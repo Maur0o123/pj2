@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Vehículo PDF</title>
+    <style>
+        @page {
+            size: letter portrait;
+            @frame header_frame {  
+                -pdf-frame-content: header_content;
+                left: 30pt; width: 552pt; top: 20pt; height: 15pt;
+            } 
+            @frame content_frame {         
+                left: 30pt; width: 552pt; top: 35pt; height: 717pt;
+            }
+            @frame footer_frame {          
+                -pdf-frame-content: footer_content;
+                left: 30pt; width: 552pt; top: 752pt; height: 40pt;
+            }
+            @frame logo {             
+                -pdf-frame-content: logo;
+                left: 185pt; width: 40pt; top: 750pt; height: 50pt;
+            }
+            @frame footer_text {           
+                -pdf-frame-content: footer_text;
+                left: 30pt; width: 552pt; top: 772pt; height: 20pt;
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container-image {
+            display: flex;
+            flex-direction: column;
+        }
+        .title {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .table-principal td, th {
+            vertical-align: middle;
+            border: 1px solid #dddddd;
+            text-align: left;
+            width: 100%;
+            padding-left: 2px;
+            padding-top: 3px;
+            white-space: nowrap;
+        }
+        .workers-cell {
+            white-space: normal !important;
+        }
+        .table-perforacion td {
+            vertical-align: middle;
+            border: 1px solid #dddddd;
+            text-align: center;
+            width: 100%;
+            padding-left: 2px;
+            padding-top: 3px;
+            white-space: nowrap;
+        }
+        .table-perforacion th {
+            vertical-align: middle;
+            border: 1px solid #dddddd;
+            text-align: center;
+            width: 100%;
+            padding-left: 2px;
+            padding-top: 3px;
+            white-space: nowrap;
+        }
+        .table-horarios td {
+            vertical-align: middle;
+            border: 1px solid #dddddd;
+            text-align: center;
+            width: 100%;
+            padding-left: 2px;
+            padding-top: 3px;
+            white-space: nowrap;
+        }
+        .table-horarios th {
+            vertical-align: middle;
+            border: 1px solid #dddddd;
+            text-align: center;
+            width: 100%;
+            padding-left: 2px;
+            padding-top: 3px;
+            white-space: nowrap;
+        }
+        .table-insumos td {
+            vertical-align: middle;
+            border: 1px solid #dddddd;
+            text-align: left;
+            width: 50%;
+            padding-left: 2px;
+            padding-top: 3px;
+            white-space: nowrap;
+        }
+        .table-longitud td {
+            vertical-align: middle;
+            border: 1px solid #dddddd;
+            text-align: left;
+            width: 50%;
+            padding-left: 2px;
+            padding-top: 3px;
+            white-space: nowrap;
+        }
+        .table-space td {
+            vertical-align: top;
+        }
+        .table-titulo td {
+            border: 0px solid #dddddd;
+        }
+        img {
+            max-width: 100%; 
+            height: auto;
+        }
+        h2, h3 { 
+            -pdf-keep-with-next: true;
+            margin-bottom: 0px;
+            padding-bottom: 0px;
+        }
+        .header {
+            text-align: right;
+        }
+        .margin-bottom {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div id="header_content" class="header">{{ current_datetime|date:"d-m-Y" }} - {{ current_datetime|time:"H:i" }}</div>
+    <div id="footer_text" style="text-align: center;vertical-align: middle;">
+        www.geoadmin.cl - Página <pdf:pagenumber> de <pdf:pagecount>
+    </div>
+    <img id="logo" src="static/images/logo/Logo GeoAdmin.png" style="width: 100px;" alt="logo"/>
+    
+    <div id="content_frame">
+        <div class="title">
+            <table class="table-titulo">
+                <tbody>
+                <tr>
+                    <td style="width: 22%;"></td>
+                    <td style="width: 8%;"><img src="static/images/logo/Logo GeoAdmin.png" style="width: 70%;" alt="logo"/></td>
+                    <td style="width: 70%; text-align:left; padding-left:5px; padding-top:15px;"><h1>REPORTE OPERACIONAL CONTROL DE SONDAJES</h1></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="container margin-bottom">
+            <div class="row row-sm">
+                <div>
+                    <h2>Datos Principales</h2>
+                </div>
+                <div>
+                    <table class="table-principal">
+                        <tbody>
+                            <tr>
+                                <td><strong>Fecha:</strong></td>
+                                <td>{{ reporte.fechacreacion|date:"d-m-Y" }}</td>
+                                <td><strong>Nombre Perforista:</strong></td>
+                                <td>{{ reporte.perforista }}</td>
+                                <td><strong>Metro Inicial:</strong></td>
+                                <td>{{ reporte.metroInicial }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Turno:</strong></td>
+                                <td>{{ reporte.get_turno_display }}</td>
+                                <td><strong>Sonda:</strong></td>
+                                <td>{{ reporte.sonda }}</td>
+                                <td><strong>Metro Final:</strong></td>
+                                <td>{{ reporte.metroFinal }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Controlador:</strong></td>
+                                <td>{{ reporte.controlador.first_name }} {{reporte.controlador.last_name}}</td>
+                                <td><strong>Sondaje:</strong></td>
+                                <td>{{ reporte.sondajeCodigo }} - {{reporte.sondajeSerie}}{% if reporte.sondajeEstado %} - {{reporte.get_sondajeEstado_display}}{%else%}{%endif%}</td>
+                                <td><strong>Total Perforado:</strong></td>
+                                <td>{{ reporte.totalPerforado }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Trabajadores en la perforación:</strong></td>
+                                <td colspan="5" class="workers-cell">
+                                    {% if trabajadores_perforacion %}
+                                        {% for trabajador in trabajadores_perforacion %}
+                                            {{ trabajador }}{% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="container margin-bottom">
+            <div class="row row-sm">
+                <div>
+                    <h2>Detalle Perforación</h2>
+                </div>
+                <div>
+                    <table class="table-perforacion">
+                        <thead>
+                            <tr>
+                                <th style="width: 9%;"><strong>Diámetro</strong></th>
+                                <th style="width: 9%;"><strong>Perfo. (mts)</strong></th>
+                                <th style="width: 9%;"><strong>Desde (mts)</strong></th>
+                                <th style="width: 9%;"><strong>Hasta (mts)</strong></th>
+                                <th style="width: 9%;"><strong>Recup (mts)</strong></th>
+                                <th style="width: 9%;"><strong>Recup. (%)</strong></th>
+                                <th style="width: 7%;"><strong>Barra</strong></th>
+                                <th style="width: 7%;"><strong>Largo B.</strong></th>
+                                <th style="width: 9%;"><strong>Total Hta.</strong></th>
+                                <th style="width: 8%;"><strong>Contra</strong></th>
+                                <th style="width: 13%;"><strong>Terreno</strong></th>
+                                <th style="width: 9%;"><strong>Orientación</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for perforacion in perforaciones %}
+                            <tr>
+                                <td style="width: 9%;">{{perforacion.diametros}}</td>
+                                <td style="width: 9%;">{{perforacion.perforado}}</td>
+                                <td style="width: 9%;">{{perforacion.desde}}</td>
+                                <td style="width: 9%;">{{perforacion.hasta}}</td>
+                                <td style="width: 9%;">{{perforacion.recuperacion}}</td>
+                                <td style="width: 9%;">{{perforacion.porcentajeRecuperacion}} %</td>
+                                <td style="width: 7%;">{{perforacion.barra}}</td>
+                                <td style="width: 7%;">{{perforacion.largoBarra}}</td>
+                                <td style="width: 9%;">{{perforacion.totalHtas}}</td>
+                                <td style="width: 8%;">{{perforacion.contra}}</td>
+                                <td style="width: 13%;">{{perforacion.tipoTerreno}}</td>
+                                <td style="width: 9%;">{{perforacion.orientacion}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="container margin-bottom">
+            <div class="row row-sm">
+                <div>
+                    <h2>Control Horario</h2>
+                </div>
+                <div>
+                    <table class="table-horarios">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%;"><strong>Hora Inicio</strong></th>
+                                <th style="width: 40%;"><strong>Hora Final</strong></th>
+                                <th style="width: 40%;"><strong>Total Horas</strong></th>
+                                <th style="width: 100%;"><strong>Detalle</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for control in control_horarios %}
+                            <tr>
+                                <td style="width: 40%;">{{control.inicio}}</td>
+                                <td style="width: 40%;">{{control.final}}</td>
+                                <td style="width: 40%;">{{control.total}}</td>
+                                <td style="width: 100%; text-align: left; padding-left:10px">{{control.detalleControlHorario}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="container margin-bottom">
+            <table class="table-space">
+                <tbody>
+                    <tr>
+                        <td style="width:100%;">
+                            <div class="row row-sm">
+                                <div>
+                                    <h2>Control Insumos</h2>
+                                </div>
+                                <div>
+                                    <table class="table-insumos">
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Corona:</strong></td>
+                                                <td>{{insumos.corona}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Escariador:</strong></td>
+                                                <td>{{insumos.escareador}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Cant. de Agua (lts):</strong></td>
+                                                {% if insumos.cantidadAgua %}
+                                                    <td>{{insumos.cantidadAgua}}</td>
+                                                {% else %}
+                                                    <td>0</td>
+                                                {% endif %}
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Casing (mts):</strong></td>
+                                                <td>{{insumos.casing}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Zapata:</strong></td>
+                                                <td>{{insumos.zapata}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row row-sm">
+                                <div>
+                                    <h2>Control Aditivos</h2>
+                                </div>
+                                <div>
+                                    <table class="table-insumos">
+                                        <thead>
+                                            <tr>
+                                                <th><strong>Aditivo</strong></th>
+                                                <th><strong>Cantidad</strong></th>
+                                            </tr>
+                                        <tbody>
+                                            {% if aditivos %}
+                                                {% for aditivo in aditivos %}
+                                                <tr>
+                                                    <td>{{aditivo.aditivo}}</td>
+                                                    <td>{{aditivo.cantidad}}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            {% else %}
+                                                <tr>
+                                                    <td colspan="2"  style="text-align:center;">No se registraron aditivos</td>
+                                                </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="width:10%;"></td>
+                        <td style="width:100%;">
+                            <div class="row row-sm">
+                                <div>
+                                    <h2>Longitud de Pozo</h2>
+                                </div>
+                                <div>
+                                    <table class="table-longitud">
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Largo Barril (mts):</strong></td>
+                                                <td>{{longitud.largoBarril}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Largo Barra (mts):</strong></td>
+                                                <td>{{longitud.largoBarra}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Punto Muerto (mts):</strong></td>
+                                                <td>{{longitud.puntoMuerto}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Resto Barra (mts):</strong></td>
+                                                <td>{{longitud.restoBarra}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Numero de Barra (mts):</strong></td>
+                                                <td>{{longitud.numeroBarras}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Longitud de Pozo (mts):</strong></td>
+                                                <td>{{longitud.longitudPozo}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row row-sm">
+                                <div>
+                                    <h2>Observaciones</h2>
+                                </div>
+                                <div>
+                                    <table class="table-longitud">
+                                        <tbody>
+                                            {% if observaciones.observaciones %}
+                                                <tr>
+                                                    <td style="width:100%;">{{observaciones.observaciones}}</td>
+                                                </tr>
+                                            {% else %}
+                                                <tr>
+                                                    <td colspan="2" style="text-align:center;">No se registraron observaciones</td>
+                                                </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+</body>
+</html>

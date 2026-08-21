@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Maquinaria PDF</title>
+    <style>
+        @page {
+            size: letter portrait;
+            @frame header_frame {  
+                -pdf-frame-content: header_content;
+                left: 30pt; width: 552pt; top: 30pt; height: 40pt;
+            } 
+            @frame content_frame {         
+                left: 30pt; width: 552pt; top: 70pt; height: 682pt;
+            }
+            @frame footer_frame {          
+                -pdf-frame-content: footer_content;
+                left: 30pt; width: 552pt; top: 752pt; height: 40pt;
+            }
+            @frame logo {             
+                -pdf-frame-content: logo;
+                left: 185pt; width: 40pt; top: 750pt; height: 50pt;
+            }
+            @frame footer_text {           
+                -pdf-frame-content: footer_text;
+                left: 30pt; width: 552pt; top: 772pt; height: 20pt;
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container-image {
+            display: flex;
+            flex-direction: column;
+        }
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .table-out td, th {
+            vertical-align: top;
+            width: 50%;
+        }
+        .table-in td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            vertical-align: top;
+            padding: 2px;
+        }
+        img {
+            max-width: 100%; 
+            height: auto;
+        }
+        h2, h3 { 
+            -pdf-keep-with-next: true; 
+        }
+        .header {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div id="header_content" class="header">{{ current_datetime|date:"d-m-Y" }} - {{ current_datetime|time:"H:i" }}</div>
+    <div id="footer_text" style="text-align: center;vertical-align: middle;">
+        www.geoadmin.cl - Página <pdf:pagenumber> de <pdf:pagecount>
+    </div>
+    <img id="logo" src="static/images/logo/Logo GeoAdmin.png" style="width: 100px;" alt="logo"/>
+    
+    <div id="content_frame">
+        <div class="title">
+            <h1>INFORME Y DOCUMENTACIÓN {{ maquinaria.maquinaria }}</h1>
+        </div>
+        <div class="container">
+            <div class="row row-sm">
+                <div>
+                    <h2>Datos Principales</h2>
+                </div>
+                <div>
+                    <table class="table-out">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <table class="table-in">
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Identificacion Maquinaria:</strong></td>
+                                                <td>{{ maquinaria.maquinaria }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Descripción:</strong></td>
+                                                <td>{{ maquinaria.descripcion }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Tipo:</strong></td>
+                                                <td>{{ maquinaria.tipo }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Marca / Modelo:</strong></td>
+                                                <td>{{ maquinaria.marca }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Fecha Adquisición:</strong></td>
+                                                <td>{% if maquinaria.fechaAdquisicion %}{{ maquinaria.fechaAdquisicion|date:"d-m-Y" }}{% else %} Sin información {% endif %}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Faena:</strong></td>
+                                                <td>{{ maquinaria.faena }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Frecuencia Mantenimiento:</strong></td>
+                                                <td>{{ maquinaria.frecuenciaMantenimiento }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td style="width: 20px;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

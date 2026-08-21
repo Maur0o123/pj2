@@ -1,0 +1,676 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Notificaciones{% endblock %}
+
+{% block css %}
+    <style>
+        .notifications-mailbox {
+            background: rgba(20, 24, 44, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+        .notifications-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .notifications-search {
+            min-width: 220px;
+            flex: 1;
+            max-width: 360px;
+        }
+        .notifications-date-filter {
+            min-width: 160px;
+            max-width: 190px;
+        }
+        .notifications-filters {
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .notifications-filter-btn {
+            border: 0;
+            background: transparent;
+            color: #d7d9e2;
+            padding: 0.5rem 0.85rem;
+            font-size: 0.82rem;
+        }
+        .notifications-filter-btn:hover,
+        .notifications-filter-btn.active {
+            background: rgba(143, 189, 86, 0.2);
+            color: #fff;
+        }
+        .notifications-count {
+            font-size: 0.82rem;
+            opacity: 0.82;
+            margin-left: auto;
+        }
+        .notifications-list {
+            display: flex;
+            flex-direction: column;
+        }
+        .mail-notification-item {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 230px;
+            gap: 0.75rem;
+            align-items: center;
+            height: 104px;
+            padding: 0.7rem 0.95rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            transition: background 0.2s ease;
+        }
+        .mail-notification-item:hover {
+            background: rgba(143, 189, 86, 0.1);
+        }
+        .mail-notification-item:last-child {
+            border-bottom: 0;
+        }
+        .mail-main {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .mail-header {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            margin-bottom: 0.2rem;
+            min-width: 0;
+        }
+        @keyframes pendingDotPulse {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(143, 189, 86, 0.7);
+            }
+            70% {
+                opacity: 0.65;
+                transform: scale(1.08);
+                box-shadow: 0 0 0 6px rgba(143, 189, 86, 0);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(143, 189, 86, 0);
+            }
+        }
+        .mail-pending-indicator {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #8fbd56;
+            flex-shrink: 0;
+            animation: pendingDotPulse 1.2s ease-in-out infinite;
+        }
+        .mail-sender {
+            font-weight: 600;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 300px;
+        }
+        .mail-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            background: #8fbd56;
+        }
+        .mail-subject {
+            font-weight: 600;
+            margin-bottom: 0.15rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .mail-preview {
+            font-size: 0.82rem;
+            opacity: 0.82;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .mail-extra {
+            margin-top: 0.45rem;
+            font-size: 0.78rem;
+            opacity: 0.75;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .mail-side {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 0.28rem;
+            min-width: 230px;
+        }
+        .mail-date {
+            font-size: 0.78rem;
+            opacity: 0.85;
+            white-space: nowrap;
+        }
+        .mail-response-date {
+            font-size: 0.7rem;
+            opacity: 0.72;
+            white-space: nowrap;
+            min-height: 1.05rem;
+        }
+        .mail-status-text {
+            font-size: 0.78rem;
+            opacity: 0.85;
+            white-space: nowrap;
+            font-weight: 500;
+            min-height: 1.1rem;
+            line-height: 1.1rem;
+        }
+        .mail-status-placeholder,
+        .mail-response-placeholder {
+            visibility: hidden;
+        }
+        .mail-actions {
+            display: flex;
+            gap: 0.45rem;
+            margin-top: 0.08rem;
+        }
+        .mail-actions .btn-open-review {
+            min-width: 140px;
+            padding: 0.4rem 1.7rem;
+        }
+        .notifications-empty {
+            padding: 1.5rem 1rem;
+            text-align: center;
+            opacity: 0.8;
+        }
+        .notifications-pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .notifications-pagination-btn {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: transparent;
+            color: #d7d9e2;
+            min-width: 36px;
+            height: 34px;
+            padding: 0 0.65rem;
+            font-size: 0.82rem;
+        }
+        .notifications-pagination-btn:hover {
+            background: rgba(143, 189, 86, 0.12);
+            color: #fff;
+        }
+        .notifications-pagination-btn.active {
+            border-color: #8fbd56;
+            background: rgba(143, 189, 86, 0.28);
+            color: #fff;
+        }
+        .notifications-pagination-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+        body.light-mode .notifications-mailbox {
+            background: #ffffff;
+            border-color: #d7deea;
+            box-shadow: 0 10px 28px rgba(19, 34, 68, 0.08);
+        }
+        body.light-mode .notifications-toolbar {
+            background: #f5f8fc;
+            border-bottom-color: #dfe6f1;
+        }
+        body.light-mode .notifications-search,
+        body.light-mode .notifications-date-filter {
+            background: #ffffff;
+            border-color: #d7deea;
+            color: #24324c;
+        }
+        body.light-mode .notifications-search::placeholder {
+            color: #657189;
+            opacity: 1;
+        }
+        body.light-mode .notifications-filters {
+            border-color: #d7deea;
+            background: #ffffff;
+        }
+        body.light-mode .notifications-filter-btn {
+            color: #4a5872;
+        }
+        body.light-mode .notifications-filter-btn:hover,
+        body.light-mode .notifications-filter-btn.active {
+            background: rgba(143, 189, 86, 0.24);
+            color: #23314c;
+        }
+        body.light-mode .notifications-count {
+            color: #4f5d77;
+            opacity: 1;
+        }
+        body.light-mode .mail-notification-item {
+            background: #ffffff;
+            border-bottom-color: #e5ebf5;
+        }
+        body.light-mode .mail-notification-item:hover {
+            background: #f3f7ff;
+        }
+        body.light-mode .mail-sender,
+        body.light-mode .mail-subject {
+            color: #1f2f4b;
+        }
+        body.light-mode .mail-pending-indicator {
+            background: #6ea63f;
+        }
+        body.light-mode .mail-preview {
+            color: #4f5e78;
+            opacity: 1;
+        }
+        body.light-mode .mail-date {
+            color: #62708a;
+            opacity: 1;
+        }
+        body.light-mode .mail-status-text {
+            color: #3f4f6a;
+            opacity: 1;
+        }
+        body.light-mode .mail-response-date {
+            color: #687791;
+            opacity: 1;
+        }
+        body.light-mode .notifications-pagination {
+            border-top-color: #dfe6f1;
+            background: #f5f8fc;
+        }
+        body.light-mode .notifications-pagination-btn {
+            border-color: #cfd8e8;
+            color: #3f4f6b;
+            background: #ffffff;
+        }
+        body.light-mode .notifications-pagination-btn:hover {
+            background: #eef4ff;
+            color: #283754;
+        }
+        body.light-mode .notifications-pagination-btn.active {
+            border-color: #8fbd56;
+            background: rgba(143, 189, 86, 0.24);
+            color: #283754;
+        }
+        @media (max-width: 767px) {
+            .notifications-toolbar {
+                align-items: stretch;
+            }
+            .notifications-search {
+                max-width: none;
+            }
+            .notifications-date-filter {
+                min-width: 0;
+                max-width: none;
+            }
+            .notifications-count {
+                margin-left: 0;
+            }
+            .mail-notification-item {
+                grid-template-columns: 1fr;
+                height: auto;
+                padding: 0.8rem 0.85rem;
+            }
+            .mail-side {
+                align-items: flex-start;
+                min-width: 0;
+                gap: 0.35rem;
+            }
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+            <div class="page-header">
+                <h1 class="page-title">Notificaciones</h1>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Usuario</a></li>
+                        <li class="breadcrumb-item active">Notificaciones</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="row row-sm">
+                <div class="col-12">
+                    <div class="notifications-mailbox">
+                        <div class="notifications-toolbar">
+                            <input type="text" class="form-control notifications-search" id="notificationsSearch" placeholder="Buscar por asunto, solicitante o descripcion...">
+                            <input type="date" class="form-control notifications-date-filter" id="notificationsDateFrom" title="Desde">
+                            <input type="date" class="form-control notifications-date-filter" id="notificationsDateTo" title="Hasta">
+                            <div class="notifications-filters" role="group" aria-label="Filtros de notificaciones">
+                                <button type="button" class="notifications-filter-btn active" data-filter="all">Todas</button>
+                                <button type="button" class="notifications-filter-btn" data-filter="pendiente">Pendientes</button>
+                                <button type="button" class="notifications-filter-btn" data-filter="procesadas">Procesadas</button>
+                            </div>
+                            <div class="notifications-count" id="notificationsVisibleCount"></div>
+                        </div>
+
+                        <div class="notifications-list" id="notificationsList">
+                            {% for n in notificaciones %}
+                                <article class="mail-notification-item"
+                                    data-state="{{ n.estado|default:''|lower }}"
+                                    data-created-ts="{{ n.created_ts|default:'0' }}"
+                                    data-search="{{ n.titulo|default:''|lower }} {{ n.descripcion|default:''|lower }} {{ n.sender|default:''|lower }} {{ n.plantilla_nombre|default:''|lower }}">
+                                    <div class="mail-main">
+                                        <div class="mail-header">
+                                            {% if n.estado|default:''|lower == 'pendiente' %}
+                                                <span class="mail-pending-indicator" title="Pendiente"></span>
+                                            {% endif %}
+                                            <span class="mail-sender">{{ n.sender|default:'Sistema' }}</span>
+                                            <span class="mail-date">{{ n.fecha|default:'-' }}</span>
+                                        </div>
+                                        <div class="mail-subject">{{ n.titulo|default:'Sin titulo' }}</div>
+                                        <div class="mail-preview">{{ n.descripcion|default:'Sin descripcion.' }}</div>
+                                    </div>
+
+                                    <div class="mail-side">
+                                        {% if n.kind != 'document' %}
+                                            <span class="mail-status-text">Estado: {{ n.estado_display|default:n.estado|default:'-' }}</span>
+                                        {% else %}
+                                            <span class="mail-status-text mail-status-placeholder">Estado: -</span>
+                                        {% endif %}
+
+                                        {% if n.fecha_respuesta %}
+                                            <span class="mail-response-date">Respondida: {{ n.fecha_respuesta }}</span>
+                                        {% else %}
+                                            <span class="mail-response-date mail-response-placeholder">Respondida: -</span>
+                                        {% endif %}
+
+                                        <div class="mail-actions">
+                                            <button
+                                                type="button"
+                                                class="btn btn-sm btn-primary btn-open-review"
+                                                data-review-url="{{ n.review_url|default:'' }}"
+                                                data-notification-id="{{ n.id }}"
+                                                data-notification-kind="{{ n.kind }}"
+                                                data-notification-title="{{ n.titulo|default:'Aprobación pendiente'|escape }}"
+                                                data-notification-description="{{ n.descripcion|default:'Tienes una solicitud pendiente.'|escape }}"
+                                            >
+                                                <i class="fa fa-eye me-1"></i>
+                                                {% if n.kind == 'sistema' %}
+                                                    Ver notificación
+                                                {% else %}
+                                                    Ver documento
+                                                {% endif %}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </article>
+                            {% empty %}
+                                <div class="notifications-empty">No tienes notificaciones por ahora.</div>
+                            {% endfor %}
+                            {% if notificaciones %}
+                                <div class="notifications-empty d-none" id="notificationsEmptyFiltered">No hay notificaciones que coincidan con el filtro.</div>
+                            {% endif %}
+                        </div>
+
+                        {% if notificaciones %}
+                            <div class="notifications-pagination" id="notificationsPagination"></div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function getCookie(name) {
+            const cookieValue = document.cookie
+                .split('; ')
+                .find((row) => row.startsWith(`${name}=`));
+            return cookieValue ? decodeURIComponent(cookieValue.split('=')[1]) : '';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('notificationsSearch');
+            const dateFromInput = document.getElementById('notificationsDateFrom');
+            const dateToInput = document.getElementById('notificationsDateTo');
+            const filterButtons = Array.from(document.querySelectorAll('.notifications-filter-btn'));
+            const notificationItems = Array.from(document.querySelectorAll('.mail-notification-item'));
+            const countEl = document.getElementById('notificationsVisibleCount');
+            const emptyFilteredEl = document.getElementById('notificationsEmptyFiltered');
+            const paginationEl = document.getElementById('notificationsPagination');
+            const mailboxEl = document.querySelector('.notifications-mailbox');
+            let currentFilter = 'all';
+            let currentPage = 1;
+            const pageSize = 10;
+
+            function scrollToNotificationsTop() {
+                const target = mailboxEl || document.body;
+                const y = target.getBoundingClientRect().top + window.pageYOffset - 18;
+                window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+            }
+
+            function parseInputDateStartOfDay(value) {
+                if (!value) return null;
+                const date = new Date(`${value}T00:00:00`);
+                return Number.isNaN(date.getTime()) ? null : Math.floor(date.getTime() / 1000);
+            }
+
+            function parseInputDateEndOfDay(value) {
+                if (!value) return null;
+                const date = new Date(`${value}T23:59:59`);
+                return Number.isNaN(date.getTime()) ? null : Math.floor(date.getTime() / 1000);
+            }
+
+            function renderPagination(totalPages) {
+                if (!paginationEl) return;
+                paginationEl.innerHTML = '';
+                if (totalPages <= 1) return;
+
+                const prevBtn = document.createElement('button');
+                prevBtn.type = 'button';
+                prevBtn.className = 'notifications-pagination-btn';
+                prevBtn.textContent = 'Anterior';
+                prevBtn.disabled = currentPage <= 1;
+                prevBtn.addEventListener('click', function() {
+                    if (currentPage <= 1) return;
+                    currentPage -= 1;
+                    applyFilters(false);
+                    scrollToNotificationsTop();
+                });
+                paginationEl.appendChild(prevBtn);
+
+                for (let page = 1; page <= totalPages; page += 1) {
+                    const pageBtn = document.createElement('button');
+                    pageBtn.type = 'button';
+                    pageBtn.className = 'notifications-pagination-btn';
+                    if (page === currentPage) {
+                        pageBtn.classList.add('active');
+                    }
+                    pageBtn.textContent = String(page);
+                    pageBtn.addEventListener('click', function() {
+                        currentPage = page;
+                        applyFilters(false);
+                        scrollToNotificationsTop();
+                    });
+                    paginationEl.appendChild(pageBtn);
+                }
+
+                const nextBtn = document.createElement('button');
+                nextBtn.type = 'button';
+                nextBtn.className = 'notifications-pagination-btn';
+                nextBtn.textContent = 'Siguiente';
+                nextBtn.disabled = currentPage >= totalPages;
+                nextBtn.addEventListener('click', function() {
+                    if (currentPage >= totalPages) return;
+                    currentPage += 1;
+                    applyFilters(false);
+                    scrollToNotificationsTop();
+                });
+                paginationEl.appendChild(nextBtn);
+            }
+
+            function applyFilters(resetPage = true) {
+                if (resetPage) currentPage = 1;
+                const term = String(searchInput && searchInput.value ? searchInput.value : '').trim().toLowerCase();
+                const dateFromTs = parseInputDateStartOfDay(dateFromInput && dateFromInput.value ? dateFromInput.value : '');
+                const dateToTs = parseInputDateEndOfDay(dateToInput && dateToInput.value ? dateToInput.value : '');
+
+                const filteredItems = [];
+
+                notificationItems.forEach((item) => {
+                    const state = String(item.dataset.state || '').toLowerCase();
+                    const searchText = String(item.dataset.search || '').toLowerCase();
+                    const createdTs = Number(item.dataset.createdTs || 0);
+
+                    const matchesTerm = !term || searchText.includes(term);
+                    let matchesFilter = true;
+                    let matchesDate = true;
+
+                    if (currentFilter === 'pendiente') {
+                        matchesFilter = state === 'pendiente';
+                    } else if (currentFilter === 'procesadas') {
+                        matchesFilter = state !== 'pendiente';
+                    }
+
+                    if (dateFromTs !== null && createdTs < dateFromTs) {
+                        matchesDate = false;
+                    }
+                    if (dateToTs !== null && createdTs > dateToTs) {
+                        matchesDate = false;
+                    }
+
+                    const matches = matchesTerm && matchesFilter && matchesDate;
+                    if (matches) filteredItems.push(item);
+                });
+
+                const filteredTotal = filteredItems.length;
+                const totalPages = Math.max(1, Math.ceil(filteredTotal / pageSize));
+                if (currentPage > totalPages) currentPage = totalPages;
+                const startIndex = (currentPage - 1) * pageSize;
+                const endIndex = startIndex + pageSize;
+
+                notificationItems.forEach((item) => item.classList.add('d-none'));
+                filteredItems.slice(startIndex, endIndex).forEach((item) => item.classList.remove('d-none'));
+
+                if (countEl) {
+                    if (filteredTotal === 0) {
+                        countEl.textContent = `0 de ${notificationItems.length} notificaciones`;
+                    } else {
+                        const from = startIndex + 1;
+                        const to = Math.min(endIndex, filteredTotal);
+                        countEl.textContent = `${from}-${to} de ${filteredTotal} notificaciones`;
+                    }
+                }
+                if (emptyFilteredEl) {
+                    emptyFilteredEl.classList.toggle('d-none', filteredTotal > 0);
+                }
+                renderPagination(totalPages);
+            }
+
+            filterButtons.forEach((btn) => {
+                btn.addEventListener('click', function() {
+                    currentFilter = String(btn.dataset.filter || 'all');
+                    filterButtons.forEach((candidate) => candidate.classList.remove('active'));
+                    btn.classList.add('active');
+                    applyFilters(true);
+                });
+            });
+
+            if (searchInput) {
+                searchInput.addEventListener('input', function() { applyFilters(true); });
+            }
+            if (dateFromInput) {
+                dateFromInput.addEventListener('change', function() { applyFilters(true); });
+            }
+            if (dateToInput) {
+                dateToInput.addEventListener('change', function() { applyFilters(true); });
+            }
+
+            applyFilters(true);
+
+            document.querySelectorAll('.btn-open-review').forEach((button) => {
+                button.addEventListener('click', async function() {
+                    const reviewUrl = String(this.dataset.reviewUrl || '').trim();
+                    const kind = String(this.dataset.notificationKind || '').trim();
+                    const title = String(this.dataset.notificationTitle || 'Aprobación pendiente').trim();
+                    const description = String(this.dataset.notificationDescription || 'Tienes una solicitud pendiente.').trim();
+                    const notificationId = String(this.dataset.notificationId || '').trim();
+
+                    if (kind === 'sistema') {
+                        if (typeof Swal !== 'undefined') {
+                            const result = await Swal.fire({
+                                titleText: title,
+                                html: `<div style="text-align: left; white-space: pre-wrap; font-family: monospace, Courier, monospace; font-size: 0.9rem; background: rgba(0, 0, 0, 0.05); padding: 1rem; border-radius: 6px; max-height: 250px; overflow-y: auto;">${description}</div>`,
+                                icon: 'info',
+                                confirmButtonText: 'Aceptar',
+                                confirmButtonColor: '#00b4db',
+                            });
+
+                            if (result.isConfirmed && notificationId) {
+                                try {
+                                    const response = await fetch(`/prevencion/ajax/notificaciones/aprobacion/${notificationId}/resolver/`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRFToken': getCookie('csrftoken'),
+                                            'X-Requested-With': 'XMLHttpRequest',
+                                        },
+                                        credentials: 'same-origin',
+                                        body: JSON.stringify({
+                                            accion: 'aceptar',
+                                            confirmar_revision: true,
+                                        }),
+                                    });
+                                    if (response.ok) {
+                                        const item = this.closest('.mail-notification-item');
+                                        if (item) {
+                                            item.dataset.state = 'aceptada';
+                                            const indicator = item.querySelector('.mail-pending-indicator');
+                                            if (indicator) indicator.remove();
+                                            const statusEl = item.querySelector('.mail-status-text');
+                                            if (statusEl) statusEl.textContent = 'Estado: Aceptada';
+                                            const responseDateEl = item.querySelector('.mail-response-date');
+                                            if (responseDateEl) {
+                                                responseDateEl.textContent = new Date().toLocaleDateString('es-CL', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+                                                responseDateEl.classList.remove('mail-response-placeholder');
+                                            }
+                                            if (typeof applyFilters === 'function') {
+                                                applyFilters(true);
+                                            }
+                                        }
+                                    }
+                                } catch (e) {
+                                    console.error("Error marking system notification as read:", e);
+                                }
+                            }
+                        }
+                        return;
+                    }
+
+                    if (!reviewUrl) return;
+
+                    const separator = reviewUrl.includes('?') ? '&' : '?';
+                    const targetUrl = `${reviewUrl}${separator}next=${encodeURIComponent(window.location.href)}`;
+
+                    window.location.href = targetUrl;
+                });
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %}Nueva Bodega{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+{% endblock css %}
+
+{% block content %}
+
+<button type="submit" form="form" class="btn btn-primary save-float">
+    Guardar
+</button>
+
+<a href="{% url 'manage_new_bodega' %}" class="btn btn-secondary back-float">
+    Regresar
+</a>
+
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Nueva Bodega</h1>
+                </div>
+
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">Inventario</li>
+                        <li class="breadcrumb-item">Bodegas</li>
+                        <li class="breadcrumb-item active">Nueva Bodega</li>
+                    </ol>
+                </div>
+            </div>
+
+            <form method="POST" id="form">
+                {% csrf_token %}
+
+                <div class="card">
+                    <div class="card-body">
+
+                        <h4 class="card-title mb-4">Datos de la Bodega</h4>
+
+                        <div class="row row-sm">
+
+                            <div class="col-md-4">
+                                <label>Nombre Bodega</label>
+                                <input type="text"
+                                       name="nombre"
+                                       class="form-control"
+                                       maxlength="150"
+                                       required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Dirección</label>
+                                <input type="text"
+                                       name="direccion"
+                                       class="form-control"
+                                       maxlength="255"
+                                       required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Descripción</label>
+                                <input type="text"
+                                       name="descripcion"
+                                       class="form-control"
+                                       maxlength="500">
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

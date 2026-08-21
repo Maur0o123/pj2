@@ -1,0 +1,233 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Nuevo Proveedor{% endblock %}
+
+{% block content %}
+
+<div class="app-content main-content mt-0">
+
+    <div class="side-app">
+
+        <div class="main-container container-fluid">
+
+            <div class="page-header">
+
+                <div>
+                    <h1 class="page-title">
+                        Nuevo Proveedor
+                    </h1>
+                </div>
+
+            </div>
+
+            <div class="card box-shadow-0">
+
+                <div class="card-body">
+
+                    <h4 class="card-title">
+                        Datos del Proveedor
+                    </h4>
+
+                    <form method="POST" id="form">
+
+                        {% csrf_token %}
+
+                        <div class="row row-sm">
+
+                            <div class="col-md-6">
+                                <label>Nombre</label>
+                                <input type="text"
+                                       class="form-control"
+                                       name="nombre">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label>Rut</label>
+                                <input type="text"
+                                    class="form-control"
+                                    name="rut"
+                                    id="rut"
+                                    maxlength="12"
+                                    required>
+                            </div>
+
+                            <div class="col-md-6 mt-3">
+                                <label>Correo</label>
+                                <input type="email"
+                                       class="form-control"
+                                       name="correo">
+                            </div>
+
+                            <div class="col-md-6 mt-3">
+                                <label>Teléfono</label>
+                                <input type="text"
+                                        class="form-control"
+                                        name="telefono"
+                                        id="telefono"
+                                        maxlength="12"
+                                        required>
+                            </div>
+
+                            <div class="col-md-12 mt-3">
+                                <label>Dirección</label>
+                                <textarea class="form-control"
+                                          name="direccion"></textarea>
+                            </div>
+
+                        </div>
+
+                        <div class="mt-4">
+
+                            <a href="{% url 'manage_proveedores' %}"
+                               class="btn btn-secondary">
+
+                                Regresar
+
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                Guardar
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% block javascript %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const rutInput = document.getElementById('rut');
+
+    rutInput.addEventListener('input', function (e) {
+        let valor = e.target.value.replace(/[^0-9kK]/g, '').toUpperCase();
+
+        if (valor.length > 9) {
+            valor = valor.substring(0, 9);
+        }
+
+        if (valor.length > 1) {
+            let cuerpo = valor.slice(0, -1);
+            let dv = valor.slice(-1);
+
+            cuerpo = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+            e.target.value = cuerpo + '-' + dv;
+        } else {
+            e.target.value = valor;
+        }
+    });
+
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const telefonoInput = document.getElementById('telefono');
+
+    telefonoInput.value = '+569';
+
+    telefonoInput.addEventListener('keydown', function(e) {
+
+        if (
+            telefonoInput.selectionStart <= 4 &&
+            (e.key === 'Backspace' || e.key === 'Delete')
+        ) {
+            e.preventDefault();
+        }
+
+    });
+
+    telefonoInput.addEventListener('input', function(e) {
+
+        let numeros = e.target.value.replace(/\D/g, '');
+
+        if (numeros.startsWith('569')) {
+            numeros = numeros.substring(3);
+        }
+
+        numeros = numeros.substring(0, 8);
+
+        e.target.value = '+569' + numeros;
+
+    });
+
+    document.querySelector('form').addEventListener('submit', function (e) {
+
+        const telefono = telefonoInput.value.replace(/\D/g, '');
+
+        if (telefono.length !== 11) {
+
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Teléfono inválido',
+                text: 'Ingrese un número chileno válido',
+                confirmButtonColor: '#00cfe8'
+            });
+
+        }
+
+    });
+
+});
+</script>
+<script>
+const form = document.querySelector('#form');
+
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+
+    $.LoadingOverlay("show");
+
+    $.ajax({
+        url: '{% url "new_proveedor" %}',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+
+        success: function(response) {
+            $.LoadingOverlay("hide");
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Proveedor creado correctamente',
+                confirmButtonColor: '#00cfe8',
+            }).then(() => {
+                window.location.href = '{% url "manage_proveedores" %}';
+            });
+        },
+
+        error: function(error) {
+            $.LoadingOverlay("hide");
+
+            Swal.fire({
+                icon: 'error',
+                titleText: 'Error al crear proveedor',
+                text: error.responseJSON?.message || 'Vuelva a intentarlo.',
+                confirmButtonColor: '#00cfe8',
+            });
+        }
+    });
+});
+</script>
+{% endblock javascript %}
+{% endblock content %}

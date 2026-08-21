@@ -1,0 +1,93 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Editar Sondaje{% endblock %}
+
+{% block content %}
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Editar Sondaje</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Mantenedor Sistema</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Editar Sondaje</li>
+                    </ol>
+                </div>
+            </div> <!-- PAGE-HEADER END --> <!-- row -->
+            <div class="row row-sm">
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">                        
+                        <div class="card-body">
+                            <h4 class="card-title">Datos Principales</h4>
+                            <p class="card-title">Atención: no se puede eliminar este registro</p>
+                            <form class="form-horizontal" id="form" action="#" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{ documento_id }}">                           
+                                <div class="row row-sm">
+                                    {{ formeditar|crispy }}
+                                </div>
+                                <div class="form-group mt-3">
+                                    <div> 
+                                        <a class="btn btn-secondary" href="{% url 'manage_drilling' %}">Regresar</a> 
+                                        <button type="submit" class="btn btn-primary">Guardar</button>                                         
+                                    </div>
+                                </div>
+                            </form>
+                        </div>  
+                    </div>
+                </div>                
+            </div> 
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script type="text/javascript">
+    document.getElementById('div_id_faena').classList.add('col-md-4');
+    document.getElementById('div_id_sondaje').classList.add('col-md-4');
+</script>
+<script type="text/javascript"> 
+    const form = document.querySelector('#form');
+    form.addEventListener('submit', (event) => {
+    event.preventDefault();        
+    const formData = new FormData(form);
+    $.LoadingOverlay("show");
+    $.ajax({
+        url: '{% url 'save_edit_drilling' %}',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            $.LoadingOverlay("hide");
+            Swal.fire({
+                icon: 'success',
+                title: 'Sondaje Actualizada con éxito!',
+                confirmButtonColor: '#ff00d9',
+            }).then(() => {
+                window.location.href = '{% url 'manage_drilling' %}';
+            });
+        },
+        error: function(error) {
+            $.LoadingOverlay("hide");
+            Swal.fire({
+                icon: 'error',        
+                titleText: 'Sondaje no se Actualizó',
+                text: 'Vuelva a intentarlo!',  
+                confirmButtonColor: '#ff00d9',
+            })
+        }
+        });
+    });
+</script>
+{% endblock javascript %}
+
+{% block messages %}
+{% endblock messages%}

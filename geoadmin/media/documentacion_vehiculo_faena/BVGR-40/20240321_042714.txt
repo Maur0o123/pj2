@@ -1,0 +1,46 @@
+  GNU nano 6.2                                            /var/www/sistemaGPS/historial.php
+<?php
+$host = "127.0.0.1";
+$user = "root";
+$password = "Casa2036";
+$database = "sistemaGPS";
+$table_historica = "ubicacion_historica";
+
+
+
+try {
+    $db = new PDO("mysql:host=$host;dbname=$database", $user, $password);
+
+    if (isset($_GET['patente'])) {
+        $patente = $_GET['patente'];
+
+        $stmt = $db->prepare("SELECT * FROM $table_historica WHERE patente = :patente ORDER BY fecha_hora DESC LIMIT 30");
+        $stmt->bindParam(':patente', $patente);
+        $stmt->execute();
+
+        if ($stmt->rowCount() == 0) {
+            $response = array('error' => 'Patente no encontrada');
+        } else {
+            $historico = array();
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $fecha_actual = date('Y-m-d H:i:s', strtotime($row['fecha_hora'] . ' -3 hours'));
+                $historico[] = array(
+                    'patente' => $row['patente'],
+                    'latitud' => $row['latitud'],
+                    'longitud' => $row['longitud'],
+                    'fecha_hora' => $fecha_actual,
+                );
+            }
+            $response = array('historico' => $historico);
+        }
+    } else {
+        $response = array('error' => 'Patente no especificada');
+    }
+} catch (PDOException $e) {
+    $response = array('error' => 'Error!: ' . $e->getMessage());
+}
+
+// Devuelve la respuesta en formato JSON
+header('Content-Type: application/json');
+echo json_encode($response);
+?>

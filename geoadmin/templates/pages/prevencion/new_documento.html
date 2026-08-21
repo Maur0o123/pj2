@@ -1,0 +1,1702 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo_vista_nuevo_documento|default:"Nuevo Documento" }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+
+<style>
+    .item-col-header {
+        width: 280px;
+        min-width: 280px;
+        max-width: 280px;
+    }
+
+    .item-cell {
+        width: 280px;
+        min-width: 280px;
+        max-width: 280px;
+        white-space: normal !important;
+        vertical-align: top;
+    }
+
+    .item-pregunta-text {
+        display: block;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        line-height: 1.35;
+    }
+
+    .dynamic-cell {
+        white-space: normal !important;
+        vertical-align: top;
+    }
+
+    .item-dinamico {
+        min-height: 42px;
+        resize: none;
+        overflow: hidden;
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+        word-break: normal;
+        hyphens: none;
+        text-align: left;
+        line-height: 1.3;
+        font-weight: 400;
+    }
+
+    .item-cumple[readonly] {
+        background-color: var(--primary-bg-color);
+        border-color: var(--primary-bg-color);
+        color: #fff;
+        font-weight: 700;
+        cursor: not-allowed;
+    }
+
+    .plantilla-question-image-wrap {
+        text-align: center;
+        padding: 0.9rem 0.9rem 0.2rem;
+    }
+
+    .plantilla-question-image {
+        width: 360px;
+        max-width: 100%;
+        height: 220px;
+        object-fit: fill;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.15);
+    }
+
+    .readonly-template-section .card-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .readonly-section-badge {
+        letter-spacing: 0.03em;
+    }
+
+    .readonly-template-input {
+        background: transparent !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: inherit !important;
+        pointer-events: none;
+    }
+
+    .readonly-template-input.input-item-writable {
+        border: none !important;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.2) !important;
+        padding-left: 8px;
+    }
+
+    .readonly-template-input.input-item-writable:focus {
+        border-bottom: 1px solid rgba(128, 128, 128, 0.2) !important;
+        box-shadow: none !important;
+    }
+
+    .readonly-structure-table td {
+        white-space: normal !important;
+        vertical-align: top !important;
+    }
+
+    .readonly-row-text {
+        min-height: 40px;
+        padding: 0.55rem 0.6rem;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+        line-height: 1.35;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .readonly-extra-text {
+        min-height: 40px;
+        padding: 0.55rem 0.6rem;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+        line-height: 1.35;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .course-doc-options-box {
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        border-radius: 0.55rem;
+        padding: 0.75rem;
+    }
+
+    .course-doc-option-row {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        margin-bottom: 0.45rem;
+    }
+
+    .course-doc-option-row:last-child {
+        margin-bottom: 0;
+    }
+
+    .course-doc-option-letter {
+        min-width: 1.1rem;
+        font-weight: 700;
+        opacity: 0.85;
+        text-transform: lowercase;
+        text-align: center;
+    }
+
+    .course-question-card {
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .course-question-title {
+        font-size: 1.7rem;
+        font-weight: 700;
+        line-height: 1.25;
+        margin: 0;
+    }
+
+    .course-image-upload-wrap {
+        text-align: center;
+    }
+
+    .course-image-preview-frame {
+        width: 360px;
+        max-width: 100%;
+        height: 220px;
+        margin: 0.5rem auto 0;
+        border: 1px dashed rgba(255, 255, 255, 0.25);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background: rgba(0, 0, 0, 0.12);
+    }
+
+    .course-image-preview {
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+    }
+
+    .course-image-empty {
+        opacity: 0.7;
+        font-size: 0.9rem;
+    }
+
+    .pdf-preview-frame {
+        width: 100%;
+        height: 640px;
+        border: 1px solid rgba(128, 128, 128, 0.3);
+        border-radius: 7px;
+        background: #fff;
+    }
+
+    .pdf-preview-empty {
+        border: 1px dashed rgba(128, 128, 128, 0.4);
+        border-radius: 7px;
+        padding: 2.5rem 1rem;
+        text-align: center;
+        opacity: 0.8;
+    }
+
+    .table-fixed-evidence {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .evidence-col-header,
+    .evidence-cell {
+        width: 500px !important;
+        min-width: 500px !important;
+        max-width: 500px !important;
+    }
+
+    .evidence-cell {
+        overflow: hidden;
+        vertical-align: middle;
+    }
+
+    .upload-preview-carousel {
+        margin-bottom: 0.5rem;
+    }
+
+    .js-evidence-link {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.35rem;
+        min-width: 0;
+        width: 100%;
+        padding: 0.45rem 3.2rem 0.45rem 3.2rem;
+        text-align: center !important;
+    }
+
+    .js-evidence-link i {
+        display: inline-block;
+        flex: 0 0 auto;
+        margin: 0 !important;
+        vertical-align: bottom;
+    }
+
+    .file-link-label {
+        display: inline-block !important;
+        min-width: 0;
+        max-width: calc(100% - 6.4rem);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: bottom;
+        text-align: center !important;
+    }
+
+    .evidence-cell .carousel-control-prev,
+    .evidence-cell .carousel-control-next,
+    .upload-preview-carousel .carousel-control-prev,
+    .upload-preview-carousel .carousel-control-next {
+        width: 2.2rem;
+        opacity: 1;
+    }
+
+    .evidence-cell .carousel-control-prev-icon,
+    .evidence-cell .carousel-control-next-icon,
+    .upload-preview-carousel .carousel-control-prev-icon,
+    .upload-preview-carousel .carousel-control-next-icon {
+        filter: none;
+        background-size: 1rem 1rem;
+    }
+
+    .config-access-card .card-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .config-panel {
+        background: rgba(13, 18, 34, 0.22);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 0.65rem;
+        padding: 0.9rem;
+        height: 100%;
+    }
+
+    .config-panel-title {
+        font-weight: 600;
+        margin-bottom: 0.7rem;
+    }
+
+    .check-list {
+        max-height: 260px;
+        overflow-y: auto;
+        display: grid;
+        gap: 0.45rem;
+        padding-right: 0.2rem;
+    }
+
+    .check-item {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.5rem 0.55rem;
+        border-radius: 0.45rem;
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        background: rgba(10, 15, 30, 0.22);
+        cursor: pointer;
+    }
+
+    .check-item input[type="checkbox"] {
+        margin-top: 0;
+        width: 16px;
+        height: 16px;
+        accent-color: #8fbd56;
+    }
+
+    .check-item:hover {
+        border-color: rgba(143, 189, 86, 0.5);
+    }
+
+    .config-plantilla-select {
+        min-height: 42px;
+    }
+
+    #select_config_plantilla {
+        min-height: 42px;
+        background: rgba(10, 15, 30, 0.55);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: #dbe5ff;
+    }
+
+    #select_config_plantilla:disabled {
+        background: rgba(10, 15, 30, 0.35) !important;
+        border-color: rgba(255, 255, 255, 0.12) !important;
+        color: rgba(228, 233, 245, 0.7) !important;
+        opacity: 1;
+        cursor: not-allowed;
+    }
+
+    /* Temporal: se oculta visualmente CUMPLE % sin eliminar su lógica interna. */
+    .cumple-col,
+    .cumple-cell {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block select2 %}
+<style>
+    /* Override final: estilos select2 de Configuración de Acceso (después de style.css). */
+    #configAccesoPanel .select2-container {
+        width: 100% !important;
+    }
+
+    #configAccesoPanel .select2-container--default .select2-selection--single,
+    #configAccesoPanel .select2-container--default .select2-selection--multiple {
+        min-height: 42px !important;
+        border-radius: 0.45rem !important;
+    }
+
+    #configAccesoPanel .select2-container--default .select2-selection--single {
+        display: flex;
+        align-items: center;
+    }
+
+    #configAccesoPanel .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 40px !important;
+        padding-left: 0.75rem;
+    }
+
+    #configAccesoPanel .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 40px !important;
+    }
+
+    .select2-container--open .select2-dropdown.config-access-dropdown {
+        z-index: 2200 !important;
+    }
+
+    .config-access-dropdown .select2-results__option--highlighted[aria-selected] {
+        background: var(--primary-bg-color) !important;
+        color: #ffffff !important;
+    }
+
+</style>
+{% endblock select2 %}
+
+{% block content %}
+
+<button id="saveButton" class="btn btn-primary save-float" style="display: none;">Guardar</button>
+<a href="{% url 'history_prevencion' %}" class="btn btn-secondary back-float">Regresar</a>
+
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+            
+            <div class="page-header">
+                <h1 id="page-title-new-documento" class="page-title">{{ titulo_vista_nuevo_documento|default:"Nuevo Documento" }}</h1>
+            </div>
+
+            <div id="configAccesoPanel" class="mb-4">
+                <div class="card config-access-card">
+                    <div class="card-body">
+                        <p class="mb-3 text-muted">
+                            Selecciona una faena, luego el tipo, el cargo y la plantilla para cargar el formulario dinámico.
+                        </p>
+                        <div class="row g-3">
+                            <div class="col-lg-3">
+                                <div class="config-panel">
+                                    <div class="config-panel-title">Faenas</div>
+                                    <select id="select_config_faenas" class="form-control">
+                                        <option value="__clear__">Selecciona faena...</option>
+                                        {% for f in faenas %}
+                                            <option value="{{ f.id }}">{{ f.faena }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="config-panel">
+                                    <div class="config-panel-title">Tipo</div>
+                                    <select id="select_config_tipo" class="form-control config-plantilla-select">
+                                        <option value="__clear__">Selecciona tipo...</option>
+                                        {% for value, label in tipos_plantilla %}
+                                            <option value="{{ value }}">{{ label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="config-panel">
+                                    <div class="config-panel-title">Cargo</div>
+                                    <select id="select_config_cargo" class="form-control config-plantilla-select">
+                                        <option value="__clear__">Selecciona cargo...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="config-panel">
+                                    <div class="config-panel-title">Nombre Capacitación</div>
+                                    <select name="config_plantilla" id="select_config_plantilla" class="form-control config-plantilla-select" required>
+                                        <option value="__clear__">Selecciona Nombre...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="formDocumento" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="contenido_data" id="contenido_data">
+                <input type="hidden" name="plantilla" id="selected_plantilla_hidden">
+                <input type="hidden" name="faenas_ids" id="selected_faenas_hidden">
+
+                <div id="document-container" style="display:none;">
+                    <div id="form_body"></div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript2 %}
+<script>
+    const MAX_FILES_PER_INPUT = 5;
+    const MAX_FILE_SIZE_BYTES = 100 * 1024 * 1024; // 100 MB
+    const MAX_FILENAME_CHARS = 30;
+    const FILE_SIZE_ERROR_MSG = 'No puede excederse de los 100 MB por archivo.';
+    const localPreviewState = new Map();
+    let localPreviewCounter = 0;
+
+    function showUploadError(message) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Limite de archivos',
+            text: message,
+            confirmButtonText: 'Entendido',
+            confirmButtonColor: '#3085d6'
+        });
+    }
+
+    function validateChangedFileInput($input) {
+        const input = $input.get(0);
+        if (!input || !input.files || !input.files.length) {
+            return true;
+        }
+
+        if (input.files.length > MAX_FILES_PER_INPUT) {
+            showUploadError(`No puedes subir mas de ${MAX_FILES_PER_INPUT} archivos por cada evidencia.`);
+            $input.val('');
+            return false;
+        }
+
+        for (const file of input.files) {
+            if (file.size > MAX_FILE_SIZE_BYTES) {
+                showUploadError(FILE_SIZE_ERROR_MSG);
+                $input.val('');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function validateAllFilesBeforeSubmit() {
+        let hasError = false;
+
+        $('#formDocumento input[type="file"]').each(function () {
+            if (!this.files || !this.files.length) {
+                return;
+            }
+
+            if (this.files.length > MAX_FILES_PER_INPUT) {
+                showUploadError(`No puedes subir mas de ${MAX_FILES_PER_INPUT} archivos por cada evidencia.`);
+                hasError = true;
+                return false;
+            }
+
+            for (const file of this.files) {
+                if (file.size > MAX_FILE_SIZE_BYTES) {
+                    showUploadError(FILE_SIZE_ERROR_MSG);
+                    hasError = true;
+                    return false;
+                }
+            }
+        });
+
+        return !hasError;
+    }
+
+    // --- 1. FUNCIÃƒâ€œN PARA RECOLECTAR DATOS (JSON) ---
+    function initManualCarousels(scope) {
+        if (!window.bootstrap || !bootstrap.Carousel) {
+            return;
+        }
+
+        const root = scope && scope.querySelectorAll ? scope : document;
+        const carousels = root.querySelectorAll('.carousel');
+
+        carousels.forEach((carouselEl) => {
+            const instance = bootstrap.Carousel.getOrCreateInstance(carouselEl, {
+                interval: false,
+                ride: false,
+                touch: false,
+                pause: true,
+                wrap: true
+            });
+            instance.pause();
+        });
+    }
+
+    function revokeObjectUrls(urls) {
+        if (!Array.isArray(urls)) {
+            return;
+        }
+        urls.forEach((url) => {
+            try {
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                // noop
+            }
+        });
+    }
+
+    function cleanupSelectedFilesPreview($input) {
+        const inputEl = $input && $input.length ? $input.get(0) : null;
+        if (!inputEl) {
+            return;
+        }
+
+        const state = localPreviewState.get(inputEl);
+        if (state && Array.isArray(state.objectUrls)) {
+            revokeObjectUrls(state.objectUrls);
+        }
+        localPreviewState.delete(inputEl);
+
+        const previewTarget = $input.attr('data-preview-target');
+        if (previewTarget) {
+            $(previewTarget).remove();
+            $input.removeAttr('data-preview-target');
+        }
+    }
+
+    function clearAllSelectedFilesPreviews() {
+        localPreviewState.forEach((state) => {
+            if (state && Array.isArray(state.objectUrls)) {
+                revokeObjectUrls(state.objectUrls);
+            }
+        });
+        localPreviewState.clear();
+        $('.upload-preview-carousel').remove();
+        $('#formDocumento input[type="file"]').removeAttr('data-preview-target');
+    }
+
+    function ensureSelectedFilesPreviewContainer($input) {
+        const existingTarget = $input.attr('data-preview-target');
+        if (existingTarget) {
+            const $existing = $(existingTarget);
+            if ($existing.length) {
+                return $existing;
+            }
+        }
+
+        localPreviewCounter += 1;
+        const previewId = `upload-preview-${localPreviewCounter}`;
+        const $preview = $(`<div id="${previewId}" class="upload-preview-carousel"></div>`);
+        const $group = $input.closest('.input-group');
+
+        if ($group.length) {
+            $group.before($preview);
+        } else {
+            $input.before($preview);
+        }
+
+        $input.attr('data-preview-target', `#${previewId}`);
+        return $preview;
+    }
+
+    function extractFileNameFromUrl(url) {
+        if (!url) {
+            return 'este archivo';
+        }
+        try {
+            const cleanUrl = String(url).split('?')[0].split('#')[0];
+            const segments = cleanUrl.split('/');
+            const rawName = segments[segments.length - 1] || '';
+            const decodedName = decodeURIComponent(rawName);
+            return decodedName || 'este archivo';
+        } catch (error) {
+            return 'este archivo';
+        }
+    }
+
+    function truncateWithEllipsis(value, maxChars = MAX_FILENAME_CHARS) {
+        const text = String(value ?? '').trim();
+        if (!text) {
+            return '';
+        }
+        if (text.length <= maxChars) {
+            return text;
+        }
+        return `${text.slice(0, Math.max(1, maxChars - 3))}...`;
+    }
+
+    function hydrateEvidenceLinkNames($scope) {
+        const $root = $scope || $(document);
+        $root.find('.js-evidence-link').each(function () {
+            const explicitName = String($(this).attr('data-file-name') || '').trim();
+            const href = $(this).attr('href') || '';
+            const fileName = explicitName || extractFileNameFromUrl(href);
+            const shortName = truncateWithEllipsis(fileName);
+            const $label = $(this).find('.file-link-label');
+            if ($label.length) {
+                $label.text(shortName || fileName);
+                $label.attr('title', fileName);
+            }
+        });
+    }
+
+    function normalizeFileList(value) {
+        if (Array.isArray(value)) {
+            return value
+                .map((entry) => {
+                    if (!entry) return null;
+                    if (typeof entry === 'string') {
+                        const url = entry.trim();
+                        return url ? { id: null, url, name: '' } : null;
+                    }
+                    if (typeof entry === 'object') {
+                        const url = String(entry.url || '').trim();
+                        if (!url) return null;
+                        return {
+                            id: entry.id ?? null,
+                            url,
+                            name: String(entry.name || '').trim()
+                        };
+                    }
+                    return null;
+                })
+                .filter(Boolean);
+        }
+        if (typeof value === 'string' && value.trim()) {
+            return [{ id: null, url: value.trim(), name: '' }];
+        }
+        return [];
+    }
+
+    function renderEvidenceCarousel(urls, carouselId, buttonClass = 'btn btn-sm btn-primary text-white w-100') {
+        const files = normalizeFileList(urls);
+        if (!files.length) {
+            return '';
+        }
+
+        const itemsHtml = files.map((file, idx) => `
+            <div class="carousel-item ${idx === 0 ? 'active' : ''}" data-evidence-id="${file.id ?? ''}">
+                <a href="${escapeHtml(file.url)}" target="_blank" class="${buttonClass} js-evidence-link" data-file-name="${escapeHtml(file.name || '')}">
+                    <i class="fe fe-eye"></i><span class="file-link-label">Archivo</span>
+                </a>
+            </div>
+        `).join('');
+
+        const controlsHtml = files.length > 1 ? `
+            <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        ` : '';
+
+        return `
+            <div id="${carouselId}" class="carousel slide mb-2 js-no-autoplay-carousel" data-bs-ride="false" data-bs-interval="false" data-bs-touch="false">
+                <div class="carousel-inner">${itemsHtml}</div>
+                ${controlsHtml}
+            </div>
+        `;
+    }
+
+    function renderSelectedFilesPreview($input) {
+        cleanupSelectedFilesPreview($input);
+
+        const inputEl = $input && $input.length ? $input.get(0) : null;
+        if (!inputEl || !inputEl.files || !inputEl.files.length) {
+            return;
+        }
+
+        const files = Array.from(inputEl.files).map((file) => ({
+            id: null,
+            url: URL.createObjectURL(file),
+            name: file.name || 'Archivo'
+        }));
+
+        localPreviewState.set(inputEl, {
+            objectUrls: files.map((file) => file.url)
+        });
+
+        const carouselId = `selected-files-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+        const selectedLabel = files.length === 1
+            ? 'nuevo archivo adjunto'
+            : 'nuevos archivos adjuntos';
+        const $preview = ensureSelectedFilesPreviewContainer($input);
+
+        $preview.html(`
+            <div class="text-white fw-semibold small mb-1">${selectedLabel}</div>
+            ${renderEvidenceCarousel(files, carouselId, 'btn btn-sm btn-primary text-white w-100')}
+        `);
+
+        hydrateEvidenceLinkNames($preview);
+        initManualCarousels($preview.get(0));
+    }
+
+    function recolectarDatos() {
+        recomputeCumpleAllRows($(document));
+
+        let datos = [];
+        $('.seccion-wrapper').each(function() {
+            let secTitle = $(this).data('titulo');
+            let colExtras = [];
+            $(this).find('thead th.th-dynamic').each(function() { colExtras.push($(this).text().trim()); });
+
+            let filas = [];
+            $(this).find('.fila-dato').each(function() {
+                const $preguntaField = $(this).find('.item-pregunta');
+                let pregunta = "";
+                if ($preguntaField.is('input,textarea,select')) {
+                    pregunta = $preguntaField.val();
+                } else {
+                    const rawAttr = $preguntaField.attr('data-raw');
+                    pregunta = rawAttr !== undefined ? rawAttr : $preguntaField.text().trim();
+                }
+                
+                let cumple = $(this).find('.item-cumple').val();
+                if(cumple === "" || cumple === null) cumple = 0;
+
+                let extras = [];
+                $(this).find('.item-dinamico').each(function() { extras.push($(this).val()); });
+
+                filas.push({
+                    'pregunta': pregunta,
+                    'cumple': cumple,
+                    'respuestas_extras': extras
+                });
+            });
+
+            datos.push({ 
+                'seccion': secTitle, 
+                'columnas_extras': colExtras,
+                'respuestas': filas 
+            });
+        });
+
+        // IMPORTANTE: Escribir el JSON en el input hidden
+        let jsonString = JSON.stringify(datos);
+        $('#contenido_data').val(jsonString);
+    }
+
+    // --- 2. LOGICA DE GUARDADO (BOTÃƒâ€œN FLOTANTE) ---
+    $('#saveButton').click(function(e) {
+        e.preventDefault();
+        syncSelectedFaenasHidden();
+
+        const plantillaSeleccionada = $('#selected_plantilla_hidden').val();
+        if (!plantillaSeleccionada) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Plantilla requerida',
+                text: 'Selecciona una plantilla en Configuración de Acceso.',
+                confirmButtonColor: '#3085d6'
+            });
+            return;
+        }
+
+        if (!validateAllFilesBeforeSubmit()) {
+            return;
+        }
+        
+        // PASO 1: Ejecutar recolecciÃƒÂ³n manual
+        recolectarDatos();
+
+        // PASO 2: Verificar si se generÃƒÂ³ data
+        if ($('#contenido_data').val() === "") {
+            $('#contenido_data').val("[]");
+        }
+
+        // PASO 3: Enviar formulario
+        document.getElementById('formDocumento').submit(); 
+    });
+
+    // --- 3. CONFIGURACION DE ACCESO (FAENA + TIPO + CARGO + PLANTILLA EN CASCADA) ---
+    const CLEAR_FILTER_VALUE = '__clear__';
+
+    function normalizeFilterSelection(rawValue) {
+        const normalized = String(rawValue || '').trim();
+        return (!normalized || normalized === CLEAR_FILTER_VALUE) ? '' : normalized;
+    }
+
+    function getSelectedFaenaId() {
+        const $faenas = $('#select_config_faenas');
+        return normalizeFilterSelection($faenas.val());
+    }
+
+    function syncSelectedFaenasHidden() {
+        const selectedId = getSelectedFaenaId();
+        $('#selected_faenas_hidden').val(selectedId);
+    }
+
+    function getSelectedTipo() {
+        return normalizeFilterSelection($('#select_config_tipo').val());
+    }
+
+    function getSelectedCargo() {
+        return normalizeFilterSelection($('#select_config_cargo').val());
+    }
+
+    function getSelectedPlantillaId() {
+        return normalizeFilterSelection($('#select_config_plantilla').val());
+    }
+
+    const tipoLabelMap = {};
+    $('#select_config_tipo option').each(function () {
+        const value = String($(this).val() || '').trim();
+        const label = String($(this).text() || '').trim();
+        if (value && value !== CLEAR_FILTER_VALUE) {
+            tipoLabelMap[value] = label || value;
+        }
+    });
+    const initialTipoSlug = '{{ tipo_documento_inicial|default:""|escapejs }}';
+    let tipoInicialPendiente = initialTipoSlug;
+    const defaultNuevoDocumentoTitle = '{{ titulo_vista_nuevo_documento|default:"Nuevo Documento"|escapejs }}';
+    const pageTitleNewDocumento = document.getElementById('page-title-new-documento');
+
+    function buildNuevoDocumentoTitleByTipo(tipoSlug) {
+        const normalizedTipo = String(tipoSlug || '').trim().toLowerCase();
+        if (!normalizedTipo) {
+            return defaultNuevoDocumentoTitle || 'Nuevo Documento';
+        }
+
+        const label = tipoLabelMap[normalizedTipo];
+        if (!label) {
+            return defaultNuevoDocumentoTitle || 'Nuevo Documento';
+        }
+
+        const prefijo = (normalizedTipo === 'charlas' || normalizedTipo === 'difusiones')
+            ? 'Nueva'
+            : 'Nuevo';
+        return `${prefijo} ${label}`;
+    }
+
+    function updateNuevoDocumentoTitle(tipoSlug) {
+        const title = buildNuevoDocumentoTitleByTipo(tipoSlug);
+        if (pageTitleNewDocumento) {
+            pageTitleNewDocumento.textContent = title;
+        }
+        document.title = title;
+    }
+
+    let previewBlobUrl = null;
+    let configPlantillasCatalogo = [];
+    let isUpdatingConfigFilters = false;
+    let lastLoadedPlantillaId = '';
+
+    function releasePdfBlobUrl() {
+        if (previewBlobUrl) {
+            URL.revokeObjectURL(previewBlobUrl);
+            previewBlobUrl = null;
+        }
+    }
+
+    function renderPdfPreview(url) {
+        const $frame = $('#pdf-preview-frame');
+        const $empty = $('#pdf-preview-empty');
+
+        if (!$frame.length || !$empty.length) {
+            return;
+        }
+
+        if (url) {
+            $frame.attr('src', url).removeClass('d-none');
+            $empty.addClass('d-none');
+        } else {
+            $frame.attr('src', '').addClass('d-none');
+            $empty.removeClass('d-none');
+        }
+    }
+
+    function loadPdfPreview(url) {
+        if (!url) {
+            renderPdfPreview('');
+            return Promise.resolve();
+        }
+
+        releasePdfBlobUrl();
+        return fetch(url, { credentials: 'same-origin' })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`No se pudo cargar el PDF (${response.status})`);
+                }
+                return response.blob();
+            })
+            .then((blob) => {
+                const isPdfBlob = (blob.type || '').toLowerCase().includes('pdf') || url.toLowerCase().includes('.pdf');
+                if (!isPdfBlob) {
+                    throw new Error('El archivo no es PDF');
+                }
+                previewBlobUrl = URL.createObjectURL(blob);
+                renderPdfPreview(previewBlobUrl);
+            })
+            .catch(() => {
+                renderPdfPreview(url);
+            });
+    }
+
+    function hideDocumentoDinamico() {
+        clearAllSelectedFilesPreviews();
+        releasePdfBlobUrl();
+        $('#selected_plantilla_hidden').val('');
+        lastLoadedPlantillaId = '';
+        $('#document-container').slideUp();
+        $('#saveButton').hide();
+    }
+
+    function normalizeCatalogItem(rawItem) {
+        const payload = rawItem || {};
+        let cargoValues = [];
+
+        if (Array.isArray(payload.cargo_values)) {
+            cargoValues = payload.cargo_values
+                .map((cargo) => String(cargo || '').trim())
+                .filter((cargo) => !!cargo);
+        }
+
+        if (!cargoValues.length) {
+            const cargoDisplay = String(payload.cargo_display || '').trim();
+            if (cargoDisplay) {
+                cargoValues = cargoDisplay
+                    .split(',')
+                    .map((cargo) => String(cargo || '').trim())
+                    .filter((cargo) => !!cargo);
+            }
+        }
+
+        if (!cargoValues.length) {
+            cargoValues = ['Todos'];
+        }
+
+        return {
+            id: String(payload.id || '').trim(),
+            nombre: String(payload.nombre || '').trim(),
+            tipo: String(payload.tipo || '').trim(),
+            cargoDisplay: String(payload.cargo_display || '').trim() || 'Todos',
+            cargos: Array.from(new Set(cargoValues))
+        };
+    }
+
+    function setSelectOptions($select, options, placeholderText, selectedValue, forceDisabled) {
+        const selected = String(selectedValue || '').trim();
+        $select.empty();
+        $select.append(new Option(placeholderText, CLEAR_FILTER_VALUE));
+
+        options.forEach((option) => {
+            $select.append(new Option(option.label, option.value));
+        });
+
+        const hasSelected = selected && options.some((option) => String(option.value) === selected);
+        $select.val(hasSelected ? selected : CLEAR_FILTER_VALUE);
+        $select.prop('disabled', Boolean(forceDisabled));
+        $select.trigger('change.select2');
+    }
+
+    function plantillaCumpleFiltros(plantilla, filtros, campoIgnorado) {
+        if (!plantilla) return false;
+
+        if (campoIgnorado !== 'tipo' && filtros.tipo && plantilla.tipo !== filtros.tipo) {
+            return false;
+        }
+
+        if (campoIgnorado !== 'cargo' && filtros.cargo) {
+            if (!Array.isArray(plantilla.cargos) || !plantilla.cargos.includes(filtros.cargo)) {
+                return false;
+            }
+        }
+
+        if (campoIgnorado !== 'plantilla' && filtros.plantilla) {
+            if (String(plantilla.id) !== String(filtros.plantilla)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function collectTipoOptions(filtros) {
+        const unique = new Map();
+        configPlantillasCatalogo.forEach((plantilla) => {
+            if (!plantillaCumpleFiltros(plantilla, filtros, 'tipo')) return;
+            if (!plantilla.tipo) return;
+            if (!unique.has(plantilla.tipo)) {
+                unique.set(plantilla.tipo, tipoLabelMap[plantilla.tipo] || plantilla.tipo);
+            }
+        });
+        return Array.from(unique.entries())
+            .map(([value, label]) => ({ value, label }))
+            .sort((a, b) => a.label.localeCompare(b.label, 'es', { sensitivity: 'base' }));
+    }
+
+    function collectCargoOptions(filtros) {
+        const unique = new Set();
+        configPlantillasCatalogo.forEach((plantilla) => {
+            if (!plantillaCumpleFiltros(plantilla, filtros, 'cargo')) return;
+            (plantilla.cargos || []).forEach((cargo) => {
+                const valor = String(cargo || '').trim();
+                if (valor) {
+                    unique.add(valor);
+                }
+            });
+        });
+        return Array.from(unique)
+            .sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }))
+            .map((cargo) => ({ value: cargo, label: cargo }));
+    }
+
+    function collectPlantillaOptions(filtros) {
+        const rows = [];
+        configPlantillasCatalogo.forEach((plantilla) => {
+            if (!plantillaCumpleFiltros(plantilla, filtros, 'plantilla')) return;
+            if (!plantilla.id) return;
+            rows.push({
+                value: String(plantilla.id),
+                label: `${plantilla.nombre}`
+            });
+        });
+        rows.sort((a, b) => a.label.localeCompare(b.label, 'es', { sensitivity: 'base' }));
+        return rows;
+    }
+
+    function rebuildConfigCascade() {
+        const $tipo = $('#select_config_tipo');
+        const $cargo = $('#select_config_cargo');
+        const $plantilla = $('#select_config_plantilla');
+        const faenaActual = getSelectedFaenaId();
+
+        const filtrosBase = {
+            tipo: getSelectedTipo(),
+            cargo: getSelectedCargo(),
+            plantilla: getSelectedPlantillaId()
+        };
+
+        const tipoOptions = collectTipoOptions(filtrosBase);
+        let tipoActual = tipoOptions.some((row) => row.value === filtrosBase.tipo) ? filtrosBase.tipo : '';
+        if (!tipoActual && tipoInicialPendiente && tipoOptions.some((row) => row.value === tipoInicialPendiente)) {
+            tipoActual = tipoInicialPendiente;
+            tipoInicialPendiente = '';
+        }
+        if (tipoActual) {
+            tipoInicialPendiente = '';
+        }
+
+        const filtrosConTipo = { ...filtrosBase, tipo: tipoActual };
+        const cargoOptions = collectCargoOptions(filtrosConTipo);
+        const cargoActual = cargoOptions.some((row) => row.value === filtrosBase.cargo) ? filtrosBase.cargo : '';
+
+        const filtrosConTipoCargo = { ...filtrosConTipo, cargo: cargoActual };
+        const filtrosCompletosParaPlantilla = Boolean(faenaActual && tipoActual && cargoActual);
+        const plantillaOptions = filtrosCompletosParaPlantilla
+            ? collectPlantillaOptions(filtrosConTipoCargo)
+            : [];
+        const plantillaActual = (filtrosCompletosParaPlantilla && plantillaOptions.some((row) => row.value === filtrosBase.plantilla))
+            ? filtrosBase.plantilla
+            : '';
+        const plantillaPlaceholder = filtrosCompletosParaPlantilla
+            ? 'Selecciona Nombre...'
+            : 'Selecciona faena, tipo y cargo...';
+
+        isUpdatingConfigFilters = true;
+        setSelectOptions($tipo, tipoOptions, 'Selecciona tipo...', tipoActual, false);
+        setSelectOptions($cargo, cargoOptions, 'Selecciona cargo...', cargoActual, false);
+        setSelectOptions(
+            $plantilla,
+            plantillaOptions,
+            plantillaPlaceholder,
+            plantillaActual,
+            !filtrosCompletosParaPlantilla
+        );
+        isUpdatingConfigFilters = false;
+
+        $('#selected_plantilla_hidden').val(plantillaActual || '');
+        updateNuevoDocumentoTitle(tipoActual);
+    }
+
+    function resetConfigCascadeWithoutFaena() {
+        const $tipo = $('#select_config_tipo');
+        const $cargo = $('#select_config_cargo');
+        const $plantilla = $('#select_config_plantilla');
+
+        isUpdatingConfigFilters = true;
+        setSelectOptions($tipo, [], 'Selecciona tipo...', '', false);
+        setSelectOptions($cargo, [], 'Selecciona cargo...', '', false);
+        setSelectOptions($plantilla, [], 'Selecciona faena, tipo y cargo...', '', true);
+        isUpdatingConfigFilters = false;
+        updateNuevoDocumentoTitle('');
+    }
+
+    function loadCatalogoPlantillasPorFaena() {
+        const faenaId = getSelectedFaenaId();
+        const $tipo = $('#select_config_tipo');
+        const $cargo = $('#select_config_cargo');
+        const $plantilla = $('#select_config_plantilla');
+
+        hideDocumentoDinamico();
+        configPlantillasCatalogo = [];
+
+        if (!faenaId) {
+            resetConfigCascadeWithoutFaena();
+            return;
+        }
+
+        isUpdatingConfigFilters = true;
+        setSelectOptions($tipo, [], 'Selecciona tipo...', '', false);
+        setSelectOptions($cargo, [], 'Selecciona cargo...', '', false);
+        setSelectOptions($plantilla, [], 'Selecciona faena, tipo y cargo...', '', true);
+        isUpdatingConfigFilters = false;
+
+        $.ajax({
+            url: "{% url 'ajax_load_plantillas' %}",
+            data: { 'faena_id': faenaId },
+            success: function (data) {
+                configPlantillasCatalogo = (Array.isArray(data) ? data : []).map(normalizeCatalogItem);
+                if (!configPlantillasCatalogo.length) {
+                    isUpdatingConfigFilters = true;
+                    setSelectOptions($tipo, [], 'Selecciona tipo...', '', false);
+                    setSelectOptions($cargo, [], 'Selecciona cargo...', '', false);
+                    setSelectOptions($plantilla, [], 'Selecciona faena, tipo y cargo...', '', true);
+                    isUpdatingConfigFilters = false;
+                    return;
+                }
+                rebuildConfigCascade();
+            },
+            error: function () {
+                isUpdatingConfigFilters = true;
+                setSelectOptions($tipo, [], 'Selecciona tipo...', '', false);
+                setSelectOptions($cargo, [], 'Selecciona cargo...', '', false);
+                setSelectOptions($plantilla, [], 'Selecciona faena, tipo y cargo...', '', true);
+                isUpdatingConfigFilters = false;
+            }
+        });
+    }
+
+    function renderDocumentoDesdePlantillaSeleccionada() {
+        const plantillaId = getSelectedPlantillaId();
+        $('#selected_plantilla_hidden').val(plantillaId || '');
+
+        if (!plantillaId) {
+            hideDocumentoDinamico();
+            return;
+        }
+
+        if (lastLoadedPlantillaId === plantillaId && $('#document-container').is(':visible')) {
+            return;
+        }
+
+        $.ajax({
+            url: "{% url 'ajax_get_structure' %}",
+            data: { 'plantilla_id': plantillaId },
+            success: function (data) {
+                clearAllSelectedFilesPreviews();
+                renderForm(data);
+                lastLoadedPlantillaId = plantillaId;
+                $('#document-container').slideDown();
+                $('#saveButton').fadeIn();
+            },
+            error: function (xhr) {
+                hideDocumentoDinamico();
+                const errorText = (xhr && xhr.responseJSON && xhr.responseJSON.error)
+                    ? xhr.responseJSON.error
+                    : 'La plantilla seleccionada no está disponible para crear documentos.';
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        titleText: 'No disponible',
+                        text: errorText,
+                        icon: 'warning',
+                        confirmButtonColor: '#ff00d9',
+                    });
+                }
+            },
+        });
+    }
+
+    function onConfigFiltersChanged() {
+        if (isUpdatingConfigFilters) return;
+        rebuildConfigCascade();
+        renderDocumentoDesdePlantillaSeleccionada();
+    }
+
+    $(document).on('change', '#select_config_faenas', function () {
+        syncSelectedFaenasHidden();
+        loadCatalogoPlantillasPorFaena();
+    });
+
+    $(document).on('change', '#select_config_tipo, #select_config_cargo, #select_config_plantilla', function () {
+        onConfigFiltersChanged();
+    });
+
+    function initConfigSelect2() {
+        if (!(window.jQuery && $.fn && typeof $.fn.select2 === 'function')) {
+            setTimeout(initConfigSelect2, 120);
+            return;
+        }
+
+        const $faenas = $('#select_config_faenas');
+        const $tipo = $('#select_config_tipo');
+        const $cargo = $('#select_config_cargo');
+        const $plantilla = $('#select_config_plantilla');
+
+        if ($faenas.length && !$faenas.data('select2')) {
+            $faenas.select2({
+                width: '100%',
+                placeholder: 'Selecciona faena...',
+                minimumResultsForSearch: Infinity,
+                closeOnSelect: true,
+                dropdownCssClass: 'config-access-dropdown'
+            });
+        }
+
+        if ($tipo.length && !$tipo.data('select2')) {
+            $tipo.select2({
+                width: '100%',
+                placeholder: 'Selecciona tipo...',
+                minimumResultsForSearch: Infinity,
+                dropdownCssClass: 'config-access-dropdown'
+            });
+        }
+
+        if ($cargo.length && !$cargo.data('select2')) {
+            $cargo.select2({
+                width: '100%',
+                placeholder: 'Selecciona cargo...',
+                minimumResultsForSearch: Infinity,
+                dropdownCssClass: 'config-access-dropdown'
+            });
+        }
+
+        if ($plantilla.length && !$plantilla.data('select2')) {
+            $plantilla.select2({
+                width: '100%',
+                placeholder: 'Selecciona Nombre...',
+                minimumResultsForSearch: Infinity,
+                dropdownCssClass: 'config-access-dropdown'
+            });
+        }
+    }
+
+    initConfigSelect2();
+    syncSelectedFaenasHidden();
+    updateNuevoDocumentoTitle(initialTipoSlug);
+    loadCatalogoPlantillasPorFaena();
+
+    // --- 4. RENDERIZADO DEL FORMULARIO ---
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function formatPreguntaDisplay(value) {
+        const text = String(value ?? '').trim();
+        return text ? escapeHtml(text) : '-';
+    }
+
+    function buildCourseImageReadonlyBlock(course) {
+        if (!course.imagenUrl) {
+            return '';
+        }
+
+        return `
+            <div class="course-image-upload-wrap mb-3">
+                <label class="form-label mb-1 d-block">Foto de la pregunta</label>
+                <div class="course-image-preview-frame">
+                    <img src="${escapeHtml(course.imagenUrl)}" class="course-image-preview" alt="Foto de la pregunta">
+                </div>
+            </div>
+        `;
+    }
+
+    function parseCourseSectionData(seccion = {}, idx = 0) {
+        const filas = Array.isArray(seccion.filas) ? seccion.filas : [];
+        let enunciado = String(seccion.enunciado || '').trim();
+        let opciones = Array.isArray(seccion.opciones)
+            ? seccion.opciones.filter(Boolean).map((opt) => String(opt).trim()).filter(Boolean)
+            : [];
+        let respuesta = String(seccion.respuesta_correcta || '').trim().toUpperCase();
+        let justificacion = String(seccion.justificacion || '').trim();
+        const imagenUrl = String(seccion.imagen_url || '').trim();
+
+        if (!enunciado && filas.length) {
+            const first = String(filas[0] || '').trim();
+            const isOptionLike = /^[a-zA-Z]\s*[-.)]\s*/.test(first);
+            const isAnswerLike = /^respuesta/i.test(first);
+            const isJustLike = /^justificaci[oó]n/i.test(first);
+            if (!isOptionLike && !isAnswerLike && !isJustLike) {
+                enunciado = first;
+            }
+        }
+
+        if (!opciones.length && filas.length) {
+            filas.forEach((line) => {
+                const text = String(line || '').trim();
+                const optionMatch = text.match(/^[a-zA-Z]\s*[-.)]\s*(.+)$/);
+                if (optionMatch) {
+                    opciones.push(optionMatch[1].trim());
+                }
+            });
+        }
+
+        if (!respuesta && filas.length) {
+            const answerLine = filas.find((line) => /^respuesta/i.test(String(line || '').trim()));
+            if (answerLine) {
+                const m = String(answerLine).match(/:\s*([A-Za-z])/);
+                if (m) respuesta = m[1].toUpperCase();
+            }
+        }
+
+        if (!justificacion && filas.length) {
+            const justLine = filas.find((line) => /^justificaci[oó]n/i.test(String(line || '').trim()));
+            if (justLine) {
+                const m = String(justLine).match(/:\s*(.+)$/);
+                justificacion = m ? m[1].trim() : '';
+            }
+        }
+
+        return {
+            titulo: String(seccion.titulo || '').trim() || `Pregunta ${idx + 1}`,
+            enunciado,
+            opciones,
+            respuesta,
+            justificacion,
+            imagenUrl
+        };
+    }
+
+    function computeCumpleForRow($row) {
+        const $extraInputs = $row.find('.item-dinamico');
+        const extraWeight = 10;
+        const evidenciaWeight = Math.max(0, 100 - ($extraInputs.length * extraWeight));
+
+        let extrasScore = 0;
+        $extraInputs.each(function () {
+            const rawValue = String($(this).val() ?? '').trim();
+            if (!rawValue) {
+                return;
+            }
+
+            const numericValue = Number(rawValue.replace(',', '.'));
+            const isCompleted = Number.isFinite(numericValue) ? numericValue > 0 : true;
+            if (isCompleted) {
+                extrasScore += extraWeight;
+            }
+        });
+
+        const total = Math.max(0, Math.min(100, evidenciaWeight + extrasScore));
+        $row.find('.item-cumple').val(total);
+    }
+
+    function recomputeCumpleAllRows($scope) {
+        $scope.find('.fila-dato').each(function () {
+            computeCumpleForRow($(this));
+        });
+    }
+
+    function autoResizeTextarea(textarea) {
+        if (!textarea) {
+            return;
+        }
+        textarea.style.height = 'auto';
+        textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+
+    function autoResizeDynamicTextareas($scope) {
+        $scope.find('.item-dinamico').each(function () {
+            autoResizeTextarea(this);
+        });
+    }
+
+    function renderForm(data) {
+        const container = $('#form_body');
+        container.empty();
+
+        const payload = (data && typeof data === 'object' && !Array.isArray(data))
+            ? data
+            : { modo_contenido: 'estructura', estructura: Array.isArray(data) ? data : [] };
+        const modoContenido = String(payload.modo_contenido || 'estructura').toLowerCase();
+        const estructura = Array.isArray(payload.estructura) ? payload.estructura : [];
+        const pdfUrl = String(payload.archivo_pdf_url || '').trim();
+        const pdfName = String(payload.archivo_pdf_nombre || '').trim();
+
+        releasePdfBlobUrl();
+
+        if (modoContenido === 'pdf') {
+            if (pdfUrl) {
+                const safePdfUrl = escapeHtml(pdfUrl);
+                const safePdfName = escapeHtml(pdfName || 'Documento PDF');
+                container.append(`
+                    <div id="pdf-preview-row" class="row">
+                        <div class="col-12 col-xl-8">
+                            <div id="pdf-preview-container" class="card mb-4">
+                                <div class="card-header">
+                                    <h3 class="card-title mb-0">Documento PDF</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div id="pdf-preview-empty" class="pdf-preview-empty">
+                                        Cargando vista previa del PDF...
+                                    </div>
+                                    <iframe id="pdf-preview-frame" class="pdf-preview-frame d-none" title="Vista previa PDF"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `);
+
+                loadPdfPreview(pdfUrl).catch(() => {
+                    renderPdfPreview('');
+                    $('#pdf-preview-empty').text('No se pudo mostrar la vista previa. Usa el botón de descarga.');
+                });
+            } else {
+                container.append(`
+                    <div id="pdf-preview-row" class="row">
+                        <div class="col-12 col-xl-8">
+                            <div id="pdf-preview-container" class="card mb-4">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h3 class="card-title mb-0">Documento PDF</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div id="pdf-preview-empty" class="pdf-preview-empty">
+                                        Esta plantilla está configurada como PDF, pero no tiene un archivo adjunto.
+                                    </div>
+                                    <iframe id="pdf-preview-frame" class="pdf-preview-frame d-none" title="Vista previa PDF"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `);
+            }
+
+            $('#contenido_data').val('[]');
+            return;
+        }
+
+        if(!estructura || estructura.length === 0) return;
+
+        const tipoSeleccionado = getSelectedTipo();
+        const esCurso = tipoSeleccionado === 'cursos' || estructura.some((s) =>
+            (Array.isArray(s.opciones) && s.opciones.length > 0) ||
+            s.enunciado !== undefined ||
+            s.respuesta_correcta !== undefined ||
+            s.justificacion !== undefined
+        );
+
+        estructura.forEach((seccion, idx) => {
+            let html = '';
+
+            if (esCurso) {
+                const course = parseCourseSectionData(seccion, idx);
+                const enunciadoRaw = String(course.enunciado || '');
+                const enunciadoDisplay = formatPreguntaDisplay(enunciadoRaw);
+                const enunciadoAttr = escapeHtml(enunciadoRaw);
+
+                let opcionesHtml = '';
+                if (course.opciones.length) {
+                    course.opciones.forEach((op, i) => {
+                        const letra = String.fromCharCode(97 + i);
+                        opcionesHtml += `
+                            <div class="course-doc-option-row">
+                                <span class="course-doc-option-letter">${letra}</span>
+                                <input type="text" class="form-control readonly-template-input" value="${escapeHtml(op)}" readonly disabled>
+                                <button type="button" class="btn btn-sm btn-link text-danger p-0 px-1" disabled tabindex="-1" aria-hidden="true" style="visibility: hidden;">
+                                    <i class="fe fe-x"></i>
+                                </button>
+                            </div>
+                        `;
+                    });
+                } else {
+                    opcionesHtml = `
+                        <div class="course-doc-option-row">
+                            <span class="course-doc-option-letter">-</span>
+                            <input type="text" class="form-control readonly-template-input" value="Sin alternativas" readonly disabled>
+                        </div>
+                    `;
+                }
+
+                html = `
+                <div class="course-question-card seccion-wrapper" data-titulo="${escapeHtml(course.titulo)}">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="course-question-title">${escapeHtml(course.titulo)}</h5>
+                    </div>
+                    <div>
+                        <div class="fila-dato">
+                            <div class="item-pregunta d-none" data-raw="${enunciadoAttr}">${enunciadoDisplay}</div>
+                            <input type="hidden" class="item-cumple" value="100">
+
+                            <div class="mb-3">
+                                <label class="form-label mb-1">Descripcion de la pregunta</label>
+                                <textarea class="form-control readonly-template-input" rows="3" readonly disabled>${escapeHtml(course.enunciado)}</textarea>
+                            </div>
+
+                            ${buildCourseImageReadonlyBlock(course)}
+
+                            <label class="form-label mb-1">Alternativas</label>
+                            <div class="course-doc-options-box mb-3">
+                                ${opcionesHtml}
+                            </div>
+
+                            <div class="row g-2">
+                                <div class="col-md-2">
+                                    <label class="form-label mb-1">Alternativa correcta</label>
+                                    <input type="text" class="form-control readonly-template-input" value="${escapeHtml(course.respuesta || '-')}" readonly disabled>
+                                </div>
+                                <div class="col-md-10">
+                                    <label class="form-label mb-1">Justificacion</label>
+                                    <input type="text" class="form-control readonly-template-input" value="${escapeHtml(course.justificacion || '-')}" readonly disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            } else {
+                const tituloSeccion = String(seccion.titulo || '').trim() || `Seccion ${idx + 1}`;
+                const filas = Array.isArray(seccion.filas) ? seccion.filas : [];
+                const columnasExtras = Array.isArray(seccion.columnas_extras)
+                    ? seccion.columnas_extras.filter((col) => String(col || '').trim())
+                    : [];
+                const tituloDetalle = columnasExtras.length ? 'ITEMS' : 'Detalle';
+                const columnasExtrasHead = columnasExtras.map((col) => (
+                    `<th class="th-dynamic text-center">${escapeHtml(String(col || '').toUpperCase())}</th>`
+                )).join('');
+
+                html = `
+                <div class="card mb-4 seccion-wrapper shadow-sm readonly-template-section" data-titulo="${escapeHtml(tituloSeccion)}">
+                    <div class="card-header border-bottom">
+                        <div class="d-flex w-100 align-items-center">
+                            <span class="badge bg-dark me-3 readonly-section-badge">SECCION ${idx + 1}</span>
+                            <input type="text" class="form-control section-title-input readonly-template-input" value="${escapeHtml(tituloSeccion)}" readonly disabled>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-bordered mb-0 align-middle readonly-structure-table">
+                                <thead>
+                                    <tr>
+                                        <th class="th-fixed" style="width: 50px;">#</th>
+                                        <th class="th-fixed text-center"><span class="th-title-normal">${tituloDetalle}</span></th>
+                                        ${columnasExtrasHead}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                `;
+
+                if (filas.length) {
+                    filas.forEach((filaRaw, rowIdx) => {
+                        const esObjetoFila = typeof filaRaw === 'object' && filaRaw !== null;
+                        let txt = esObjetoFila ? (filaRaw.item ?? filaRaw.pregunta ?? '') : filaRaw;
+                        const extrasFila = esObjetoFila && Array.isArray(filaRaw.respuestas_extras)
+                            ? filaRaw.respuestas_extras
+                            : [];
+                        if (txt === "RELLENAR EN REPORTE") txt = "";
+                        const txtRaw = String(txt ?? '');
+                        const txtDisplay = formatPreguntaDisplay(txtRaw);
+                        const txtRawAttr = escapeHtml(txtRaw);
+                        const extrasCells = columnasExtras.map((_, colIdx) => {
+                            const rawExtra = String(extrasFila[colIdx] ?? '').trim();
+                            const displayExtra = rawExtra || '-';
+                            return `
+                                <td class="cell-nopad">
+                                    <textarea class="form-control input-ghost item-dinamico readonly-template-input readonly-extra-text text-center" rows="1" readonly disabled>${escapeHtml(displayExtra)}</textarea>
+                                </td>
+                            `;
+                        }).join('');
+
+                        html += `
+                            <tr class="fila-dato">
+                                <td class="text-center bg-light">${idx + 1}.${rowIdx + 1}</td>
+                                <td class="cell-nopad">
+                                    <div class="readonly-row-text item-pregunta" data-raw="${txtRawAttr}">${escapeHtml(txtDisplay === '-' ? '' : txtRaw)}</div>
+                                    <input type="hidden" class="item-cumple" value="100">
+                                </td>
+                                ${extrasCells}
+                            </tr>
+                        `;
+                    });
+                } else {
+                    const emptyExtrasCells = columnasExtras.map(() => (
+                        '<td class="cell-nopad"><textarea class="form-control input-ghost item-dinamico readonly-template-input readonly-extra-text text-center" rows="1" readonly disabled>-</textarea></td>'
+                    )).join('');
+                    html += `
+                        <tr class="fila-dato">
+                            <td class="text-center bg-light">${idx + 1}.1</td>
+                            <td class="cell-nopad">
+                                <div class="readonly-row-text item-pregunta" data-raw="">-</div>
+                                <input type="hidden" class="item-cumple" value="100">
+                            </td>
+                            ${emptyExtrasCells}
+                        </tr>
+                    `;
+                }
+
+                html += `
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }
+
+            container.append(html);
+        });
+
+        hydrateEvidenceLinkNames(container);
+        initManualCarousels(container.get(0));
+        autoResizeDynamicTextareas(container);
+        recomputeCumpleAllRows(container);
+    }
+
+    // --- 6. LIMPIAR INPUTS (CORREGIDO Y BLINDADO) ---
+    
+    // Para botones dinÃƒÂ¡micos (Secciones e ÃƒÂtems)
+    $(document).on('click', '.btn-clear-dynamic', function(e) {
+        e.preventDefault(); // <--- ESTO EVITA QUE EL FORMULARIO SE ENVÃƒÂE
+        const $input = $(this).siblings('input[type="file"]');
+        $input.val('');
+        cleanupSelectedFilesPreview($input);
+        const $row = $(this).closest('.fila-dato');
+        if ($row.length) computeCumpleForRow($row);
+    });
+
+    $(document).on('change', '#formDocumento input[type="file"]', function () {
+        const $input = $(this);
+        const isValid = validateChangedFileInput($input);
+        if (!isValid) {
+            cleanupSelectedFilesPreview($input);
+            return;
+        }
+        renderSelectedFilesPreview($input);
+    });
+
+    $(document).on('input change', '.item-dinamico', function () {
+        autoResizeTextarea(this);
+        const $row = $(this).closest('.fila-dato');
+        if ($row.length) computeCumpleForRow($row);
+    });
+
+</script>
+{% endblock %}

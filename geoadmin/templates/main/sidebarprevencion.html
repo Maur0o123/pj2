@@ -1,0 +1,260 @@
+{% load static %}
+<div class="sticky is-expanded" style="margin-bottom: -74px;">
+    <div class="app-sidebar__overlay active" data-bs-toggle="sidebar"></div>
+    <div class="app-sidebar ps">
+        <div class="side-header"> 
+            <a class="header-brand1" href="{% url 'logincustom' %}"> 
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img desktop-logo" alt="logo" />
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img toggle-logo" alt="logo" />
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img light-logo"  alt="logo" />
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img light-logo1" alt="logo" /> 
+                <h3>GeoAdmin</h3>
+            </a>   
+        </div>
+        <div class="main-sidemenu is-expanded">
+            <div class="slide-left disabled active d-none" id="slide-left">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
+                </svg> 
+            </div>
+    
+            <ul class="side-menu open" style="margin-right: 0px; margin-left: 0px;">
+                <li>
+                    <h3>Menu Prevención</h3>
+                </li>
+
+                {% if request.user.usuarioprofile.seccionPrevencion in 'ADMINISTRADOR, BASE DATOS' %}
+                <li class="slide"> 
+                    <a class="side-menu__item has-link {% if sidebar == 'dashboardPrevencion' %}active{% endif %}" data-bs-toggle="slide" href="{% url 'dashboardPrevencion' %}"> 
+                        <i class="icon-home icons-size"></i>  
+                        <span class="side-menu__label">Dashboard</span> 
+                    </a> 
+                </li>
+                {% endif %}
+
+                {% if request.user.usuarioprofile.seccionPrevencion != "SIN ASIGNAR" %}
+                <li class="slide {% if sidebarmain == 'capacitaciones' %}is-expanded{% endif %}">
+                    <a class="side-menu__item {% if sidebarmain == 'capacitaciones' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#">
+                        <i class="icon-note icons-size"></i>
+                        <span class="side-menu__label">Capacitaciones</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Capacitaciones</a></li>
+                        <li><a href="{% url 'manage_capacitaciones' 'charlas' %}" class="slide-item {% if sidebarmenu == 't-charlas' %}active{% endif %}">Charlas</a></li>
+                        <li><a href="{% url 'manage_capacitaciones' 'informativos' %}" class="slide-item {% if sidebarmenu == 't-informativos' %}active{% endif %}">Informativos</a></li>
+                        <li><a href="{% url 'manage_capacitaciones' 'difusiones' %}" class="slide-item {% if sidebarmenu == 't-difusiones' %}active{% endif %}">Difusiones</a></li>
+                        <li><a href="{% url 'manage_capacitaciones' 'cursos' %}" class="slide-item {% if sidebarmenu == 't-cursos' %}active{% endif %}">Cursos</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                <li>
+                    <h3>Secciones</h3>
+                </li>
+                
+                {% if request.user.usuarioprofile.seccionPrevencion in 'ADMINISTRADOR, BASE DATOS, PREVENCIONISTA, SUPERVISOR' %}
+                <li class="slide {% if sidebarmain == 'prevencion_riesgo' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'prevencion_riesgo' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-notebook icons-size"></i>
+                        <span class="side-menu__label">Prevencionista Riesgo</span>
+                        <i class="angle fa fa-angle-right"></i> 
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Documentos Digitales</a></li>
+                        <li>
+                            <a href="{% url 'history_prevencion' %}" class="slide-item {% if sidebar == 'historial_doc' %}active{% endif %}" data-key="t-historial-doc"> Capacitaciones </a>
+                        </li>
+
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Salud Ocupacional</a></li>
+                        <li class="sub-slide {% if sidebar == 'higiene_cualitativa' or sidebar == 'higiene_cuantitativa' %}is-expanded active{% endif %}">
+                            <a class="sub-side-menu__item {% if sidebar == 'higiene_cualitativa' or sidebar == 'higiene_cuantitativa' %}active{% endif %}" data-bs-toggle="sub-slide" href="#">
+                                <span class="sub-side-menu__label">Higiene Ocupacional</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a>
+                            <ul class="sub-slide-menu {% if sidebar == 'higiene_cualitativa' or sidebar == 'higiene_cuantitativa' %}open{% endif %}">
+                                <li>
+                                    <a class="sub-slide-item {% if sidebar == 'higiene_cualitativa' %}active{% endif %}" href="{% url 'higiene_cualitativa' %}">
+                                        Evaluacion Cualitativa
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="sub-slide-item {% if sidebar == 'higiene_cuantitativa' %}active{% endif %}" href="{% url 'higiene_cuantitativa' %}">
+                                        Evaluacion Cuantitativa
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="{% url 'manage_vigilancia' %}" class="slide-item {% if sidebar == 'vigilancia_medica' %}active{% endif %}" data-key="t-vigilancia"> Vigilancia Médica </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'egreso' %}" class="slide-item {% if sidebar == 'egreso' %}active{% endif %}" data-key="t-egreso"> Egreso </a>
+                        </li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if request.user.usuarioprofile.seccionPrevencion != "SIN ASIGNAR" %}
+                <li class="slide {% if sidebarmain == 'manage_documentation' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'manage_documentation' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-layers icons-size"></i>
+                        <span class="side-menu__label">Documentación</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Documentación</a></li>
+                        <li><a href="{% url 'view_general_mining_documents' %}"  class="slide-item {% if sidebar == 'manage_viewdocuemntationmining' %}active{% endif %}">Para Faena</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if request.user.usuarioprofile.seccionPrevencion in 'ADMINISTRADOR, BASE DATOS, PREVENCIONISTA, SUPERVISOR' %}
+                <li class="slide {% if sidebarmain == 'prevencion_reportes' %}is-expanded{% endif %}">
+                    <a class="side-menu__item {% if sidebarmain == 'prevencion_reportes' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#">
+                        <i class="icon-chart icons-size"></i>
+                        <span class="side-menu__label">Informes y Estadisticas</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Estadisticas</a></li>
+                        <li>
+                            <a href="{% url 'prevencion_export_data' %}" class="slide-item {% if sidebar == 'prevencion_export_data' %}active{% endif %}">
+                                Obtener datos
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {% endif %}
+                
+                {% if request.user.usuarioprofile.seccionPrevencion in 'ADMINISTRADOR, BASE DATOS' %}
+                <li class="slide {% if sidebarmain == 'system_users' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'system_users' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-people icons-size"></i>
+                        <span class="side-menu__label">Usuarios</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Usuarios</a></li>
+                        <li><a href="{% url 'manage_users' %}" class="slide-item {% if sidebar == 'manage_users' %}active{% endif %}">Administrar</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+                 
+                {% if request.user.usuarioprofile.seccionPrevencion in 'ADMINISTRADOR, BASE DATOS, PREVENCIONISTA' %}
+                <li class="slide {% if sidebarmain == 'manage_system' or sidebar == 'mantenedor_prev' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'manage_system' or sidebar == 'mantenedor_prev' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-organization icons-size"></i>
+                        <span class="side-menu__label">Mantenedor Sistema</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Mantenedor Sistema</a></li>
+                        
+                        {% if request.user.usuarioprofile.seccionPrevencion in 'ADMINISTRADOR, BASE DATOS' %}
+                        <li class="sub-slide {% if sidebarmenu == 'manage_users' or sidebarmenu == 'v-ges' or sidebarmenu == 'v-area' or sidebarmenu == 'v-cargo' or sidebarmenu == 'v-tipo-contrato' or sidebarmenu == 'v-contrato' %}is-expanded active{% endif %}"> 
+                            <a class="sub-side-menu__item {% if sidebarmenu == 'manage_users' or sidebarmenu == 'v-ges' or sidebarmenu == 'v-area' or sidebarmenu == 'v-cargo' or sidebarmenu == 'v-tipo-contrato' or sidebarmenu == 'v-contrato' %}active{% endif %}" data-bs-toggle="sub-slide" href="#">
+                                <span class="sub-side-menu__label ">Opciones Usuarios</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a> 
+                            <ul class="sub-slide-menu {% if sidebarmenu == 'manage_users' or sidebarmenu == 'v-ges' or sidebarmenu == 'v-area' or sidebarmenu == 'v-cargo' or sidebarmenu == 'v-tipo-contrato' or sidebarmenu == 'v-contrato' %}open{% endif %}"> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_genders' %}active{% endif %}" href="{% url 'manage_genders' %}" >Géneros</a></li> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_cities' %}active{% endif %}" href="{% url 'manage_cities' %}">Ciudades</a></li> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_nationalities' %}active{% endif %}" href="{% url 'manage_nationalities' %}">Nacionalidades</a></li> 
+                                <li><a class="sub-slide-item {% if sidebarmenu == 'v-ges' %}active{% endif %}" href="{% url 'manage_vigilancia_option' 'ges' %}">GES</a></li>
+                                <li><a class="sub-slide-item {% if sidebarmenu == 'v-area' %}active{% endif %}" href="{% url 'manage_vigilancia_option' 'area' %}">Area</a></li>
+                                <li><a class="sub-slide-item {% if sidebarmenu == 'v-cargo' %}active{% endif %}" href="{% url 'manage_vigilancia_option' 'cargo' %}">Cargo</a></li>
+                                <li><a class="sub-slide-item {% if sidebarmenu == 'v-tipo-contrato' %}active{% endif %}" href="{% url 'manage_vigilancia_option' 'tipo-contrato' %}">Tipo de Contrato</a></li>
+                                <li><a class="sub-slide-item {% if sidebarmenu == 'v-contrato' %}active{% endif %}" href="{% url 'manage_vigilancia_option' 'contrato' %}">Contrato</a></li>
+                            </ul> 
+                        </li>
+
+                        <li class="sub-slide {% if sidebarmenu == 'manage_mining' %}is-expanded active{% endif %}"> 
+                            <a class="sub-side-menu__item {% if sidebarmenu == 'manage_mining' %}active{% endif %}" data-bs-toggle="sub-slide" href="#">
+                                <span class="sub-side-menu__label ">Opciones Faenas Mineras</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a> 
+                            <ul class="sub-slide-menu {% if sidebarmenu == 'manage_mining' %}open{% endif %}"> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_managemining' %}active{% endif %}" href="{% url 'manage_mining' %}" >Administrar Faenas</a></li> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_documentsmining_general' %}active{% endif %}" href="{% url 'manage_mining_documents_general' %}">Documentación General</a></li>
+                            </ul> 
+                        </li>
+
+                        <li class="sub-slide {% if sidebarmenu == 'manage_ayuda_manuales' %}is-expanded active{% endif %}"> 
+                            <a class="sub-side-menu__item {% if sidebarmenu == 'manage_ayuda_manuales' %}active{% endif %}" data-bs-toggle="sub-slide" href="{% url 'manage_help_manuals' %}">
+                                <span class="sub-side-menu__label ">Opciones Ayuda y Manuales</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li class="sub-slide {% if sidebar == 'manage_notifications' %}is-expanded active{% endif %}"> 
+                            <a class="sub-side-menu__item {% if sidebar == 'manage_notifications' %}active{% endif %}" data-bs-toggle="sub-slide" href="{% url 'manage_notifications' %}?area=PREVENCION">
+                                <span class="sub-side-menu__label ">Notificaciones</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        <li class="sub-slide {% if sidebar == 'mantenedor_prev' %}is-expanded active{% endif %}">
+                            <a class="sub-side-menu__item {% if sidebar == 'mantenedor_prev' %}active{% endif %}" data-bs-toggle="sub-slide" href="#">
+                                <span class="sub-side-menu__label">Opciones Prevención</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a>
+                            <ul class="sub-slide-menu {% if sidebar == 'mantenedor_prev' %}open{% endif %}">
+                                <li class="sub-slide2 {% if sidebarmenu == 't-condiciones' or sidebarmenu == 't-silice' or sidebarmenu == 't-ruido' or sidebarmenu == 't-hipobaria' or sidebarmenu == 't-psicosocial' or sidebarmenu == 't-tmert' or sidebarmenu == 't-mmc' or sidebarmenu == 't-charlas' or sidebarmenu == 't-informativos' or sidebarmenu == 't-difusiones' or sidebarmenu == 't-cursos' %}is-expanded active{% endif %}">
+                                    <a class="sub-side-menu__item2 {% if sidebarmenu == 't-condiciones' or sidebarmenu == 't-silice' or sidebarmenu == 't-ruido' or sidebarmenu == 't-hipobaria' or sidebarmenu == 't-psicosocial' or sidebarmenu == 't-tmert' or sidebarmenu == 't-mmc' or sidebarmenu == 't-charlas' or sidebarmenu == 't-informativos' or sidebarmenu == 't-difusiones' or sidebarmenu == 't-cursos' %}is-expanded active{% endif %}" data-bs-toggle="sub-slide2" href="#">
+                                        <span class="sub-side-menu__label2">Capacitaciones</span>
+                                        <i class="sub-angle2 fa fa-angle-right"></i>
+                                    </a>
+                                    <ul class="sub-slide-menu2 {% if sidebarmenu == 't-condiciones' or sidebarmenu == 't-silice' or sidebarmenu == 't-ruido' or sidebarmenu == 't-hipobaria' or sidebarmenu == 't-psicosocial' or sidebarmenu == 't-tmert' or sidebarmenu == 't-mmc' or sidebarmenu == 't-charlas' or sidebarmenu == 't-informativos' or sidebarmenu == 't-difusiones' or sidebarmenu == 't-cursos' %}open{% endif %}">
+                                        <li><a href="{% url 'manage_prevencion' 'charlas' %}" class="sub-slide-item2 {% if sidebarmenu == 't-charlas' %}active{% endif %}">Charlas</a></li>
+                                        <li><a href="{% url 'manage_prevencion' 'informativos' %}" class="sub-slide-item2 {% if sidebarmenu == 't-informativos' %}active{% endif %}">Informativos</a></li>
+                                        <li><a href="{% url 'manage_prevencion' 'difusiones' %}" class="sub-slide-item2 {% if sidebarmenu == 't-difusiones' %}active{% endif %}">Difusiones</a></li>
+                                        <li><a href="{% url 'manage_prevencion' 'cursos' %}" class="sub-slide-item2 {% if sidebarmenu == 't-cursos' %}active{% endif %}">Cursos</a></li>
+                                    </ul>
+                                </li>
+
+                                <li class="sub-slide2 {% if sidebarmenu == 'v-evaluacion-riesgo' or sidebarmenu == 'v-exposicion' or sidebarmenu == 'v-nivel-riesgo' or sidebarmenu == 'v-grado-exposicion' or sidebarmenu == 'v-nivel-seguimiento' or sidebarmenu == 'v-estado' %}is-expanded active{% endif %}">
+                                    <a class="sub-side-menu__item2 {% if sidebarmenu == 'v-evaluacion-riesgo' or sidebarmenu == 'v-exposicion' or sidebarmenu == 'v-nivel-riesgo' or sidebarmenu == 'v-grado-exposicion' or sidebarmenu == 'v-nivel-seguimiento' or sidebarmenu == 'v-estado' %}is-expanded active{% endif %}" data-bs-toggle="sub-slide2" href="#">
+                                        <span class="sub-side-menu__label2">Vigilancia</span>
+                                        <i class="sub-angle2 fa fa-angle-right"></i>
+                                    </a>
+                                    <ul class="sub-slide-menu2 {% if sidebarmenu == 'v-evaluacion-riesgo' or sidebarmenu == 'v-exposicion' or sidebarmenu == 'v-nivel-riesgo' or sidebarmenu == 'v-grado-exposicion' or sidebarmenu == 'v-nivel-seguimiento' or sidebarmenu == 'v-estado' %}open{% endif %}">
+                                        <li><a href="{% url 'manage_vigilancia_option' 'evaluacion-riesgo' %}" class="sub-slide-item2 {% if sidebarmenu == 'v-evaluacion-riesgo' %}active{% endif %}">Evaluacion de Riesgo</a></li>
+                                        <li><a href="{% url 'manage_vigilancia_option' 'exposicion' %}" class="sub-slide-item2 {% if sidebarmenu == 'v-exposicion' %}active{% endif %}">Exposicion</a></li>
+                                        <li><a href="{% url 'manage_vigilancia_option' 'nivel-riesgo' %}" class="sub-slide-item2 {% if sidebarmenu == 'v-nivel-riesgo' %}active{% endif %}">Nivel de Riesgo</a></li>
+                                        <li><a href="{% url 'manage_vigilancia_option' 'grado-exposicion' %}" class="sub-slide-item2 {% if sidebarmenu == 'v-grado-exposicion' %}active{% endif %}">Grado de Exposicion</a></li>
+                                        <li><a href="{% url 'manage_vigilancia_option' 'nivel-seguimiento' %}" class="sub-slide-item2 {% if sidebarmenu == 'v-nivel-seguimiento' %}active{% endif %}">Nivel de Seguimiento</a></li>
+                                        <li><a href="{% url 'manage_vigilancia_option' 'estado' %}" class="sub-slide-item2 {% if sidebarmenu == 'v-estado' %}active{% endif %}">Estado</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                {% endif %}
+                
+                {% if request.user.usuarioprofile.seccionPrevencion in 'ADMINISTRADOR, BASE DATOS' %}
+                <li class="slide {% if sidebarmain == 'system_report_error' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'system_report_error' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="{% url 'manage_report_error' %}"> 
+                        <i class="icon-people icons-size"></i>
+                        <span class="side-menu__label">Reporte de Errores</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+                <div class="mt-5"></div>
+            </ul>
+            <div class="slide-right" id="slide-right">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
+                </svg> 
+            </div>
+        </div>
+        <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+            <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+        </div>
+        <div class="ps__rail-y" style="top: 100px;">
+            <div class="ps__thumb-y" tabindex="0" ></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,457 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Administrar Bodegas{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+<link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+{% endblock css %}
+
+{% block content %}
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Administrar Bodegas</h1>
+                </div>
+
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">Inventario</li>
+                        <li class="breadcrumb-item active">Administrar Bodegas</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="row row-sm align-items-end">
+
+                        <div class="col-md-4">
+                            <label>Seleccionar Bodega</label>
+                            <select id="selectBodega" class="form-control">
+                                <option value="">Seleccione una bodega</option>
+
+                                {% for bodega in bodegas %}
+                                    <option value="{{ bodega.id }}">
+                                        {{ bodega.nombre }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <a href="{% url 'new_traspaso_bodega' %}"
+                               class="btn btn-info btn-size-new">
+                                Traspaso a bodega
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <h5 class="mb-5"></h5>
+
+            <div class="row row-sm">
+                <table id="datatable-bodega" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Código</th>
+                            <th>Nombre Item</th>
+                            <th>Stock Mínimo</th>
+                            <th>Stock Máximo</th>
+                            <th>Stock Buenos</th>
+                            <th>Stock Malos</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <h5 class="mb-5"></h5>
+
+            <a class="btn btn-secondary"
+               href="{% url 'dashboardInventario' %}">
+                Regresar
+            </a>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalEditarStock" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <form id="formEditarStock">
+                {% csrf_token %}
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar stock de bodega</h5>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal">
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <input type="hidden" name="stock_id" id="edit_stock_id">
+
+                    <div class="row row-sm">
+
+                        <div class="col-md-6">
+                            <label>Código Item</label>
+                            <input type="text"
+                                   id="edit_codigo_item"
+                                   class="form-control"
+                                   readonly>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Nombre Item</label>
+                            <input type="text"
+                                   id="edit_nombre_item"
+                                   class="form-control"
+                                   readonly>
+                        </div>
+
+                        <div class="col-md-6 mt-3">
+                            <label>Stock Mínimo</label>
+                            <input type="number"
+                                   name="stock_minimo"
+                                   id="edit_stock_minimo"
+                                   class="form-control"
+                                   min="0">
+                        </div>
+
+                        <div class="col-md-6 mt-3">
+                            <label>Stock Máximo</label>
+                            <input type="number"
+                                   name="stock_maximo"
+                                   id="edit_stock_maximo"
+                                   class="form-control"
+                                   min="0">
+                        </div>
+
+                        <div class="col-md-6 mt-3">
+                            <label>Stock Buenos</label>
+                            <input type="number"
+                                   name="stock_buenos"
+                                   id="edit_stock_buenos"
+                                   class="form-control"
+                                   min="0">
+                        </div>
+
+                        <div class="col-md-6 mt-3">
+                            <label>Stock Malos</label>
+                            <input type="number"
+                                   name="stock_malos"
+                                   id="edit_stock_malos"
+                                   class="form-control"
+                                   min="0">
+                        </div>
+
+                        <div class="col-md-12 mt-3">
+                            <label>Definir alarma de reposición</label>
+                            <input type="number"
+                                   name="stock_alarma"
+                                   id="edit_stock_alarma"
+                                   class="form-control"
+                                   min="0"
+                                   placeholder="Ej: 10">
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+                        Guardar cambios
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalHistorialStock" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Historial del material
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <h5 id="tituloHistorialMaterial" class="mb-4"></h5>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Movimiento</th>
+                            <th>Cantidad</th>
+                            <th>Origen / Destino</th>
+                            <th>Responsable</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tbodyHistorialStock">
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script src="{% static 'js/jquery-3.7.0.js' %}"></script>
+<script src="{% static 'js/jquery.dataTables.min1.13.7.js' %}"></script>
+<script src="{% static 'js/dataTables.responsive.min2.5.0.js' %}"></script>
+
+<script>
+let tablaBodega = new DataTable('#datatable-bodega', {
+    responsive: {
+        details: {
+            type: 'column'
+        }
+    },
+    columnDefs: [
+        {
+            className: 'dtr-control',
+            orderable: false,
+            searchable: false,
+            targets: 0
+        },
+        {
+            orderable: false,
+            targets: [0, 7]
+        }
+    ],
+    language: {
+        url: '{% static "json/es-CL.json" %}'
+    }
+});
+
+document.getElementById('selectBodega').addEventListener('change', function () {
+
+    const bodegaId = this.value;
+
+    tablaBodega.clear().draw();
+
+    if (!bodegaId) {
+        return;
+    }
+
+    fetch(`{% url 'obtener_stock_bodega' %}?bodega_id=${bodegaId}`)
+        .then(response => response.json())
+        .then(data => {
+
+            if (!data.success || data.stocks.length === 0) {
+                return;
+            }
+
+            data.stocks.forEach(stock => {
+
+                if (
+                        Number(stock.stock_alarma) > 0 &&
+                        Number(stock.stock_buenos) <= Number(stock.stock_alarma)
+                    ) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Material bajo stock',
+                            text: `${stock.nombre_item} llegó al límite de reposición (${stock.stock_buenos}/${stock.stock_alarma}).`,
+                            confirmButtonColor: '#00cfe8'
+                        });
+                    }
+
+                tablaBodega.row.add([
+                    '',
+                    stock.codigo_item,
+                    stock.nombre_item,
+                    stock.stock_minimo,
+                    stock.stock_maximo,
+                    stock.stock_buenos,
+                    stock.stock_malos,
+                    `
+                    <div class="form-inline-btn">
+                        <button type="button"
+                                class="btn btn-warning btn-size-edit btn-ver-historial"
+                                data-bodega-id="${document.getElementById('selectBodega').value}"
+                                data-item-id="${stock.item_id}"
+                                data-codigo="${stock.codigo_item}"
+                                data-nombre="${stock.nombre_item}">
+                            <i class="fe fe-eye"></i>
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-info btn-size-edit btn-editar-stock"
+                                data-stock-id="${stock.stock_id}"
+                                data-codigo="${stock.codigo_item}"
+                                data-nombre="${stock.nombre_item}"
+                                data-stock-minimo="${stock.stock_minimo}"
+                                data-stock-maximo="${stock.stock_maximo}"
+                                data-stock-buenos="${stock.stock_buenos}"
+                                data-stock-malos="${stock.stock_malos}"
+                                data-stock-alarma="${stock.stock_alarma}">
+                            <i class="fe fe-edit"></i>
+                        </button>
+                    </div>
+                    `
+                ]).draw(false);
+
+            });
+        });
+});
+</script>
+<script>
+    document.addEventListener('click', function(e) {
+
+    const btn = e.target.closest('.btn-editar-stock');
+
+    if (!btn) return;
+
+    document.getElementById('edit_stock_id').value = btn.dataset.stockId;
+    document.getElementById('edit_codigo_item').value = btn.dataset.codigo;
+    document.getElementById('edit_nombre_item').value = btn.dataset.nombre;
+    document.getElementById('edit_stock_minimo').value = btn.dataset.stockMinimo;
+    document.getElementById('edit_stock_maximo').value = btn.dataset.stockMaximo;
+    document.getElementById('edit_stock_buenos').value = btn.dataset.stockBuenos;
+    document.getElementById('edit_stock_malos').value = btn.dataset.stockMalos;
+    document.getElementById('edit_stock_alarma').value = btn.dataset.stockAlarma;
+
+    const modal = new bootstrap.Modal(
+        document.getElementById('modalEditarStock')
+    );
+
+    modal.show();
+});
+
+document.getElementById('formEditarStock').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    fetch("{% url 'update_stock_bodega' %}", {
+        method: "POST",
+        body: formData,
+        headers: {
+            "X-CSRFToken": formData.get("csrfmiddlewaretoken")
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Stock actualizado',
+                text: data.message,
+                confirmButtonColor: '#00cfe8'
+            }).then(() => {
+                document.getElementById('selectBodega').dispatchEvent(
+                    new Event('change')
+                );
+
+                bootstrap.Modal.getInstance(
+                    document.getElementById('modalEditarStock')
+                ).hide();
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: data.message || 'No se pudo actualizar el stock.',
+                confirmButtonColor: '#00cfe8'
+            });
+        }
+    });
+});
+</script>
+<script>
+    document.addEventListener('click', function(e) {
+
+    const btn = e.target.closest('.btn-ver-historial');
+
+    if (!btn) return;
+
+    const bodegaId = btn.dataset.bodegaId;
+    const itemId = btn.dataset.itemId;
+
+    document.getElementById('tituloHistorialMaterial').innerText =
+        `${btn.dataset.codigo} | ${btn.dataset.nombre}`;
+
+    const tbody = document.getElementById('tbodyHistorialStock');
+
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="5">Cargando historial...</td>
+        </tr>
+    `;
+
+    fetch(`{% url 'obtener_historial_stock_bodega' %}?bodega_id=${bodegaId}&item_id=${itemId}`)
+        .then(response => response.json())
+        .then(data => {
+
+            tbody.innerHTML = '';
+
+            if (!data.success || data.historial.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5">Sin movimientos para este material.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            data.historial.forEach(mov => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${mov.fecha}</td>
+                        <td>${mov.tipo}</td>
+                        <td>${mov.cantidad}</td>
+                        <td>${mov.origen_destino}</td>
+                        <td>${mov.responsable}</td>
+                    </tr>
+                `;
+            });
+        });
+
+    const modal = new bootstrap.Modal(
+        document.getElementById('modalHistorialStock')
+    );
+
+    modal.show();
+});
+</script>
+{% endblock javascript %}

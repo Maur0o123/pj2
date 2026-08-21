@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ficha Vigilancia Medica #{{ vigilancia.id }}</title>
+    <style>
+        @page {
+            size: letter portrait;
+            margin: 24pt;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10pt;
+            color: #1f2430;
+        }
+
+        h1 {
+            margin: 0 0 8pt 0;
+        }
+
+        .meta {
+            text-align: right;
+            font-size: 9pt;
+            color: #555;
+            margin-bottom: 12pt;
+        }
+
+        .card {
+            border: 1px solid #cfd4dd;
+            margin-bottom: 14pt;
+        }
+
+        .card-header {
+            background: #d7eb8f;
+            padding: 8pt 10pt;
+            font-weight: bold;
+        }
+
+        .card-body {
+            padding: 10pt;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .info-table td {
+            border: 1px solid #cfd4dd;
+            padding: 5pt;
+            vertical-align: top;
+        }
+
+        .anexo-portada {
+            page-break-before: always;
+        }
+
+        .evidencia-ficha {
+            page-break-before: always;
+        }
+
+        .evidencia-meta {
+            margin-bottom: 12pt;
+        }
+
+        .evidencia-meta p {
+            margin: 0 0 6pt 0;
+        }
+
+        .evidencia-preview-wrap {
+            border: 1px solid #cfd4dd;
+            padding: 10pt;
+            text-align: center;
+        }
+
+        .evidencia-preview {
+            width: 100%;
+            max-height: 640pt;
+            object-fit: contain;
+        }
+
+        .evidencia-no-preview {
+            border: 1px solid #cfd4dd;
+            background: #f7f8fb;
+            padding: 16pt;
+        }
+
+        .evidencia-no-preview p {
+            margin: 0 0 8pt 0;
+        }
+
+        .download-link {
+            color: #111111;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="meta">
+        Descargado: {{ fecha_descarga|date:"d/m/Y H:i" }}
+    </div>
+
+    <h1>Ficha Vigilancia Medica #{{ vigilancia.id }}</h1>
+
+    <div class="card">
+        <div class="card-header">Datos del Reporte</div>
+        <div class="card-body">
+            <table class="info-table">
+                <tbody>
+                    <tr>
+                        <td><strong>RUT</strong></td>
+                        <td>{{ vigilancia.rut_trabajador|default:"-" }}</td>
+                        <td><strong>Nombre Completo</strong></td>
+                        <td>{{ vigilancia.nombre_completo|default:"-" }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Genero</strong></td>
+                        <td>{{ vigilancia.genero_texto|default:"-" }}</td>
+                        <td><strong>Edad</strong></td>
+                        <td>{{ vigilancia.edad|default:"-" }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Area</strong></td>
+                        <td>{{ vigilancia.area|default:"-" }}</td>
+                        <td><strong>Cargo</strong></td>
+                        <td>{{ vigilancia.cargo|default:"-" }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Faena</strong></td>
+                        <td>{% if vigilancia.faena %}{{ vigilancia.faena.faena }}{% else %}-{% endif %}</td>
+                        <td><strong>Fecha Realizacion</strong></td>
+                        <td>{{ vigilancia.fecha_incidente|date:"d/m/Y"|default:"-" }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">Silice y Ruido</div>
+        <div class="card-body">
+            <table class="info-table">
+                <tbody>
+                    <tr><td><strong>Silice Evaluacion de Riesgo</strong></td><td>{{ vigilancia.silice_eval_riesgo|default:"-" }}</td></tr>
+                    <tr><td><strong>Silice Nivel de Riesgo</strong></td><td>{{ vigilancia.silice_nivel_riesgo|default:"-" }}</td></tr>
+                    <tr><td><strong>Silice Grado Exposicion</strong></td><td>{{ vigilancia.silice_grado_expo|default:"-" }}</td></tr>
+                    <tr><td><strong>Silice Fecha Radiografia</strong></td><td>{{ vigilancia.silice_fecha_radio|date:"d/m/Y"|default:"-" }}</td></tr>
+                    <tr><td><strong>Silice Fecha Vencimiento</strong></td><td>{{ vigilancia.silice_fecha_vence|date:"d/m/Y"|default:"-" }}</td></tr>
+                    <tr><td><strong>Silice Vigencia</strong></td><td>{{ vigilancia.silice_vigencia|default:"-" }}</td></tr>
+                    <tr><td><strong>Silice Observaciones</strong></td><td>{{ vigilancia.silice_obs|default:"-" }}</td></tr>
+                    <tr><td><strong>Ruido Evaluacion de Riesgo</strong></td><td>{{ vigilancia.ruido_eval_riesgo|default:"-" }}</td></tr>
+                    <tr><td><strong>Ruido Nivel Seguimiento</strong></td><td>{{ vigilancia.ruido_nivel_seguimiento|default:"-" }}</td></tr>
+                    <tr><td><strong>Ruido Grado Exposicion</strong></td><td>{{ vigilancia.ruido_grado_expo|default:"-" }}</td></tr>
+                    <tr><td><strong>Ruido Fecha Audiometria</strong></td><td>{{ vigilancia.ruido_fecha_audio|date:"d/m/Y"|default:"-" }}</td></tr>
+                    <tr><td><strong>Ruido Fecha Vencimiento</strong></td><td>{{ vigilancia.ruido_fecha_vence|date:"d/m/Y"|default:"-" }}</td></tr>
+                    <tr><td><strong>Ruido Vigencia</strong></td><td>{{ vigilancia.ruido_vigencia|default:"-" }}</td></tr>
+                    <tr><td><strong>Ruido Observaciones</strong></td><td>{{ vigilancia.ruido_obs|default:"-" }}</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">Otros Agentes</div>
+        <div class="card-body">
+            <table class="info-table">
+                <tbody>
+                    <tr><td><strong>Hipobaria Exposicion</strong></td><td>{{ vigilancia.hipo_exposicion|default:"-" }}</td></tr>
+                    <tr><td><strong>Hipobaria Fecha Hemoglobina</strong></td><td>{{ vigilancia.hipo_fecha_hemo|date:"d/m/Y"|default:"-" }}</td></tr>
+                    <tr><td><strong>Hipobaria Fecha Vencimiento</strong></td><td>{{ vigilancia.hipo_fecha_vence|date:"d/m/Y"|default:"-" }}</td></tr>
+                    <tr><td><strong>Hipobaria Vigencia</strong></td><td>{{ vigilancia.hipo_vigencia|default:"-" }}</td></tr>
+                    <tr><td><strong>Hipobaria Observaciones</strong></td><td>{{ vigilancia.hipo_obs|default:"-" }}</td></tr>
+                    <tr><td><strong>Vibraciones Evaluacion del Riesgo</strong></td><td>{{ vigilancia.vibra_eval_riesgo|default:"-" }}</td></tr>
+                    <tr><td><strong>Vibraciones Exposicion</strong></td><td>{{ vigilancia.vibra_exposicion|default:"-" }}</td></tr>
+                    <tr><td><strong>Radiaciones Ionizantes Exposicion</strong></td><td>{{ vigilancia.rad_exposicion|default:"-" }}</td></tr>
+                    <tr><td><strong>Humos Metalicos Evaluacion del Riesgo</strong></td><td>{{ vigilancia.humos_eval_riesgo|default:"-" }}</td></tr>
+                    <tr><td><strong>Humos Metalicos Exposicion</strong></td><td>{{ vigilancia.humos_exposicion|default:"-" }}</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% for archivo in archivos_adjuntos %}
+        <div class="evidencia-ficha">
+            <div class="card">
+                <div class="card-header">Adjunto {{ forloop.counter }}</div>
+                <div class="card-body">
+                    <div class="evidencia-meta">
+                        <p><strong>Archivo:</strong> {{ archivo.name }}</p>
+                    </div>
+                    <!-- Renderiza adjuntos respetando orden: imagen directa, PDF convertido a páginas. -->
+                    {% if archivo.tipo == 'imagen' and archivo.url %}
+                        <div class="evidencia-preview-wrap">
+                            <img src="{{ archivo.url }}" alt="{{ archivo.name }}" class="evidencia-preview">
+                        </div>
+                    {% elif archivo.tipo == 'pdf' %}
+                        {% if archivo.paginas_pdf %}
+                            {% for pagina in archivo.paginas_pdf %}
+                                <div class="evidencia-preview-wrap" style="margin-top: 8pt;">
+                                    <img src="{{ pagina }}" alt="{{ archivo.name }}" class="evidencia-preview">
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="evidencia-no-preview">
+                                <p>No se pudo previsualizar el PDF adjunto.</p>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</body>
+</html>

@@ -1,0 +1,198 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Nueva Vigilancia{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+<style>
+    .auto-locked-input[readonly] {
+        cursor: not-allowed;
+        background-color: #8fbe54 !important;
+        border-color: #8fbe54 !important;
+        color: #99c1b2 !important;
+        font-weight: 400;
+    }
+
+    .dark-mode #formNuevaVigilancia .select2-container--default .select2-selection--single {
+        min-height: 2.375rem;
+        background-color: var(--dark-bg) !important;
+        border: 1px solid var(--dark-border) !important;
+        border-radius: 7px;
+    }
+
+    .dark-mode #formNuevaVigilancia .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: rgba(255, 255, 255, 0.85) !important;
+        line-height: 2.25rem !important;
+    }
+
+    .dark-mode .select2-container--open .select2-dropdown.cualitativa-select2-dropdown {
+        background-color: var(--dark-body) !important;
+        background-image: none !important;
+        border: 1px solid var(--dark-border) !important;
+        opacity: 1 !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    .dark-mode .select2-container--open .select2-dropdown.cualitativa-select2-dropdown .select2-results > .select2-results__options,
+    .dark-mode .select2-container--open .select2-dropdown.cualitativa-select2-dropdown .select2-results__option {
+        background-color: var(--dark-body) !important;
+        background-image: none !important;
+        opacity: 1 !important;
+        color: rgba(255, 255, 255, 0.85) !important;
+    }
+
+    .dark-mode .select2-container--open .select2-dropdown.cualitativa-select2-dropdown .select2-results__option--highlighted[aria-selected],
+    .dark-mode .select2-container--open .select2-dropdown.cualitativa-select2-dropdown .select2-results__option--highlighted[data-selected],
+    .dark-mode .select2-container--open .select2-dropdown.cualitativa-select2-dropdown .select2-results__option[aria-selected=true] {
+        background-color: #0d6efd !important;
+        color: #ffffff !important;
+    }
+
+    .dark-mode .select2-container--open .select2-dropdown.cualitativa-select2-dropdown .select2-search--dropdown .select2-search__field {
+        background-color: var(--dark-body) !important;
+        color: rgba(255, 255, 255, 0.85) !important;
+        border: 1px solid var(--dark-border) !important;
+    }
+</style>
+{% endblock %}
+
+{% block select2 %}
+<link href="{% static 'css/select2.min.css' %}" rel="stylesheet" />
+{% endblock select2 %}
+
+{% block content %}
+<button type="submit" form="formNuevaVigilancia" class="btn btn-primary save-float">Guardar</button>
+<a href="{% url 'manage_vigilancia' %}" class="btn btn-secondary back-float">Regresar</a>
+
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+
+            <div class="page-header">
+                <h1 class="page-title">Nueva Vigilancia</h1>
+            </div>
+
+            <form method="POST" id="formNuevaVigilancia">
+                {% csrf_token %}
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card border-secondary shadow-none mb-4">
+                            <div class="card-header">
+                                <h4 class="card-title mb-0">Sección Cuantitativa</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label required">Cuantitativa</label>
+                                        <select class="form-control" name="cuantitativa_id" id="cuantitativa_select" required>
+                                            <option value="">Seleccione...</option>
+                                            {% for c in cuantitativas %}
+                                            <option
+                                                value="{{ c.id }}"
+                                                data-faena="{{ c.faena.faena|default:'' }}"
+                                                data-area="{{ c.area|default:'' }}"
+                                                data-ges="{{ c.ges|default:'' }}"
+                                            >
+                                                {{ c.codigo }} - {{ c.nombre }} ({{ c.faena.faena }})
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="w-100"></div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Faena</label>
+                                        <input type="text" class="form-control auto-locked-input" id="faena_info" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Area</label>
+                                        <input type="text" class="form-control auto-locked-input" id="area_info" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">GES</label>
+                                        <input type="text" class="form-control auto-locked-input" id="ges_info" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card border-secondary shadow-none">
+                            <div class="card-header">
+                                <h4 class="card-title mb-0">Sección Vigilancia Médica</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label required">Codigo Vigilancia</label>
+                                        <input type="text" class="form-control" id="codigo_info" name="codigo" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label required">Nombre Vigilancia</label>
+                                        <input type="text" class="form-control" id="nombre_info" name="nombre" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    function setInfoFromCuantitativa() {
+        const select = document.getElementById('cuantitativa_select');
+        const option = select.options[select.selectedIndex];
+        const get = (key) => (option && option.dataset && option.dataset[key]) ? option.dataset[key] : '';
+
+        document.getElementById('faena_info').value = get('faena');
+        document.getElementById('area_info').value = get('area');
+        document.getElementById('ges_info').value = get('ges');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const select = document.getElementById('cuantitativa_select');
+        if (select) {
+            select.addEventListener('change', setInfoFromCuantitativa);
+            setInfoFromCuantitativa();
+        }
+    });
+</script>
+{% endblock %}
+
+{% block javascript2 %}
+<script>
+    (function () {
+        if (typeof window.jQuery === 'undefined') {
+            return;
+        }
+
+        const $ = window.jQuery;
+        const $select = $('#cuantitativa_select');
+        if (!$select.length || typeof $select.select2 !== 'function') {
+            return;
+        }
+
+        $select.select2({
+            width: '100%',
+            minimumResultsForSearch: 0,
+            dropdownCssClass: 'cualitativa-select2-dropdown',
+        });
+
+        $select.on('change', function () {
+            if (typeof window.setInfoFromCuantitativa === 'function') {
+                window.setInfoFromCuantitativa();
+            }
+        });
+
+        if (typeof window.setInfoFromCuantitativa === 'function') {
+            window.setInfoFromCuantitativa();
+        }
+    })();
+</script>
+{% endblock javascript2 %}

@@ -1,0 +1,125 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Documentos Generales{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <style>
+        .form-inline-btn {
+            flex-wrap: nowrap !important;
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Documentos Generales {{ documento.faena }}</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Documentación</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Documentos Generales</li>
+                    </ol>
+                </div>
+            </div>
+            <h5 class="mb-5"></h5>
+            <div class="row row-sm"> 
+                <table id="datatable-allusers" class="display nowrap table table-bordered text-nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Nombre Documento</th>
+                            {% if request.user.usuarioprofile.seccionAdministracion == "ADMINISTRADOR" or request.user.is_superuser %}
+                                <th>Faena</th>
+                            {% endif %}
+                            <th>Fecha Creación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for documento in tipo_documentos %}
+                            {% if request.user.usuarioprofile.seccionAdministracion == "ADMINISTRADOR" or request.user.is_superuser %}
+                                <tr>
+                                    <td class="dtr-control"></td>
+                                    <td>{{ documento.nombredocumento }}</td>
+                                    <td>{{ documento.faena }}</td>
+                                    <td data-order="{{ documento.fechacreacion|date:'U' }}">{{ documento.fechacreacion|date:"Y-m-d" }}</td>   
+                                    <td class="form-inline-btn">
+                                        <a href="{{ documento.archivodocumento.url }}" target="_blank" class="btn btn-warning btn-size-adm">Ver</a>
+                                    </td>                                 
+                                </tr>
+                            {% else %}
+                                {% if faenausuario == documento.faena %}
+                                <tr>
+                                    <td class="dtr-control"></td>
+                                    <td>{{ documento.nombredocumento }}</td>
+                                    <td data-order="{{ documento.fechacreacion|date:'U' }}">{{ documento.fechacreacion|date:"Y-m-d" }}</td>   
+                                    <td class="form-inline-btn">
+                                        <a href="{{ documento.archivodocumento.url }}" target="_blank" class="btn btn-warning btn-size-adm">Ver</a>
+                                    </td>                                 
+                                </tr>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>             
+                </table>
+            </div>            
+        </div>
+        <h5 class="mb-5"></h5> 
+        <div class="main-container container-fluid"> 
+            {% if request.user.usuarioprofile.seccionSondaje == "PERFORISTA" %}
+                <a class="btn btn-secondary" href="{% url 'edit_my_profile' %}">Regresar</a>
+            {% else %}
+                <a class="btn btn-secondary" href="{% url 'dashboard' %}">Regresar</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script type="application/javascript">
+$(document).ready(function() {
+    const isAdmin = {{ request.user.usuarioprofile.seccionAdministracion|yesno:"true,false" }} || {{ request.user.is_superuser|yesno:"true,false" }};
+    
+    const config = {
+        language: {
+            url: '{% static "json/es-CL.json" %}'        
+        },
+        columnDefs: [    
+            { className: 'dtr-control', orderable: false, targets: 0, width: "5%", searchable: false },
+            { targets: 1, width: "40%", searchable: true },
+            { targets: isAdmin ? 2 : 2, width: isAdmin ? "20%" : "35%", searchable: true },
+            { targets: isAdmin ? 3 : 2, width: "20%", searchable: true },
+            { targets: isAdmin ? 4 : 3, width: "15%", searchable: false, orderable: false, className: "text-center" }
+        ],
+        order: [[isAdmin ? 3 : 2, 'desc']],
+        responsive: {
+            details: {
+                type: 'column',
+                target: 0
+            }
+        },
+        autoWidth: false
+    };
+
+    new DataTable('#datatable-allusers', config);
+});
+</script>
+{% endblock javascript %}

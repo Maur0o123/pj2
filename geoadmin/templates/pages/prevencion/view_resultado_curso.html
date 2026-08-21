@@ -1,0 +1,340 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Resultado Curso{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+<style>
+    .resultado-summary-card {
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.03);
+        height: 100%;
+    }
+
+    .resultado-summary-label {
+        font-size: 0.88rem;
+        opacity: 0.8;
+        margin-bottom: 0.35rem;
+    }
+
+    .resultado-summary-value {
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.1;
+    }
+
+    .resultado-trabajador-wrap {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .resultado-trabajador-datos {
+        width: fit-content;
+        max-width: 100%;
+    }
+
+    .resultado-question-card {
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.025);
+        margin-bottom: 1rem;
+    }
+
+    .resultado-block {
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.02);
+        padding: 0.85rem;
+        margin-bottom: 0.9rem;
+    }
+
+    .resultado-block-title {
+        font-size: 0.88rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        opacity: 0.82;
+        margin-bottom: 0.45rem;
+    }
+
+    .resultado-block-text {
+        margin: 0;
+        white-space: pre-wrap;
+    }
+
+    .result-status-badge {
+        font-size: 0.9rem;
+        padding: 0.42rem 0.78rem;
+        font-weight: 700;
+        border-radius: 8px;
+    }
+
+    .result-option {
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 10px;
+        padding: 0.65rem 0.8rem;
+        margin-bottom: 0.55rem;
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+    }
+
+    .result-option:last-child {
+        margin-bottom: 0;
+    }
+
+    .result-option-letter {
+        width: 1.9rem;
+        height: 1.9rem;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.06);
+    }
+
+    .result-option-correct {
+        border-color: rgba(143, 189, 86, 0.8);
+        background: rgba(143, 189, 86, 0.12);
+    }
+
+    .result-option-correct-selected {
+        border-color: rgba(143, 189, 86, 1);
+        background: rgba(143, 189, 86, 0.22);
+    }
+
+    .result-option-selected-wrong {
+        border-color: rgba(226, 67, 95, 0.9);
+        background: rgba(226, 67, 95, 0.15);
+    }
+
+    .resultado-answer-label {
+        font-size: 1.02rem;
+        margin-bottom: 0.45rem;
+        display: block;
+    }
+
+    .resultado-answer-display {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        border-radius: 0.35rem;
+        padding: 0.375rem 0.75rem;
+        min-height: calc(1.5em + 0.75rem + 2px);
+        line-height: 1.5;
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .result-foto-frame {
+        width: 320px;
+        max-width: 100%;
+        height: 210px;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .result-foto-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .attempt-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .attempt-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        border-radius: 999px;
+        padding: 0.35rem 0.75rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.05);
+        color: #fff;
+        text-decoration: none;
+        font-size: 0.85rem;
+    }
+
+    .attempt-chip.active {
+        border-color: rgba(143, 189, 86, 0.9);
+        background: rgba(143, 189, 86, 0.2);
+        color: #fff;
+        font-weight: 700;
+    }
+</style>
+{% endblock css %}
+
+{% block content %}
+<a href="{{ back_url }}" class="btn btn-secondary back-float">Regresar</a>
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+            <div class="page-header">
+                <h1 class="page-title">Resultado de Prueba - Curso</h1>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'history_prevencion' %}">Documentos</a></li>
+                        <li class="breadcrumb-item"><a href="{{ back_url }}">Trabajadores</a></li>
+                        <li class="breadcrumb-item active">Resultado</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-xl-5">
+                            <div class="resultado-trabajador-wrap">
+                                <div class="resultado-trabajador-datos">
+                                    <div><strong>Trabajador:</strong> {{ nombre_trabajador }}</div>
+                                    <div><strong>RUT:</strong> {{ rut_trabajador|default:'-' }}</div>
+                                    <div><strong>Cargo:</strong> {{ cargo_trabajador|default:'-' }}</div>
+                                    {% if fecha_resultado %}
+                                        <div><strong>Último resultado:</strong> {{ fecha_resultado|date:"d/m/Y H:i" }}</div>
+                                    {% else %}
+                                        <div><strong>Último resultado:</strong> Sin resultado guardado</div>
+                                    {% endif %}
+                                    {% if intento_actual_numero %}
+                                        <div><strong>Intento mostrado:</strong> {{ intento_actual_numero }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-7">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="resultado-summary-card">
+                                        <div class="resultado-summary-label">Total preguntas</div>
+                                        <div class="resultado-summary-value">{{ total_preguntas }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="resultado-summary-card">
+                                        <div class="resultado-summary-label">Total correctas</div>
+                                        <div class="resultado-summary-value text-success">{{ total_correctas }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="resultado-summary-card">
+                                        <div class="resultado-summary-label">Porcentaje de respuestas correctas</div>
+                                        <div class="resultado-summary-value text-info">{{ porcentaje_aprobacion|floatformat:2 }}%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if lista_intentos %}
+                        <hr class="my-3" style="opacity:.15;">
+                        <div>
+                            <div class="mb-2"><strong>Intentos registrados</strong></div>
+                            <div class="attempt-list">
+                                {% for intento in lista_intentos %}
+                                    {% if intento.url %}
+                                        <a
+                                            href="{{ intento.url }}"
+                                            class="attempt-chip {% if intento_actual_numero == intento.numero %}active{% endif %}"
+                                        >
+                                            <span>Intento {{ intento.numero }}</span>
+                                            <span>
+                                                {% if intento.porcentaje is not None %}
+                                                    {{ intento.porcentaje|floatformat:2 }}%
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            </span>
+                                            {% if intento.fecha %}
+                                                <span>{{ intento.fecha|date:"d/m H:i" }}</span>
+                                            {% endif %}
+                                        </a>
+                                    {% else %}
+                                        <span class="attempt-chip">
+                                            <span>Intento {{ intento.numero }}</span>
+                                            <span>-</span>
+                                            <span>Sin detalle</span>
+                                        </span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% for pregunta in detalle_respuestas %}
+                <div class="resultado-question-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h4 class="mb-0">Pregunta {{ pregunta.numero }}</h4>
+                            {% if not pregunta.respondida %}
+                                <span class="badge bg-secondary result-status-badge">Sin responder</span>
+                            {% elif pregunta.es_correcta %}
+                                <span class="badge bg-success result-status-badge">Correcta</span>
+                            {% else %}
+                                <span class="badge bg-danger result-status-badge">Incorrecta</span>
+                            {% endif %}
+                        </div>
+
+                        {% if pregunta.titulo_mostrar %}
+                            <div class="mb-2"><strong>{{ pregunta.titulo_mostrar }}</strong></div>
+                        {% endif %}
+
+                        <div class="resultado-block">
+                            <div class="resultado-block-title">Descripción de la pregunta</div>
+                            <p class="resultado-block-text">{{ pregunta.enunciado|default:'Sin descripción.' }}</p>
+                        </div>
+
+                        <div class="resultado-block">
+                            <div class="resultado-block-title">Alternativas</div>
+                            {% for opcion in pregunta.opciones %}
+                                <div class="result-option {% if opcion.es_correcta and opcion.es_marcada %}result-option-correct-selected{% elif opcion.es_marcada and not pregunta.es_correcta %}result-option-selected-wrong{% endif %}">
+                                    <span class="result-option-letter">{{ opcion.letra }}</span>
+                                    <div class="flex-grow-1">{{ opcion.texto }}</div>
+                                </div>
+                            {% empty %}
+                                <div class="text-muted">Sin alternativas registradas.</div>
+                            {% endfor %}
+                        </div>
+
+                        {% if pregunta.imagen_url %}
+                            <div class="mb-3">
+                                <div class="result-foto-frame">
+                                    <img src="{{ pregunta.imagen_url }}" alt="Imagen pregunta {{ pregunta.numero }}">
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="resultado-block mb-0">
+                            <div class="row g-2">
+                                <div class="col-md-3">
+                                    <label class="resultado-answer-label">Alternativa correcta</label>
+                                    <div class="resultado-answer-display">{{ pregunta.respuesta_correcta_letra|default:'-' }}</div>
+                                </div>
+                                <div class="col-md-9">
+                                    <label class="resultado-answer-label">Justificación</label>
+                                    <div class="resultado-answer-display">{{ pregunta.justificacion|default:'Sin justificación.' }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="alert alert-warning">No hay preguntas registradas para este curso.</div>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Administrar Escareador{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+{% endblock css %}
+
+{% block content %}
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Administrar Escareador</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Mantenedor Sistema</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Administrar Escareador</li>
+                    </ol>
+                </div>
+            </div> <!-- PAGE-HEADER END --> <!-- row -->  
+            <a class="btn btn-primary btn-size-new" href="{% url 'new_escareador' %}">Nuevo Escareador</a>  
+            <h5 class="mb-5"></h5>
+            <div class="row row-sm"> 
+                <table id="datatable-allusers" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Escareador</th>
+                            <th>Fecha Creación</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for documento in documentos %}                            
+                            <tr>
+                                <td class="dtr-control"></td>
+                                <td>{{ documento.escareador }}</td>
+                                <td>{{ documento.fechacreacion|date:"d-m-Y" }}</td>   
+                                <td>{% if documento.status %}Habilitado{% else %}Deshabilitado{% endif %}</td>
+                                <td class="form-inline-btn">
+                                    <form action="{% url 'edit_escareador' %}" method="POST" >
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ documento.id }}">
+                                        <button type="submit" class="btn btn-info btn-size-edit">Editar</button> 
+                                    </form> 
+                                    <form action="{% url 'status_escareador' %}" method="POST" >
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ documento.id }}">
+                                        {% if documento.status %}          
+                                            <button type="submit" class="btn btn-danger btn-size-adm">Deshabilitar</button>
+                                        {% else %}                                                
+                                            <button type="submit" class="btn btn-primary btn-size-adm">Habilitar</button>
+                                        {% endif%}
+                                    </form> 
+                                </td>                                 
+                            </tr>                          
+                        {% endfor %}
+                    </tbody>                    
+                </table>
+            </div>            
+        </div>
+        <h5 class="mb-5"></h5> 
+        <div class="main-container container-fluid"> 
+            <a class="btn btn-secondary" href="{% url 'dashboardSondaje' %}">Regresar</a> 
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script type="application/javascript">
+    new DataTable('#datatable-allusers', {
+        columnDefs: [
+            {
+                className: 'dtr-control',
+                orderable: false,
+                targets: 2
+            }
+        ],
+        language: {
+            url: '{% static 'json/es-CL.json' %}',        
+        },
+        columnDefs: [    
+            { searchable: false, targets: [0,1,] },
+            { orderable: false, targets: [0,1]}  
+        ],
+        /*order: [1, 'desc'],*/
+        responsive: {
+            details: {
+                type: 'column'
+            }
+        }
+    });
+</script>
+{% endblock javascript %}

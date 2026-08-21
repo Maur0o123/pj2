@@ -1,0 +1,471 @@
+{% load static %}
+<style>
+    .header-approval-notifications .dropdown-menu {
+        min-width: 360px;
+        max-width: 380px;
+        padding: 0;
+        overflow: hidden;
+    }
+    .header-approval-notifications .dropdown-header-custom {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        font-weight: 600;
+    }
+    .header-approval-notifications .notification-list {
+        max-height: 360px;
+        overflow-y: auto;
+    }
+    .header-approval-notifications .notification-item {
+        width: 100%;
+        border: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        background: transparent;
+        color: inherit;
+        text-align: left;
+        padding: 0.8rem 1rem;
+    }
+    .header-approval-notifications .notification-item:hover {
+        background: rgba(143, 189, 86, 0.12);
+    }
+    .header-approval-notifications .notification-item:last-child {
+        border-bottom: 0;
+    }
+    .header-approval-notifications .notification-title {
+        font-weight: 600;
+        margin-bottom: 0.2rem;
+    }
+    @keyframes pendingBellDotPulse {
+        0% {
+            opacity: 1;
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(143, 189, 86, 0.68);
+        }
+        70% {
+            opacity: 0.7;
+            transform: scale(1.1);
+            box-shadow: 0 0 0 6px rgba(143, 189, 86, 0);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(143, 189, 86, 0);
+        }
+    }
+    .header-approval-notifications .notification-title.notification-title-pending::before {
+        content: '';
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 0.45rem;
+        background: #8fbd56;
+        vertical-align: middle;
+        animation: pendingBellDotPulse 1.2s ease-in-out infinite;
+    }
+    .header-approval-notifications .notification-description {
+        font-size: 0.82rem;
+        opacity: 0.85;
+        margin-bottom: 0.35rem;
+    }
+    .header-approval-notifications .notification-meta {
+        font-size: 0.75rem;
+        opacity: 0.75;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .header-approval-notifications .notification-empty {
+        padding: 1rem;
+        font-size: 0.86rem;
+        opacity: 0.8;
+    }
+    #approvalNotificationTrigger {
+        position: relative;
+    }
+    #approvalNotificationBadge {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        min-width: 18px;
+        height: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.68rem;
+        line-height: 1;
+        padding: 0 0.3rem;
+    }
+    .swal2-popup .swal2-actions .swal2-confirm.approval-confirm-btn {
+        background-color: #8fbd56 !important;
+        border: 1px solid #8fbd56 !important;
+        color: #fff !important;
+    }
+    .swal2-popup .swal2-actions .swal2-deny.approval-deny-btn {
+        background-color: #e984b1 !important;
+        border: 1px solid #e984b1 !important;
+        color: #fff !important;
+    }
+</style>
+<div class="app-header header sticky" style="margin-bottom: -74px">
+    <div class="container-fluid main-container">
+        <div class="d-flex">
+            <a aria-label="Hide Sidebar" class="app-sidebar__toggle" data-bs-toggle="sidebar" href="#"></a>
+            <!-- sidebar-toggle-->
+            <a class="logo-horizontal" href="{% url 'logincustom' %}" style="width: fit-content;">                      
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img light-logo1"  alt="logo" />    
+                <h3>GeoAdmin</h3>                            
+            </a>                                                      
+            <!-- LOGO -->                            
+            <div class="d-flex order-lg-2 ms-auto header-right-icons">   
+                <button class="navbar-toggler navresponsive-toggler d-md-none ms-auto" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent-4"
+                    aria-controls="navbarSupportedContent-4" aria-expanded="false"
+                    aria-label="Toggle navigation">                    
+                    <span class="navbar-toggler-icon icon-user icons-size-menu">
+                        <i class="user-angle ms-1 fa fa-angle-down"></i>
+                    </span>
+                    
+                </button>
+                <div class="navbar navbar-collapse responsive-navbar p-0">
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
+                        <div class="d-flex order-lg-2">                                                                       
+                            <!-- THEME LAYOUT -->
+                            <div class="dropdown d-flex">
+                                <a class="nav-link icon theme-layout nav-link-bg layout-setting">
+                                    <span class="dark-layout">
+                                        <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24">
+                                            <path
+                                                d="M22.0482178,13.2746582c-0.1265259-0.2453003-0.4279175-0.3416138-0.6732178-0.2150879C20.1774902,13.6793823,18.8483887,14.0019531,17.5,14c-0.8480835-0.0005493-1.6913452-0.1279297-2.50177-0.3779297c-4.4887085-1.3847046-7.0050049-6.1460571-5.6203003-10.6347656c0.0320435-0.1033325,0.0296021-0.2142944-0.0068359-0.3161621C9.2781372,2.411377,8.9921875,2.2761841,8.7324219,2.3691406C4.6903076,3.800293,1.9915771,7.626709,2,11.9146729C2.0109863,17.4956055,6.5440674,22.0109863,12.125,22c4.9342651,0.0131226,9.1534424-3.5461426,9.9716797-8.4121094C22.1149292,13.4810181,22.0979614,13.3710327,22.0482178,13.2746582z M16.0877075,20.0958252c-4.5321045,2.1853027-9.9776611,0.2828979-12.1630249-4.2492065S3.6417236,5.8689575,8.1738281,3.6835938C8.0586548,4.2776489,8.0004272,4.8814087,8,5.4865723C7.9962769,10.7369385,12.2495728,14.9962769,17.5,15c1.1619263,0.0023193,2.3140869-0.2119751,3.3974609-0.6318359C20.1879272,16.8778076,18.4368896,18.9630127,16.0877075,20.0958252z">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                    <span class="light-layout">
+                                        <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24">
+                                            <path
+                                                d="M6.3427734,16.9501953l-1.4140625,1.4140625c-0.09375,0.09375-0.1463623,0.2208862-0.1464233,0.3534546c0,0.276123,0.2238159,0.5,0.499939,0.500061c0.1326294,0.0001831,0.2598877-0.0525513,0.3535156-0.1464844l1.4140015-1.4140625c0.0024414-0.0023804,0.0047607-0.0047607,0.0071411-0.0071411c0.1932373-0.1971436,0.1900635-0.5137329-0.0071411-0.7069702C6.8526001,16.7498169,6.5360718,16.7529907,6.3427734,16.9501953z M6.3427734,7.0498047c0.0936279,0.0939331,0.2208862,0.1466675,0.3535156,0.1464844c0.1325684,0,0.2597046-0.0526733,0.3534546-0.1464233c0.1952515-0.1952515,0.1953125-0.5118408,0.000061-0.7070923L5.6356812,4.9287109c-0.1943359-0.1904907-0.5054321-0.1904907-0.6998291,0C4.7386475,5.1220093,4.7354736,5.4385376,4.9287109,5.6357422L6.3427734,7.0498047z M12,5h0.0006104C12.2765503,4.9998169,12.5001831,4.776001,12.5,4.5v-2C12.5,2.223877,12.276123,2,12,2s-0.5,0.223877-0.5,0.5v2.0006104C11.5001831,4.7765503,11.723999,5.0001831,12,5z M17.3037109,7.1962891c0.1326294,0.0001831,0.2598877-0.0525513,0.3535156-0.1464844l1.4140625-1.4141235c0.0023804-0.0023193,0.0047607-0.0046997,0.0070801-0.0070801c0.1932983-0.1972046,0.1900635-0.5137329-0.0070801-0.7070312c-0.1972046-0.1932373-0.5137329-0.1900635-0.7070312,0.0071411l-1.4140625,1.4140625c-0.09375,0.09375-0.1463623,0.2208862-0.1464233,0.3534546C16.803772,6.9723511,17.0275879,7.196228,17.3037109,7.1962891z M5,12c0-0.276123-0.223877-0.5-0.5-0.5h-2C2.223877,11.5,2,11.723877,2,12s0.223877,0.5,0.5,0.5h2C4.776123,12.5,5,12.276123,5,12z M17.6572266,16.9502563c-0.0023804-0.0023804-0.0046997-0.0047607-0.0070801-0.0070801c-0.1972046-0.1932983-0.5137329-0.1901245-0.7070312,0.0070801c-0.1932373,0.1971436-0.1901245,0.5136719,0.0070801,0.7069702l1.4140625,1.4140625c0.0936279,0.0939331,0.2208252,0.1466675,0.3534546,0.1464844c0.1325684,0,0.2597046-0.0526733,0.3534546-0.1463623c0.1953125-0.1952515,0.1953125-0.5118408,0.0001221-0.7070923L17.6572266,16.9502563z M12,19c-0.276123,0-0.5,0.223877-0.5,0.5v2.0005493C11.5001831,21.7765503,11.723999,22.0001831,12,22h0.0006104c0.2759399-0.0001831,0.4995728-0.223999,0.4993896-0.5v-2C12.5,19.223877,12.276123,19,12,19z M21.5,11.5h-2c-0.276123,0-0.5,0.223877-0.5,0.5s0.223877,0.5,0.5,0.5h2c0.276123,0,0.5-0.223877,0.5-0.5S21.776123,11.5,21.5,11.5z M12,6.5c-3.0375366,0-5.5,2.4624634-5.5,5.5s2.4624634,5.5,5.5,5.5c3.0360107-0.0037842,5.4962158-2.4639893,5.5-5.5C17.5,8.9624634,15.0375366,6.5,12,6.5z M12,16.5c-2.4852905,0-4.5-2.0147095-4.5-4.5S9.5147095,7.5,12,7.5c2.4841309,0.0026855,4.4973145,2.0158691,4.5,4.5C16.5,14.4852905,14.4852905,16.5,12,16.5z">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="dropdown d-md-flex notifications header-approval-notifications" id="headerApprovalNotifications">
+                                <a class="nav-link icon" id="approvalNotificationTrigger" href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notificaciones" title="Notificaciones">
+                                    <i class="icon-bell"></i>
+                                    <span class="badge rounded-pill bg-danger d-none" id="approvalNotificationBadge">0</span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow" aria-labelledby="approvalNotificationTrigger">
+                                    <div class="dropdown-header-custom d-flex justify-content-between align-items-center">
+                                        <span>Notificaciones</span>
+                                        <small id="approvalNotificationCounterText"></small>
+                                    </div>
+                                    <div class="notification-list" id="approvalNotificationList">
+                                        <div class="notification-empty">Sin notificaciones.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- DOWNLOAD -->
+                            {% if request.session.seccion == 'sondaje' %}
+                                <div class="dropdown d-md-flex notifications">
+                                    <a class="nav-link icon" href="/media/apk/geoadmin_v20.apk">
+                                        <i class="icon-arrow-down-circle"></i>
+                                        <span class="pulse"></span>
+                                    </a>
+                                </div>
+                            {% endif %}
+                            <!-- PROFILE -->
+                            <div class="dropdown d-md-flex profile-1">
+                                <a href="{% url 'logincustom' %}" data-bs-toggle="dropdown" class="nav-link pe-2 leading-none d-flex animate">
+                                    <span>
+                                        {% if user.documentacionusuario.fotografiaUsuario %}
+                                            <img src="{{ user.documentacionusuario.fotografiaUsuario.url }}" alt="profile-user" class="avatar profile-user brround cover-image" />
+                                        {% else %}
+                                            <img src="/media/base/no-avatar.png" alt="profile-user" class="avatar profile-user brround cover-image" />
+                                        {% endif %}
+                                        <i class="user-angle ms-1 fa fa-angle-down"></i>
+                                    </span>
+                                    <div class="text-center p-1 d-flex d-lg-none-max">
+                                        <h6 class="mb-0" id="profile-heading">{{ user.first_name }} {{ user.last_name }} <i class="user-angle ms-1 fa fa-angle-down"></i></h6>
+                                    </div>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                    <form method="POST" action="{% url 'edit_my_profile' %}">
+                                        {% csrf_token %}  
+                                        <input type="hidden" name="username" value="{{ user.username }}">
+                                        <button type="submit" class="dropdown-item"><i class="icon-user icons-size-submenu"></i>Perfil</button> 
+                                    </form> 
+                                    <a class="dropdown-item" href="{% url 'view_all_approval_notifications' %}"><i class="icon-bell icons-size-submenu"></i>Notificaciones</a>
+                                    <a class="dropdown-item" href="{% url 'password_change' %}"><i class="icon-settings icons-size-submenu"></i>Cambiar Contraseña</a>
+                                    <a class="dropdown-item" href="{% url 'view_help_manuals' %}"><i class="icon-support icons-size-submenu"></i>Guías y Manuales</a>
+                                    <a class="dropdown-item" href="{% url 'new_report_error' %}"><i class="fa fa-exclamation-triangle icons-size-submenu"></i>Reportar Problemas</a>
+                                    <a class="dropdown-item" href="{% url 'select' %}"><i class="icon-refresh icons-size-submenu"></i>Cambiar Sección</a>
+                                    <form method="POST" action="{% url 'logoutcustom' %}">
+                                        {% csrf_token %}                                        
+                                        <button type="submit" class="dropdown-item"><i class="icon-logout icons-size-submenu"></i>Cerrar Sesión</button>
+                                    </form>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>                                
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    (function() {
+        const listUrl = "{% url 'ajax_list_approval_notifications' %}";
+
+        function getCookie(name) {
+            const cookieValue = document.cookie
+                .split('; ')
+                .find((row) => row.startsWith(`${name}=`));
+            return cookieValue ? decodeURIComponent(cookieValue.split('=')[1]) : '';
+        }
+
+        async function requestJson(url, options = {}) {
+            const config = {
+                method: options.method || 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    ...(options.headers || {}),
+                },
+            };
+
+            if (options.body !== undefined) {
+                config.headers['Content-Type'] = 'application/json';
+                config.headers['X-CSRFToken'] = getCookie('csrftoken');
+                config.body = JSON.stringify(options.body);
+            }
+
+            const response = await fetch(url, config);
+            let data = {};
+            try {
+                data = await response.json();
+            } catch (error) {
+                data = {};
+            }
+            return { response, data };
+        }
+
+        function updateNotificationBadge(unreadCount) {
+            const badge = document.getElementById('approvalNotificationBadge');
+            const counterText = document.getElementById('approvalNotificationCounterText');
+            if (!badge || !counterText) return;
+
+            if (unreadCount > 0) {
+                badge.classList.remove('d-none');
+                badge.textContent = unreadCount > 99 ? '99+' : String(unreadCount);
+                counterText.textContent = `${unreadCount} pendiente${unreadCount === 1 ? '' : 's'}`;
+            } else {
+                badge.classList.add('d-none');
+                badge.textContent = '0';
+                counterText.textContent = '';
+            }
+        }
+
+        function getStateBadgeClass(state) {
+            if (state === 'aceptada') return 'badge bg-success-light';
+            if (state === 'rechazada') return 'badge bg-danger-light';
+            if (state === 'cancelada') return 'badge bg-secondary-light';
+            return 'badge bg-warning-light';
+        }
+
+        function normalizeApprovalTipoLabel(rawTipo) {
+            const tipo = String(rawTipo || '').trim().toLowerCase();
+            const labels = {
+                charla: 'Charla',
+                charlas: 'Charla',
+                informativo: 'Informativo',
+                informativos: 'Informativo',
+                difusion: 'Difusión',
+                difusiones: 'Difusión',
+                'difusión': 'Difusión',
+                curso: 'Curso',
+                cursos: 'Curso',
+            };
+            return labels[tipo] || String(rawTipo || '').trim();
+        }
+
+        function normalizeApprovalTitle(rawTitle, rawDescription = '') {
+            const title = String(rawTitle || '').trim();
+            const description = String(rawDescription || '').trim();
+            const tipoFromDescriptionMatch = description.match(/para\s+([^:]+)\s*:/i);
+            const tipoFromDescription = tipoFromDescriptionMatch
+                ? normalizeApprovalTipoLabel(tipoFromDescriptionMatch[1])
+                : '';
+
+            if (/^solicitud de aprobaci[oó]n\s*\(.+\)$/i.test(title)) {
+                return tipoFromDescription ? `Aprobación pendiente: ${tipoFromDescription}` : 'Aprobación pendiente';
+            }
+            if (/^solicitud de aprobaci[oó]n de t[ií]tulos$/i.test(title)) {
+                return tipoFromDescription ? `Aprobación pendiente: ${tipoFromDescription}` : 'Aprobación pendiente';
+            }
+            if (!title) {
+                return tipoFromDescription ? `Aprobación pendiente: ${tipoFromDescription}` : 'Aprobación pendiente';
+            }
+            return title;
+        }
+
+        function renderNotifications(notifications) {
+            const listEl = document.getElementById('approvalNotificationList');
+            if (!listEl) return;
+            listEl.innerHTML = '';
+
+            if (!Array.isArray(notifications) || notifications.length === 0) {
+                const emptyEl = document.createElement('div');
+                emptyEl.className = 'notification-empty';
+                emptyEl.textContent = 'Sin notificaciones.';
+                listEl.appendChild(emptyEl);
+                return;
+            }
+
+            notifications.forEach((notification) => {
+                const notificationDescription = notification.descripcion || '';
+                const notificationTitle = normalizeApprovalTitle(notification.titulo, notificationDescription);
+                const itemBtn = document.createElement('button');
+                itemBtn.type = 'button';
+                itemBtn.className = 'notification-item';
+                itemBtn.dataset.notificationId = String(notification.id);
+                itemBtn.dataset.notificationState = String(notification.estado || '').toLowerCase();
+                itemBtn.dataset.notificationKind = String(notification.kind || '').toLowerCase();
+                itemBtn.dataset.notificationTitle = notificationTitle;
+                itemBtn.dataset.notificationDescription = notificationDescription;
+                itemBtn.dataset.notificationReviewUrl = notification.review_url || '';
+
+                const titleEl = document.createElement('div');
+                titleEl.className = 'notification-title';
+                titleEl.textContent = notificationTitle;
+                if (itemBtn.dataset.notificationState === 'pendiente') {
+                    titleEl.classList.add('notification-title-pending');
+                }
+
+                const descriptionEl = document.createElement('div');
+                descriptionEl.className = 'notification-description';
+                descriptionEl.textContent = notificationDescription || 'Sin descripción';
+
+                const metaEl = document.createElement('div');
+                metaEl.className = 'notification-meta';
+
+                const leftMetaEl = document.createElement('span');
+                leftMetaEl.textContent = `${notification.solicitante || 'Usuario'} • ${notification.fecha || ''}`;
+
+                const stateBadge = document.createElement('span');
+                stateBadge.className = getStateBadgeClass(notification.estado);
+                stateBadge.textContent = notification.estado_display || 'Pendiente';
+
+                metaEl.appendChild(leftMetaEl);
+                metaEl.appendChild(stateBadge);
+                itemBtn.appendChild(titleEl);
+                itemBtn.appendChild(descriptionEl);
+                itemBtn.appendChild(metaEl);
+                listEl.appendChild(itemBtn);
+            });
+        }
+
+        async function loadNotifications() {
+            try {
+                const { response, data } = await requestJson(listUrl);
+                if (!response.ok || !data.success) return;
+                updateNotificationBadge(Number(data.unread_count || 0));
+                renderNotifications(data.notifications || []);
+            } catch (error) {
+                // No interrumpe la UI por fallas de red.
+            }
+        }
+
+        async function handleNotificationClick(event) {
+            const trigger = event.target.closest('.notification-item');
+            if (!trigger) return;
+
+            const notifId = String(trigger.dataset.notificationId || '').trim();
+            const kind = String(trigger.dataset.notificationKind || '').trim();
+            const title = String(trigger.dataset.notificationTitle || 'Aprobación pendiente').trim();
+            const description = String(trigger.dataset.notificationDescription || '').trim();
+            const reviewUrl = String(trigger.dataset.notificationReviewUrl || '').trim();
+
+            if (kind === 'sistema') {
+                if (typeof Swal !== 'undefined') {
+                    const result = await Swal.fire({
+                        titleText: title,
+                        html: `<div style="text-align: left; white-space: pre-wrap; font-family: monospace, Courier, monospace; font-size: 0.9rem; background: rgba(0, 0, 0, 0.05); padding: 1rem; border-radius: 6px; max-height: 250px; overflow-y: auto;">${description}</div>`,
+                        icon: 'info',
+                        confirmButtonText: 'Aceptar',
+                        confirmButtonColor: '#00b4db',
+                    });
+                    
+                    if (result.isConfirmed) {
+                        try {
+                            const response = await fetch(`/prevencion/ajax/notificaciones/aprobacion/${notifId}/resolver/`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': getCookie('csrftoken'),
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                },
+                                credentials: 'same-origin',
+                                body: JSON.stringify({
+                                    accion: 'aceptar',
+                                    confirmar_revision: true,
+                                }),
+                            });
+                            if (response.ok) {
+                                if (window.refreshHeaderApprovalNotifications) {
+                                    window.refreshHeaderApprovalNotifications();
+                                } else if (typeof applyFilters === 'function') {
+                                    window.location.reload();
+                                } else {
+                                    window.location.reload();
+                                }
+                            }
+                        } catch (e) {
+                            console.error("Error marking system notification as read:", e);
+                        }
+                    }
+                }
+                return;
+            }
+
+            if (!reviewUrl) return;
+
+            function buildReviewUrlWithNext(url) {
+                const separator = url.includes('?') ? '&' : '?';
+                return `${url}${separator}next=${encodeURIComponent(window.location.href)}`;
+            }
+
+            const targetUrl = buildReviewUrlWithNext(reviewUrl);
+
+            if (typeof Swal === 'undefined') {
+                window.location.href = targetUrl;
+                return;
+            }
+
+            const result = await Swal.fire({
+                titleText: title || 'Solicitud de aprobación',
+                text: description || 'Tienes una solicitud pendiente de aprobación.',
+                icon: 'info',
+                confirmButtonText: 'Ver',
+                confirmButtonColor: '#8fbd56',
+            });
+            if (!result.isConfirmed) return;
+            window.location.href = targetUrl;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationWrapper = document.getElementById('headerApprovalNotifications');
+            const notificationListEl = document.getElementById('approvalNotificationList');
+            if (!notificationWrapper || !notificationListEl) return;
+
+            notificationWrapper.addEventListener('show.bs.dropdown', function() {
+                loadNotifications();
+            });
+            notificationListEl.addEventListener('click', handleNotificationClick);
+
+            loadNotifications();
+            setInterval(loadNotifications, 30000);
+
+            // Expuesto para refrescar campanita desde otras pantallas (ej: solicitud de aprobación).
+            window.refreshHeaderApprovalNotifications = loadNotifications;
+        });
+    })();
+</script>

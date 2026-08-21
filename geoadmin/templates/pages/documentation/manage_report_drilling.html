@@ -1,0 +1,178 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Administrar Informe General{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+{% endblock css %}
+
+{% block content %}
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Reporte General</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">informes y Estadisticas</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Reporte General</li>
+                    </ol>
+                </div>
+            </div> <!-- PAGE-HEADER END --> <!-- row -->
+            <form id="form" action="#" method="POST" style="display: flex;flex-direction: row;justify-content: flex-start;align-items: center;" >
+                {% csrf_token %}
+                <div id="div_id_fechaInicial" class="form-group col-md-3"> 
+                    <label for="id_fechaInicial" class=" requiredField">
+                        Fecha Inicial
+                        <span class="asteriskField">*</span>
+                    </label>
+                    <div> 
+                        <input type="date" name="fechaInicial" style="text-align:center" min="1920-01-01" class="datetimeinput form-control" required="" id="id_fechaInicial"> 
+                    </div> 
+                </div>
+                <div id="div_id_fechaFinal" class="form-group col-md-3"> 
+                    <label for="id_fechaFinal" class=" requiredField">           
+                        Fecha Final
+                        <span class="asteriskField">*</span> 
+                    </label> 
+                    <div> 
+                        <input type="date" name="fechaFinal" style="text-align:center" min="1920-01-01" class="datetimeinput form-control" required="" id="id_fechaFinal"> 
+                    </div> 
+                </div>
+                <div id="div_id_faena" class="form-group col-md-3"> 
+                    <label for="id_fechaFinal" class=" requiredField">           
+                        Faena
+                        <span class="asteriskField">*</span> 
+                    </label> 
+                    <select name="faena" id="faenaSelect" class="form-control">
+                        <option value="">-- Seleccione una Faena --</option>
+                        {% for faena in faenas %}
+                            <option value="{{ faena.id }}">{{ faena.faena }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div id="div_id_submit" class="form-group col-md-3" style="margin-top: 25px;"> 
+                    
+                    <button type="submit" class="btn btn-primary btn-size-new">Nuevo Informe</button>
+                </div>
+            </form>
+            <h5 class="mb-5"></h5> 
+            <div class="row row-sm"> 
+                <table id="datatable-allusers" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Tipo Reporte</th>
+                            <th>Creador</th>
+                            <th>Fecha Creación</th>                           
+                            <th>Acciones</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for documento in documentos %}                            
+                            <tr>
+                                <td class="dtr-control"></td>
+                                <td>{{ documento.reporte }}</td>
+                                <td>{{ documento.creador }}</td>
+                                <td>{{ documento.fechacreacion|date:"Y-m-d H:i" }}</td>
+                                <td><a href="media/{{documento.archivo}}" class="btn btn-primary">Descargar</a></td>                                 
+                            </tr>                          
+                        {% endfor %}
+                    </tbody>                    
+                </table>
+            </div>            
+        </div>
+        <h5 class="mb-5"></h5> 
+        <div class="main-container container-fluid"> 
+            <a class="btn btn-secondary" href="{% url 'dashboard' %}">Regresar</a> 
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+<script type="text/javascript">        
+    document.getElementById('div_id_fechaInicial').classList.add('col-md-3');
+    document.getElementById('div_id_fechaFinal').classList.add('col-md-3');
+</script>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script type="application/javascript">
+    new DataTable('#datatable-allusers', {
+        columnDefs: [
+            {
+                className: 'dtr-control',
+                orderable: false,
+                targets: 2
+            }
+        ],
+        language: {
+            url: '{% static 'json/es-CL.json' %}',        
+        },
+        columnDefs: [    
+            { searchable: false, targets: [0,1,4] },
+            { orderable: false, targets: [0,1]}  
+        ],
+        order: [3, 'desc'],
+        responsive: {
+            details: {
+                type: 'column'
+            }
+        }
+    });
+</script>
+<script type="text/javascript"> 
+    const form = document.querySelector('#form');
+    form.addEventListener('submit', (event) => {
+    event.preventDefault();        
+    const formData = new FormData(form);
+    $.LoadingOverlay("show");
+    $.ajax({
+        url: '{% url 'report_drilling_general' %}',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            $.LoadingOverlay("hide");
+
+            const fechaInicial = document.querySelector('#id_fechaInicial').value;
+            const fechaFinal = document.querySelector('#id_fechaFinal').value;
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Reporte Creado con éxito!',
+                confirmButtonColor: '#ff00d9',
+            });
+            // Espera unos milisegundos antes de redirigir
+            setTimeout(() => {
+                window.location.href = `{% url 'manage_report_drilling' %}?fechaInicial=${encodeURIComponent(fechaInicial)}&fechaFinal=${encodeURIComponent(fechaFinal)}`;
+            }, 1200); // 1.2 segundos
+        },
+        error: function(error) {
+            $.LoadingOverlay("hide");
+            const titleText = (error && error.responseJSON && error.responseJSON.titleText)
+                ? error.responseJSON.titleText
+                : 'No se pudo generar el informe';
+            const text = (error && error.responseJSON && error.responseJSON.text)
+                ? error.responseJSON.text
+                : 'Ocurrió un error inesperado. Revisa los datos e inténtalo nuevamente.';
+            Swal.fire({
+                icon: 'error',        
+                titleText: titleText,
+                text: text,  
+                confirmButtonColor: '#ff00d9',
+            })
+        }
+        });
+    });
+</script>
+{% endblock javascript %}

@@ -1,0 +1,1386 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo_detalle_documento }}{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+
+<style>
+    .documento-actions-float {
+        position: fixed;
+        right: 20px;
+        bottom: 90px;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .documento-action-btn {
+        min-width: 118px;
+        height: 36px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px !important;
+        box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease-in-out;
+        white-space: nowrap;
+    }
+
+    .documento-action-finalizar.btn.btn-success {
+        background-color: #8FBD56 !important;
+        border-color: #8FBD56 !important;
+        color: #fff !important;
+    }
+
+    .documento-action-finalizar.is-disabled-by-time {
+        opacity: 0.45;
+        filter: grayscale(40%);
+        cursor: not-allowed !important;
+    }
+
+    @media (max-width: 767.98px) {
+        .documento-actions-float {
+            right: 20px;
+            bottom: 90px;
+        }
+    }
+
+    .config-access-card {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .config-access-card .card-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .config-panel {
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 10px;
+        padding: 14px;
+        background: rgba(0, 0, 0, 0.08);
+    }
+
+    .config-panel-title {
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .readonly-template-section .card-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .th-fixed {
+        background-color: #343a40 !important;
+        color: #fff !important;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .th-dynamic {
+        background-color: var(--primary-bg-color) !important;
+        color: #fff !important;
+        vertical-align: middle;
+    }
+
+    .cell-nopad {
+        padding: 0 !important;
+        vertical-align: middle !important;
+    }
+
+    .input-ghost {
+        border: none !important;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.2) !important;
+        border-radius: 0 !important;
+    }
+
+    .readonly-section-badge {
+        letter-spacing: 0.03em;
+    }
+
+    .readonly-template-input {
+        background: transparent !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: inherit !important;
+        pointer-events: none;
+    }
+
+    .readonly-template-input.input-item-writable {
+        border: none !important;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.2) !important;
+        padding-left: 8px;
+    }
+
+    .readonly-template-input.input-item-writable:focus {
+        border-bottom: 1px solid rgba(128, 128, 128, 0.2) !important;
+        box-shadow: none !important;
+    }
+
+    .readonly-structure-table td {
+        white-space: normal !important;
+        vertical-align: top !important;
+    }
+
+    .readonly-row-text {
+        min-height: 40px;
+        padding: 0.55rem 0.6rem;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+        line-height: 1.35;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .readonly-extra-text {
+        min-height: 40px;
+        padding: 0.55rem 0.6rem;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+        line-height: 1.35;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        text-align: center;
+    }
+
+    .course-question-card {
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .course-question-title {
+        font-size: 1.7rem;
+        font-weight: 700;
+        line-height: 1.25;
+        margin: 0;
+    }
+
+    .course-image-upload-wrap {
+        text-align: center;
+    }
+
+    .course-image-preview-frame {
+        width: 360px;
+        max-width: 100%;
+        height: 220px;
+        margin: 0.5rem auto 0;
+        border: 1px dashed rgba(255, 255, 255, 0.25);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background: rgba(0, 0, 0, 0.12);
+    }
+
+    .course-image-preview {
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+    }
+
+    .course-question-content-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .course-question-options-col {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    .course-question-image-col {
+        flex: 0 0 50%;
+        max-width: 50%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .course-question-image-col .course-image-upload-wrap {
+        width: 100%;
+        text-align: center;
+    }
+
+    .course-question-image-col .course-image-preview-frame {
+        width: 420px;
+        max-width: 100%;
+        height: 250px;
+        margin: 0.5rem auto 0;
+    }
+
+    .course-doc-options-box {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 0.85rem;
+        padding: 0.9rem;
+        counter-reset: option;
+        width: 50%;
+        max-width: 100%;
+        background: linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.015) 100%
+        );
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    .course-doc-options-box.course-doc-options-box-fill {
+        width: 100%;
+    }
+
+    .course-doc-option-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0;
+    }
+
+    .course-doc-option-empty {
+        border: 1px dashed rgba(255, 255, 255, 0.25);
+        border-radius: 0.7rem;
+        padding: 0.7rem 0.8rem;
+        opacity: 0.85;
+    }
+
+    .course-doc-option-choice {
+        cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 0.75rem;
+        padding: 0.7rem 1rem 0.7rem 0.8rem;
+        background: rgba(255, 255, 255, 0.02);
+        position: relative;
+        display: grid;
+        grid-template-columns: 32px minmax(0, 1fr);
+        align-items: center;
+        gap: 0.75rem;
+        transition:
+            border-color 0.18s ease,
+            background-color 0.18s ease,
+            box-shadow 0.18s ease,
+            transform 0.18s ease;
+    }
+
+    .course-doc-option-choice::after {
+        content: '';
+        position: absolute;
+        right: 0.8rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .course-doc-option-choice:hover {
+        border-color: rgba(143, 189, 86, 0.45);
+        background: rgba(143, 189, 86, 0.08);
+        transform: translateX(2px);
+    }
+
+    .course-doc-option-choice.is-selected {
+        border-color: #8FBD56;
+        background: linear-gradient(
+            90deg,
+            rgba(143, 189, 86, 0.24) 0%,
+            rgba(143, 189, 86, 0.1) 100%
+        );
+        box-shadow:
+            0 0 0 1px rgba(143, 189, 86, 0.35),
+            0 10px 22px rgba(0, 0, 0, 0.18);
+    }
+
+    .course-doc-option-choice.is-selected::after {
+        background: #8FBD56;
+        box-shadow: 0 0 0 5px rgba(143, 189, 86, 0.16);
+    }
+
+    .course-doc-option-radio {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+        width: 1px;
+        height: 1px;
+        margin: 0;
+    }
+
+    .course-doc-option-letter {
+        min-width: 2rem;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.82rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        text-align: center;
+        color: #e7f2d5;
+        border: 1px solid rgba(143, 189, 86, 0.55);
+        background: rgba(143, 189, 86, 0.14);
+    }
+
+    .course-doc-option-letter::before {
+        counter-increment: option;
+        content: counter(option, upper-alpha);
+    }
+
+    .course-doc-option-letter--plain {
+        border-color: rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.06);
+        color: rgba(255, 255, 255, 0.75);
+    }
+
+    .course-doc-option-letter--plain::before {
+        content: none;
+    }
+
+    .course-doc-option-text {
+        flex: 1;
+        border: none;
+        min-height: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        color: rgba(255, 255, 255, 0.92);
+        line-height: 1.35;
+        font-size: 1.02rem;
+    }
+
+    .course-doc-option-choice.is-selected .course-doc-option-text {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .course-doc-option-text-muted {
+        opacity: 0.72;
+    }
+
+    .pdf-preview-frame {
+        width: 100%;
+        height: 640px;
+        border: 1px solid rgba(128, 128, 128, 0.3);
+        border-radius: 7px;
+        background: #fff;
+    }
+
+    .pdf-preview-empty {
+        border: 1px dashed rgba(128, 128, 128, 0.4);
+        border-radius: 7px;
+        padding: 2.5rem 1rem;
+        text-align: center;
+        opacity: 0.8;
+    }
+
+    @media (max-width: 991.98px) {
+        .course-question-content-row {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .course-question-options-col,
+        .course-question-image-col {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+
+        .course-question-image-col {
+            justify-content: center;
+        }
+
+        .course-question-image-col .course-image-upload-wrap {
+            text-align: center;
+        }
+
+        .course-doc-options-box {
+            width: 100%;
+        }
+    }
+
+</style>
+{% endblock %}
+
+{% block javascript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const contadorLabel = document.getElementById('contador-tiempo-real');
+        const btnRegresarDocumento = document.getElementById('btn-regresar-documento');
+        const btnFinalizadoCapacitacion = document.getElementById('btn-finalizado-capacitacion');
+        const textoBotonFinalizado = btnFinalizadoCapacitacion
+            ? (btnFinalizadoCapacitacion.textContent || '').trim() || 'Finalizado'
+            : 'Finalizado';
+        const mostrarBotonFinalizado = {{ mostrar_boton_finalizado|yesno:"true,false" }};
+        const tipoSlugActual = '{{ tipo_slug|default:""|escapejs }}';
+        const esCurso = tipoSlugActual === 'cursos';
+        const urlGuardarResultadoCurso = '{{ url_guardar_resultado_curso|default:""|escapejs }}';
+        const urlGuardarBorradorCurso = '{{ url_guardar_borrador_curso|default:""|escapejs }}';
+        const respuestasCursoInicialesRaw = '{{ respuestas_curso_iniciales_json|default:"{}"|escapejs }}';
+        
+        const alertaCapacitacionActiva = {
+            nombre: "{{ alerta_capacitacion_activa.nombre_documento_activo|default:''|escapejs }}",
+            tipoActivoSlug: "{{ alerta_capacitacion_activa.tipo_activo_slug|default:''|escapejs }}",
+            tipoDestinoSlug: "{{ alerta_capacitacion_activa.tipo_destino_slug|default:''|escapejs }}",
+            urlContinuar: "{{ alerta_capacitacion_activa.url_continuar|default:''|escapejs }}",
+            urlVolver: "{{ alerta_capacitacion_activa.url_volver_activo|default:''|escapejs }}",
+        };
+        const requiereResolverCapacitacionActiva = Boolean(
+            alertaCapacitacionActiva.urlContinuar && alertaCapacitacionActiva.urlVolver
+        );
+        let contadorSegundos = parseInt('{{ contador_segundos_restantes|default:0 }}', 10);
+        if (!Number.isFinite(contadorSegundos) || contadorSegundos < 0) {
+            contadorSegundos = 0;
+        }
+
+        let finalizacionEnCurso = false;
+        let finalizadoBloqueadoPorTiempo = false;
+        let autoFinalizacionDisparada = false;
+        let validacionQrEnProceso = false; 
+        let esValidacionForzada = false;
+        
+        let guardadoBorradorPendienteTimer = null;
+        let guardandoBorradorEnCurso = false;
+        let guardadoBorradorPosterior = false;
+        let navegandoDesdeRegresar = false;
+
+        function normalizarRespuestasCurso(raw) {
+            const normalizadas = {};
+            if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+                return normalizadas;
+            }
+            Object.entries(raw).forEach(([key, value]) => {
+                const preguntaIdx = parseInt(key, 10);
+                const opcionIdx = parseInt(value, 10);
+                if (!Number.isFinite(preguntaIdx) || preguntaIdx < 0 || !Number.isFinite(opcionIdx) || opcionIdx < 0) {
+                    return;
+                }
+                normalizadas[String(preguntaIdx)] = opcionIdx;
+            });
+            return normalizadas;
+        }
+
+        let respuestasCursoIniciales = {};
+        try {
+            respuestasCursoIniciales = normalizarRespuestasCurso(JSON.parse(respuestasCursoInicialesRaw || '{}'));
+        } catch (error) {
+            respuestasCursoIniciales = {};
+        }
+        const respuestasCursoSeleccionadas = { ...respuestasCursoIniciales };
+
+        function metaCategoriaSegunSlug(slug) {
+            const key = String(slug || '').toLowerCase();
+            if (key === 'charlas') return { nombre: 'charla', articulo: 'esta', otro: 'otra', adjetivo: 'activa' };
+            if (key === 'cursos') return { nombre: 'curso', articulo: 'este', otro: 'otro', adjetivo: 'activo' };
+            if (key === 'difusiones') return { nombre: 'difusión', articulo: 'esta', otro: 'otra', adjetivo: 'activa' };
+            if (key === 'informativos') return { nombre: 'informativo', articulo: 'este', otro: 'otro', adjetivo: 'activo' };
+            return { nombre: 'capacitación', articulo: 'esta', otro: 'otra', adjetivo: 'activa' };
+        }
+
+        function formatoMMSS(totalSegundos) {
+            const minutes = Math.floor(totalSegundos / 60);
+            const segundos = totalSegundos % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
+        }
+
+        function actualizarContadorUi() {
+            if (!contadorLabel) {
+                return;
+            }
+            if (contadorSegundos > 0) {
+                contadorLabel.textContent = formatoMMSS(contadorSegundos);
+            } else {
+                contadorLabel.textContent = mostrarBotonFinalizado ? '00:00' : 'No activo';
+            }
+        }
+
+        function getCookie(name) {
+            const cookieValue = document.cookie
+                .split(';')
+                .map((chunk) => chunk.trim())
+                .find((chunk) => chunk.startsWith(`${name}=`));
+            return cookieValue ? decodeURIComponent(cookieValue.split('=').slice(1).join('=')) : '';
+        }
+
+        function recolectarRespuestasCurso() {
+            const respuestas = { ...respuestasCursoSeleccionadas };
+            document.querySelectorAll('.course-doc-option-radio:checked').forEach((radio) => {
+                const match = String(radio.name || '').match(/respuesta_pregunta_(\d+)/);
+                if (!match) {
+                    return;
+                }
+                const preguntaIdx = parseInt(match[1], 10);
+                const opcionIdx = parseInt(radio.value || '', 10);
+                if (!Number.isFinite(preguntaIdx) || preguntaIdx < 0 || !Number.isFinite(opcionIdx) || opcionIdx < 0) {
+                    return;
+                }
+                respuestas[String(preguntaIdx)] = opcionIdx;
+            });
+            return normalizarRespuestasCurso(respuestas);
+        }
+
+        function cancelarGuardadoBorradorProgramado() {
+            if (guardadoBorradorPendienteTimer) {
+                window.clearTimeout(guardadoBorradorPendienteTimer);
+                guardadoBorradorPendienteTimer = null;
+            }
+        }
+
+        async function guardarBorradorCursoSilencioso(options = {}) {
+            const keepalive = Boolean(options.keepalive);
+            if (!esCurso || !urlGuardarBorradorCurso || autoFinalizacionDisparada) {
+                return true;
+            }
+
+            if (guardandoBorradorEnCurso) {
+                guardadoBorradorPosterior = true;
+                return true;
+            }
+
+            guardandoBorradorEnCurso = true;
+            const respuestas = recolectarRespuestasCurso();
+            try {
+                const response = await fetch(urlGuardarBorradorCurso, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    keepalive,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify({ respuestas }),
+                });
+                if (!response.ok) {
+                    return false;
+                }
+                let payload = {};
+                try {
+                    payload = await response.json();
+                } catch (error) {
+                    payload = {};
+                }
+                if (payload && typeof payload === 'object') {
+                    const respuestasGuardadas = normalizarRespuestasCurso(payload.respuestas || {});
+                    if (Object.keys(respuestasGuardadas).length > 0) {
+                        Object.assign(respuestasCursoSeleccionadas, respuestasGuardadas);
+                    }
+                }
+                return true;
+            } catch (error) {
+                return false;
+            } finally {
+                guardandoBorradorEnCurso = false;
+                if (guardadoBorradorPosterior) {
+                    guardadoBorradorPosterior = false;
+                    window.setTimeout(() => {
+                        guardarBorradorCursoSilencioso();
+                    }, 0);
+                }
+            }
+        }
+
+        function programarGuardadoBorradorCurso(delayMs = 350) {
+            if (!esCurso || !urlGuardarBorradorCurso || autoFinalizacionDisparada) {
+                return;
+            }
+            cancelarGuardadoBorradorProgramado();
+            guardadoBorradorPendienteTimer = window.setTimeout(() => {
+                guardadoBorradorPendienteTimer = null;
+                guardarBorradorCursoSilencioso();
+            }, delayMs);
+        }
+
+        async function guardarResultadoCursoAntesDeFinalizar(options = {}) {
+            const mostrarErrores = options.mostrarErrores !== false;
+            const forzarRechazo = options.forzarRechazo === true; 
+
+            if (!esCurso || !urlGuardarResultadoCurso) {
+                return true;
+            }
+
+            try {
+                let respuestasFinales = forzarRechazo ? {} : recolectarRespuestasCurso();
+
+                const response = await fetch(urlGuardarResultadoCurso, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify({
+                        respuestas: respuestasFinales,
+                        forzar_rechazo: forzarRechazo
+                    }),
+                });
+                if (!response.ok) {
+                    let mensaje = 'No se pudo guardar el resultado del curso.';
+                    try {
+                        const payload = await response.json();
+                        if (payload && payload.error) {
+                            mensaje = payload.error;
+                        }
+                    } catch (error) {
+                    }
+                    throw new Error(mensaje);
+                }
+                return true;
+            } catch (error) {
+                if (!mostrarErrores) {
+                    return false;
+                }
+                const mensaje = (error && error.message) ?
+                    error.message : 'No se pudo guardar el resultado del curso.';
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        titleText: 'Error al guardar resultado',
+                        text: mensaje,
+                        icon: 'error',
+                        confirmButtonColor: '#ff00d9',
+                    });
+                } else {
+                    alert(mensaje);
+                }
+                return false;
+            }
+        }
+
+        async function ejecutarFinalizacionCapacitacion() {
+            if (!btnFinalizadoCapacitacion || finalizacionEnCurso) {
+                return;
+            }
+            const destino = btnFinalizadoCapacitacion.getAttribute('href') || '#';
+            if (!destino || destino === '#') {
+                return;
+            }
+
+            finalizacionEnCurso = true;
+            cancelarGuardadoBorradorProgramado();
+            await guardarBorradorCursoSilencioso();
+            const resultadoGuardado = await guardarResultadoCursoAntesDeFinalizar({ mostrarErrores: true });
+            
+            if (!resultadoGuardado) {
+                finalizacionEnCurso = false;
+                return;
+            }
+            
+            window.location.href = destino;
+        }
+
+        function actualizarEstadoBotonFinalizado() {
+            if (!btnFinalizadoCapacitacion) {
+                return;
+            }
+            const requiereTiempoLecturaParaFinalizar = ['charlas', 'informativos', 'difusiones']
+                .includes(String(tipoSlugActual || '').toLowerCase());
+            finalizadoBloqueadoPorTiempo = Boolean(
+                requiereTiempoLecturaParaFinalizar && contadorSegundos > 0
+            );
+            btnFinalizadoCapacitacion.classList.toggle(
+                'is-disabled-by-time',
+                finalizadoBloqueadoPorTiempo
+            );
+            btnFinalizadoCapacitacion.setAttribute(
+                'aria-disabled',
+                finalizadoBloqueadoPorTiempo ? 'true' : 'false'
+            );
+            if (finalizadoBloqueadoPorTiempo) {
+                btnFinalizadoCapacitacion.dataset.tiempoRestante = formatoMMSS(contadorSegundos);
+            }
+        }
+
+        async function autoFinalizarCursoPorTiempo() {
+            if (!esCurso || autoFinalizacionDisparada || finalizacionEnCurso || !mostrarBotonFinalizado) {
+                return;
+            }
+            autoFinalizacionDisparada = true;
+            iniciarValidacionDobleFactor(true);
+        }
+
+        function registrarRespuestaDesdeRadio(radio) {
+            const match = String(radio.name || '').match(/respuesta_pregunta_(\d+)/);
+            const preguntaIdx = match ? parseInt(match[1], 10) : NaN;
+            const opcionIdx = parseInt(radio.value || '', 10);
+            if (!Number.isFinite(preguntaIdx) || preguntaIdx < 0 || !Number.isFinite(opcionIdx) || opcionIdx < 0) {
+                return;
+            }
+            respuestasCursoSeleccionadas[String(preguntaIdx)] = opcionIdx;
+        }
+
+        function actualizarSeleccionVisualEnCaja(box, radioActivo) {
+            const choices = box.querySelectorAll('.course-doc-option-choice');
+            choices.forEach((choice) => {
+                const choiceRadio = choice.querySelector('.course-doc-option-radio');
+                choice.classList.toggle('is-selected', Boolean(choiceRadio && choiceRadio === radioActivo));
+            });
+        }
+
+        function aplicarRespuestasInicialesCurso() {
+            Object.entries(respuestasCursoSeleccionadas).forEach(([preguntaIdx, opcionIdx]) => {
+                const selector = `.course-doc-option-radio[name="respuesta_pregunta_${preguntaIdx}"][value="${opcionIdx}"]`;
+                const radio = document.querySelector(selector);
+                if (radio) {
+                    radio.checked = true;
+                }
+            });
+        }
+
+        aplicarRespuestasInicialesCurso();
+
+        document.querySelectorAll('.course-doc-options-box').forEach((box) => {
+            const radios = box.querySelectorAll('.course-doc-option-radio');
+            const choices = box.querySelectorAll('.course-doc-option-choice');
+
+            radios.forEach((radio) => {
+                radio.addEventListener('change', function (e) {
+
+                    if (!mostrarBotonFinalizado) {
+                        e.preventDefault();
+                        return;
+                    }
+
+                    if (!radio.checked) {
+                        return;
+                    }
+                    actualizarSeleccionVisualEnCaja(box, radio);
+                    registrarRespuestaDesdeRadio(radio);
+                    programarGuardadoBorradorCurso();
+                });
+            });
+
+            choices.forEach((choice) => {
+                choice.addEventListener('click', function (e) {
+
+                    if (!mostrarBotonFinalizado) {
+                        e.preventDefault();
+                        return;
+                    }
+
+                    const radio = choice.querySelector('.course-doc-option-radio');
+                    if (!radio) {
+                        return;
+                    }
+                    radio.checked = true;
+                    actualizarSeleccionVisualEnCaja(box, radio);
+                    registrarRespuestaDesdeRadio(radio);
+                    programarGuardadoBorradorCurso();
+                });
+            });
+
+            const radioMarcado = box.querySelector('.course-doc-option-radio:checked');
+            if (radioMarcado) {
+                actualizarSeleccionVisualEnCaja(box, radioMarcado);
+                registrarRespuestaDesdeRadio(radioMarcado);
+            }
+        });
+
+        actualizarContadorUi();
+        actualizarEstadoBotonFinalizado();
+        
+        if (contadorSegundos > 0) {
+            const intervalId = window.setInterval(function () {
+                
+                contadorSegundos = Math.max(0, contadorSegundos - 1);
+                actualizarContadorUi();
+                actualizarEstadoBotonFinalizado();
+                
+                if (contadorSegundos <= 1) {
+                    contadorSegundos = 0; 
+                    actualizarContadorUi();
+                    actualizarEstadoBotonFinalizado();
+                    window.clearInterval(intervalId);
+                    
+                    esValidacionForzada = true;
+
+                    if (validacionQrEnProceso) {
+                        autoFinalizacionDisparada = true;
+                        
+                        if (esCurso) {
+                            const advertenciaContainer = document.getElementById('advertencia-qr-container');
+                            if (advertenciaContainer) {
+                                advertenciaContainer.innerHTML = `<p class="text-danger fw-bold text-center mt-3 mb-0" style="font-size: 14px;">
+                                    El tiempo finalizó. Si cancelas, el intento se rechazará automáticamente.
+                                </p>`;
+                            }
+                            
+                            const cancelButton = Swal.getCancelButton();
+                            if (cancelButton) {
+                                cancelButton.textContent = 'Cancelar y Rechazar';
+                                cancelButton.style.backgroundColor = '#d33';
+                            }
+                        }
+                    } else {
+                        autoFinalizarCursoPorTiempo();
+                    }
+                }
+            }, 1000);
+        } else if (contadorSegundos <= 0 && esCurso && !autoFinalizacionDisparada && mostrarBotonFinalizado) {
+            esValidacionForzada = true;
+            autoFinalizarCursoPorTiempo();
+        }
+
+        function iniciarValidacionDobleFactor(esForzadoInicial = false) {
+            validacionQrEnProceso = true; 
+            esValidacionForzada = esForzadoInicial || contadorSegundos <= 0; 
+
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const textoInstruccion = isMobile 
+                ? "Autoriza el uso de la cámara y enfoca el código de tu carnet para finalizar."
+                : "Escanea este código QR con tu teléfono móvil para validar tu carnet y finalizar.";
+            
+            let validacionExitosaProcesada = false;
+
+            let textoAdvertencia = "";
+            let textoBotonCancelar = "";
+            let colorBotonCancelar = "";
+
+            if (esCurso) {
+                textoAdvertencia = esValidacionForzada 
+                    ? `<p class="text-danger fw-bold text-center mt-3 mb-0" style="font-size: 14px;">
+                        El tiempo finalizó. Si cancelas, el intento se rechazará automáticamente.
+                       </p>`
+                    : `<p class="text-muted fw-bold text-center mt-3 mb-0" style="font-size: 14px;">
+                        Aún tienes tiempo. Puedes cancelar para volver a revisar tus respuestas.
+                       </p>`;
+
+                textoBotonCancelar = esValidacionForzada ? 'Cancelar y Rechazar' : 'Cancelar y Volver';
+                colorBotonCancelar = esValidacionForzada ? '#d33' : '#6c757d';
+            } else {
+                textoAdvertencia = `<p class="text-muted fw-bold text-center mt-3 mb-0" style="font-size: 14px;">
+                        Escanea el código para registrar tu validación. Si cancelas, podrás validarlo más tarde.
+                       </p>`;
+                textoBotonCancelar = 'Cancelar';
+                colorBotonCancelar = '#6c757d';
+            }
+
+            Swal.fire({
+                title: 'Validación de Identidad',
+                html: `
+                    <p class="text-muted mb-3" style="font-size: 14px;">${textoInstruccion}</p>
+                    <div id="codigo-qr" class="d-flex justify-content-center mb-3">
+                        <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;">
+                            <span class="sr-only">Cargando...</span>
+                        </div>
+                    </div>
+                    <div id="estado-validacion" class="alert mb-0 fw-bold" role="alert" style="background-color: #0dcaf0; color: #000000; border: none; font-size: 13px;">
+                        Generando código...
+                    </div>
+                    <div id="advertencia-qr-container">
+                        ${textoAdvertencia}
+                    </div>
+                `,
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showCancelButton: true,
+                cancelButtonText: textoBotonCancelar,
+                cancelButtonColor: colorBotonCancelar,
+                didOpen: () => {
+                    const divQr = document.getElementById('codigo-qr');
+                    const alertaEstado = document.getElementById('estado-validacion');
+                    const docId = "{{ documento.id|default:0 }}";
+                    fetch(`/prevencion/generar-qr-validacion/${docId}/`, {
+                        headers: {
+                            'ngrok-skip-browser-warning': 'true'
+                        }
+                    })
+                        .then(r => r.json())
+                        .then(data => {
+                            divQr.innerHTML = '';
+                            if (isMobile) {
+                                const urlSegura = data.url_qr.replace('http://', 'https://');
+                                fetch(urlSegura, {
+                                    headers: { 'ngrok-skip-browser-warning': 'true' }
+                                })
+                                .then(res => res.text())
+                                .then(html => {
+                                    const iframe = document.createElement('iframe');
+                                    iframe.allow = "camera";
+                                    iframe.style.cssText = "width: 100%; height: 320px; border: none; border-radius: 8px;";
+                                    iframe.srcdoc = html;
+                                    divQr.innerHTML = '';
+                                    divQr.appendChild(iframe);
+                                    alertaEstado.innerHTML = 'Enfoca tu carnet con la cámara...';
+                                });
+                            } else {
+                                new QRCode(divQr, {
+                                    text: data.url_qr,
+                                    width: 220,
+                                    height: 220,
+                                    colorDark: "#000000",
+                                    colorLight: "#ffffff",
+                                    correctLevel: QRCode.CorrectLevel.H
+                                });
+                                alertaEstado.innerHTML = 'Esperando escaneo desde tu celular...';
+                            }
+
+                            Swal.getPopup().dataset.intervalId = setInterval(() => {
+                                fetch(`/prevencion/estado-validacion/${data.token}/`, {
+                                    headers: {
+                                        'ngrok-skip-browser-warning': 'true'
+                                    }
+                                })
+                                .then(res => res.json())
+                                .then(estadoData => {
+                                    if (estadoData.validado) {
+                                        if (validacionExitosaProcesada) return;
+                                        validacionExitosaProcesada = true;
+                                        clearInterval(Swal.getPopup().dataset.intervalId);
+                                        alertaEstado.className = 'alert alert-success mb-0 fw-bold';
+                                        alertaEstado.innerHTML = '¡Identidad verificada exitosamente!';
+                                        setTimeout(() => {
+                                            Swal.close();
+                                            ejecutarFinalizacionCapacitacion();
+                                        }, 1500);
+                                    } else if (estadoData.rechazado) {
+                                        clearInterval(Swal.getPopup().dataset.intervalId);
+                                        alertaEstado.className = 'alert alert-danger mb-0 fw-bold';
+                                        alertaEstado.innerHTML = '¡Rechazado! Identidad no coincide.';
+                                        setTimeout(() => {
+                                            if (esCurso) {
+                                                Swal.fire({
+                                                    title: 'Identidad no válida',
+                                                    text: 'El carnet escaneado no coincide. Se restará un intento.',
+                                                    icon: 'error',
+                                                    confirmButtonColor: '#d33',
+                                                    allowOutsideClick: false
+                                                }).then(() => {
+                                                    forzarRechazoAutomatico();
+                                                });
+                                            } else {
+                                                Swal.fire({
+                                                    titleText: 'Validación Rechazada',
+                                                    text: 'El RUT escaneado no coincide con tu usuario. Vuelve a intentarlo.',
+                                                    icon: 'error',
+                                                    confirmButtonColor: '#d33',
+                                                    allowOutsideClick: false
+                                                }).then(() => {
+                                                    window.location.href = "{{ back_url|default:'#' }}";
+                                                });
+                                            }
+                                        }, 1500);
+                                    }
+                                });
+                            }, 2000);
+                        })
+                        .catch(err => {
+                            alertaEstado.className = 'alert alert-danger mb-0';
+                            alertaEstado.innerText = "Error de conexión generando QR.";
+                        });
+                },
+                willClose: () => {
+                    validacionQrEnProceso = false; 
+                    const popup = Swal.getPopup();
+                    if (popup && popup.dataset.intervalId) {
+                        clearInterval(popup.dataset.intervalId);
+                    }
+                    if (!esValidacionForzada) {
+                        autoFinalizacionDisparada = false;
+                    }
+                }
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.cancel) {
+                    if (esValidacionForzada && esCurso) {
+                        forzarRechazoAutomatico();
+                    } else {
+                        console.log("Validación cancelada pacíficamente.");
+                    }
+                }
+            });
+        }
+
+        if (btnFinalizadoCapacitacion) {
+            btnFinalizadoCapacitacion.addEventListener('click', function (event) {
+                event.preventDefault();
+                
+                if (finalizadoBloqueadoPorTiempo) {
+                    const tiempoRestante = formatoMMSS(contadorSegundos);
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            titleText: 'Tiempo de lectura en curso',
+                            text: `Debes esperar hasta ${tiempoRestante} para habilitar ${textoBotonFinalizado}.`,
+                            icon: 'info',
+                            confirmButtonColor: '#8FBD56',
+                        });
+                    } else {
+                        alert(`Debes esperar hasta ${tiempoRestante} para habilitar ${textoBotonFinalizado}.`);
+                    }
+                    return;
+                }
+                
+                autoFinalizacionDisparada = true;
+                iniciarValidacionDobleFactor(false);
+            });
+        }
+
+        if (btnRegresarDocumento) {
+            btnRegresarDocumento.addEventListener('click', async function (event) {
+                if (!esCurso || contadorSegundos <= 0 || autoFinalizacionDisparada || navegandoDesdeRegresar) {
+                    return;
+                }
+                event.preventDefault();
+                navegandoDesdeRegresar = true;
+                const destino = btnRegresarDocumento.getAttribute('href') || '#';
+                cancelarGuardadoBorradorProgramado();
+                await guardarBorradorCursoSilencioso();
+                if (destino && destino !== '#') {
+                    window.location.href = destino;
+                }
+            });
+        }
+
+        window.addEventListener('pagehide', function () {
+            if (!esCurso || contadorSegundos <= 0 || autoFinalizacionDisparada) {
+                return;
+            }
+            cancelarGuardadoBorradorProgramado();
+            guardarBorradorCursoSilencioso({ keepalive: true });
+        });
+
+        if (requiereResolverCapacitacionActiva) {
+            const tipoDestino = metaCategoriaSegunSlug(tipoSlugActual || alertaCapacitacionActiva.tipoDestinoSlug);
+            const tipoActivo = metaCategoriaSegunSlug(alertaCapacitacionActiva.tipoActivoSlug);
+            const mensajeActivo = `¿Estás seguro de entrar a ${tipoDestino.articulo} ${tipoDestino.nombre}, cuando hay ${tipoActivo.otro} ${tipoActivo.nombre} ${tipoActivo.adjetivo}?`;
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    titleText: 'Capacitación activa sin finalizar',
+                    text: mensajeActivo,
+                    icon: 'warning',
+                    confirmButtonColor: '#ff00d9',
+                    denyButtonColor: '#8FBD56',
+                    confirmButtonText: 'Regresar',
+                    denyButtonText: 'Sí',
+                    showDenyButton: true,
+                    reverseButtons: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                }).then((result) => {
+                    if (result.isDenied) {
+                        window.location.href = alertaCapacitacionActiva.urlContinuar;
+                        return;
+                    }
+                });
+            } else {
+                const continuar = window.confirm(
+                    `${mensajeActivo}\n\nAceptar: Sí.\nCancelar: Regresar.`
+                );
+                if (continuar) {
+                    window.location.href = alertaCapacitacionActiva.urlContinuar;
+                }
+            }
+        }
+
+        const frame = document.getElementById('pdf-preview-frame');
+        const empty = document.getElementById('pdf-preview-empty');
+        const pdfUrl = frame ? frame.dataset.src : '';
+        if (!frame || !empty || !pdfUrl) {
+            return;
+        }
+
+        fetch(pdfUrl, { credentials: 'same-origin' })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('No se pudo cargar el PDF');
+                }
+                return response.blob();
+            })
+            .then((blob) => {
+                const isPdf = (blob.type || '').toLowerCase().includes('pdf') || pdfUrl.toLowerCase().includes('.pdf');
+                if (!isPdf) {
+                    throw new Error('El archivo no es PDF');
+                }
+                frame.src = URL.createObjectURL(blob);
+                frame.classList.remove('d-none');
+                empty.classList.add('d-none');
+            })
+            .catch(() => {
+                frame.src = pdfUrl;
+                frame.classList.remove('d-none');
+                empty.classList.add('d-none');
+            });
+
+        async function forzarRechazoAutomatico() {
+            if (esCurso) {
+                finalizacionEnCurso = true;
+                cancelarGuardadoBorradorProgramado();
+                
+                Swal.fire({
+                    title: 'Rechazando intento...',
+                    text: 'Cancelaste la validación obligatoria.',
+                    icon: 'warning',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                await guardarResultadoCursoAntesDeFinalizar({ 
+                    mostrarErrores: false, 
+                    forzarRechazo: true 
+                });
+                
+                const destino = btnFinalizadoCapacitacion ? btnFinalizadoCapacitacion.getAttribute('href') : '#';
+                if (destino && destino !== '#') {
+                    window.location.href = destino;
+                } else {
+                    window.location.reload();
+                }
+            } else {
+                finalizacionEnCurso = false;
+            }
+        }
+
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="documento-actions-float">
+    <a id="btn-regresar-documento" href="{{ back_url|default:'#' }}" class="btn btn-secondary documento-action-btn">Regresar</a>
+    {% if mostrar_boton_finalizado %}
+    <a
+        id="btn-finalizado-capacitacion"
+        href="{{ url_finalizar_capacitacion|default:back_url|default:'#' }}"
+        class="btn btn-primary documento-action-btn documento-action-finalizar"
+        data-tiempo-restante="{{ aviso_tiempo_bloqueo_capacitacion|default:'' }}"
+    >
+        {% if tipo_slug == 'charlas' or tipo_slug == 'informativos' or tipo_slug == 'difusiones' %}
+            Validado
+        {% else %}
+            Finalizado
+        {% endif %}
+    </a>
+    {% endif %}
+</div>
+
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+            <div class="page-header">
+                <h1 class="page-title">{{ titulo_vista_documento|default:"Ver Documento" }}</h1>
+            </div>
+
+            <div id="configAccesoPanel" class="mb-4">
+            <div class="card config-access-card">
+                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                        <h3 class="card-title mb-0">Información del Documento</h3>
+                        <span class="fw-bold" style="color: #ffc107; font-size: 15px; letter-spacing: 0.02em;">
+                            ⚠️ Necesitas tener tu cédula de identidad en mano
+                        </span>
+                    </div>
+                    
+                    <h3 class="card-title mb-0">
+                        {% if tipo_slug == 'charlas' or tipo_slug == 'informativos' or tipo_slug == 'difusiones' %}
+                                Tiempo de lectura: <span id="contador-tiempo-real">--:--</span>
+                            {% else %}
+                                Contador: <span id="contador-tiempo-real">--:--</span>
+                            {% endif %}
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-3 text-muted">Datos principales del documento asignado.</p>
+                        <div class="row g-3">
+                            <div class="col-lg-4">
+                                <div class="config-panel">
+                                    <div class="config-panel-title">
+                                        {% if tipo_slug == 'charlas' %}
+                                            Charla
+                                        {% elif tipo_slug == 'informativos' %}
+                                            Informativo
+                                        {% elif tipo_slug == 'difusiones' %}
+                                            Difusión
+                                        {% elif tipo_slug == 'cursos' %}
+                                            Curso
+                                        {% else %}
+                                            Plantilla
+                                        {% endif %}
+                                    </div>
+                                    <input type="text" class="form-control" value="{% if documento.plantilla_base %}{{ documento.plantilla_base.nombre }}{% else %}Eliminada{% endif %}" readonly disabled>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="config-panel">
+                                    <div class="config-panel-title">
+                                        {% if tipo_slug == 'charlas' or tipo_slug == 'informativos' or tipo_slug == 'difusiones' or tipo_slug == 'cursos' %}
+                                            Tipo de capacitación
+                                        {% else %}
+                                            Tipo de charla
+                                        {% endif %}
+                                    </div>
+                                    <input type="text" class="form-control" value="{{ tipo_label }}" readonly disabled>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="config-panel">
+                                    <div class="config-panel-title">
+                                        {% if tipo_slug == 'charlas' or tipo_slug == 'informativos' or tipo_slug == 'difusiones' or tipo_slug == 'cursos' %}
+                                            Tiempo de realización
+                                        {% else %}
+                                            Tiempo estimado
+                                        {% endif %}
+                                    </div>
+                                    <input type="text" class="form-control" value="{{ tiempo_estimado_documento }}" readonly disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if modo_contenido == 'pdf' %}
+                <div id="pdf-preview-row" class="row">
+                    <div class="col-12 col-xl-8">
+                        <div id="pdf-preview-container" class="card mb-4">
+                            <div class="card-header">
+                                <h3 class="card-title mb-0">Documento PDF</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="pdf-preview-empty" class="pdf-preview-empty">
+                                    Cargando vista previa del PDF...
+                                </div>
+                                <iframe id="pdf-preview-frame" class="pdf-preview-frame d-none" title="Vista previa PDF" data-src="{{ pdf_view_url }}"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% elif tipo_slug == 'cursos' %}
+                {% for seccion in estructura_lectura %}
+                    <div class="course-question-card">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="course-question-title">{{ seccion.titulo|default:"pregunta" }}</h5>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label mb-1">Descripcion de la pregunta</label>
+                            <textarea class="form-control readonly-template-input" rows="3" readonly disabled>{{ seccion.enunciado|default:"" }}</textarea>
+                        </div>
+
+                        <div class="course-question-content-row">
+                            <div class="course-question-options-col">
+                                <label class="form-label mb-1">Alternativas</label>
+                                <div class="course-doc-options-box course-doc-options-box-fill mb-0">
+                                    {% for opcion in seccion.opciones %}
+                                        <label
+                                            class="course-doc-option-row course-doc-option-choice"
+                                            data-pregunta-index="{{ forloop.parentloop.counter0 }}"
+                                            data-opcion-index="{{ forloop.counter0 }}"
+                                            {% if not mostrar_boton_finalizado %}style="pointer-events: none; cursor: default;"{% endif %}
+                                        >
+                                            <input
+                                                type="radio"
+                                                class="form-check-input course-doc-option-radio"
+                                                name="respuesta_pregunta_{{ forloop.parentloop.counter0 }}"
+                                                value="{{ forloop.counter0 }}"
+                                                {% if not mostrar_boton_finalizado %}disabled{% endif %}
+                                            >
+                                            <span class="course-doc-option-letter"></span>
+                                            <span class="course-doc-option-text">{{ opcion }}</span>
+                                        </label>
+                                    {% empty %}
+                                        <div class="course-doc-option-row course-doc-option-empty">
+                                            <span class="course-doc-option-letter course-doc-option-letter--plain">-</span>
+                                            <span class="course-doc-option-text course-doc-option-text-muted">Sin alternativas</span>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            {% if seccion.imagen_url %}
+                                <div class="course-question-image-col">
+                                    <div class="course-image-upload-wrap">
+                                        <label class="form-label mb-1 d-block">Foto de la pregunta</label>
+                                        <div class="course-image-preview-frame">
+                                            <img src="{{ seccion.imagen_url }}" class="course-image-preview" alt="Foto de la pregunta">
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        {% if not mostrar_boton_finalizado %}
+                            <div class="row g-2">
+                                <div class="col-md-2">
+                                    <label class="form-label mb-1">Alternativa correcta</label>
+                                    <input type="text" class="form-control readonly-template-input" value="{{ seccion.respuesta_correcta|default:'-' }}" readonly disabled>
+                                </div>
+                                <div class="col-md-10">
+                                    <label class="form-label mb-1">Justificacion</label>
+                                    <input type="text" class="form-control readonly-template-input" value="{{ seccion.justificacion|default:'-' }}" readonly disabled>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                {% for seccion in estructura_lectura %}
+                    <div class="card mb-4 shadow-sm readonly-template-section">
+                        <div class="card-header border-bottom">
+                            <div class="d-flex w-100 align-items-center">
+                                <span class="badge bg-dark me-3 readonly-section-badge">SECCION {{ forloop.counter }}</span>
+                                <input type="text" class="form-control section-title-input readonly-template-input" value="{{ seccion.titulo|default:'' }}" readonly disabled>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-bordered mb-0 align-middle readonly-structure-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="th-fixed" style="width: 50px;">#</th>
+                                            <th class="th-fixed text-center"><span class="th-title-normal">{% if seccion.columnas_extras %}ITEMS{% else %}Detalle{% endif %}</span></th>
+                                            {% for col in seccion.columnas_extras %}
+                                                <th class="th-dynamic text-center">{{ col|upper }}</th>
+                                            {% endfor %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for fila in seccion.filas %}
+                                            <tr>
+                                                <td class="text-center bg-light">{{ forloop.parentloop.counter }}.{{ forloop.counter }}</td>
+                                                <td class="cell-nopad">
+                                                    <div class="readonly-row-text">{{ fila.item|default:fila }}</div>
+                                                </td>
+                                                {% for extra in fila.respuestas_extras %}
+                                                    <td class="cell-nopad">
+                                                        <div class="readonly-extra-text">{{ extra|default:'-' }}</div>
+                                                    </td>
+                                                {% endfor %}
+                                            </tr>
+                                        {% empty %}
+                                            <tr>
+                                                <td class="text-center bg-light">-</td>
+                                                <td class="cell-nopad">
+                                                    <div class="readonly-row-text">-</div>
+                                                </td>
+                                                {% for col in seccion.columnas_extras %}
+                                                    <td class="cell-nopad">
+                                                        <div class="readonly-extra-text">-</div>
+                                                    </td>
+                                                {% endfor %}
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

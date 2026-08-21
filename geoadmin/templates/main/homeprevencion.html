@@ -1,0 +1,90 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Dashboard Prevención{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+<link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+{% endblock css %}
+
+{% block content %}
+{% if request.user.usuarioprofile.seccionPrevencion == "ADMINISTRADOR" or request.user.is_superuser %}
+<div class="app-content main-content mt-0">
+  <div class="side-app">
+    <!-- CONTAINER -->
+    <div class="main-container container-fluid">
+      <!-- PAGE-HEADER -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Dashboard Prevención</h1>
+        </div>
+        <div class="ms-auto pageheader-btn">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="javascript:void(0);">Dashboard Prevención</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+              Dashboard Prevención
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Power BI Dashboard Placeholder -->
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="card"> 
+          <div class="panel panel-primary">
+            <div class="tab-menu-heading border-bottom-0"> 
+              <div class="tabs-menu4 border-bottomo-sm"> 
+                <!-- Tabs --> 
+                <nav class="nav d-sm-flex d-block"> 
+                  <a id="nav-prevencion" class="nav-link border border-bottom-0 br-sm-5 me-2 active" data-bs-toggle="tab" href="#tab-prevencion">Reportes de Prevención</a> 
+                  <a id="nav-vigilancia" class="nav-link border border-bottom-0 br-sm-5 me-2" data-bs-toggle="tab" href="#tab-vigilancia">Vigilancia Médica</a>
+                </nav> 
+              </div> 
+            </div>
+            <div class="panel-body tabs-menu-body"> 
+              <div class="tab-content">
+                <!-- Tab: Reportes de Prevención -->
+                <div class="tab-pane active" id="tab-prevencion">
+                  <div class="ratio ratio-16x9">
+                    <iframe
+                      title="Dashboard Prevencion"
+                      src="https://app.powerbi.com/view?r=eyJrIjoiMDA1NDg5YTItOWY4NC00ODkyLTlhZTEtZGYxMWI5MWUyNmJlIiwidCI6IjI3NmM5YjA4LTJlOTctNGQ0MS1hMzY3LWZmOTA4YmNiNmRmMCJ9"
+                      frameborder="0"
+                      allowFullScreen="true"
+                    ></iframe>
+                  </div>
+                </div>
+                <!-- Tab: Vigilancia Médica -->
+                <div class="tab-pane" id="tab-vigilancia"> 
+                  <div class="ratio ratio-16x9">
+                    <!-- Placeholder iframe for Vigilancia Médica Dashboard. Replace the src URL when ready. -->
+                    <iframe
+                      title="Dashboard Vigilancia Medica"
+                      src="https://app.powerbi.com/view?r=eyJrIjoiN2U2MzM3NzUtNmZlYS00YmVhLWIzZGItYWViODgyMjY3M2U4IiwidCI6IjI3NmM5YjA4LTJlOTctNGQ0MS1hMzY3LWZmOTA4YmNiNmRmMCJ9"
+                      frameborder="0"
+                      allowFullScreen="true"
+                    ></iframe>
+                  </div>
+                </div>
+              </div>
+            </div> 
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Power BI Dashboard Placeholder -->
+  </div>
+</div>
+{% else %}
+<meta http-equiv="REFRESH" content="0;url={% url 'edit_my_profile' %}" />
+{% endif %} {% endblock content %} {% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+{% endblock javascript %}

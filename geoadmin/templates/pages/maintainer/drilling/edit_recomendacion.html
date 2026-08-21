@@ -1,0 +1,428 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Editar Recomendación{% endblock %}
+
+{% block content %}
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Editar Recomendación</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Mantenedor Sistema</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Editar Recomendación</li>
+                    </ol>
+                </div>
+            </div> 
+
+            <div class="card"> 
+                <div class="panel panel-primary">
+                    <div class="tab-menu-heading border-bottom-0"> 
+                        <div class="tabs-menu4 border-bottomo-sm"> 
+                            <nav class="nav d-sm-flex d-block"> 
+                                <a id="nav25" class="nav-link border border-bottom-0 br-sm-5 me-2 active" data-bs-toggle="tab" href="#tab25">Recomendación Programada</a> 
+                                <a id="nav26" class="nav-link border border-bottom-0 br-sm-5 me-2" data-bs-toggle="tab" href="#tab26">Recomendación Ajuste</a>
+                                <a id="nav27" class="nav-link border border-bottom-0 br-sm-5 me-2" data-bs-toggle="tab" href="#tab27">Recomendación Final</a>
+                            </nav> 
+                        </div> 
+                    </div>
+
+                    <div class="panel-body tabs-menu-body"> 
+                        <div class="tab-content">
+
+                            <!-- TAB 25 -->
+                            <div class="tab-pane active" id="tab25">
+                                <div class="row row-sm">
+                                    <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                                        <div class="card box-shadow-0">                        
+                                            <div class="card-body">
+                                                <h4 class="card-title">Datos Principales</h4>
+                                                <p class="card-title">Atención: no se puede eliminar este registro</p>
+
+                                                <form class="form-horizontal" id="form" action="#" method="POST" enctype="multipart/form-data">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="id" value="{{ documento_id }}">                           
+                                                    <div class="row row-sm">
+                                                        {{ formeditar|crispy }}
+                                                    </div>
+                                                    <div class="form-group mt-3">
+                                                        <div> 
+                                                            <a class="btn btn-secondary" href="{% url 'manage_recomendacion' %}">Regresar</a>
+                                                            <button type="submit" class="btn btn-primary">Guardar</button>                                         
+                                                        </div>
+                                                    </div>
+                                                </form>
+
+                                            </div>  
+                                        </div>
+                                    </div>                
+                                </div>
+                            </div>
+
+                            <!-- TAB 26 -->
+                            <div class="tab-pane" id="tab26"> 
+                                <div class="row row-sm">
+                                    <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                                        <div class="card box-shadow-0">                        
+                                            <div class="card-body">
+                                                <h4 class="card-title">Datos Principales</h4>
+                                                <p class="card-title">Atención: no se puede eliminar este registro</p>
+
+                                                <form class="form-horizontal" id="formAjuste" action="#" method="POST" enctype="multipart/form-data">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="id" value="{{ documento_id }}">                           
+                                                    <div class="row row-sm">
+                                                        {{ formeditarajuste|crispy }}
+                                                    </div>
+                                                    <div class="form-group mt-3">
+                                                        <div> 
+                                                            <a class="btn btn-secondary" href="{% url 'manage_recomendacion' %}">Regresar</a>
+                                                            <button type="submit" class="btn btn-primary">Guardar</button>                                         
+                                                        </div>
+                                                    </div>
+                                                </form>
+
+                                            </div>  
+                                        </div>
+                                    </div>  
+                                </div>
+                            </div>
+
+                            <!-- TAB 27 -->
+                            <div class="tab-pane" id="tab27"> 
+                                <div class="row row-sm">
+                                    <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                                        <div class="card box-shadow-0">                        
+                                            <div class="card-body">
+                                                <h4 class="card-title">Datos Principales</h4>
+                                                <p class="card-title">Atención: no se puede eliminar este registro</p>
+
+                                                <form class="form-horizontal" id="formFinal" action="#" method="POST" enctype="multipart/form-data">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="id" value="{{ documento_id }}">                           
+                                                    <div class="row row-sm">
+                                                        {{ formeditarfinal|crispy }}
+                                                    </div>
+                                                    <div class="form-group mt-3">
+                                                        <div> 
+                                                            <a class="btn btn-secondary" href="{% url 'manage_recomendacion' %}">Regresar</a>
+                                                            <button type="submit" class="btn btn-primary">Guardar</button>                                         
+                                                        </div>
+                                                    </div>
+                                                </form>
+
+                                            </div>  
+                                        </div>
+                                    </div>  
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function () {
+
+    // ---------- Layout (safe) ----------
+    [
+        'div_id_campana','div_id_programa','div_id_recomendacion','div_id_pozo','div_id_sonda',
+        'div_id_fecha_inicio','div_id_sector','div_id_azimut','div_id_inclinacion','div_id_este',
+        'div_id_norte','div_id_cota','div_id_largo_programado','div_id_estado',
+
+        'div_id_azimutAjuste','div_id_esteAjuste','div_id_norteAjuste','div_id_cotaAjuste','div_id_manteoAjuste',
+        'div_id_esteFinal','div_id_norteFinal','div_id_cotaFinal','div_id_fechaFinal'
+    ].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('col-md-4');
+    });
+
+    // ---------- Helpers (MOSTRAR SOLO 1 ERROR - IGUAL QUE NUEVA) ----------
+    function getFirstFieldError(errorsObj) {
+        if (!errorsObj) return null;
+
+        const keys = Object.keys(errorsObj);
+        if (!keys.length) return null;
+
+        const campo = keys[0];
+        const val = errorsObj[campo];
+
+        // puede venir como array o string
+        let msg = "";
+        if (Array.isArray(val) && val.length) msg = String(val[0]);
+        else if (typeof val === "string") msg = val;
+        else if (val != null) msg = String(val);
+
+        msg = (msg || "").trim();
+        if (!msg) return null;
+
+        return { campo, mensaje: msg };
+    }
+
+     function normalizeMensaje(campo, mensaje) {
+        mensaje = String(mensaje || "").trim();
+        if (!mensaje) return mensaje;
+
+
+        let m = mensaje.match(/no more than\s+(\d+)\s+digits?/i);
+        if (m) {
+            const n = m[1];
+            return `Asegúrese de que no haya más de ${n} dígitos en total.`;
+        }
+
+
+        m = mensaje.match(/no haya más de\s+(\d+)\s+d[ií]gitos?/i);
+        if (m) {
+            const n = m[1];
+            return `Asegúrese de que no haya más de ${n} dígitos en total.`;
+        }
+
+        if (/El valor es demasiado grande para/i.test(mensaje)) {
+            return mensaje.replace(/['"`]+/g, "");
+        }
+
+
+        return mensaje.replace(/['"`]+/g, "");
+    }
+
+     function showValidationSwal(response) {
+        const first = (response && response.errors) ? getFirstFieldError(response.errors) : null;
+
+        const texto = first
+            ? `${first.campo}: ${normalizeMensaje(first.campo, first.mensaje)}`
+            : (response && response.message ? response.message : 'No se pudo guardar.');
+
+        Swal.fire({
+            icon: 'warning',
+            titleText: 'Validación',
+            text: texto,
+            confirmButtonColor: '#ff00d9',
+        });
+    }
+    // ---------- TAB 25 ----------
+    const form = document.querySelector('#form');
+    if (form) {
+        const inputs = form.querySelectorAll('input, select, textarea');
+        const azimutField = document.getElementById("id_azimut");
+        const requiredFields = ["recomendacion", "pozo", "sonda", "fecha_inicio", "sector", "inclinacion"];
+
+        const validateField = (input) => {
+            const value = (input.value || '').trim();
+            let isValid = true;
+
+            if (requiredFields.includes(input.name)) {
+                isValid = value.length > 0;
+            }
+
+            if (input.name === "azimut") {
+                isValid = value === "" || (/^\d+$/.test(value) && parseInt(value, 10) >= 0 && parseInt(value, 10) <= 360);
+            } else if (["inclinacion", "largo_programado", "largo_real", "este", "norte", "cota"].includes(input.name) && value !== "") {
+                isValid = /^-?\d+(\.\d{1,3})?$/.test(value);
+            } else if (input.name === "fecha_inicio") {
+                isValid = !isNaN(Date.parse(value));
+            }
+
+            return isValid;
+        };
+
+        inputs.forEach((input) => {
+            input.addEventListener('input', () => validateField(input));
+        });
+
+        if (azimutField) {
+            azimutField.addEventListener("input", function () {
+                let value = (this.value || '').trim();
+                if (value !== "") {
+                    value = parseInt(value, 10);
+                    if (value < 0) this.value = "";
+                    else if (value > 360) this.value = 360;
+                }
+            });
+        }
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            let isFormValid = true;
+            requiredFields.forEach((fieldName) => {
+                const field = form.querySelector(`[name="${fieldName}"]`);
+                if (field) {
+                    const valid = validateField(field);
+                    if (!valid) isFormValid = false;
+                }
+            });
+
+            if (!isFormValid) {
+                Swal.fire({
+                    icon: 'error',
+                    titleText: 'Formulario Incompleto',
+                    text: 'Por favor, complete todos los campos obligatorios antes de enviar.',
+                    confirmButtonColor: '#ff00d9',
+                });
+                return;
+            }
+
+            const formData = new FormData(form);
+            $.LoadingOverlay("show");
+
+            $.ajax({
+                url: '{% url "save_edit_recomendacion" %}',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+
+                success: function (response) {
+                    $.LoadingOverlay("hide");
+                    if (response && response.success === true) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Recomendación Actualizada con éxito!',
+                            confirmButtonColor: '#ff00d9',
+                        }).then(() => {
+                            window.location.href = '{% url "manage_recomendacion" %}';
+                        });
+                        return;
+                    }
+
+                    // Si backend forzó abortado, reflejar estado
+                    if (response && response.estado_aplicado === "1") {
+                        const estadoField = form.querySelector('[name="estado"]');
+                        if (estadoField) {
+                            if (estadoField.tagName === "SELECT") estadoField.value = "1";
+                            else estadoField.value = "Abortado";
+                        }
+                    }
+
+                    // ✅ Mostrar SOLO 1 error (igual que Nueva)
+                    showValidationSwal(response);
+                },
+
+                error: function () {
+                    $.LoadingOverlay("hide");
+                    Swal.fire({
+                        icon: 'error',
+                        titleText: 'Recomendación no se Actualizó',
+                        text: 'Vuelva a intentarlo!',
+                        confirmButtonColor: '#ff00d9',
+                    });
+                }
+            });
+        });
+    }
+
+    // ---------- TAB 26 ----------
+    const formAjuste = document.querySelector('#formAjuste');
+    if (formAjuste) {
+        formAjuste.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const formDataAjuste = new FormData(formAjuste);
+            $.LoadingOverlay("show");
+
+            $.ajax({
+                url: '{% url "save_edit_recomendacion_ajuste" %}',
+                type: 'POST',
+                data: formDataAjuste,
+                processData: false,
+                contentType: false,
+
+                success: function (response) {
+                    $.LoadingOverlay("hide");
+
+                    if (response && response.success === true) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Recomendación Ajuste Actualizada con éxito!',
+                            confirmButtonColor: '#ff00d9',
+                        }).then(() => {
+                            window.location.href = '{% url "manage_recomendacion" %}';
+                        });
+                        return;
+                    }
+
+                    // ✅ Igual que Nueva
+                    showValidationSwal(response);
+                },
+
+                error: function () {
+                    $.LoadingOverlay("hide");
+                    Swal.fire({
+                        icon: 'error',
+                        titleText: 'Recomendación no se Actualizó',
+                        text: 'Vuelva a intentarlo!',
+                        confirmButtonColor: '#ff00d9',
+                    });
+                }
+            });
+        });
+    }
+
+    // ---------- TAB 27 ----------
+    const formFinal = document.querySelector('#formFinal');
+    if (formFinal) {
+        formFinal.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const formDataFinal = new FormData(formFinal);
+            $.LoadingOverlay("show");
+
+            $.ajax({
+                url: '{% url "save_edit_recomendacion_final" %}',
+                type: 'POST',
+                data: formDataFinal,
+                processData: false,
+                contentType: false,
+
+                success: function (response) {
+                    $.LoadingOverlay("hide");
+
+                    if (response && response.success === true) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Recomendación Final Actualizada con éxito!',
+                            confirmButtonColor: '#ff00d9',
+                        }).then(() => {
+                            window.location.href = '{% url "manage_recomendacion" %}';
+                        });
+                        return;
+                    }
+
+                    // ✅ Igual que Nueva
+                    showValidationSwal(response);
+                },
+
+                error: function () {
+                    $.LoadingOverlay("hide");
+                    Swal.fire({
+                        icon: 'error',
+                        titleText: 'Recomendación no se Actualizó',
+                        text: 'Vuelva a intentarlo!',
+                        confirmButtonColor: '#ff00d9',
+                    });
+                }
+            });
+        });
+    }
+
+});
+</script>
+
+{% endblock javascript %}
+
+{% block messages %}
+{% endblock messages %}

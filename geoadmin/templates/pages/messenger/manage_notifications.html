@@ -1,0 +1,429 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- MAIN-CONTENT -->
+<div class="main-content app-content mt-0">
+    <div class="side-app">
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">
+                    {% if area_requested %}
+                        Configuración de Notificaciones: {{ categories.0.name }}
+                    {% else %}
+                        Centro de Notificaciones
+                    {% endif %}
+                </h1>
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Mantenedor</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Opciones de Email</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <div class="row">
+                {% if not area_requested %}
+                <!-- MENU LATERAL DE CATEGORÍAS (Solo se muestra en el Centro General) -->
+                <div class="col-md-3">
+                    <div class="card overflow-hidden notification-sidebar-card">
+                        <div class="card-header border-bottom">
+                            <h3 class="card-title">Áreas del Sistema</h3>
+                        </div>
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            {% for category in categories %}
+                            <button class="nav-link {% if forloop.first %}active{% endif %} text-start py-3 px-4 border-bottom" 
+                                    id="v-pills-{{ category.key }}-tab" 
+                                    data-bs-toggle="pill" 
+                                    data-bs-target="#v-pills-{{ category.key }}" 
+                                    type="button" role="tab" 
+                                    aria-controls="v-pills-{{ category.key }}" 
+                                    aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                                    style="border-radius: 0;">
+                                <i class="{% if category.key == 'VEHICULAR' %}fa fa-truck{% elif category.key == 'SONDAJE' %}fa fa-bullseye{% elif category.key == 'PREVENCION' %}fa fa-shield{% else %}fa fa-cog{% endif %} me-2"></i>
+                                {{ category.name }}
+                            </button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- CONTENIDO DE LOS GRUPOS -->
+                <div class="{% if area_requested %}col-md-12{% else %}col-md-9{% endif %}">
+                    <div class="tab-content" id="v-pills-tabContent">
+                        {% for category in categories %}
+                        <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" 
+                             id="v-pills-{{ category.key }}" role="tabpanel" 
+                             aria-labelledby="v-pills-{{ category.key }}-tab">
+                            
+                            <div class="row">
+                                {% for group in category.groups %}
+                                <div class="col-12 mb-4">
+                                    <div class="card notification-group-card">
+                                        <div class="card-header py-3 px-4 notification-group-header">
+                                            <h3 class="card-title text-info" style="font-size: 1rem; font-weight: 600;">
+                                                <i class="fa fa-envelope-o me-2"></i>{{ group.name }}
+                                            </h3>
+                                        </div>
+                                        <div class="card-body p-4">
+                                            <div class="row g-4">
+                                                <!-- Usuarios Sistema -->
+                                                <div class="col-md-6 border-end notification-divider">
+                                                    <label class="form-label text-muted mb-3" style="font-size: 0.85rem;">USUARIOS DEL SISTEMA (DENTRO DE LA PLATAFORMA)</label>
+                                                    <div class="input-group mb-3">
+                                                        <select class="form-control select2" id="user-select-{{ group.id }}" data-placeholder="Buscar usuario por nombre...">
+                                                            <option value=""></option>
+                                                            {% for user in all_users %}
+                                                                <option value="{{ user.id }}" {% if user in group.users.all %}style="display:none" disabled{% endif %}>
+                                                                    {{ user.nombre_con_detalles }}
+                                                                </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <button class="btn btn-info" onclick="addUser({{ group.id }})">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+                                                        <table class="table table-sm table-hover mb-0" style="font-size: 0.85rem;">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="border-0">Nombre</th>
+                                                                    <th class="border-0 text-center" style="width: 40px;">X</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="user-table-{{ group.id }}">
+                                                                {% for user in group.users.all %}
+                                                                <tr id="user-row-{{ group.id }}-{{ user.id }}">
+                                                                    <td class="align-middle">{{ user.nombre_con_detalles }}</td>
+                                                                    <td class="text-center">
+                                                                        <button class="btn btn-sm btn-link text-danger p-0" onclick="removeUser({{ group.id }}, {{ user.id }})">
+                                                                            <i class="fa fa-trash"></i>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                                {% empty %}
+                                                                <tr class="empty-user-row"><td colspan="2" class="text-center py-3 text-muted">Sin usuarios asignados</td></tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Emails Externos -->
+                                                <div class="col-md-6">
+                                                    <label class="form-label text-muted mb-3" style="font-size: 0.85rem;">EMAILS EXTERNOS (FUERA DE LA PLATAFORMA)</label>
+                                                    <div class="input-group mb-3">
+                                                        <input type="email" class="form-control notification-email-input" id="email-input-{{ group.id }}" 
+                                                               placeholder="ejemplo@correo.com">
+                                                        <button class="btn btn-success" onclick="addEmail({{ group.id }})">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+                                                        <table class="table table-sm table-hover mb-0" style="font-size: 0.85rem;">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="border-0">Correo Electrónico</th>
+                                                                    <th class="border-0 text-center" style="width: 40px;">X</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="email-table-{{ group.id }}">
+                                                                {% for email in group.external_emails %}
+                                                                <tr id="email-row-{{ group.id }}-{{ forloop.counter }}">
+                                                                    <td class="align-middle">{{ email }}</td>
+                                                                    <td class="text-center">
+                                                                        <button class="btn btn-sm btn-link text-danger p-0" onclick="removeEmail({{ group.id }}, '{{ email }}', {{ forloop.counter }})">
+                                                                            <i class="fa fa-trash"></i>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                                {% empty %}
+                                                                <tr class="empty-email-row"><td colspan="2" class="text-center py-3 text-muted">Sin correos externos</td></tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <div class="col-12 text-center py-5">
+                                    <h4 class="text-muted">No hay grupos configurados para esta área.</h4>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.select2').forEach(function(el) {
+        const placeholder = el.getAttribute('data-placeholder') || 'Buscar usuario...';
+        $(el).select2({
+            placeholder: placeholder,
+            allowClear: false,
+        });
+    });
+});
+
+function updateGroup(groupId, action, value, callback) {
+    fetch('{% url "update_notification_group" %}', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
+        body: JSON.stringify({ group_id: groupId, action: action, value: value })
+    })
+    .then(res => res.json())
+    .then(data => { 
+        if(data.status === 'ok') {
+            callback();
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(err => {
+        alert('Error de conexión con el servidor.');
+        console.error(err);
+    });
+}
+
+function addUser(groupId) {
+    const sel = document.getElementById(`user-select-${groupId}`);
+    if (!sel.value) return;
+    updateGroup(groupId, 'add_user', sel.value, () => {
+        const table = document.getElementById(`user-table-${groupId}`);
+        if (table.querySelector('.empty-user-row')) table.querySelector('.empty-user-row').remove();
+        const row = `<tr id="user-row-${groupId}-${sel.value}">
+            <td class="align-middle">${sel.options[sel.selectedIndex].text}</td>
+            <td class="text-center">
+                <button class="btn btn-sm btn-link text-danger p-0" onclick="removeUser(${groupId}, ${sel.value})">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </td></tr>`;
+        table.insertAdjacentHTML('beforeend', row);
+        // Ocultar y deshabilitar al usuario de la lista desplegable
+        const option = sel.querySelector(`option[value="${sel.value}"]`);
+        if (option) {
+            option.style.display = 'none';
+            option.disabled = true;
+        }
+        // Forzar a Select2 a refrescar la lista y limpiar selección
+        $(sel).val('').trigger('change');
+    });
+}
+
+function removeUser(groupId, userId) {
+    updateGroup(groupId, 'remove_user', userId, () => {
+        document.getElementById(`user-row-${groupId}-${userId}`).remove();
+        // Volver a mostrar y habilitar al usuario en la lista desplegable
+        const sel = document.getElementById(`user-select-${groupId}`);
+        const option = sel.querySelector(`option[value="${userId}"]`);
+        if (option) {
+            option.style.display = 'block';
+            option.disabled = false;
+        }
+        // Forzar a Select2 a refrescar la lista
+        $(sel).trigger('change');
+    });
+}
+
+function addEmail(groupId) {
+    const inp = document.getElementById(`email-input-${groupId}`);
+    if (!inp.value.includes('@')) {
+        alert('Por favor, ingresa un correo válido.');
+        return;
+    }
+    updateGroup(groupId, 'add_email', inp.value, () => {
+        const table = document.getElementById(`email-table-${groupId}`);
+        if (table.querySelector('.empty-email-row')) table.querySelector('.empty-email-row').remove();
+        const id = Date.now();
+        const row = `<tr id="email-row-${groupId}-${id}">
+            <td class="align-middle">${inp.value}</td>
+            <td class="text-center">
+                <button class="btn btn-sm btn-link text-danger p-0" onclick="removeEmail(${groupId}, '${inp.value}', ${id})">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </td></tr>`;
+        table.insertAdjacentHTML('beforeend', row);
+        inp.value = '';
+    });
+}
+
+function removeEmail(groupId, email, id) {
+    updateGroup(groupId, 'remove_email', email, () => {
+        document.getElementById(`email-row-${groupId}-${id}`).remove();
+    });
+}
+</script>
+
+<style>
+    /* Estilos para el menú lateral */
+    #v-pills-tab .nav-link {
+        color: #8f9bb3;
+        background: transparent;
+        transition: all 0.3s ease;
+    }
+
+    /* Tarjetas adaptables */
+    .notification-sidebar-card {
+        background: var(--card-background, #fff) !important;
+        border: 1px solid rgba(0,0,0,0.125) !important;
+        border-radius: 12px;
+    }
+
+    .dark-mode .notification-sidebar-card {
+        background: var(--transparent-bg, #1a1f2e) !important;
+        border-color: rgba(255,255,255,0.1) !important;
+    }
+
+    .notification-group-card {
+        background: var(--card-background, #fff) !important;
+        border: 1px solid rgba(0,0,0,0.125) !important;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    }
+
+    .dark-mode .notification-group-card {
+        background: var(--transparent-bg, #1a1f2e) !important;
+        border-color: rgba(255,255,255,0.1) !important;
+    }
+
+    .notification-group-header {
+        background: rgba(0, 188, 212, 0.08) !important;
+        border-bottom: 1px solid rgba(0,0,0,0.1) !important;
+    }
+
+    .dark-mode .notification-group-header {
+        border-bottom-color: rgba(255,255,255,0.1) !important;
+    }
+
+    .notification-divider {
+        border-right: 1px solid rgba(0,0,0,0.1) !important;
+    }
+
+    .dark-mode .notification-divider {
+        border-right-color: rgba(255,255,255,0.1) !important;
+    }
+
+    /* Estilos para el modo oscuro/claro de Select2 e Inputs */
+    .notification-email-input {
+        background-color: var(--input-bg, #fff) !important;
+        color: var(--text-color, #333) !important;
+        border: 1px solid rgba(0,0,0,0.2) !important;
+    }
+
+    .dark-mode .notification-email-input {
+        background-color: #11151f !important;
+        color: #fff !important;
+        border-color: rgba(255,255,255,0.2) !important;
+    }
+
+    .input-group .select2-container--default .select2-selection--single {
+        background-color: var(--input-bg, #fff) !important;
+        border: 1px solid rgba(0,0,0,0.2) !important;
+        height: 38px !important;
+    }
+
+    .dark-mode .input-group .select2-container--default .select2-selection--single {
+        background-color: #11151f !important;
+        border-color: rgba(255,255,255,0.2) !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: inherit !important;
+        line-height: 36px !important;
+    }
+
+    /* Tablas */
+    .table thead th {
+        background: rgba(0, 0, 0, 0.04) !important;
+        color: var(--text-color, #333) !important;
+        font-weight: 600;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+        cursor: pointer;
+    }
+
+    .dark-mode .table-hover tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.2) !important;
+        cursor: pointer;
+    }
+
+    .dark-mode .table thead th {
+        background: rgba(255, 255, 255, 0.05) !important;
+        color: #fff !important;
+    }
+
+    .table tbody tr {
+        border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+    }
+
+    .dark-mode .table tbody tr {
+        border-bottom-color: rgba(255,255,255,0.05) !important;
+    }
+
+    /* Ajustes de simetría y alineación */
+    .select2-container--default .select2-selection--single .select2-selection__placeholder {
+        color: #6c757d !important;
+        font-size: 0.85rem;
+    }
+    .input-group {
+        display: flex !important;
+        width: 100% !important;
+    }
+
+    .input-group > .select2-container {
+        flex: 1 1 auto !important;
+        width: 1% !important; 
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 36px !important;
+    }
+
+    .table thead th {
+        padding: 12px 8px !important;
+        height: 45px;
+        vertical-align: middle;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 0.75rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    #v-pills-tab .nav-link:hover {
+        background: rgba(0, 188, 212, 0.05);
+    }
+
+    #v-pills-tab .nav-link.active {
+        color: #00bcd4;
+        background: rgba(0, 188, 212, 0.1);
+        border-right: 3px solid #00bcd4;
+        font-weight: bold;
+    }
+
+    .select2-container--default .select2-results__option[aria-disabled=true] {
+        display: none !important;
+    }
+</style>
+{% endblock javascript %}

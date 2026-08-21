@@ -1,0 +1,438 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Dashboard Administración - Auditoría{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+<link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<style>
+    #tabla-historial thead th,
+    table.dataTable thead th {
+        color: #ffffff !important;
+        text-align: center !important;
+    }
+
+    .table-responsive {
+        overflow-x: visible !important;
+    }
+
+    #tabla-historial {
+        width: 100% !important;
+        table-layout: fixed !important; 
+    }
+
+    #tabla-historial th, 
+    #tabla-historial td {
+        white-space: normal !important; 
+        overflow-wrap: break-word !important;
+        font-size: 12px !important; 
+        padding: 8px 6px !important;
+        vertical-align: middle !important; 
+        text-align: center !important;
+    }
+
+    span.select2-container {
+        width: 100% !important;
+        display: block !important;
+    }
+
+    .select2-container--default .select2-selection--single {
+        background-color: #ffffff !important;
+        border: 1px solid #e9ecef !important;
+        height: 38px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #333333 !important;
+        padding-left: 12px !important;
+        line-height: 38px !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 36px !important;
+    }
+
+    .select2-dropdown {
+        background-color: #ffffff !important;
+        border: 1px solid #e9ecef !important;
+        color: #333333 !important;
+    }
+    
+    .select2-results__option--highlighted[aria-selected] {
+        background-color: #0d6efd !important;
+        color: white !important;
+    }
+
+    .dark-mode .select2-container--default .select2-selection--single,
+    .dark-theme .select2-container--default .select2-selection--single {
+        background-color: #2a2e3f !important;
+        border: 1px solid #444b5f !important;
+    }
+
+    .dark-mode .select2-container--default .select2-selection--single .select2-selection__rendered,
+    .dark-theme .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #ffffff !important;
+    }
+
+    .dark-mode .select2-dropdown,
+    .dark-theme .select2-dropdown {
+        background-color: #2a2e3f !important;
+        border: 1px solid #444b5f !important;
+        color: white !important;
+    }
+
+    .dark-mode .select2-results__option--highlighted[aria-selected],
+    .dark-theme .select2-results__option--highlighted[aria-selected] {
+        background-color: #3b4258 !important;
+    }
+
+    #contenidoDetalles {
+        white-space: pre-wrap;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 13px;
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 4px;
+        border: 1px solid #e9ecef;
+        color: #333;
+    }
+</style>
+{% endblock css %}
+
+{% block content %}
+{% if request.user.is_superuser %}
+<div class="app-content main-content mt-0">
+  <div class="side-app">
+    <div class="main-container container-fluid">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Panel de Control de Cambios</h1>
+        </div>
+        <div class="ms-auto pageheader-btn">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Administración</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Auditoría del Sistema</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-header bg-transparent border-bottom">
+              <h3 class="card-title">Filtros de Búsqueda</h3>
+            </div>
+            <div class="card-body">
+              <form method="GET" id="form-filtros">
+                <div class="row align-items-end">
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label">RUT o Usuario</label>
+                    <select name="usuario" id="select-usuario" class="form-control">
+                      <option value="" data-rol="">Todos los usuarios</option>
+                      {% for u in lista_usuarios %}
+                        <option value="{{ u.username }}" data-rol="{{ u.usuarioprofile.seccionAdministracion }}" {% if request.GET.usuario == u.username %}selected{% endif %}>
+                          {{ u.get_full_name|default:u.username }} - {{ u.username }}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+
+                  <div class="col-md-2 mb-3">
+                    <label class="form-label">Rol</label>
+                    <select name="rol" id="select-rol" class="form-control form-select">
+                        <option value="">Cualquiera</option>
+                        {% for r in roles_disponibles %}
+                        <option value="{{ r }}" {% if request.GET.rol == r %}selected{% endif %}>{{ r }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+
+                  <div class="col-md-2 mb-3">
+                    <label class="form-label">Desde</label>
+                    <input type="date" name="fecha_a" class="form-control" value="{{ request.GET.fecha_a }}" required>
+                  </div>
+
+                  <div class="col-md-2 mb-3">
+                    <label class="form-label">Hasta</label>
+                    <input type="date" name="fecha_b" class="form-control" value="{{ request.GET.fecha_b }}" required>
+                  </div>
+
+                  <div class="col-md-2 mb-3">
+                    <button type="submit" name="generar" value="true" class="btn btn-primary w-100">Generar</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card"> 
+            <div class="card-header bg-transparent border-bottom d-flex justify-content-between align-items-center">
+                <h3 class="card-title mb-0">Historial de Modificaciones</h3>
+                {% if request.GET.generar or request.GET.export %}
+                <button type="submit" form="form-filtros" name="export" value="true" class="btn btn-success btn-sm">
+                    <i class="fe fe-download"></i> Exportar a Excel
+                </button>
+                {% endif %}
+            </div>
+            <div class="card-body"> 
+                <div class="table-responsive">
+                  <table class="table table-bordered border-bottom w-100" id="tabla-historial">
+                      <thead class="bg-primary text-white">
+                          <tr>
+                              <th style="width: 6%;">RUT</th>
+                              <th style="width: 10%;">Nombre Apellido</th>
+                              <th style="width: 10%;">Cargo</th>
+                              <th style="width: 9%;">Sección</th>
+                              <th style="width: 6%;">Acción</th>
+                              <th style="width: 13%;">Registro Afectado</th>
+                              <th style="width: 9%;">Fecha/Hora</th>
+                              <th style="width: 9%;">Campo</th>
+                              <th style="width: 8%;">Valor Anterior</th>
+                              <th style="width: 8%;">Valor Nuevo</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {% for h in historial_cambios %}
+                          <tr>
+                              <td>{{ h.rut_usuario }}</td>
+                              <td>{{ h.nombre_usuario }}</td>
+                              <td class="align-middle">
+                                    <span class="badge bg-info text-wrap" style="width: 100%; line-height: 1.2; padding: 6px 8px;">
+                                        {{ h.rol_usuario|default:"Sin asignar" }}
+                                    </span>
+                                </td>
+                              <td>
+                                {% if h.seccion|lower == 'vehicle' %}
+                                    Vehículo
+                                {% elif h.seccion|lower == 'user' %}
+                                    Usuario
+                                {% elif h.seccion|lower == 'prevencion' %}
+                                    Prevención
+                                {% elif h.seccion|lower == 'planning' %}
+                                    Planificación
+                                {% elif h.seccion|lower == 'mining' %}
+                                    Minería
+                                {% elif h.seccion|lower == 'maintenance' %}
+                                    Mantenimiento
+                                {% elif h.seccion|lower == 'machine' %}
+                                    Maquinaria
+                                {% elif h.seccion|lower == 'inventory' %}
+                                    Inventario
+                                {% elif h.seccion|lower == 'equipment' %}
+                                    Equipos
+                                {% elif h.seccion|lower == 'drilling' %}
+                                    Perforación
+                                {% elif h.seccion|lower == 'documentation' %}
+                                    Documentación
+                                {% elif h.seccion|lower == 'core' %}
+                                    General
+                                {% elif h.seccion|lower == 'checklist' %}
+                                    Lista de Verificación
+                                {% else %}
+                                    {{ h.seccion|capfirst }}
+                                {% endif %}
+                              </td>
+                              <td>
+                                  {% if h.accion == 'Creado' %}
+                                      <span class="badge bg-success">Creado</span>
+                                  {% elif h.accion == 'Eliminado' %}
+                                      <span class="badge bg-danger">Eliminado</span>
+                                  {% else %}
+                                      <span class="badge bg-warning text-dark">Editado</span>
+                                  {% endif %}
+                              </td>
+                              <td class="text-center align-middle fw-bold text-dark">
+                                  {{ h.nombre_registro|default:"-" }}
+                              </td>
+                              <td data-order="{{ h.fecha_modificacion|date:'U'|default:'0' }}">
+                                  {{ h.fecha_modificacion|date:"d/m/Y H:i" }}
+                              </td>
+                              <td><strong>{{ h.campo_modificado }}</strong></td>
+                              
+                              <td class="text-danger text-center align-middle" style="max-width: 200px; white-space: normal; word-wrap: break-word;">
+                                  {% if '.png' in h.valor_anterior|lower or '.jpg' in h.valor_anterior|lower or '.jpeg' in h.valor_anterior|lower %}
+                                      <a href="/media/{{ h.valor_anterior }}" target="_blank" title="Clic para ampliar">
+                                          <img src="/media/{{ h.valor_anterior }}" style="width: 45px; height: 45px; object-fit: cover; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                                      </a>
+                                  {% elif '-' in h.valor_anterior and h.valor_anterior|length == 10 and h.seccion == 'vehicle' %}
+                                      {{ h.valor_anterior|slice:":7" }}
+                                  {% elif h.valor_anterior == '-' or h.valor_anterior == 'None' or not h.valor_anterior %}
+                                      Sin valor
+                                  {% elif h.valor_anterior == 'True' %}
+                                      Habilitado
+                                  {% elif h.valor_anterior == 'False' %}
+                                      Deshabilitado
+                                  {% else %}
+                                      {{ h.valor_anterior }}
+                                  {% endif %}
+                              </td>
+                              
+                              <td class="text-success text-center align-middle" style="max-width: 200px;">
+                                  {% if h.accion == 'Creado' %}
+                                        <button type="button" class="btn btn-outline-info" 
+                                            style="font-size: 8px !important; padding: 4px 8px !important; height: auto !important; min-height: 0 !important; line-height: 1.2 !important;"
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalDetalles" 
+                                            data-detalles="{{ h.valor_nuevo }}">
+                                            <i class="fe fe-eye"></i> Ver detalles
+                                        </button>
+                                  {% elif '.png' in h.valor_nuevo|lower or '.jpg' in h.valor_nuevo|lower or '.jpeg' in h.valor_nuevo|lower %}
+                                      <a href="/media/{{ h.valor_nuevo }}" target="_blank" title="Clic para ampliar">
+                                          <img src="/media/{{ h.valor_nuevo }}" style="width: 45px; height: 45px; object-fit: cover; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                                      </a>
+                                  {% else %}
+                                      <div style="white-space: normal; word-wrap: break-word;">
+                                          {% if '-' in h.valor_nuevo and h.valor_nuevo|length == 10 and h.seccion == 'vehicle' %}
+                                              {{ h.valor_nuevo|slice:":7" }}
+                                          {% elif h.valor_nuevo == '-' or h.valor_nuevo == 'None' or not h.valor_nuevo %}
+                                              Sin valor
+                                          {% elif h.valor_nuevo == 'True' %}
+                                              Habilitado
+                                          {% elif h.valor_nuevo == 'False' %}
+                                              Deshabilitado
+                                          {% else %}
+                                              {{ h.valor_nuevo }}
+                                          {% endif %}
+                                      </div>
+                                  {% endif %}
+                              </td>
+                          </tr>
+                          {% empty %}
+                          <tr>
+                              <td colspan="10" class="text-center text-muted py-5">
+                                {% if request.GET.generar %}
+                                  No se encontraron resultados.
+                                {% else %}
+                                  Ajuste los filtros y presione "Generar".
+                                {% endif %}
+                              </td>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                  </table>
+                </div>
+            </div> 
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalDetalles" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Detalles del Registro Creado</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <pre id="contenidoDetalles"></pre>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<meta http-equiv="REFRESH" content="0;url={% url 'select' %}" />
+{% endif %}
+{% endblock content %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#select-usuario').select2({
+            placeholder: "Escriba RUT o Nombre...",
+            allowClear: true,
+            width: '100%',
+            dropdownAutoWidth: false,
+            minimumInputLength: 1,
+            language: {
+                inputTooShort: function() { return "Escriba al menos 1 carácter..."; },
+                noResults: function() { return "No se encontraron coincidencias"; }
+            }
+        });
+
+        $('#tabla-historial').DataTable({
+            responsive: false,
+            autoWidth: false,
+            order: [[6, 'desc']],
+            language: {
+                "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
+            }
+        });
+
+        var modalDetalles = document.getElementById('modalDetalles');
+        if (modalDetalles) {
+            modalDetalles.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget;
+                var detalles = button.getAttribute('data-detalles');
+                var content = modalDetalles.querySelector('#contenidoDetalles');
+                content.textContent = detalles;
+            });
+        }
+
+        $('form').on('submit', function(e) {
+            var fechaA = $('input[name="fecha_a"]').val();
+            var fechaB = $('input[name="fecha_b"]').val();
+
+            if (fechaA && fechaB) {
+                if (fechaA > fechaB) {
+                    e.preventDefault();
+                    alert("La fecha 'Desde' no puede ser mayor que la fecha 'Hasta'.");
+                }
+            }
+        });
+
+        var $usuarioSelect = $('#select-usuario');
+        var $rolSelect = $('#select-rol');
+        
+        var opcionesUsuariosHTML = $usuarioSelect.html();
+
+        $rolSelect.on('change', function(e) {
+            var rolSeleccionado = $(this).val();
+            var usuarioActual = $usuarioSelect.val(); 
+
+            $usuarioSelect.html(opcionesUsuariosHTML);
+
+            if (rolSeleccionado) {
+                $usuarioSelect.find('option').each(function() {
+                    if ($(this).val() !== "" && $(this).attr('data-rol') !== rolSeleccionado) {
+                        $(this).remove();
+                    }
+                });
+            }
+
+            if ($usuarioSelect.find('option[value="' + usuarioActual + '"]').length > 0) {
+                $usuarioSelect.val(usuarioActual);
+            } else {
+                $usuarioSelect.val('');
+            }
+
+            $usuarioSelect.trigger('change.select2');
+        });
+
+        if ($rolSelect.val()) {
+            $rolSelect.trigger('change');
+        }
+    });
+</script>
+{% endblock javascript %}

@@ -1,0 +1,99 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Administrar Bodegas{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+<link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+{% endblock css %}
+
+{% block content %}
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Administrar Bodegas</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">Inventario</li>
+                        <li class="breadcrumb-item active">Bodegas</li>
+                    </ol>
+                </div>
+            </div>
+
+            <a class="btn btn-primary btn-size-new" href="#">Nueva Bodega</a>
+
+            <h5 class="mb-5"></h5>
+
+            <div class="row row-sm">
+                <table id="datatable-allusers" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Nombre Bodega</th>
+                            <th>Ubicación</th>
+                            <th>Fecha Creación</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bodega in bodegas %}
+                        <tr>
+                            <td class="dtr-control"></td>
+                            <td>{{ bodega.nombre }}</td>
+                            <td>{{ bodega.ubicacion }}</td>
+                            <td>{{ bodega.fechacreacion|date:"d-m-Y" }}</td>
+                            <td>{% if bodega.status %}Habilitada{% else %}Deshabilitada{% endif %}</td>
+                            <td class="form-inline-btn">
+                                <a href="#" class="btn btn-info btn-size-edit">Editar</a>
+                                <a href="#" class="btn btn-danger btn-size-adm">Deshabilitar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <h5 class="mb-5"></h5>
+            <a class="btn btn-secondary" href="{% url 'dashboardInventario' %}">Regresar</a>
+
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script src="{% static 'js/jquery-3.7.0.js' %}"></script>
+<script src="{% static 'js/jquery.dataTables.min1.13.7.js' %}"></script>
+<script src="{% static 'js/dataTables.responsive.min2.5.0.js' %}"></script>
+
+<script>
+    new DataTable('#datatable-allusers', {
+        columnDefs: [
+            {
+                className: 'dtr-control',
+                orderable: false,
+                searchable: false,
+                targets: 0
+            },
+            {
+                orderable: false,
+                targets: [0, 5]
+            }
+        ],
+        language: {
+            url: '{% static "json/es-CL.json" %}',
+        },
+        responsive: {
+            details: {
+                type: 'column'
+            }
+        }
+    });
+</script>
+{% endblock javascript %}

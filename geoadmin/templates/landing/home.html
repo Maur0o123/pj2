@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoAdmin — Gestión Documental Inteligente</title>
+    <link rel="stylesheet" href="/static/landing/css/styles-landing.css">
+    <link rel="shortcut icon" type="image/png" href="/static/landing/images/Logo_GeoAdmin-removebg-preview.png"/>
+</head>
+
+<body id="inicio">
+
+    <!-- ─── TOPBAR ─────────────────────────────────────── -->
+    <header class="topbar">
+        <a href="#inicio" class="brand" aria-label="GeoAdmin inicio">
+            <img src="/static/landing/images/Logo_GeoAdmin-removebg-preview.png" alt="GeoAdmin logo" class="brand-logo">
+            <span class="brand-name">GeoAdmin</span>
+        </a>
+
+        <nav class="topbar-nav" aria-label="Navegación principal">
+            <button type="button" id="menuToggle" class="menu-toggle" aria-expanded="false" aria-controls="topbarMenu"
+                aria-label="Abrir menú">
+                <span class="menu-toggle-line"></span>
+                <span class="menu-toggle-line"></span>
+                <span class="menu-toggle-line"></span>
+            </button>
+
+            <div id="topbarMenu" class="topbar-menu">
+                <a href="#inicio" class="nav-link">Inicio</a>
+                <a href="#nosotros" class="nav-link">Nosotros</a>
+                <a href="#servicios" class="nav-link">Servicios</a>
+                <button type="button" id="loginBtn" class="nav-link nav-link-login">Ingresar</button>
+                <button type="button" id="logoutBtn" class="nav-link nav-link-logout is-hidden">Salir</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ─── HERO ──────────────────────────────────────── -->
+    <section class="hero-full">
+        <div class="hero-slider" id="heroSlider">
+            <div class="slide active"><img src="/static/landing/images/hero01.jpg" alt=""></div>
+            <div class="slide"><img src="/static/landing/images/hero02.jpg" alt=""></div>
+            <div class="slide"><img src="/static/landing/images/hero03.jpg" alt=""></div>
+        </div>
+
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+            <h1>Transformamos la gestión documental en control total</h1>
+            <p>Deja atrás el papel y accede a un sistema digital que te permite gestionar, validar y rastrear cada
+                documento en tu empresa.</p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="#contacto">Comenzar ahora</a>
+                <a class="btn btn-outline" href="#servicios">Ver servicios</a>
+            </div>
+        </div>
+
+        <div class="hero-dots" id="heroDots">
+            <span class="dot active" data-index="0"></span>
+            <span class="dot" data-index="1"></span>
+            <span class="dot" data-index="2"></span>
+        </div>
+    </section>
+
+    <!-- ─── APP SHELL ─────────────────────────────────── -->
+    <div class="app-shell">
+
+        <aside id="sidebar" class="sidebar is-hidden" aria-label="Panel lateral" aria-hidden="true">
+            <h2 class="sidebar-title">Panel de control</h2>
+            <nav class="sidebar-nav" aria-label="Navegación del panel">
+                <a href="#dashboard" class="sidebar-link">Dashboard</a>
+                <a href="#trabajadores" class="sidebar-link">Trabajadores</a>
+                <a href="#vehiculos" class="sidebar-link">Vehículos</a>
+                <a href="#operaciones" class="sidebar-link">Operaciones</a>
+                <a href="#documentos" class="sidebar-link">Documentos</a>
+                <a href="#charlas" class="sidebar-link">Charlas</a>
+                <a href="#protocolos" class="sidebar-link">Protocolos</a>
+                <a href="#difusiones-charlas" class="sidebar-link">Difusiones y Charlas</a>
+            </nav>
+        </aside>
+
+        <main class="page-content">
+
+            <!-- NOSOTROS -->
+            <section id="nosotros" class="content-section nosotros-section">
+                <div class="nosotros-image">
+                    <div class="nosotros-slider" id="nosotrosSlider">
+                        <img src="/static/landing/images/nosotros01.jpg" alt="Equipo GeoAdmin">
+                        <img src="/static/landing/images/nosotros02.jpg" alt="Oficinas GeoAdmin">
+                        <img src="/static/landing/images/nosotros03.jpg" alt="Trabajo en equipo">
+                    </div>
+                </div>
+
+                <div class="nosotros-text">
+                    <span class="section-tag">Quiénes somos</span>
+                    <h2 class="section-title">Transformamos el papel en control inteligente</h2>
+                    <p>En Geo Admin creemos que los procesos empresariales no deberían perderse entre hojas, firmas
+                        manuales y archivos olvidados. Nacimos con un objetivo claro: convertir la gestión documental en
+                        un sistema transparente, ordenado y completamente trazable.</p>
+                    <p>Ayudamos a empresas a digitalizar sus operaciones internas, permitiéndoles saber exactamente qué
+                        ocurre con cada documento, quién lo valida y cuándo sucede.</p>
+                    <p class="highlight-text">No solo organizamos información. Creamos control, seguridad y confianza en
+                        cada proceso.</p>
+                </div>
+            </section>
+
+            <!-- SERVICIOS -->
+            <section id="servicios" class="content-section services-section">
+                <span class="section-tag">Lo que ofrecemos</span>
+                <h2 class="section-title">Lo que hacemos por tu empresa</h2>
+
+                <div class="services-grid">
+                    <article class="service-card">
+                        <span></span>
+                        <div class="card-img-container">
+                            <img src="/static/landing/images/servicios01.png" alt="Gestión documental">
+                        </div>
+                        <div class="service-card-body">
+                            <h3>Gestión documental</h3>
+                            <p>Centraliza documentos con control de versiones, responsables y flujos de aprobación.</p>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <span></span>
+                        <div class="card-img-container">
+                            <img src="/static/landing/images/servicios02.png" alt="Validación digital">
+                        </div>
+                        <div class="service-card-body">
+                            <h3>Validación digital</h3>
+                            <p>Automatiza aprobaciones con registro completo de firmas y responsables por etapa.</p>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <span></span>
+                        <div class="card-img-container">
+                            <img src="/static/landing/images/servicios03.png" alt="Trazabilidad">
+                        </div>
+                        <div class="service-card-body">
+                            <h3>Trazabilidad</h3>
+                            <p>Consulta el historial de cada documento en segundos para auditorías y seguimiento.</p>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <span></span>
+                        <div class="card-img-container">
+                            <img src="/static/landing/images/servicios04.png" alt="Capacitaciones">
+                        </div>
+                        <div class="service-card-body">
+                            <h3>Capacitaciones</h3>
+                            <p>Gestiona cursos, asistencia y cumplimiento normativo desde una sola plataforma.</p>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <span></span>
+                        <div class="card-img-container">
+                            <img src="/static/landing/images/servicios05.png" alt="Procedimientos">
+                        </div>
+                        <div class="service-card-body">
+                            <h3>Procedimientos</h3>
+                            <p>Documenta, versiona y distribuye procesos internos clave de forma controlada.</p>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- CTA / BENEFITS -->
+            <section class="content-section benefits-section cta-demo">
+                <div class="cta-bg">
+                    <div class="cta-slide active"></div>
+                    <div class="cta-slide"></div>
+                    <div class="cta-slide"></div>
+                </div>
+
+                <div class="cta-text-content">
+                    <h2 class="section-title">Tu empresa, pero con control real</h2>
+                    <ul class="benefits-list">
+                        <li>Reduce errores humanos.</li>
+                        <li>Mejora tus auditorías.</li>
+                        <li>Asegura cumplimiento interno.</li>
+                        <li>Centraliza toda tu información.</li>
+                    </ul>
+                    <div class="btn-group">
+                        <a class="btn btn-primary" href="#contacto">Solicitar una demo</a>
+                        <a class="btn btn-secondary" href="#contacto">Contactar</a>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <!-- ─── FOOTER ─────────────────────────────────────── -->
+    <footer id="contacto" class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <img src="/static/landing/images/Logo_GeoAdmin-removebg-preview.png" alt="GeoAdmin logo" class="footer-logo">
+                <span>Gestión Documental Inteligente</span>
+            </div>
+
+            <nav class="footer-links">
+                <a href="#nosotros">Nosotros</a>
+                <a href="#servicios">Servicios</a>
+                <a href="#contacto">Contacto</a>
+            </nav>
+
+            <div class="footer-social">
+                <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                    <img src="/static/landing/images/2023_Facebook_icon.svg.png" alt="Facebook">
+                </a>
+                <a href="https://www.whatsapp.com/" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+                    <img src="/static/landing/images/WhatsAppImage.jpeg" alt="WhatsApp">
+                </a>
+            </div>
+        </div>
+
+        <div class="footer-copyright">
+            <p>&copy; 2026 GeoAdmin. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- ─── FLOATING SOCIAL ────────────────────────────── -->
+    <div class="floating-social" aria-label="Accesos rápidos de contacto">
+        <a class="floating-social-link" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer"
+            aria-label="Facebook">
+            <img src="/static/landing/images/2023_Facebook_icon.svg.png" alt="Facebook">
+        </a>
+        <a class="floating-social-link" href="https://www.whatsapp.com/" target="_blank" rel="noopener noreferrer"
+            aria-label="WhatsApp">
+            <img src="/static/landing/images/WhatsAppImage.jpeg" alt="WhatsApp">
+        </a>
+    </div>
+
+    <script src="/static/landing/js/main-landing.js" defer></script>
+</body>
+
+</html>

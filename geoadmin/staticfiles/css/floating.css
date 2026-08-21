@@ -1,0 +1,53 @@
+.save-float {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  z-index: 999;
+  display: block;
+  width: 90px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #00b4db;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease-in-out;
+  font-size: 15px !important;
+}
+.pulse {
+  animation: pulse-animation 2s infinite;
+}
+.back-float {
+  position: fixed;
+  bottom: 90px;
+  right: 120px;
+  z-index: 999;
+  display: block;
+  width: 90px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #E984B1;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease-in-out;
+  font-size: 15px !important;
+}
+
+.save-float,
+.back-float {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  line-height: 1 !important;
+  text-align: center;
+}
+@keyframes pulse-animation {
+  0% {
+   box-shadow: 0 0 0 0px #25d36657; 
+  }
+  100% {
+    box-shadow: 0 0 0 20px rgba(0, 0, 0, 0);
+  }
+}
+
+.fila-error {
+    background-color: #fd6262 !important;
+}

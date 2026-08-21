@@ -1,0 +1,21 @@
+{% load i18n %}
+
+<div id="session_security_warning" class="session_security" style="display:none" aria-hidden="true" role="dialog">
+    <div class="session_security_overlay"></div>
+    <div class="session_security_modal user-info" role="document" tabindex="-1">
+        <div class="user-info">
+            <h4>{% trans 'Tu sesión esta próxima a cerrarse' %}</h4>
+            <div class="mt-2"></div>
+            <h6>{% trans 'Haz click o pulsa una tecla para extender la sesión.' %}</h6>
+            <div class="mt-4"></div>
+            <div class="container" style="display:inline-block;">
+                <div>Tiempo Restante: </div>
+                <h3><div id="contador">10</div></h3>
+                <div>Segundos</div>
+            </div>   
+            <div class="mt-4"></div>
+            <h6>Los datos no guardados se perderán</h6>
+        </div>
+    </div>
+</div>
+

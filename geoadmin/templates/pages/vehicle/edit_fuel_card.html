@@ -1,0 +1,181 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Editar Tarjeta de Combustible{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+{% endblock css %}
+
+{% block content %}
+<form class="form-horizontal" id="form" action="#" method="POST">
+{% csrf_token %}    
+
+<button type="submit" class="btn btn-primary save-float">Guardar</button>
+<a href="{% url 'manage_fuel_cards' %}" class="btn btn-secondary back-float">Regresar</a>
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Editar Tarjeta de Combustible</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Registro Vehicular</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Editar Tarjeta de Combustible</li>
+                    </ol>
+                </div>
+            </div> <!-- PAGE-HEADER END --> <!-- row -->
+            <div class="row row-sm">
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">                        
+                        <div class="card-body">
+                            <h4 class="card-title">Editar</h4>                                                         
+                            <div class="row row-sm">
+                                {{ form|crispy }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-sm"> 
+                        <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                            <div class="card box-shadow-0">                        
+                                <div class="card-body">
+                                    <h4 class="card-title">Historial de Tarjetas de Combustible</h4>
+                                    <table id="datatable-historial" class="display nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Fecha</th> 
+                                                <th>N° Tarjeta</th>
+                                                <th>Tipo Documento</th>
+                                                <th>Tipo Combustible</th>
+                                                <th>Creador</th>
+                                                <th>Actual</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for tarjeta in historial_tarjetas %} 
+                                                <tr>
+                                                    <td class="dtr-control"></td>
+                                                    <td>{{ tarjeta.fechacreacion|date:"d-m-Y H:i" }}</td>
+                                                    <td>{{ tarjeta.numeroTarjeta }}</td>
+                                                    <td>{{ tarjeta.tipoDocumento }}</td>
+                                                    <td>{{ tarjeta.tipoCombustible }}</td>
+                                                    <td>{{ tarjeta.creador }}</td>
+                                                    <td>
+                                                        {% if tarjeta.actual %}
+                                                            <span class="badge bg-primary">Sí</span>
+                                                        {% else %}
+                                                            <span class="badge bg-secondary">No</span>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>                    
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                  
+                </div>                
+            </div>
+             
+        </div>
+    </div>
+</div>
+</form>
+{% endblock content %}
+
+{% block javascript %} 
+<script type="text/javascript">        
+    document.getElementById('div_id_vehiculo').classList.add('col-md-4');
+    document.getElementById('div_id_faena').classList.add('col-md-4');
+    document.getElementById('div_id_tipoVehiculo').classList.add('col-md-4');
+    document.getElementById('div_id_nombrePropietario').classList.add('col-md-4');
+    document.getElementById('div_id_rutPropietario').classList.add('col-md-4');
+    document.getElementById('div_id_tipoDocumento').classList.add('col-md-4');
+    document.getElementById('div_id_tipoCombustible').classList.add('col-md-4');
+    document.getElementById('div_id_numeroTarjeta').classList.add('col-md-4');
+    document.getElementById('div_id_fechaVencimiento').classList.add('col-md-4');
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script type="application/javascript">
+    function initializeDataTable(selector) {
+        new DataTable(selector, {
+            columnDefs: [
+                {
+                    className: 'dtr-control',
+                    orderable: false,
+                    targets: 2
+                },
+            ],
+            language: {
+                url: '{% static "json/es-CL.json" %}',
+            },
+            columnDefs: [
+                { searchable: false, targets: [0] },
+                { orderable: false, targets: [0] }
+            ],
+            /*order: [1, 'asc'],*/
+            responsive: {
+                details: {
+                    type: 'column'
+                }
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeDataTable('#datatable-historial');
+    });
+</script>
+
+
+<script>
+    document.getElementById('form').addEventListener('submit', function(event) {
+        event.preventDefault();        
+        const formData = new FormData(this);
+    
+        $.LoadingOverlay("show");
+        $.ajax({
+            url: '{% url 'save_edit_fuel_card' tarjeta.id %}',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                $.LoadingOverlay("hide");
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Tarjeta Editada con éxito!',
+                    confirmButtonColor: '#ff00d9',
+                }).then(() => {
+                    window.location.href = '{% url 'manage_fuel_cards' %}';
+                });
+            },
+            error: function(error) {
+                $.LoadingOverlay("hide");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error en la Edición',
+                    text: 'Vuelva a intentarlo!',  
+                    confirmButtonColor: '#ff00d9',
+                })
+            }
+        });
+    });
+    </script>
+{% endblock javascript %}
+
+{% block messages %}
+
+{% endblock messages %}

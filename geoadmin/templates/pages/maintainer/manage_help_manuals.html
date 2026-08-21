@@ -1,0 +1,204 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Administrar Ayuda y Manuales{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <style>
+        .form-inline-btn {
+            flex-wrap: nowrap !important;
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <div class="main-container container-fluid"> <div class="page-header">
+                <div>
+                    <h1 class="page-title">Administrar Ayuda y Manuales</h1>
+                </div>
+               
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Mantenedor Sistema</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Administrar Ayudas y Manuales</li>
+                   
+                    </ol>
+                </div>
+            </div> <a class="btn btn-primary btn-size-new" href="{% url 'new_help_manuals' %}">Nuevo Documento</a>  
+            <h5 class="mb-5"></h5>
+            
+            <div class="card"> 
+                <div class="panel panel-primary">
+   
+                    <div class="tab-menu-heading border-bottom-0"> 
+                        <div class="tabs-menu4 border-bottomo-sm"> 
+                            <nav class="nav d-sm-flex d-block"> 
+                     
+                                <a id="nav-hab" class="nav-link border border-bottom-0 br-sm-5 me-2 active" data-bs-toggle="tab" href="#tab-hab">Habilitados</a> 
+                                <a id="nav-des" class="nav-link border border-bottom-0 br-sm-5 me-2" data-bs-toggle="tab" href="#tab-des">Deshabilitados</a>
+                            </nav> 
+          
+                        </div> 
+                    </div>
+   
+                    <div class="panel-body tabs-menu-body"> 
+                        <div class="tab-content">
+              
+                            <div class="tab-pane active" id="tab-hab">
+                                <div class="table-responsive">
+                      
+                                    <table id="datatable-allusers" class="display nowrap table table-bordered text-nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Seccion</th>
+                                                <th>Nombre Documento</th>
+                                                <th>Fecha Creación</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for documento in documentos %}
+                                                {% if documento.status %}
+                                                    <tr>
+                                                        <td class="dtr-control"></td>
+                                                        <td>{{ documento.get_seccion_display }}</td>
+                                                        <td>{{ documento.nombredocumento }}</td>
+                                                        <td data-order="{{ documento.fechacreacion|date:'U' }}">{{ documento.fechacreacion|date:"Y-m-d" }}</td>   
+                                                        <td class="form-inline-btn">
+                                                            <form action="{% url 'edit_help_manuals' %}" method="POST" >
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="documento_id" value="{{ documento.id }}">
+                                                                <button type="submit" class="btn btn-info btn-size-edit">Editar</button> 
+                                                            </form> 
+                                                            <a href="{{ documento.archivodocumento.url }}" target="_blank" class="btn btn-warning btn-size-edit">Ver</a>
+                                                            <form action="{% url 'status_help_manuals' %}" method="POST" >
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="id" value="{{ documento.id }}">
+                                                                <button type="submit" class="btn btn-danger btn-size-adm">Deshabilitar</button>
+                                                            </form> 
+                                                        </td>                                 
+                                                    </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tbody>                    
+                                    </table>
+                      
+                                </div>
+                            </div>
+
+                            <div class="tab-pane" id="tab-des">
+                                
+                                <div class="table-responsive">
+                                    <table id="datatable-allusers-des" class="display nowrap table table-bordered text-nowrap" style="width:100%">
+                                        <thead>
+                
+                                            <tr>
+                                                <th></th>
+                                                <th>Seccion</th>
+                                                <th>Nombre Documento</th>
+                                                <th>Fecha Creación</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+      
+                                            {% for documento in documentos %}
+                                                {% if not documento.status %}
+                                                    <tr>
+                                                        <td class="dtr-control"></td>
+                                                        <td>{{ documento.get_seccion_display }}</td>
+                                                        <td>{{ documento.nombredocumento }}</td>
+                                                        <td data-order="{{ documento.fechacreacion|date:'U' }}">{{ documento.fechacreacion|date:"Y-m-d" }}</td>   
+                                                        <td class="form-inline-btn">
+                                                            <form action="{% url 'edit_help_manuals' %}" method="POST" >
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="documento_id" value="{{ documento.id }}">
+                                                                <button type="submit" class="btn btn-info btn-size-edit">Editar</button> 
+                                                            </form> 
+                                                            <a href="{{ documento.archivodocumento.url }}" target="_blank" class="btn btn-warning btn-size-edit">Ver</a>
+                                                            <form action="{% url 'status_help_manuals' %}" method="POST" >
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="id" value="{{ documento.id }}">
+                                                                <button type="submit" class="btn btn-primary btn-size-adm">Habilitar</button>
+                                                            </form> 
+                                                        </td>                               
+                                            
+                                                    </tr>
+                                                {% endif %}
+                                          
+                                            {% endfor %}
+                                        </tbody>          
+                                    </table>
+          
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+      
+                </div>
+            </div>            
+        </div>
+        <h5 class="mb-5"></h5> 
+        <div class="main-container container-fluid"> 
+            <a class="btn btn-secondary" href="{% url 'dashboard' %}">Regresar</a> 
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script type="application/javascript">
+$(document).ready(function() {
+    const commonConfig = {
+        language: {
+            url: '{% static "json/es-CL.json" %}'       
+        },
+        columnDefs: [    
+            { className: 'dtr-control', orderable: false, targets: 0, width: "5%", searchable: false },
+            { targets: 1, width: "20%", searchable: true },
+            { targets: 2, width: "30%", searchable: true },
+            { targets: 3, width: "25%", searchable: true },
+            { targets: 4, width: "20%", searchable: false, orderable: false, className: "text-center" }
+        ],
+        order: [[3, 'desc']],
+        responsive: {
+            details: {
+                type: 'column',
+                target: 0
+            }
+        },
+        autoWidth: false
+    };
+
+    new DataTable('#datatable-allusers', commonConfig);
+    new DataTable('#datatable-allusers-des', commonConfig);
+
+    $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+        $($.fn.dataTable.tables(true)).DataTable().columns.adjust().responsive.recalc();
+    });
+
+    $("form").on("submit", function(e) {
+        if (this.checkValidity()) {
+            if (typeof $.LoadingOverlay !== "undefined") {
+                $.LoadingOverlay("show");
+            } 
+        }
+    });
+});
+</script>
+{% endblock javascript %}

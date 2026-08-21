@@ -1,0 +1,251 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Lista de Trabajadores{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+<link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+<link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+<style>
+    :root {
+        --toolbar-control-width: 470px;
+        --toolbar-control-height: 36px;
+    }
+    .toolbar-trabajadores {
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-start !important;
+        gap: 12px;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    .toolbar-field {
+        width: min(100%, var(--toolbar-control-width));
+        max-width: 100%;
+    }
+    .toolbar-field .select2-container {
+        width: 100% !important;
+    }
+    .toolbar-field .select2-container .select2-selection--single {
+        height: var(--toolbar-control-height) !important;
+        display: flex;
+        align-items: center;
+        padding-right: 58px;
+        position: relative;
+    }
+    .toolbar-field .select2-container .select2-selection__rendered {
+        line-height: normal !important;
+        width: 100%;
+    }
+    .toolbar-field .select2-container .select2-selection__arrow {
+        height: var(--toolbar-control-height) !important;
+    }
+    .toolbar-field .select2-container .select2-selection__clear {
+        display: none !important;
+    }
+    .toolbar-add-btn {
+        margin-top: 0;
+        width: auto;
+        min-width: 170px !important;
+        height: var(--toolbar-control-height);
+        margin-left: 0 !important;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 12px;
+    }
+    @media (max-width: 767.98px) {
+        :root {
+            --toolbar-control-width: 100%;
+        }
+    }
+</style>
+{% endblock css %}
+
+{% block select2 %}
+<link href="{% static 'css/select2.min.css' %}" rel="stylesheet" />
+{% endblock select2 %}
+
+{% block content %}
+<a href="{% url 'manage_vigilancia' %}" class="btn btn-secondary back-float">Regresar</a>
+
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+
+            <div class="page-header">
+                <h1 class="page-title">Lista de Trabajadores</h1>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'manage_vigilancia' %}">Vigilancia Médica</a></li>
+                        <li class="breadcrumb-item active">Trabajadores</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <form id="formAgregarTrabajador" method="POST" action="{% url 'add_vigilancia_trabajadores' vigilancia.id %}" class="toolbar-trabajadores">
+                        {% csrf_token %}
+                        <div class="toolbar-field">
+                            <label for="selectAgregarTrabajador" class="form-label mb-1">Agregar Trabajador:</label>
+                            <select
+                                id="selectAgregarTrabajador"
+                                class="form-control"
+                                name="user_id">
+                                <option value="" selected>Seleccione trabajador...</option>
+                                {% for fila in trabajadores_disponibles %}
+                                    <option value="{{ fila.user.id }}">{{ fila.username }} - {{ fila.nombre }}</option>
+                                {% empty %}
+                                    <option value="" disabled>Sin trabajadores disponibles</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button id="btnAgregarTrabajador" type="submit" class="btn btn-primary btn-size-adm toolbar-add-btn"{% if not trabajadores_disponibles %} disabled{% endif %}>Agregar a lista</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row row-sm">
+                <table id="datatable-vigilancia-trabajadores" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>RUT</th>
+                            <th>Nombre</th>
+                            <th>Cargo</th>
+                            <th>Faena</th>
+                            <th>Area</th>
+                            <th>GES</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fila in filas_trabajadores %}
+                        <tr>
+                            <td class="dtr-control"></td>
+                            <td>{{ fila.username }}</td>
+                            <td>{{ fila.nombre }}</td>
+                            <td>{{ fila.cargo|default:'-' }}</td>
+                            <td>{{ fila.faena_nombre|default:'-' }}</td>
+                            <td>{{ fila.area|default:'-' }}</td>
+                            <td>{{ fila.ges|default:'-' }}</td>
+                            <td>
+                                <div class="d-flex justify-content-start align-items-center gap-2 flex-nowrap">
+                                    {% if fila.ficha %}
+                                        <a href="{% url 'view_vigilancia' fila.ficha.id %}" class="btn btn-warning btn-size-adm">Ver</a>
+                                        {% if fila.puede_egresar %}
+                                            <form method="POST" action="{% url 'egresar_vigilancia_trabajador' vigilancia.id %}" class="d-inline">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="ficha_id" value="{{ fila.ficha.id }}">
+                                                <button type="submit" class="btn btn-success btn-size-adm">Egreso</button>
+                                            </form>
+                                        {% else %}
+                                            <button
+                                                type="button"
+                                                class="btn btn-success btn-size-adm"
+                                                disabled
+                                                title="Faltan: {{ fila.faltantes_egreso|join:', ' }}"
+                                            >Egreso</button>
+                                        {% endif %}
+                                        <form method="POST" action="{% url 'delete_vigilancia' fila.ficha.id %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger btn-size-adm">Eliminar</button>
+                                        </form>
+                                    {% else %}
+                                        {# Sin ficha activa, "Ver" abre el flujo de alta/completado de ficha. #}
+                                        <a href="{% url 'new_vigilancia_trabajador' vigilancia.id %}?rut={{ fila.username|urlencode }}" class="btn btn-warning btn-size-adm">Ver</a>
+                                        <button type="button" class="btn btn-success btn-size-adm" disabled>Egreso</button>
+                                        <form method="POST" action="{% url 'remove_vigilancia_trabajador' vigilancia.id %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="user_id" value="{{ fila.user.id }}">
+                                            <button type="submit" class="btn btn-danger btn-size-adm">Eliminar</button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script>
+    const table = new DataTable('#datatable-vigilancia-trabajadores', {
+        columnDefs: [
+            { className: 'dtr-control', orderable: false, targets: 0, responsivePriority: 1 },
+            { responsivePriority: 2, targets: [1, 2, 3] },
+            { orderable: false, targets: 7, responsivePriority: 20000 }
+        ],
+        language: { url: '{% static "json/es-CL.json" %}' },
+        order: [[1, 'asc']],
+        responsive: { details: { type: 'column' } }
+    });
+
+</script>
+{% endblock %}
+
+{% block javascript2 %}
+<script>
+    (function () {
+        function normalizarTextoBusqueda(valor) {
+            return String(valor || '')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[.\-\s]/g, '');
+        }
+
+        const $selectAgregar = $('#selectAgregarTrabajador');
+        const formAgregar = document.getElementById('formAgregarTrabajador');
+        const btnAgregar = document.getElementById('btnAgregarTrabajador');
+
+        function actualizarEstadoBotonAgregar() {
+            if (!btnAgregar) return;
+            const valor = ($selectAgregar.val() || '').toString().trim();
+            const sinOpciones = $selectAgregar.find('option[value!=""]').length === 0;
+            btnAgregar.disabled = sinOpciones || !valor;
+        }
+
+        $selectAgregar.select2({
+            width: '100%',
+            allowClear: false,
+            minimumResultsForSearch: 0,
+            matcher: function(params, data) {
+                if ($.trim(params.term) === '') {
+                    return data;
+                }
+                if (!data.text) {
+                    return null;
+                }
+
+                const term = normalizarTextoBusqueda(params.term);
+                const text = normalizarTextoBusqueda(data.text);
+                return text.includes(term) ? data : null;
+            }
+        });
+
+        $selectAgregar.on('change', actualizarEstadoBotonAgregar);
+        actualizarEstadoBotonAgregar();
+
+        if (formAgregar) {
+            formAgregar.addEventListener('submit', function (event) {
+                const valor = ($selectAgregar.val() || '').toString().trim();
+                if (!valor) {
+                    event.preventDefault();
+                }
+            });
+        }
+    })();
+</script>
+{% endblock javascript2 %}

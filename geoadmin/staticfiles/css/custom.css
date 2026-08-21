@@ -1,0 +1,491 @@
+/* ==========================================================================
+   GeoAdmin Custom Styles
+   ========================================================================== */
+
+.apexcharts-canvas {
+    position: relative;
+    user-select: none;
+}
+.apexcharts-canvas ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 6px;
+}
+.apexcharts-canvas ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+.apexcharts-canvas.dark {
+    background: #343f57;
+}
+.apexcharts-inner {
+    position: relative;
+}
+
+.btn-size-adm, .btn-size-edit {
+    min-width: 38px !important; /* Reducido de 48px */
+    height: 38px !important; /* Reducido de 48px */
+    font-size: 14px !important; /* Ícono un poco más pequeño */
+    padding: 0 !important;
+    margin-left: 3px; /* Reducido de 5px */
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px; /* Bordes un poco más suaves */
+}
+
+.btn-size-new {
+    min-width: 120px !important;
+}
+
+/* Estilos para botones flotantes de Guardar/Regresar */
+.save-float {
+    background-color: #00b4db !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    border: none !important;
+}
+
+.back-float {
+    background-color: #E984B1 !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    border: none !important;
+}
+
+.btn-geoadmin {
+    background-color: #00b4db !important;
+    color: #ffffff !important;
+}
+
+.btn-size-qr {
+    height: 34px !important;
+    padding: 0 15px !important;
+    font-size: 13px !important;
+    text-transform: uppercase;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
+/* Tema SweetAlert */
+body.seccion-prevencion .swal2-popup .swal2-styled.swal2-confirm,
+body.seccion-sondaje .swal2-popup .swal2-styled.swal2-confirm {
+    background-color: #00b4db !important;
+    border-color: #00b4db !important;
+    color: #fff !important;
+}
+
+.form-inline-btn {
+    display: flex;    
+    flex-wrap: wrap !important; 
+    gap: 3px; /* Reducido de 5px */
+    align-items: center;
+}
+
+.form-inline-btn > * {
+    flex-shrink: 0 !important; /* Evita que los botones se aplasten y se vuelvan rectangulares */
+    margin: 0 !important; /* Elimina márgenes extra que puedan descuadrar */
+}
+
+.dtr-details li, .dtr-data {
+    display: flex;
+}
+
+*:focus {
+    outline: none;
+}
+
+.changed {
+    border-color: #00b4db;
+}
+
+.card-body-custom {
+    padding: 10px;
+}
+.card-title-custom {
+    margin-bottom: 10px;
+    font-size: 13.4px;
+}
+.card-custom {
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.26);
+    padding: 10px;
+    margin-right: 15px;
+}
+.uppercase-text {
+    text-transform: uppercase;
+}
+
+/* Switch Styles */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    margin: 0px;
+}
+.switch input { 
+    opacity: 0; width: 0; height: 0;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px; width: 26px;
+    left: 4px; bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+input:checked + .slider { background-color: #f51313; }
+input:checked + .slider:before { transform: translateX(26px); }
+.slider.round { border-radius: 34px; }
+input.slider.round:before { border-radius: 50%; }
+
+.qr-button {
+    display: flex;
+    justify-content: space-between;
+}
+.qr-button a {
+    padding: 10px !important;
+    max-height: 45.81px !important;
+}
+
+.oculto { display: none !important; }
+.text-dark-mode { color: #495057; }
+.card-dashboard { padding: 10px !important; }
+
+/* Dark Mode Form Elements */
+.dark-mode select, .dark-mode .form-control {
+    color: rgba(255, 255, 255, 0.85);
+    background-color: var(--dark-bg);
+    border: 1px solid var(--dark-border);
+}
+
+.form-control, select {
+    border: 2px solid #00b4db !important;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+}
+
+.dark-mode .form-control {
+    border: 2px solid #00d2ff !important;
+    background-color: #1a2332;
+    color: #e0e0e0;
+}
+
+/* ============================================
+   CAMBIOS ESPECIFICOS
+   ============================================ */
+
+.btn-salir {
+    background-color: #dc3545 !important;
+    color: #ffffff !important;
+    border-color: #dc3545 !important;
+}
+
+/* Secciones de acceso */
+.secciones-row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
+#id_seccionInventario, #id_seccionInformacionTecnica, #id_seccionSondaje, 
+#id_seccionPrevencion, #id_seccionRegistro, #id_seccionVehicular {
+    width: 213px !important;
+}
+
+@media (min-width: 769px) {
+    #id_seccionInventario, #id_seccionInformacionTecnica, #id_seccionSondaje, 
+    #id_seccionPrevencion, #id_seccionRegistro, #id_seccionVehicular {
+        width: 287px !important;
+    }
+}
+
+/* GeoAdmin Title Colors - Mantener siempre celeste */
+.side-header .header-brand1 h3,
+.app-header .logo-horizontal h3,
+.header-brand1 h3,
+.logo-horizontal h3 {
+    color: #00b4db !important;
+}
+
+.dark-mode .side-header .header-brand1 h3,
+.dark-mode .app-header .logo-horizontal h3,
+.dark-mode .header-brand1 h3,
+.dark-mode .logo-horizontal h3 {
+    color: #00d2ff !important;
+}
+
+/* Tablas Responsivas */
+.table-responsive {
+    overflow-x: auto !important;
+    width: 100% !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Quitar fondo de Anterior/Siguiente para que sean solo texto y oscurecer color */
+.dataTables_wrapper .dataTables_paginate .paginate_button.previous,
+.dataTables_wrapper .dataTables_paginate .paginate_button.next {
+    background: transparent !important;
+    border: none !important;
+    width: auto !important;
+    color: #1a2332 !important; /* Oscuro para modo claro */
+    font-weight: 800 !important; 
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+/* Color especial para MODO OSCURO */
+.dark-mode .dataTables_wrapper .dataTables_paginate .paginate_button.previous,
+.dark-mode .dataTables_wrapper .dataTables_paginate .paginate_button.next {
+    color: #00b4db !important; /* Celeste para modo oscuro */
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.previous:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.next:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.previous:active,
+.dataTables_wrapper .dataTables_paginate .paginate_button.next:active {
+    background: none !important;
+    background-color: transparent !important;
+    border: none !important;
+    color: #00d2ff !important; /* Un celeste más brillante al pasar el mouse */
+    text-decoration: underline !important;
+    box-shadow: none !important;
+}
+
+/* Estado desactivado más visible */
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {
+    color: #adb5bd !important; 
+    background: transparent !important;
+    cursor: default !important;
+}
+
+/* Estilos para el botón de expansión (+) en modo responsivo */
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control:before,
+table.dataTable.dtr-column > tbody > tr > td.dtr-control:before,
+table.dataTable.dtr-column > tbody > tr > th.dtr-control:before {
+    background-color: #00b4db !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr.parent td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr.parent th.dtr-control:before,
+table.dataTable.dtr-column > tbody > tr.parent td.dtr-control:before,
+table.dataTable.dtr-column > tbody > tr.parent th.dtr-control:before {
+    background-color: #dc3545 !important; /* Rojo al expandir */
+}
+
+/* Forzar ancho de la columna de expansión */
+.dtr-control {
+    width: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    text-align: center !important;
+}
+
+/* Forzar que la columna de porcentaje no se estire en móviles */
+#datatable-allusers td:nth-child(2),
+#datatable-allusers th:nth-child(2),
+#datatable-allusers-des td:nth-child(2),
+#datatable-allusers-des th:nth-child(2) {
+    width: 80px !important;
+    min-width: 80px !important;
+    max-width: 90px !important;
+}
+
+/* Quitar flechas de la primera columna (control) */
+table.dataTable thead th:first-child:before,
+table.dataTable thead th:first-child:after {
+    display: none !important;
+}
+
+.dtr-details {
+    width: 100%;
+}
+
+/* Estilos para el contenido expandido (+) */
+ul.dtr-details {
+    display: table !important;
+    width: 100% !important;
+    padding: 10px !important;
+    background: rgba(0, 0, 0, 0.05) !important;
+}
+
+ul.dtr-details li {
+    display: flex !important;
+    align-items: center !important;
+    padding: 8px 5px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    text-align: left !important;
+}
+
+.dtr-title {
+    font-weight: 600 !important;
+    color: #00b4db !important;
+    margin-right: 10px !important;
+    min-width: 100px !important; /* Ancho fijo para alinear los datos */
+}
+
+.dtr-data {
+    text-align: left !important;
+    white-space: normal !important;
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    /* Ajuste de botones para tablets para que quepan 4 en una fila o bloque compacto */
+    .btn-size-edit,
+    .btn-size-adm {
+        min-width: 32px !important;
+        height: 32px !important;
+        padding: 0 !important;
+        font-size: 14px !important;
+        margin-left: 2px !important;
+    }
+
+    /* Forzamos que el contenedor de botones no los apile verticalmente si hay espacio */
+    .form-inline-btn {
+        display: flex;
+        flex-wrap: nowrap !important;
+        justify-content: flex-start !important;
+    }
+
+    /* Ajuste de anchos de columna para que se parezca a Deshabilitados */
+    table.dataTable thead th, 
+    table.dataTable tbody td {
+        padding: 8px 4px !important;
+        font-size: 12px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    /* En móviles, forzamos que los botones de acción queden en un 2x2 limpio */
+    .form-inline-btn {
+        display: grid;
+        grid-template-columns: repeat(2, 48px) !important;
+        gap: 8px !important;
+        justify-content: center !important;
+        width: 100% !important;
+        padding: 10px 0 !important;
+    }
+
+    .btn-size-adm,
+    .btn-size-edit {
+        width: 40px !important; /* Reducido de 48px */
+        height: 40px !important; /* Reducido de 48px */
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .dtr-control {
+        width: 35px !important;
+        min-width: 35px !important;
+    }
+
+    /* Achicar paginación en móviles */
+    .dataTables_paginate .paginate_button,
+    .pagination .page-link {
+        padding: 4px 8px !important;
+        font-size: 11px !important;
+    }
+    
+    .dataTables_info {
+        font-size: 11px !important;
+        margin-bottom: 10px !important;
+    }
+
+    /* Ocultar puntos suspensivos y el salto al final en paginación */
+    .dataTables_paginate .ellipsis {
+        display: none !important;
+    }
+}
+
+/* Estilos para el menú desplegable de 'Mostrar registros' de DataTables */
+.dataTables_length select {
+    background-color: #1a2332 !important; /* Azul oscuro del tema */
+    color: #ffffff !important; /* Texto blanco nítido */
+    border: 2px solid #00b4db !important; /* Borde celeste */
+    border-radius: 4px !important;
+    padding: 2px 5px !important;
+    cursor: pointer;
+}
+
+.dataTables_length select option {
+    background-color: #1a2332 !important; /* Fondo oscuro en la lista */
+    color: #ffffff !important; /* Texto blanco en la lista */
+    padding: 10px !important;
+}
+
+/* Evitar que el fondo gris por defecto tape los números al abrir el menú */
+.dataTables_length select:focus {
+    background-color: #1a2332 !important;
+    color: #ffffff !important;
+}
+
+/* Permitir que las cabeceras de tablas se ajusten en móviles para evitar superposiciones */
+@media (max-width: 768px) {
+    table.dataTable thead th,
+    table.table thead th {
+        white-space: normal !important;
+        vertical-align: middle !important;
+        word-wrap: break-word !important;
+        line-height: 1.2 !important;
+    }
+}
+
+/* ESTILOS DEL BOTON DE EXPANSION (PLAY) */
+table.dataTable > tbody > tr > td.dtr-control, 
+table.dataTable > tbody > tr > th.dtr-control {
+    position: relative !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before, 
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control:before {
+    font-family: "FontAwesome" !important;
+    content: "\f04b" !important; /* fa-play */
+    background-color: #00b4db !important;
+    color: white !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-size: 12px !important; /* Icono un poco más grande */
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    padding-left: 2px !important; /* Ajuste del triangulito interno */
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td.dtr-control:before, 
+table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th.dtr-control:before {
+    content: "\f04d" !important; /* fa-stop para cuando está abierto */
+    background-color: #dc3545 !important;
+    padding-left: 0 !important;
+}
+
+/* Ocultar el espacio vacío de la columna de control cuando la tabla NO está colapsada */
+table.dataTable:not(.collapsed) > thead > tr > th:first-child,
+table.dataTable:not(.collapsed) > tbody > tr > td:first-child {
+    display: none !important;
+}
+    }
+}

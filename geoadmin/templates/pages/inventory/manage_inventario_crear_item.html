@@ -1,0 +1,261 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Inventario Crear Item{% endblock %}
+
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <meta name="csrf-token" content="{{ csrf_token }}">
+{% endblock css %}
+
+{% block content %}
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Inventario Crear Item</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Inventario</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Crear Item</li>
+                    </ol>
+                </div>
+            </div> <!-- PAGE-HEADER END --> <!-- row -->  
+            {% if request.user.usuarioprofile.seccionInventario == "ADMINISTRADOR" or request.user.is_superuser %} 
+                <a class="btn btn-primary btn-size-new" href="{% url 'new_inventario_crear_item' %}">Nuevo Item</a>
+            {% endif %}
+            <h5 class="mb-5"></h5>
+ 
+            <div class="card"> 
+                <div class="panel panel-primary">
+                    <div class="tab-menu-heading border-bottom-0"> 
+                        <div class="tabs-menu4 border-bottomo-sm"> 
+                            <!-- Tabs --> 
+                            <nav class="nav d-sm-flex d-block"> 
+                                <a id="nav25" class="nav-link border border-bottom-0 br-sm-5 me-2 active" data-bs-toggle="tab" href="#tab25">Habilitados</a> 
+                                <a id="nav26" class="nav-link border border-bottom-0 br-sm-5 me-2" data-bs-toggle="tab" href="#tab26">Deshabilitados</a>
+                            </nav> 
+                        </div> 
+                    </div>
+                    <div class="panel-body tabs-menu-body"> 
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab25">
+                                <h5 class="mb-5"></h5>
+                                <div class="row row-sm"> 
+                                    <table id="datatable-allusers" class="display nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Código Item</th>
+                                                <th>Categoría</th>
+                                                <th>Marca</th>
+                                                <th>Items</th>
+                                                <th>Valor Neto</th>
+                                                <th>Stock Mínimo</th>
+                                                <th>Stock Máximo</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in items %}
+                                                {% if item.status %}
+                                            <tr>
+                                                <td class="dtr-control"></td>
+                                                <td>{{ item.codigo_item|default:"-" }}</td>
+                                                <td>{{ item.categoria }}</td> 
+                                                <td>{{ item.marca }}</td> 
+                                                <td>{{ item.item }}</td>  
+                                                <td>{{ item.valor_neto }}</td>
+                                                <td>{{ item.stock_minimo }}</td>
+                                                <td>{{ item.stock_maximo }}</td>
+                                                {% comment %} <td>{% if item.duracion %}{{ item.duracion }}{% else %}N/A{% endif %}</td>  {% endcomment %}
+                                                {% comment %} <td>{{ item.fechacreacion|date:"d-m-Y" }}  |  {{ item.fechacreacion|date:"H:i" }}</td>   {% endcomment %}
+                                                {% comment %} <td>{{ item.descripcion }}</td>   {% endcomment %}
+                                                <td class="form-inline-btn"> 
+                                                   <a href="{% url 'edit_inventario_item' item.id %}"class="btn btn-warning btn-size-adm">Editar</a>
+                                                    {% if request.user.usuarioprofile.seccionInventario == "ADMINISTRADOR" or request.user.is_superuser %}
+                                                     <form action="{% url 'status_item' %}" method="POST" >
+                                                        <form action="{% url 'status_item' %}" method="POST" >
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="item" value="{{ item.id}}">
+                                                        <input type="hidden" name="name" value="{{ item.name }}">
+                                                        {% if item.status %}   
+                                                            <button type="submit" class="btn btn-danger btn-size-adm">Deshabilitar</button>                                              
+                                                        {% else %}                                                
+                                                            <button type="submit" class="btn btn-primary btn-size-adm">Habilitar</button>
+                                                        {% endif%}
+                                                    </form> 
+                                                    {% endif %}
+                                                </td>                                
+                                            </tr>
+                                            {% endif%}
+                                            {% endfor %}
+                                        </tbody>            
+                                    </table>
+                                </div>    
+                            </div>
+                            <div class="tab-pane" id="tab26"> 
+                                <h5 class="mb-5"></h5>
+                                <div class="row row-sm"> 
+                                    <table id="datatable-allusers-des" class="display nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                
+                                                <th>Código Item</th>
+                                                <th>Categoría</th>
+                                                <th>Marca</th>
+                                                <th>Items</th>
+                                                <th>Valor Neto</th>
+                                                <th>Stock Mínimo</th>
+                                                <th>Stock Máximo</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in items %}
+                                                {% if not item.status %}
+                                            <tr>
+                                                <td class="dtr-control"></td>
+                                                <td>{{ item.codigo_item }}</td>
+                                                <td>{{ item.categoria }}</td> 
+                                                <td>{{ item.marca }}</td> 
+                                                <td>{{ item.item }}</td>  
+                                                <td>{{ item.valor_neto }}</td>
+                                                <td>{{ item.stock_minimo }}</td>
+                                                <td>{{ item.stock_maximo }}</td>
+                                                {% comment %} <td>{% if item.duracion %}{{ item.duracion }}{% else %}N/A{% endif %}</td>  {% endcomment %}
+                                                {% comment %} <td>{{ item.fechacreacion|date:"d-m-Y" }}  |  {{ item.fechacreacion|date:"H:i" }}</td>   {% endcomment %}
+                                                {% comment %} <td>{{ item.descripcion }}</td>   {% endcomment %}
+                                                <td class="form-inline-btn"> 
+                                                    <a href="{% url 'edit_inventario_item' item.id %}"
+                                                        class="btn btn-warning btn-size-adm">
+                                                        Editar
+                                                    </a>
+                                                    {% comment %} <button class="btn btn-warning btn-size-adm" onclick="abrirmodal('{% url 'mostrar_item' item.id %}')">Editar</button> {% endcomment %}
+                                                    {% comment %} <form action="#" method="POST" >
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="name" value="{{ item.name }}">
+                                                        <button type="submit" class="btn btn-info btn-size-edit">Editar</button> 
+                                                    </form>  {% endcomment %}
+                                                    {% if request.user.usuarioprofile.seccionInventario == "ADMINISTRADOR" or request.user.is_superuser %}
+                                                    <form action="{% url 'status_item' %}" method="POST" >
+                                                        <form action="{% url 'status_item' %}" method="POST" >
+                                                        {% csrf_token %}
+                                                        
+                                                        <input type="hidden" name="item" value="{{ item.id}}">
+                                                        <input type="hidden" name="name" value="{{ item.name }}">
+                                                        {% if item.status %}   
+                                                            <button type="submit" class="btn btn-danger btn-size-adm">Deshabilitar</button>                                              
+                                                        {% else %}                                                
+                                                            <button type="submit" class="btn btn-primary btn-size-adm">Habilitar</button>
+                                                        {% endif%}
+                                                    </form> 
+                                                    {% endif %}
+                                                </td>                                
+                                            </tr>
+                                            {% endif%}
+                                            {% endfor %}
+                                        </tbody>                    
+                                    </table>
+                                </div>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h5 class="mb-5"></h5> 
+        <div class="modal" id="mostrarregistroitem">                    
+        </div>
+        <div class="main-container container-fluid"> 
+            <a class="btn btn-secondary" href="{% url 'dashboardInventario' %}">Regresar</a> 
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script>
+    const idDataTable = '#datatable-allusers';
+    const idDataTableDes = '#datatable-allusers-des';
+    const urlLenguage = '{% static "json/es-CL.json" %}';
+</script>
+<script type="text/javascript">
+    function abrirmodal(url){
+        $('#mostrarregistroitem').load(url, function(){
+            $(this).modal('show');
+        });
+    };
+</script>
+<script>
+    function updateTextareaColor() {
+        const body = document.body;
+        const textarea = document.getElementById('registros');
+        if (body.classList.contains('dark-mode')) {
+            textarea.style.color = 'white';
+        } else if (body.classList.contains('light-mode')) {
+            textarea.style.color = 'black';
+        }
+    }
+    document.addEventListener('DOMContentLoaded', updateTextareaColor);
+    const observer = new MutationObserver(updateTextareaColor);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });    
+</script>
+<script type="application/javascript">
+    new DataTable('#datatable-allusers', {
+        columnDefs: [
+            {
+                className: 'dtr-control',
+                orderable: false,
+                targets: 2
+            }
+        ],
+        language: {
+            url: '{% static 'json/es-CL.json' %}',        
+        },
+        columnDefs: [    
+            { searchable: false, targets: [0,1,3] },
+            { orderable: false, targets: [0,1]}  
+        ],
+        order: [1, 'desc'],
+        responsive: {
+            details: {
+                type: 'column'
+            }
+        }
+    });
+    new DataTable('#datatable-allusers-des', {
+        columnDefs: [
+            {
+                className: 'dtr-control',
+                orderable: false,
+                targets: 2
+            }
+        ],
+        language: {
+            url: '{% static 'json/es-CL.json' %}',        
+        },
+        columnDefs: [    
+            { searchable: false, targets: [0,1,3] },
+            { orderable: false, targets: [0,1]}  
+        ],
+        order: [1, 'desc'],
+        responsive: {
+            details: {
+                type: 'column'
+            }
+        }
+    });
+</script>
+{% endblock javascript %}

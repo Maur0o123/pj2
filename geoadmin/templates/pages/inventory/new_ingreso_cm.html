@@ -1,0 +1,582 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block css %}
+
+<link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+
+{% endblock css %}
+{% block select2 %}
+<link href="{% static 'css/select2.min.css' %}" rel="stylesheet" />
+{% endblock select2 %}
+{% block title %}Nuevo Ingreso C.M{% endblock %}
+
+{% block content %}
+<button type="submit" form="form" class="btn btn-primary save-float">
+    Guardar 
+</button>
+
+<a href="{% url 'manage_inventario_movimientos' %}"
+   class="btn btn-secondary back-float"
+   id="btnRegresar">
+    Regresar
+</a>
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+
+        <div class="main-container container-fluid">
+
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Nuevo Ingreso Casa Matriz</h1>
+                </div>
+
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">Inventario</li>
+                        <li class="breadcrumb-item active">Nuevo Ingreso C.M</li>
+                    </ol>
+                </div>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data" id="form">
+                {% csrf_token %}
+
+                <div class="card">
+                    <div class="card-body">
+
+                        <h4 class="card-title mb-4">Datos del Ingreso</h4>
+
+                        <div class="row">
+
+                            <div class="col-md-4">
+                                <label>Proveedor</label>
+                                <select name="proveedor"
+                                    id="proveedor"
+                                    class="form-control select-buscador"
+                                    style="width:100%;"
+                                    required>
+                                    <option value="">-- Buscar proveedor --</option>
+
+                                    {% for proveedor in proveedores %}
+                                        <option value="{{ proveedor.id }}"
+                                                data-correo="{{ proveedor.correo }}"
+                                                data-telefono="{{ proveedor.telefono }}"
+                                                data-direccion="{{ proveedor.direccion }}">
+                                            {{ proveedor.rut }} | {{ proveedor.nombre }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div id="datosProveedor" class="col-md-8" style="display:none;">
+                                <div class="row">
+
+                                    <div class="col-md-4">
+                                        <label>Correo</label>
+                                        <input type="text"
+                                               id="correo_proveedor"
+                                               class="form-control"
+                                               readonly>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label>Teléfono</label>
+                                        <input type="text"
+                                               id="telefono_proveedor"
+                                               class="form-control"
+                                               readonly>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label>Dirección</label>
+                                        <input type="text"
+                                               id="direccion_proveedor"
+                                               class="form-control"
+                                               readonly>
+                                    </div>
+                                    <p><p></p></p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    
+                        <div id="contenedorItems">
+
+                            <div class="row item-row mt-1">
+
+                                <div class="col-md-2">
+                                    <label>Item</label>
+                                    <select name="items[]"
+                                        class="form-control item-select select-buscador-item"
+                                        style="width:100%;"
+                                        required>
+                                        <option value="">-- Buscar item --</option>
+
+                                        {% for item in items %}
+                                            <option value="{{ item.id }}">
+                                                {{ item.codigo_item }} | {{ item.item }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="col-md-1">
+                                    <label>Buenos</label>
+                                    <input type="number"
+                                        name="cantidad_buenos[]"
+                                        class="form-control"
+                                        min="0"
+                                        value="0"
+                                        oninput="this.value = this.value.replace(/^0+(?=\d)/, '')">
+                                </div>
+
+                                <div class="col-md-1">
+                                    <label>Malos</label>
+                                    <input type="number"
+                                        name="cantidad_malos[]"
+                                        class="form-control"
+                                        min="0"
+                                        value="0">
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label>Valor neto total</label>
+                                    <input type="number"
+                                            name="valor_neto[]"
+                                            class="form-control"
+                                            min="1"
+                                            required>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label>Imagen</label>
+                                    <input type="file"
+                                        name="imagenes[]"
+                                        class="form-control">
+                                </div>
+
+                               <div class="col-md-2">
+                                    <label>Observación</label>
+                                    <input type="text"
+                                        name="observaciones[]"
+                                        class="form-control">
+                                </div>
+
+                                <div class="col-md-2 botonera-item d-flex align-items-end">
+                                    <div class="d-flex justify-content-center align-items-end gap-1">
+
+                                        <button type="button"
+                                                class="btn btn-danger btn-remove-item"
+                                                style="display:none;">
+                                            <i class="fe fe-trash-2"></i>
+                                        </button>
+
+                                        <button type="button"
+                                                class="btn btn-primary btn-add-item">
+                                            +
+                                        </button>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-12 text-end">
+                                <h4>
+                                    Valor Total Compra:
+                                    <span id="valorTotalVenta">$0</span>
+                                </h4>
+                            </div>
+                        </div>
+
+                </div>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const proveedor = document.getElementById('proveedor');
+
+    proveedor.addEventListener('change', function() {
+        const opcion = this.options[this.selectedIndex];
+        const contenedor = document.getElementById('datosProveedor');
+
+        if (this.value) {
+            contenedor.style.display = 'block';
+
+            document.getElementById('correo_proveedor').value =
+                opcion.getAttribute('data-correo') || '';
+
+            document.getElementById('telefono_proveedor').value =
+                opcion.getAttribute('data-telefono') || '';
+
+            document.getElementById('direccion_proveedor').value =
+                opcion.getAttribute('data-direccion') || '';
+        } else {
+            contenedor.style.display = 'none';
+
+            document.getElementById('correo_proveedor').value = '';
+            document.getElementById('telefono_proveedor').value = '';
+            document.getElementById('direccion_proveedor').value = '';
+        }
+    });
+
+});
+</script>
+<script>
+function actualizarOpcionesItems() {
+    const selects = document.querySelectorAll('.item-select');
+
+    const seleccionados = Array.from(selects)
+        .map(select => select.value)
+        .filter(value => value !== '');
+
+    $('.select-buscador-item').select2('destroy');
+
+    selects.forEach(select => {
+        const valorActual = select.value;
+
+        Array.from(select.options).forEach(option => {
+            if (option.value === '') {
+                option.disabled = false;
+                return;
+            }
+
+            option.disabled =
+                seleccionados.includes(option.value) &&
+                option.value !== valorActual;
+        });
+    });
+
+    if (typeof window.inicializarSelect2IngresoCM === 'function') {
+        window.inicializarSelect2IngresoCM();
+    }
+}
+function actualizarBotonesEliminar() {
+    const filas = document.querySelectorAll('.item-row');
+
+    filas.forEach(fila => {
+        const botonEliminar = fila.querySelector('.btn-remove-item');
+
+        if (!botonEliminar) return;
+
+        if (filas.length <= 1) {
+            botonEliminar.style.display = 'none';
+        } else {
+            botonEliminar.style.display = 'inline-block';
+        }
+    });
+}
+const labelsItemsOriginales = [
+    'Item',
+    'Buenos',
+    'Malos',
+    'Valor Neto',
+    'Imagen',
+    'Observación'
+];
+function crearFilaItem() {
+    $('.select-buscador-item').select2('destroy');
+
+    const contenedor = document.getElementById('contenedorItems');
+    const primeraFila = document.querySelector('.item-row');
+    const nuevaFila = primeraFila.cloneNode(true);
+
+    nuevaFila.querySelectorAll('label').forEach(label => {
+        label.innerHTML = '&nbsp;';
+        label.style.visibility = 'hidden';
+    });
+
+
+    nuevaFila.querySelectorAll('input').forEach(input => {
+        if (input.type === 'file') {
+            input.value = '';
+        } else if (input.type === 'number') {
+            input.value = 0;
+        } else {
+            input.value = '';
+        }
+    });
+
+    nuevaFila.querySelector('.item-select').value = '';
+
+    const botonera = nuevaFila.querySelector('.botonera-item');
+    botonera.innerHTML = `
+        <div class="d-flex justify-content-center align-items-center gap-1">
+
+            <button type="button"
+                    class="btn btn-danger btn-remove-item">
+                <i class="fe fe-trash-2"></i>
+            </button>
+
+            <button type="button"
+                    class="btn btn-primary btn-add-item">
+                +
+            </button>
+
+        </div>
+    `;
+
+    contenedor.appendChild(nuevaFila);
+
+    if (typeof window.inicializarSelect2IngresoCM === 'function') {
+        window.inicializarSelect2IngresoCM();
+    }
+
+    actualizarOpcionesItems();
+    actualizarBotonesEliminar();
+    actualizarLabelsItems();
+    actualizarValorTotalVenta();
+}
+function actualizarLabelsItems() {
+    const filas = document.querySelectorAll('.item-row');
+
+    filas.forEach((fila, indexFila) => {
+        const labels = fila.querySelectorAll('label');
+
+        labels.forEach((label, indexLabel) => {
+            if (indexFila === 0) {
+                label.innerHTML = labelsItemsOriginales[indexLabel] || '';
+                label.style.visibility = 'visible';
+            } else {
+                label.innerHTML = '&nbsp;';
+                label.style.visibility = 'hidden';
+            }
+        });
+    });
+}
+function actualizarValorTotalVenta() {
+
+    let total = 0;
+
+    document.querySelectorAll('input[name="valor_neto[]"]').forEach(input => {
+
+        const valor = parseInt(input.value) || 0;
+
+        total += valor;
+    });
+
+    document.getElementById('valorTotalVenta').innerText =
+        '$' + total.toLocaleString('es-CL');
+}
+document.addEventListener('input', function(e) {
+
+    if (e.target.name === 'valor_neto[]') {
+        actualizarValorTotalVenta();
+    }
+
+});
+document.addEventListener('click', function(e) {
+
+    const btnAdd = e.target.closest('.btn-add-item');
+
+        if (btnAdd) {
+
+            const filas = document.querySelectorAll('.item-row');
+
+            for (const fila of filas) {
+
+                const itemSelect = fila.querySelector('.item-select');
+                const inputBuenos = fila.querySelector('input[name="cantidad_buenos[]"]');
+
+                const item = itemSelect ? itemSelect.value.trim() : '';
+                const buenos = inputBuenos ? inputBuenos.value.trim() : '';
+
+                if (!item) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Falta seleccionar item',
+                        text: 'Debes completar todos los items antes de agregar otro.',
+                        confirmButtonColor: '#00cfe8'
+                    });
+                    return;
+                }
+
+                if (buenos === '' || Number(buenos) <= 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Cantidad inválida',
+                        text: 'Cada item debe tener una cantidad de buenos mayor a 0.',
+                        confirmButtonColor: '#00cfe8'
+                    });
+                    return;
+                }
+
+                const valorNeto = fila.querySelector('input[name="valor_neto[]"]');
+
+                if (!valorNeto || valorNeto.value === '' || Number(valorNeto.value) <= 0) {
+
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Valor Neto inválido',
+                        text: 'Debe ingresar un valor neto mayor a 0.',
+                        confirmButtonColor: '#00cfe8'
+                    });
+
+                    return;
+                }
+            }
+
+            crearFilaItem();
+        }
+
+        const btnRemove = e.target.closest('.btn-remove-item');
+
+            if (btnRemove) {
+
+                const filas = document.querySelectorAll('.item-row');
+
+                if (filas.length <= 1) {
+                    return;
+                }
+
+                btnRemove.closest('.item-row').remove();
+
+                actualizarOpcionesItems();
+                actualizarBotonesEliminar();
+                actualizarLabelsItems();
+                actualizarValorTotalVenta();
+
+            }
+
+});
+
+document.addEventListener('change', function(e) {
+    if (e.target.classList.contains('item-select')) {
+        actualizarOpcionesItems();
+    }
+});
+</script>
+
+{% endblock javascript %}
+{% block javascript2 %}
+<script>
+(function () {
+    if (typeof window.jQuery === 'undefined') {
+        return;
+    }
+
+    const $ = window.jQuery;
+
+    function inicializarSelect2IngresoCM() {
+        const $proveedor = $('#proveedor');
+
+        if ($proveedor.length && typeof $proveedor.select2 === 'function') {
+            $proveedor.select2({
+                width: '100%',
+                minimumResultsForSearch: 0
+            });
+        }
+
+        $('.select-buscador-item').each(function () {
+            const $item = $(this);
+
+            if (typeof $item.select2 === 'function') {
+                $item.select2({
+                    width: '100%',
+                    minimumResultsForSearch: 0
+                });
+            }
+        });
+    }
+
+    window.inicializarSelect2IngresoCM = inicializarSelect2IngresoCM;
+
+    inicializarSelect2IngresoCM();
+
+    $('#proveedor').on('change', function () {
+    const opcion = this.options[this.selectedIndex];
+    const contenedor = document.getElementById('datosProveedor');
+
+    if (this.value) {
+        contenedor.style.display = 'block';
+
+        document.getElementById('correo_proveedor').value =
+            opcion.getAttribute('data-correo') || '';
+
+        document.getElementById('telefono_proveedor').value =
+            opcion.getAttribute('data-telefono') || '';
+
+        document.getElementById('direccion_proveedor').value =
+            opcion.getAttribute('data-direccion') || '';
+    } else {
+        contenedor.style.display = 'none';
+
+        document.getElementById('correo_proveedor').value = '';
+        document.getElementById('telefono_proveedor').value = '';
+        document.getElementById('direccion_proveedor').value = '';
+    }
+});
+
+})();
+
+let hayCambiosSinGuardar = false;
+document.addEventListener('input', function() {
+    hayCambiosSinGuardar = true;
+});
+
+document.addEventListener('change', function() {
+    hayCambiosSinGuardar = true;
+});
+
+document.getElementById('form').addEventListener('submit', function() {
+    hayCambiosSinGuardar = false;
+});
+
+window.addEventListener('beforeunload', function (e) {
+
+    if (!hayCambiosSinGuardar) {
+        return;
+    }
+
+    e.preventDefault();
+    e.returnValue = '';
+
+});
+
+document.getElementById('btnRegresar').addEventListener('click', function(e) {
+
+    if (!hayCambiosSinGuardar) {
+        return;
+    }
+
+    e.preventDefault();
+
+    const destino = this.href;
+
+    Swal.fire({
+        icon: 'warning',
+        title: 'Hay cambios sin guardar',
+        text: 'Si sales ahora perderás la información ingresada.',
+        showCancelButton: true,
+        confirmButtonText: 'Salir',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+            hayCambiosSinGuardar = false;
+            window.location.href = destino;
+        }
+
+    });
+
+});
+</script>
+{% endblock javascript2 %}

@@ -1,0 +1,23 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header" style="padding-left: 50px">
+            <div class="main-button main-title">
+                <h4>Detalle de Item  {{ item_ver.item }}</h4>
+            </div>            
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+            <div class="user-info-modal"> 
+                <div class="datos">
+                    <div class="col"><p>Fecha y Hora: {{ item_ver.fechacreacion|date:"d-m-Y" }}  |  {{ item_ver.fechacreacion|date:"H:i" }}</p></div>
+                    <div class="col"><p>Duracion en Meses: {% if item_ver.duracion %}{{ item_ver.duracion }}{% else %}N/A{% endif %} </p></div>
+                    <div class="col"><p>Descripción: {{ item_ver.descripcion|linebreaksbr }}</p></div>  
+                </div> 
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+    </div>
+</div>
+            

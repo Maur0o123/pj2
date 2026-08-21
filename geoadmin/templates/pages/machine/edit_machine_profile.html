@@ -1,0 +1,529 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Editar Maquinaria{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <style>
+        .modal-minimal { font-size: 0.875rem; }
+        .minimal-label { font-size: 0.725rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.55; margin-bottom: 0.15rem; }
+        .minimal-value { font-weight: 400; margin-bottom: 0.85rem; }
+        .minimal-title { font-size: 0.775rem; text-transform: uppercase; letter-spacing: 0.08em; color: #0284c7; border-bottom: 1px solid rgba(128, 128, 128, 0.15); padding-bottom: 0.25rem; margin-top: 1.25rem; margin-bottom: 0.85rem; font-weight: 600; }
+        .minimal-badge { display: inline-block; padding: 0.15rem 0.45rem; font-size: 0.725rem; font-weight: 500; border-radius: 3px; background: rgba(14, 165, 233, 0.08); color: #0284c7; }
+        .minimal-table { width: 100%; margin-bottom: 1rem; border-collapse: collapse; }
+        .minimal-table th { font-size: 0.725rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.55; padding: 0.4rem; border-bottom: 1px solid rgba(128, 128, 128, 0.2); font-weight: 500; text-align: left; }
+        .minimal-table td { padding: 0.5rem 0.4rem; border-bottom: 1px solid rgba(128, 128, 128, 0.1); }
+        .minimal-img { max-height: 140px; object-fit: contain; border-radius: 4px; border: 1px solid rgba(128, 128, 128, 0.15); filter: grayscale(10%) contrast(95%); transition: opacity 0.2s; }
+        .minimal-img:hover { opacity: 0.85; }
+        [data-bs-theme="dark"] .minimal-title, .dark-mode .minimal-title, .dark-theme .minimal-title { color: #38bdf8; }
+        [data-bs-theme="dark"] .minimal-badge, .dark-mode .minimal-badge, .dark-theme .minimal-badge { background: rgba(56, 189, 248, 0.12); color: #38bdf8; }
+    </style>
+{% endblock css %}
+
+{% block content %}
+<form class="form-horizontal" id="form" action="#" method="POST" enctype="multipart/form-data">
+{% csrf_token %}    
+
+<button type="submit" class="btn btn-primary save-float">Guardar</button>
+<a href="{% url 'manage_machines' %}" class="btn btn-secondary back-float">Regresar</a>
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Detalles Maquinaria {{maquinaria.maquinaria}}</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Registro Maquinaria</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Editar Maquinaria</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="card"> 
+                <div class="panel panel-primary">
+                    <div class="tab-menu-heading border-bottom-0"> 
+                        <div class="tabs-menu4 border-bottomo-sm"> 
+                            <!-- Tabs --> 
+                            <nav class="nav d-sm-flex d-block"> 
+                                <a id="nav25" class="nav-link border border-bottom-0 br-sm-5 me-2 active" data-bs-toggle="tab" href="#tab25">Datos Principales</a> 
+                                <a id="nav26" class="nav-link border border-bottom-0 br-sm-5 me-2" data-bs-toggle="tab" href="#tab26">Historial Faenas</a>
+                                <a id="nav27" class="nav-link border border-bottom-0 br-sm-5 me-2" data-bs-toggle="tab" href="#tab27">Historial Mantenimientos</a>
+                                <a id="nav28" class="nav-link border border-bottom-0 br-sm-5 me-2" data-bs-toggle="tab" href="#tab28">Historial Horómetros</a>
+                            </nav> 
+                        </div> 
+                    </div>
+                    <div class="panel-body tabs-menu-body"> 
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab25">
+                                <div class="row row-sm">
+                                    <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                                        <div class="card box-shadow-0">                        
+                                            <div class="card-body">
+                                                <h4 class="card-title">Datos Principales</h4>  
+                                                <input type="hidden" name="maquinaria_id" value="{{ maquinaria.id }}">
+                                                <div class="row row-sm">
+                                                    {{ formnuevamaquinaria|crispy }}
+                                                </div>
+                                                {% if request.user.usuarioprofile.seccionVehicular == "SUPERVISOR" %}
+                                                    <input type="hidden" name="faena" value="{{ faena }}">
+                                                {% endif %}
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tab26"> 
+                                <div class="row row-sm"> 
+                                    <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                                        <div class="card box-shadow-0">                        
+                                            <div class="card-body">
+                                                <h4 class="card-title">Historial de Faenas</h4>
+                                                <table id="datatable-allusers" class="display nowrap" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>Estado</th>
+                                                            <th>Faena</th>
+                                                            <th>Fecha</th>
+                                                            <th>Asignado por:</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for faena in historialfaenas %} 
+                                                            <tr>
+                                                                <td class="dtr-control"></td>
+                                                                <td>{% if faena.status %} Activa {% else %} Histórica {% endif %}</td>
+                                                                <td>{{ faena.faena}}</td>
+                                                                <td>{{ faena.fechacreacion|date:"d-m-Y H:i" }}</td>
+                                                                <td>{{ faena.creador }}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>                    
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tab27">
+                                <div class="row row-sm"> 
+                                    <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                                        <div class="card box-shadow-0">                        
+                                            <div class="card-body">
+                                                <h4 class="card-title">Historial de Mantenimientos</h4>
+                                                <table id="datatable-mantenimientos" class="display nowrap" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>Fecha</th>
+                                                            <th>Estado</th>
+                                                            <th>Solicitante</th>
+                                                            <th>Faena</th>                                        
+                                                            <th>turno</th>
+                                                            <th>Acciones</th> 
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for solicitud in solicitudesMantenimiento %} 
+                                                            <tr>
+                                                                <td class="dtr-control"></td>
+                                                                <td>{{ solicitud.fechacreacion|date:"d-m-Y H:i" }}</td>
+                                                                <td>
+                                                                    {% for opcion in choicesprogreso %}
+                                                                        {% if solicitud.progreso == opcion.0 %} 
+                                                                            {{ opcion.1 }}
+                                                                        {% endif %}
+                                                                    {% endfor%}
+                                                                </td>
+                                                                <td>{{ solicitud.solicitante.first_name }} {{ solicitud.solicitante.last_name }}</td>
+                                                                <td>{{ solicitud.faena}}</td>
+                                                                <td>{% if solicitud.turno == '1' %}Turno A{% elif solicitud.turno == '2' %}Turno B{% endif %}</td>
+                                                                <td class="form-inline-btn"> 
+                                                                    <button type="button" class="btn btn-info btn-size-adm" data-bs-toggle="modal" data-bs-target="#viewMaintenanceModal{{ solicitud.id }}" title="Revisar"><i class="fa fa-search"></i></button>
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>                    
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tab28">
+                                <div class="row row-sm"> 
+                                    <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                                        <div class="card box-shadow-0">                        
+                                            <div class="card-body">
+                                                <h4 class="card-title">Historial de Horómetros</h4>
+                                                <table id="datatable-horometros" class="display nowrap" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>Fecha</th> 
+                                                            <th>Horómetros</th>
+                                                            <th>Origen Registro</th>
+                                                            <th>Responsable</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for horometro in horometros %} 
+                                                            <tr>
+                                                                <td class="dtr-control"></td>
+                                                                <td>{{ horometro.fechacreacion|date:"d-m-Y H:i" }}</td>
+                                                                <td class="cambiarNumero" style="text-align: left;">{{ horometro.horometro }} </td>
+                                                                <td>{{ horometro.origen }}</td>
+                                                                <td>{{ horometro.creador }}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>                    
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                    </div> 
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+</form>
+
+{% for solicitud in solicitudesMantenimiento %}
+<div class="modal fade" id="viewMaintenanceModal{{ solicitud.id }}" tabindex="-1" aria-labelledby="viewMaintenanceModalLabel{{ solicitud.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title" id="viewMaintenanceModalLabel{{ solicitud.id }}">Detalle de Solicitud de Mantenimiento de Maquinaria</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-start">
+                <div class="modal-minimal container-fluid px-0">
+                    <div class="row gx-4">
+                        <div class="col-md-6">
+                            <div class="minimal-label">Maquinaria</div>
+                            <div class="minimal-value">{{ solicitud.maquinaria.maquinaria }}</div>
+
+                            <div class="minimal-label">Faena</div>
+                            <div class="minimal-value">{{ solicitud.faena|default:"-" }}</div>
+
+                            <div class="minimal-label">Solicitante</div>
+                            <div class="minimal-value">{{ solicitud.solicitante.first_name }} {{ solicitud.solicitante.last_name }}</div>
+
+                            <div class="minimal-label">Teléfono</div>
+                            <div class="minimal-value">{{ solicitud.telefono|default:"-" }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="minimal-label">Fecha Creación</div>
+                            <div class="minimal-value">{{ solicitud.fechacreacion|date:"d-m-Y H:i" }}</div>
+
+                            <div class="minimal-label">Horómetro</div>
+                            <div class="minimal-value">{{ solicitud.horometro }}</div>
+
+                            <div class="minimal-label">Turno</div>
+                            <div class="minimal-value">
+                                {% if solicitud.turno == '1' %}Turno A
+                                {% elif solicitud.turno == '2' %}Turno B
+                                {% else %}-{% endif %}
+                            </div>
+
+                            <div class="minimal-label">Estado Actual</div>
+                            <div class="minimal-value">
+                                {% for opcion in choicesprogreso %}
+                                    {% if solicitud.progreso|stringformat:"s" == opcion.0|stringformat:"s" %}
+                                        <span class="minimal-badge">{{ opcion.1 }}</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <div class="minimal-label">Comentarios</div>
+                            <div class="minimal-value" style="white-space: pre-line;">{{ solicitud.comentario|default:"Sin comentarios." }}</div>
+                        </div>
+                    </div>
+
+                    <div class="minimal-title">Problemas Reportados</div>
+                    <div class="table-responsive">
+                        <table class="minimal-table">
+                            <thead>
+                                <tr>
+                                    <th>Problema</th>
+                                    <th>Descripción</th>
+                                    <th style="text-align: right;">Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for problema in solicitud.solicitudmantenimientoproblemasmaquinaria_set.all %}
+                                <tr>
+                                    <td>{{ problema.fallaMaquinaria.falla }}</td>
+                                    <td style="opacity: 0.85;">{{ problema.descripcion|default:"-" }}</td>
+                                    <td style="text-align: right; font-variant-numeric: tabular-nums;">${{ problema.valorServicio|default:"0" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3" style="text-align: center; opacity: 0.5; padding: 1rem 0;">No hay problemas detallados registrados</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="minimal-title">Historial de Actualizaciones</div>
+                    <div class="table-responsive">
+                        <table class="minimal-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th>Empresa</th>
+                                    <th>Responsable</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for historial in solicitud.historialsolicitudmantenimientomaquinaria_set.all %}
+                                <tr>
+                                    <td style="font-variant-numeric: tabular-nums;">{{ historial.fechacreacion|date:"d-m-Y H:i" }}</td>
+                                    <td>
+                                        {% for opcion in choicesprogreso %}
+                                            {% if historial.progreso|stringformat:"s" == opcion.0|stringformat:"s" %}
+                                                {{ opcion.1 }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>{{ historial.empresaMantenimiento|default:"-" }}</td>
+                                    <td>{{ historial.solicitante.first_name }} {{ historial.solicitante.last_name }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" style="text-align: center; opacity: 0.5; padding: 1rem 0;">No hay un historial registrado aún</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="minimal-title">Evidencia Fotográfica</div>
+                    <div class="row gx-3 mt-2">
+                        {% if solicitud.fotografiaUno and 'no-imagen' not in solicitud.fotografiaUno.url %}
+                            <div class="col-6 mb-2">
+                                <a href="{{ solicitud.fotografiaUno.url }}" target="_blank">
+                                    <img src="{{ solicitud.fotografiaUno.url }}" class="minimal-img w-100">
+                                </a>
+                            </div>
+                        {% endif %}
+                        
+                        {% if solicitud.fotografiaDos and 'no-imagen' not in solicitud.fotografiaDos.url %}
+                            <div class="col-6 mb-2">
+                                <a href="{{ solicitud.fotografiaDos.url }}" target="_blank">
+                                    <img src="{{ solicitud.fotografiaDos.url }}" class="minimal-img w-100">
+                                </a>
+                            </div>
+                        {% endif %}
+                        
+                        {% if not solicitud.fotografiaUno or 'no-imagen' in solicitud.fotografiaUno.url %}
+                            {% if not solicitud.fotografiaDos or 'no-imagen' in solicitud.fotografiaDos.url %}
+                                <div class="col-12 py-2 text-center" style="opacity: 0.5;">
+                                    No se adjuntaron fotografías a esta solicitud.
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock content %}
+
+{% block javascript %}
+<script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Buscar el nombre del cookie
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script type="application/javascript">
+    function initializeDataTable(selector, extraOptions = {}) {
+        const defaultOptions = {
+            "order": [[1, "desc"]],
+            "scrollX": false,
+            "autoWidth": false,
+            "columnDefs": [
+                {
+                    className: 'dtr-control',
+                    orderable: false,
+                    targets: 0
+                },
+                {
+                    targets: "_all",
+                    orderSequence: ["desc", "asc", ""]
+                },
+                {
+                    searchable: false,
+                    targets: [0]
+                }
+            ],
+            language: {
+                url: '{% static "json/es-CL.json" %}',
+            },
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: 'tr'
+                }
+            }
+        };
+        const finalOptions = $.extend(true, {}, defaultOptions, extraOptions);
+        return $(selector).DataTable(finalOptions);
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeDataTable('#datatable-allusers');
+        initializeDataTable('#datatable-mantenimientos');
+        initializeDataTable('#datatable-horometros');
+
+        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+            $($.fn.dataTable.tables(true)).DataTable().columns.adjust().responsive.recalc();
+        });
+    });
+</script>
+<script>
+    var marca = document.getElementById('id_marca');
+    while (marca.firstChild) {
+        marca.removeChild(marca.firstChild);
+    }
+    marca.innerHTML = '<option value="">---------</option>';
+    var tipoMaquina = document.getElementById('id_tipo')
+    $(window).on("load", function (e) {
+        var tipoId = {{ maquinaria.tipo.id }};
+        if (tipoId) {
+            $.LoadingOverlay("show");
+            $.ajax({
+                url: '{% url 'cargar_marca_por_tipo' %}',
+                method: 'GET',
+                data: {
+                    'tipo_id': tipoId
+                },
+                dataType: 'json',
+                success: function(data) {
+                    $.LoadingOverlay("hide");
+                    var selectKit = document.getElementById('id_marca');
+                    data.forEach(function(marca) {
+                        var option = document.createElement('option');
+                        option.value = marca.id;
+                        option.text = marca.nombre;
+                        if (marca.nombre == '{{ maquinaria.marca }}' && tipoId == {{ maquinaria.tipo.id}} ){
+                            option.selected = true;
+                        };
+                        selectKit.appendChild(option);
+                    });
+                }
+            });
+        }
+    });
+    tipoMaquina.addEventListener('change', function() {
+        var tipoId = this.value;
+        marca.innerHTML = '<option value="">---------</option>';
+        if (tipoId) {
+            $.LoadingOverlay("show");
+            $.ajax({
+                url: '{% url 'cargar_marca_por_tipo' %}',
+                method: 'GET',
+                data: {
+                    'tipo_id': tipoId
+                },
+                dataType: 'json',
+                success: function(data) {
+                    $.LoadingOverlay("hide");
+                    var selectKit = document.getElementById('id_marca');
+                    data.forEach(function(marca) {
+                        var option = document.createElement('option');
+                        option.value = marca.id;
+                        option.text = marca.nombre;
+                        if (marca.nombre == '{{ maquinaria.marca }}' && tipoId == {{ maquinaria.tipo.id}} ){
+                            option.selected = true;
+                        };
+                        selectKit.appendChild(option);
+                    });
+                }
+            });
+        }
+    });
+</script>
+<script src="{% static 'js/custommachinenew.js' %}"></script>
+<script src="{% static 'js/formatmoney.js' %}"></script>
+<script type="text/javascript"> 
+    const form = document.querySelector('#form');
+    form.addEventListener('submit', (event) => {
+    event.preventDefault();        
+    const formData = new FormData(form);
+    $.LoadingOverlay("show");
+    $.ajax({
+        url: '{% url 'save_edit_machine_profile' %}',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            $.LoadingOverlay("hide");
+            if (response.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Maquinaria Actualizada con éxito!',
+                    confirmButtonColor: '#ff00d9',
+                }).then(() => {
+                    window.location.href = '{% url 'manage_machines' %}';
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al Actualizar',
+                    text: response.error || 'Ocurrió un error inesperado.',
+                    confirmButtonColor: '#ff00d9',
+                });
+            }
+        },
+        error: function(xhr) {
+            $.LoadingOverlay("hide");
+            let errorMsg = 'Error al Actualizar';
+            if (xhr.responseJSON && xhr.responseJSON.error) {
+                errorMsg = xhr.responseJSON.error;
+            }
+            Swal.fire({
+                icon: 'error',
+                title: 'Error en el servidor',
+                text: errorMsg,
+                confirmButtonColor: '#ff00d9',
+            });
+        }
+        });
+    });
+</script>
+{% endblock javascript %}

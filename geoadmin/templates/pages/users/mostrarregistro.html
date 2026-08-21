@@ -1,0 +1,28 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header" style="padding-left: 50px">
+            <div class="main-button main-title">
+                <h4>Registro de Error # {{ registro.id }}</h4>
+            </div>            
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+            <div class="user-info-modal"> 
+                <div class="datos">
+                    <div class="col"><p>Fecha y Hora: {{ registro.fechacreacion|date:"d-m-Y" }}  |  {{ registro.fechacreacion|date:"H:i" }}</p></div>
+                    <div class="col"><p>Reportado por: {{ registro.creador }}</p></div>
+                    <div class="col"><p>Descripción: {{ registro.descripcion }}</p></div>  
+                </div>
+                <h5 class="mb-5"></h5> 
+                <div class="datos-modal">
+                    <div class="col"><p>Detalle del problema:</p></div>
+                    <textarea type="text" id="registros" name="registro" style="margin-top: 10px;min-width: 90%;height: 150px;" disabled>{{ registro.detalle }}</textarea>
+                </div>       
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+    </div>
+</div>
+            

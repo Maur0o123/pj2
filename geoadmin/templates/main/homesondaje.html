@@ -1,0 +1,71 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Dashboard Sondaje{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+{% endblock css %}
+
+{% block content %}
+{% if request.user.usuarioprofile.seccionSondaje == "ADMINISTRADOR" or request.user.is_superuser %}
+    <div class="app-content main-content mt-0">
+        <div class="side-app">
+            <!-- CONTAINER -->
+            <div class="main-container container-fluid">
+                <!-- PAGE-HEADER -->
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Dashboard Sondaje</h1>
+                    </div>
+                    <div class="ms-auto pageheader-btn">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="javascript:void(0);">Dashboard Sondaje</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Dashboard Sondaje
+                            </li>
+                            
+                        </ol>
+                    </div>
+                    
+                </div>
+                <div class="card"> 
+                    <div class="panel panel-primary">
+                        <div class="tab-menu-heading border-bottom-0"> 
+                            <div class="tabs-menu4 border-bottomo-sm"> 
+                                <!-- Tabs --> 
+                                <nav class="nav d-sm-flex d-block"> 
+                                    <a id="nav25" class="nav-link border border-bottom-0 br-sm-5 me-2 active" data-bs-toggle="tab" href="#tab25">Planificación - Avance Real</a> 
+                                    <a id="nav26" class="nav-link border border-bottom-0 br-sm-5 me-2" data-bs-toggle="tab" href="#tab26">Información por Día(s)</a>
+                                </nav> 
+                            </div> 
+                        </div>
+                        <div class="panel-body tabs-menu-body"> 
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab25">
+                                    {% include 'pages/drilling/dashboard/general.html' %}
+                                </div>
+                                <div class="tab-pane" id="tab26"> 
+                                    {% include 'pages/drilling/dashboard/diario.html' %}
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <meta http-equiv="REFRESH" content="0;url={% url 'edit_my_profile' %}">
+{% endif %}
+{% endblock content %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+{% endblock javascript %}

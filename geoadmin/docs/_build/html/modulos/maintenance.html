@@ -1,0 +1,2204 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Maintenance &#8212; documentación de Geoadmin - Versión Web</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=ea490ea2"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../_static/translations.js?v=f85f4cfb"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'modulos/maintenance';</script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="Messenger" href="messenger.html" />
+    <link rel="prev" title="Machine" href="machine.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logobg.png" class="logo__image only-light" alt="documentación de Geoadmin - Versión Web - Home"/>
+    <script>document.write(`<img src="../_static/logobg.png" class="logo__image only-dark" alt="documentación de Geoadmin - Versión Web - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Búsqueda</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../antesDeComenzar.html">Antes de Comenzar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../arquitectura.html">Arquitectura del Sistema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../databases.html">Database</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../secciones.html">Secciones</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="core.html">Core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checklist.html">Checklist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="drilling.html">Drilling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="equipment.html">Equipment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geoadmin.html">Geoadmin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inventory.html">Inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="machine.html">Machine</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Maintenance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="messenger.html">Messenger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mining.html">Mining</a></li>
+<li class="toctree-l2"><a class="reference internal" href="offline.html">Offline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="planning.html">Planning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prevencion.html">Prevencion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user.html">User</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vehicle.html">Vehicle</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Api</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/Cconelli/Geoadmin" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Repositorio de origen"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/modulos/maintenance.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="claro/oscuro" aria-label="claro/oscuro" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Maintenance</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#descripcion-general">Descripción General</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-de-datos-models-py">Modelos de Datos (models.py)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nuevasolicitudmantenimiento">NuevaSolicitudMantenimiento</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#historialsolicitudmantenimiento">HistorialSolicitudMantenimiento</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#signal-create-historial-solicitud-mantenimiento">Signal: create_historial_solicitud_mantenimiento</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solicitudmantenimientoproblemas">SolicitudMantenimientoProblemas</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nuevasolicitudmantenimientomaquinaria">NuevaSolicitudMantenimientoMaquinaria</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#historialsolicitudmantenimientomaquinaria">HistorialSolicitudMantenimientoMaquinaria</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#signal-create-historial-solicitud-mantenimiento-maquinaria">Signal: create_historial_solicitud_mantenimiento_maquinaria</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solicitudmantenimientoproblemasmaquinaria">SolicitudMantenimientoProblemasMaquinaria</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mantenimiento">Mantenimiento</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#formularios-forms-py">Formularios (forms.py)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formnuevasolicitudmantenimiento">FormNuevaSolicitudMantenimiento</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#campos-del-formulario">Campos del Formulario</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#consideraciones-adicionales">Consideraciones Adicionales</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formeditsolicitudmantenimiento">FormEditSolicitudMantenimiento</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Campos del Formulario</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Consideraciones Adicionales</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formprocesarsolicitudmantenimiento">FormProcesarSolicitudMantenimiento</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Campos del Formulario</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Consideraciones Adicionales</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formeditsolicitudmantenimientomaquinaria">FormEditSolicitudMantenimientoMaquinaria</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Campos del Formulario</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Consideraciones Adicionales</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formprocesarsolicitudmantenimientomaquinaria">FormProcesarSolicitudMantenimientoMaquinaria</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Campos del Formulario</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Consideraciones Adicionales</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vistas-views-py">Vistas (views.py)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#new-maintenance-request">new_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#decoradores">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#funcionamiento">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#retorno">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#save-new-maintenance-request">save_new_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manage-maintenance-request">manage_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#edit-maintenance-request">edit_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#save-edit-maintenance-request">save_edit_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#status-maintenance-request">status_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#new-maintenance-machine-request">new_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id26">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#save-new-maintenance-machine-request">save_new_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id27">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id28">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id29">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manage-maintenance-machine-request">manage_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id30">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id31">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id32">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#edit-maintenance-machine-request">edit_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id33">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id34">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id35">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#save-edit-maintenance-machine-request">save_edit_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id36">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id37">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id38">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maintenance-pdf-view">maintenance_pdf_view</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id39">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id40">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id41">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maintenance-machine-pdf-view">maintenance_machine_pdf_view</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id42">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id43">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id44">Retorno</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rutas-urls-py">Rutas (urls.py)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id45">new_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#url">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#vista-asociada">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id46">save_new_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id47">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id48">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id49">manage_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id50">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id51">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id52">edit_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id53">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id54">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id55">save_edit_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id56">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id57">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id58">status_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id59">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id60">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id61">new_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id62">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id63">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id64">save_new_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id65">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id66">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id67">manage_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id68">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id69">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id70">edit_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id71">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id72">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id73">save_edit_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id74">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id75">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id76">maintenance_pdf_view</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id77">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id78">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id79">maintenance_machine_pdf_view</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id80">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id81">Vista asociada</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="maintenance">
+<h1>Maintenance<a class="headerlink" href="#maintenance" title="Link to this heading">#</a></h1>
+<section id="descripcion-general">
+<h2>Descripción General<a class="headerlink" href="#descripcion-general" title="Link to this heading">#</a></h2>
+<p>Este módulo permite gestionar solicitudes de mantenimiento de vehículos y maquinaria, incluyendo su historial, estado de progreso y empresa encargada del mantenimiento.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>maintenance/
+│──<span class="w"> </span>admin.py<span class="w">        </span><span class="c1"># Configuración del panel de administración de Django</span>
+│──<span class="w"> </span>apps.py<span class="w">         </span><span class="c1"># Configuración de la aplicación Django</span>
+│──<span class="w"> </span>forms.py<span class="w">        </span><span class="c1"># Formularios utilizados dentro del módulo</span>
+│──<span class="w"> </span>models.py<span class="w">       </span><span class="c1"># Definición de modelos de datos</span>
+│──<span class="w"> </span>urls.py<span class="w">         </span><span class="c1"># Definición de rutas para las vistas del módulo</span>
+│──<span class="w"> </span>views.py<span class="w">        </span><span class="c1"># Lógica de controladores para las vistas</span>
+│──<span class="w"> </span>migrations/<span class="w">     </span><span class="c1"># Archivos de migración para la base de datos</span>
+</pre></div>
+</div>
+</section>
+<section id="modelos-de-datos-models-py">
+<h2>Modelos de Datos (models.py)<a class="headerlink" href="#modelos-de-datos-models-py" title="Link to this heading">#</a></h2>
+<p>Define las entidades utilizadas en el sistema para gestionar las solicitudes de mantenimiento y su historial.</p>
+<section id="nuevasolicitudmantenimiento">
+<h3>NuevaSolicitudMantenimiento<a class="headerlink" href="#nuevasolicitudmantenimiento" title="Link to this heading">#</a></h3>
+<p>El modelo NuevaSolicitudMantenimiento gestiona las solicitudes de mantenimiento de vehículos, registrando detalles como la información del solicitante, el vehículo, los problemas a resolver, y el progreso de la solicitud.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Campos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">solicitante</span></code>: (ForeignKey) Relación con el modelo Usuario, indicando el usuario que realiza la solicitud.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">telefono</span></code>: (IntegerField) Teléfono del solicitante.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vehiculo</span></code>: (ForeignKey) Relación con el modelo Vehiculo, indicando el vehículo al que se le solicita el mantenimiento.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">faena</span></code>: (ForeignKey) Relación con el modelo Faena, indicando la faena asociada a la solicitud de mantenimiento.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">patente</span></code>: (CharField) Patente del vehículo.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kilometraje</span></code>: (IntegerField) Kilometraje del vehículo al momento de la solicitud de mantenimiento.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">progreso</span></code>: (CharField) Indica el progreso de la solicitud de mantenimiento (por ejemplo, «Creado», «En proceso»).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">empresaMantenimiento</span></code>: (ForeignKey) Relación con el modelo EmpresaServicios, indicando la empresa encargada del mantenimiento.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">turno</span></code>: (CharField) El turno en el que se realizó la solicitud de mantenimiento.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">problemas</span></code>: (ManyToManyField) Relación con el modelo TipoFallaVehiculo, a través del modelo intermedio SolicitudMantenimientoProblemas, indicando los problemas que presenta el vehículo.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">comentario</span></code>: (CharField) Comentarios adicionales sobre la solicitud de mantenimiento.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">avisoJefatura</span></code>: (CharField) Indica si se ha notificado a la jefatura directa del solicitante sobre la solicitud de mantenimiento.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status</span></code>: (BooleanField) Estado de la solicitud de mantenimiento (activo/inactivo).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fechacreacion</span></code>: (DateTimeField) Fecha y hora en que se creó la solicitud de mantenimiento.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Métodos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">generaNombre</span></code>: Función que genera dinámicamente el nombre y ruta de las imágenes de la solicitud de mantenimiento. Utiliza la patente del vehículo y la fecha de creación para crear una estructura de carpeta organizada para las imágenes subidas.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">__str__(self)</span></code>: Devuelve una cadena que contiene los problemas asociados a la solicitud de mantenimiento.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Imágenes:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">fotografiaUno</span></code>: (ImageField) Imagen asociada a la solicitud, con un nombre de archivo generado dinámicamente.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fotografiaDos</span></code>: (ImageField) Otra imagen asociada a la solicitud.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fotografiaTres</span></code>: (ImageField) Otra imagen asociada a la solicitud.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="historialsolicitudmantenimiento">
+<h3>HistorialSolicitudMantenimiento<a class="headerlink" href="#historialsolicitudmantenimiento" title="Link to this heading">#</a></h3>
+<p>El modelo HistorialSolicitudMantenimiento permite realizar el seguimiento del historial de solicitudes de mantenimiento, guardando los cambios de progreso y actualizaciones relevantes sobre el estado de cada solicitud de mantenimiento.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Campos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">solicitud</span></code>: (ForeignKey) Relación con el modelo NuevaSolicitudMantenimiento, indicando la solicitud de mantenimiento a la que pertenece este historial.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">solicitante</span></code>: (ForeignKey) Relación con el modelo Usuario, indicando el usuario que está realizando el seguimiento o actualización de la solicitud de mantenimiento.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">progreso</span></code>: (CharField) Indica el progreso de la solicitud de mantenimiento (por ejemplo, «En proceso», «Finalizado»).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">empresaMantenimiento</span></code>: (ForeignKey) Relación con el modelo EmpresaServicios, indicando la empresa que está realizando el mantenimiento.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fechacreacion</span></code>: (DateTimeField) Fecha y hora en que se registró la actualización o cambio en el historial de la solicitud de mantenimiento.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Métodos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">__str__(self)</span></code>: Devuelve una cadena que contiene el progreso de la solicitud de mantenimiento.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Metadatos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose_name</span></code>: «Historial Registro de Mantenimiento».</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose_name_plural</span></code>: «Historial Registros de Mantenimientos».</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">db_table</span></code>: maintenance_register_history.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="signal-create-historial-solicitud-mantenimiento">
+<h3>Signal: create_historial_solicitud_mantenimiento<a class="headerlink" href="#signal-create-historial-solicitud-mantenimiento" title="Link to this heading">#</a></h3>
+<p>La señal create_historial_solicitud_mantenimiento se ejecuta automáticamente cuando se guarda una nueva instancia del modelo NuevaSolicitudMantenimiento. Su objetivo es crear un registro en el modelo HistorialSolicitudMantenimiento cada vez que se crea una nueva solicitud de mantenimiento, almacenando el progreso inicial y la información del solicitante.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Detalles:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;receiver(post_save,</span> <span class="pre">sender=NuevaSolicitudMantenimiento)</span></code>: Esto indica que la función create_historial_solicitud_mantenimiento se ejecutará después de guardar una nueva instancia del modelo NuevaSolicitudMantenimiento (post_save). La señal se activa solo cuando se crea una nueva instancia (cuando created es True).</p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">create_historial_solicitud_mantenimiento</span></code>:</dt><dd><ul>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Parámetros</span></code>:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sender</span></code>: Es el modelo que dispara la señal, en este caso, NuevaSolicitudMantenimiento.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">instance</span></code>: Es la instancia de NuevaSolicitudMantenimiento que acaba de ser guardada.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">created</span></code>: Es un valor booleano que indica si la instancia fue creada (es True cuando la instancia es nueva).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**kwargs</span></code>: Argumentos adicionales que pueden ser pasados en la señal.</p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Acción</span></code>: Si la instancia es nueva (created es True), se crea un nuevo registro en el modelo HistorialSolicitudMantenimiento. Este registro contiene los siguientes datos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">solicitud</span></code>: Relación con la instancia de NuevaSolicitudMantenimiento recién creada.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">solicitante</span></code>: Relación con el usuario que hizo la solicitud, usando instance.solicitante.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">progreso</span></code>: El estado inicial del progreso de la solicitud, usando instance.progreso.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="solicitudmantenimientoproblemas">
+<h3>SolicitudMantenimientoProblemas<a class="headerlink" href="#solicitudmantenimientoproblemas" title="Link to this heading">#</a></h3>
+<p>El modelo SolicitudMantenimientoProblemas representa una relación entre los problemas de un vehículo, la solicitud de mantenimiento y detalles adicionales como el valor del servicio y una descripción.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Campos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">fallaVehiculo</span> <span class="pre">(ForeignKey</span> <span class="pre">a</span> <span class="pre">TipoFallaVehiculo)</span></code>:Relaciona este modelo con el tipo de falla del vehículo. Hace referencia al modelo TipoFallaVehiculo, que probablemente describe diferentes tipos de fallas que pueden ocurrir en un vehículo.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose_name</span></code>: “Falla Vehiculo”.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">solicitudMantenimiento</span> <span class="pre">(ForeignKey</span> <span class="pre">a</span> <span class="pre">NuevaSolicitudMantenimiento)</span></code>:Relaciona el problema con la solicitud de mantenimiento a la que pertenece. Hace referencia al modelo NuevaSolicitudMantenimiento.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose_name</span></code>: “Solicitud Mantenimiento”.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">valorServicio</span> <span class="pre">(IntegerField)</span></code>: Representa el costo asociado al servicio para resolver el problema del vehículo. Este valor puede ser opcional, ya que es nullable y puede quedar en blanco.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose_name</span></code>: “Valor Servicio”.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">descripcion</span> <span class="pre">(CharField)</span></code>:Permite almacenar una descripción adicional sobre el problema o el servicio que se está proporcionando.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_length</span></code>: 100 caracteres.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose_name</span></code>: “Descripción”.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="nuevasolicitudmantenimientomaquinaria">
+<h3>NuevaSolicitudMantenimientoMaquinaria<a class="headerlink" href="#nuevasolicitudmantenimientomaquinaria" title="Link to this heading">#</a></h3>
+<p>Este modelo permite registrar las solicitudes de mantenimiento de maquinaria, lo que facilita el seguimiento y control de las incidencias y reparaciones de equipos.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Campos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">solicitante</span></code>: (ForeignKey) Relación con Usuario, indicando quién está realizando la solicitud.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">telefono</span></code>: (IntegerField) Número de teléfono del solicitante.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">maquinaria</span></code>: (ForeignKey) Relación con Maquinaria, indicando qué maquinaria necesita mantenimiento.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">faena</span></code>: (ForeignKey) Relación con Faena, para saber en qué faena se encuentra la maquinaria.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">horometro</span></code>: (IntegerField) Valor del horómetro, indica el tiempo de uso de la maquinaria.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">progreso</span></code>: (CharField) Estado del progreso de la solicitud, con opciones definidas por progreso.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">empresaMantenimiento</span></code>: (ForeignKey) Relación con EmpresaServicios, especificando la empresa encargada del mantenimiento.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">turno</span></code>: (CharField) Turno en que se realiza el mantenimiento, definido por las opciones de turno.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">problemas</span></code>: (ManyToManyField) Relación con FallaMaquinaria, para detallar los problemas que afectan a la maquinaria.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">comentario</span></code>: (CharField) Comentarios adicionales sobre la solicitud.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">avisoJefatura</span></code>: (CharField) Indica si se ha notificado a la jefatura directa sobre la solicitud.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status</span></code>: (BooleanField) Estado de la solicitud (True para activa, False para cerrada o resuelta).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fechacreacion</span></code>: (DateTimeField) Fecha y hora de creación del registro de la solicitud.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Archivos de imágenes:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">fotografiaUno</span></code>: (ImageField) Imagen relacionada con la solicitud.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fotografiaDos</span></code>: (ImageField) Segunda imagen asociada, opcional.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Método</span> <span class="pre">generaNombre</span></code>: Genera un nombre de archivo único basado en la fecha de la solicitud y el nombre de la maquinaria.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Métodos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">__str__(self)</span></code>: Devuelve una cadena con los problemas asociados a la solicitud de mantenimiento.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Metadatos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose_name</span></code>: «Registro de Mantenimiento Maquinaria».</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose_name_plural</span></code>: «Registros de Mantenimientos Maquinarias».</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">db_table</span></code>: maintenance_register_machines.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="historialsolicitudmantenimientomaquinaria">
+<h3>HistorialSolicitudMantenimientoMaquinaria<a class="headerlink" href="#historialsolicitudmantenimientomaquinaria" title="Link to this heading">#</a></h3>
+<p>Este modelo sirve para llevar un registro del historial de las solicitudes de mantenimiento de maquinaria, permitiendo realizar un seguimiento de su progreso a lo largo del tiempo.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Campos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">solicitud</span></code>: (ForeignKey) Relación con NuevaSolicitudMantenimientoMaquinaria, asociando este historial a una solicitud específica.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">solicitante</span></code>: (ForeignKey) Relación con Usuario, indicando quién está gestionando o realizando un seguimiento de la solicitud.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">progreso</span></code>: (CharField) Estado del progreso de la solicitud, con opciones definidas por progreso.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">empresaMantenimiento</span></code>: (ForeignKey) Relación con EmpresaServicios, indicando qué empresa está gestionando el mantenimiento de la maquinaria.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fechacreacion</span></code>: (DateTimeField) Fecha y hora en que se registró el historial de la solicitud.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Métodos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">__str__(self)</span></code>: Devuelve el progreso de la solicitud como una cadena.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Metadatos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose_name</span></code>: «Historial Registro de Mantenimiento Maquinaria».</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose_name_plural</span></code>: «Historial Registros de Mantenimientos Maquinarias».</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">db_table</span></code>: maintenance_register_history_machines.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="signal-create-historial-solicitud-mantenimiento-maquinaria">
+<h3>Signal: create_historial_solicitud_mantenimiento_maquinaria<a class="headerlink" href="#signal-create-historial-solicitud-mantenimiento-maquinaria" title="Link to this heading">#</a></h3>
+<p>Esta es una señal que se activa automáticamente después de que se guarda una nueva instancia del modelo NuevaSolicitudMantenimientoMaquinaria. La señal crea un historial relacionado en el modelo HistorialSolicitudMantenimientoMaquinaria para registrar el progreso de la solicitud.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Funcionamiento:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;receiver(post_save,</span> <span class="pre">sender=NuevaSolicitudMantenimientoMaquinaria)</span></code>: Se define una señal que se ejecuta después de que se guarda una nueva instancia del modelo NuevaSolicitudMantenimientoMaquinaria (evento post_save).</p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">create_historial_solicitud_mantenimiento_maquinaria(sender,</span> <span class="pre">instance,</span> <span class="pre">created,</span> <span class="pre">**kwargs)</span></code>: Define la función que manejará la señal. Recibe varios parámetros:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sender</span></code>: El modelo que envía la señal (en este caso, NuevaSolicitudMantenimientoMaquinaria).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">instance</span></code>: La instancia del modelo que se ha guardado (en este caso, la nueva solicitud de mantenimiento de maquinaria).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">created</span></code>: Un valor booleano que indica si la instancia fue creada por primera vez o si se actualizó.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kwargs</span></code>: Cualquier argumento adicional (no utilizado en este caso).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">created</span></code>: Verifica si la instancia es nueva (es decir, si se acaba de crear una nueva solicitud). Si es así, se crea una nueva entrada en el historial de solicitudes de mantenimiento.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">HistorialSolicitudMantenimientoMaquinaria.objects.create(...)</span></code>: Si la solicitud es nueva, crea un nuevo registro en el modelo HistorialSolicitudMantenimientoMaquinaria, con la siguiente información:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">solicitud</span></code>: La instancia recién creada de NuevaSolicitudMantenimientoMaquinaria.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">solicitante</span></code>: El solicitante asociado a la nueva solicitud de mantenimiento.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">progreso</span></code>: El progreso de la solicitud, tal como está definido en el modelo NuevaSolicitudMantenimientoMaquinaria.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="solicitudmantenimientoproblemasmaquinaria">
+<h3>SolicitudMantenimientoProblemasMaquinaria<a class="headerlink" href="#solicitudmantenimientoproblemasmaquinaria" title="Link to this heading">#</a></h3>
+<p>Este modelo relaciona las fallas de la maquinaria con las solicitudes de mantenimiento, permitiendo registrar los problemas específicos que requiere la maquinaria durante el mantenimiento.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Campos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">fallaMaquinaria</span></code>: (ForeignKey) Relación con FallaMaquinaria, especificando el tipo de falla o problema detectado en la maquinaria.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">solicitudMantenimiento</span></code>: (ForeignKey) Relación con NuevaSolicitudMantenimientoMaquinaria, asociando el problema de la maquinaria con una solicitud de mantenimiento en particular.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">valorServicio</span></code>: (IntegerField) El valor del servicio asociado a la falla, con un valor entero opcional.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">descripcion</span></code>: (CharField) Descripción detallada del problema de la maquinaria, permitiendo que el usuario ingrese más información.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Metadatos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose_name</span></code>: «Falla Maquinaria en Solicitud de Mantenimiento».</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose_name_plural</span></code>: «Fallos Maquinaria en Solicitudes de Mantenimiento».</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">db_table</span></code>: maintenance_problem_request_machines.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="mantenimiento">
+<h3>Mantenimiento<a class="headerlink" href="#mantenimiento" title="Link to this heading">#</a></h3>
+<p>Este modelo representa el estado de progreso de las solicitudes de mantenimiento de maquinaria, con distintas etapas definidas para cada solicitud.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Campos:</dt><dd><ul>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">progreso</span></code>: (CharField) Almacena el estado de progreso del mantenimiento mediante un conjunto de opciones predefinidas:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">'1'</span></code>: «Solicitud»</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'2'</span></code>: «En Mantención»</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'3'</span></code>: «Segunda Revisión»</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'4'</span></code>: «Terminada»</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'5'</span></code>: «Anulada»</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Métodos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_nombre_progreso</span></code>: (classmethod) Un método de clase que devuelve el nombre correspondiente al progreso del mantenimiento dado un número, usando las opciones definidas en progreso_choices. Si el número no se encuentra en las opciones, devuelve “Desconocido”.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Metadatos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose_name</span></code>: «Mantenimiento».</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose_name_plural</span></code>: «Mantenimientos».</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">db_table</span></code>: maintenance_register.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+<section id="formularios-forms-py">
+<h2>Formularios (forms.py)<a class="headerlink" href="#formularios-forms-py" title="Link to this heading">#</a></h2>
+<p>Contiene los formularios utilizados en las vistas.</p>
+<section id="formnuevasolicitudmantenimiento">
+<h3>FormNuevaSolicitudMantenimiento<a class="headerlink" href="#formnuevasolicitudmantenimiento" title="Link to this heading">#</a></h3>
+<p>Este formulario permite la creación de una nueva solicitud de mantenimiento para un vehículo, permitiendo al usuario registrar detalles sobre el solicitante, el vehículo, el kilometraje, los problemas identificados y cualquier comentario adicional.</p>
+<section id="campos-del-formulario">
+<h4>Campos del Formulario<a class="headerlink" href="#campos-del-formulario" title="Link to this heading">#</a></h4>
+<ol class="arabic">
+<li><p><code class="docutils literal notranslate"><span class="pre">solicitante</span></code></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Tipo: CharField</p></li>
+<li><p>Etiqueta: Nombre Solicitante</p></li>
+<li><p>Descripción: Nombre de la persona que está solicitando el mantenimiento.</p></li>
+<li><p>Requerido: Sí (deshabilitado para edición)</p></li>
+<li><p>Widget: TextInput, tipo <code class="docutils literal notranslate"><span class="pre">text</span></code></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">telefono</span></code></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Tipo: CharField</p></li>
+<li><p>Etiqueta: Teléfono</p></li>
+<li><p>Descripción: Teléfono del solicitante.</p></li>
+<li><p>Requerido: No</p></li>
+<li><p>Widget: TextInput, tipo <code class="docutils literal notranslate"><span class="pre">text</span></code></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">turno</span></code></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Tipo: CharField</p></li>
+<li><p>Etiqueta: Turno (solo si corresponde)</p></li>
+<li><p>Descripción: Turno de trabajo del solicitante (opcional).</p></li>
+<li><p>Requerido: No</p></li>
+<li><p>Widget: Select, estilo centrado.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vehiculo</span></code></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Tipo: ForeignKey a <code class="docutils literal notranslate"><span class="pre">Vehiculo</span></code></p></li>
+<li><p>Etiqueta: Vehículo</p></li>
+<li><p>Descripción: El vehículo para el que se solicita el mantenimiento.</p></li>
+<li><p>Requerido: Sí</p></li>
+<li><p>Widget: Select, estilo centrado.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kilometraje</span></code></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Tipo: IntegerField</p></li>
+<li><p>Etiqueta: Kilometraje</p></li>
+<li><p>Descripción: Kilometraje actual del vehículo al momento de la solicitud.</p></li>
+<li><p>Requerido: Sí</p></li>
+<li><p>Widget: TextInput, tipo <code class="docutils literal notranslate"><span class="pre">number</span></code></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">problemas</span></code></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Tipo: CharField</p></li>
+<li><p>Etiqueta: Problemas</p></li>
+<li><p>Descripción: Descripción de los problemas identificados en el vehículo.</p></li>
+<li><p>Requerido: Sí</p></li>
+<li><p>Widget: Select2MultipleWidget, con estilo <code class="docutils literal notranslate"><span class="pre">width:</span> <span class="pre">50%</span></code></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">comentario</span></code></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Tipo: CharField</p></li>
+<li><p>Etiqueta: Comentario</p></li>
+<li><p>Descripción: Comentarios adicionales sobre la solicitud.</p></li>
+<li><p>Requerido: No</p></li>
+<li><p>Widget: Textarea, filas 2</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+</section>
+<section id="consideraciones-adicionales">
+<h4>Consideraciones Adicionales<a class="headerlink" href="#consideraciones-adicionales" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>El campo <code class="docutils literal notranslate"><span class="pre">vehiculo</span></code> muestra un listado de vehículos filtrados según los proporcionados al formulario. Si no se pasan vehículos, el campo será vacío.</p></li>
+<li><p>El campo <code class="docutils literal notranslate"><span class="pre">problemas</span></code> utiliza un widget especial para permitir la selección múltiple de problemas relacionados con el vehículo.</p></li>
+<li><p>El campo <code class="docutils literal notranslate"><span class="pre">solicitante</span></code> está deshabilitado, ya que se espera que sea completado automáticamente con el nombre del usuario que está creando la solicitud.</p></li>
+</ul>
+</section>
+</section>
+<section id="formeditsolicitudmantenimiento">
+<h3>FormEditSolicitudMantenimiento<a class="headerlink" href="#formeditsolicitudmantenimiento" title="Link to this heading">#</a></h3>
+<p>Este formulario permite la edición de una solicitud de mantenimiento para un vehículo ya registrado. Permite modificar detalles sobre el solicitante, el vehículo, el kilometraje, los problemas y comentarios adicionales.</p>
+<section id="id1">
+<h4>Campos del Formulario<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
+<ol class="arabic simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">solicitante</span></code></dt><dd><ul class="simple">
+<li><p>Tipo: CharField</p></li>
+<li><p>Etiqueta: Nombre Solicitante</p></li>
+<li><p>Descripción: Nombre de la persona que está solicitando el mantenimiento.</p></li>
+<li><p>Requerido: Sí (deshabilitado para edición)</p></li>
+<li><p>Widget: TextInput, tipo <code class="docutils literal notranslate"><span class="pre">text</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">telefono</span></code></dt><dd><ul class="simple">
+<li><p>Tipo: CharField</p></li>
+<li><p>Etiqueta: Teléfono</p></li>
+<li><p>Descripción: Teléfono del solicitante.</p></li>
+<li><p>Requerido: No</p></li>
+<li><p>Widget: TextInput, tipo <code class="docutils literal notranslate"><span class="pre">text</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">turno</span></code></dt><dd><ul class="simple">
+<li><p>Tipo: CharField</p></li>
+<li><p>Etiqueta: Turno (solo si corresponde)</p></li>
+<li><p>Descripción: Turno de trabajo del solicitante (opcional).</p></li>
+<li><p>Requerido: No</p></li>
+<li><p>Widget: Select, estilo centrado.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">vehiculo</span></code></dt><dd><ul class="simple">
+<li><p>Tipo: ForeignKey a <code class="docutils literal notranslate"><span class="pre">Vehiculo</span></code></p></li>
+<li><p>Etiqueta: Vehículo</p></li>
+<li><p>Descripción: El vehículo para el que se solicita el mantenimiento.</p></li>
+<li><p>Requerido: Sí</p></li>
+<li><p>Widget: Select, estilo centrado.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">kilometraje</span></code></dt><dd><ul class="simple">
+<li><p>Tipo: IntegerField</p></li>
+<li><p>Etiqueta: Kilometraje</p></li>
+<li><p>Descripción: Kilometraje actual del vehículo al momento de la solicitud.</p></li>
+<li><p>Requerido: Sí</p></li>
+<li><p>Widget: TextInput, tipo <code class="docutils literal notranslate"><span class="pre">text</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">problemas</span></code></dt><dd><ul class="simple">
+<li><p>Tipo: CharField</p></li>
+<li><p>Etiqueta: Problemas</p></li>
+<li><p>Descripción: Descripción de los problemas identificados en el vehículo.</p></li>
+<li><p>Requerido: No</p></li>
+<li><p>Widget: Select2MultipleWidget, con estilo <code class="docutils literal notranslate"><span class="pre">width:</span> <span class="pre">50%</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">comentario</span></code></dt><dd><ul class="simple">
+<li><p>Tipo: CharField</p></li>
+<li><p>Etiqueta: Comentario</p></li>
+<li><p>Descripción: Comentarios adicionales sobre la solicitud.</p></li>
+<li><p>Requerido: No</p></li>
+<li><p>Widget: Textarea, filas 2</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</section>
+<section id="id2">
+<h4>Consideraciones Adicionales<a class="headerlink" href="#id2" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>El campo <code class="docutils literal notranslate"><span class="pre">vehiculo</span></code> muestra un listado de vehículos filtrados según los proporcionados al formulario. Si no se pasan vehículos, el campo será vacío.</p></li>
+<li><p>El campo <code class="docutils literal notranslate"><span class="pre">problemas</span></code> utiliza un widget especial para permitir la selección múltiple de problemas relacionados con el vehículo.</p></li>
+<li><p>El campo <code class="docutils literal notranslate"><span class="pre">solicitante</span></code> está deshabilitado, ya que se espera que sea completado automáticamente con el nombre del usuario que está editando la solicitud.</p></li>
+</ul>
+</section>
+</section>
+<section id="formprocesarsolicitudmantenimiento">
+<h3>FormProcesarSolicitudMantenimiento<a class="headerlink" href="#formprocesarsolicitudmantenimiento" title="Link to this heading">#</a></h3>
+<p>Este formulario permite procesar una solicitud de mantenimiento, actualizando el estado de la solicitud y asignando la empresa encargada del mantenimiento.</p>
+<section id="id3">
+<h4>Campos del Formulario<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
+<ol class="arabic simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">progreso</span></code></dt><dd><ul class="simple">
+<li><p>Tipo: CharField</p></li>
+<li><p>Etiqueta: Estado Solicitud</p></li>
+<li><p>Descripción: Indica el estado actual de la solicitud de mantenimiento.</p></li>
+<li><p>Requerido: Sí</p></li>
+<li><p>Widget: Select, con opciones predefinidas para los estados de la solicitud.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">empresaMantenimiento</span></code></dt><dd><ul class="simple">
+<li><p>Tipo: ForeignKey a <code class="docutils literal notranslate"><span class="pre">EmpresaMantenimiento</span></code></p></li>
+<li><p>Etiqueta: Empresa de Mantenimiento</p></li>
+<li><p>Descripción: Empresa encargada de realizar el mantenimiento del vehículo.</p></li>
+<li><p>Requerido: Sí</p></li>
+<li><p>Widget: Select</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</section>
+<section id="id4">
+<h4>Consideraciones Adicionales<a class="headerlink" href="#id4" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>El campo <code class="docutils literal notranslate"><span class="pre">progreso</span></code> permite seleccionar el estado de la solicitud. Es un campo obligatorio.</p></li>
+<li><p>El campo <code class="docutils literal notranslate"><span class="pre">empresaMantenimiento</span></code> es obligatorio y permite asignar una empresa de mantenimiento al proceso de la solicitud.</p></li>
+</ul>
+</section>
+</section>
+<section id="formeditsolicitudmantenimientomaquinaria">
+<h3>FormEditSolicitudMantenimientoMaquinaria<a class="headerlink" href="#formeditsolicitudmantenimientomaquinaria" title="Link to this heading">#</a></h3>
+<p>Este formulario permite la edición de una solicitud de mantenimiento de maquinaria previamente creada.</p>
+<section id="id5">
+<h4>Campos del Formulario<a class="headerlink" href="#id5" title="Link to this heading">#</a></h4>
+<ol class="arabic simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">solicitante</span></code></dt><dd><ul class="simple">
+<li><p>Etiqueta: Nombre Solicitante</p></li>
+<li><p>Descripción: Nombre de la persona que solicita el mantenimiento.</p></li>
+<li><p>Requerido: Sí</p></li>
+<li><p>Widget: TextInput</p></li>
+<li><p>Deshabilitado: Sí</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">telefono</span></code></dt><dd><ul class="simple">
+<li><p>Etiqueta: Teléfono</p></li>
+<li><p>Descripción: Teléfono de contacto del solicitante.</p></li>
+<li><p>Requerido: No</p></li>
+<li><p>Widget: TextInput</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">turno</span></code></dt><dd><ul class="simple">
+<li><p>Etiqueta: Turno (solo si corresponde)</p></li>
+<li><p>Descripción: Turno de trabajo del solicitante, si aplica.</p></li>
+<li><p>Requerido: No</p></li>
+<li><p>Widget: Select</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">maquinaria</span></code></dt><dd><ul class="simple">
+<li><p>Etiqueta: Maquinaria</p></li>
+<li><p>Descripción: Maquinaria que requiere el mantenimiento.</p></li>
+<li><p>Requerido: Sí</p></li>
+<li><p>Widget: Select</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">horometro</span></code></dt><dd><ul class="simple">
+<li><p>Etiqueta: Horómetro</p></li>
+<li><p>Descripción: Indica el valor actual del horómetro de la maquinaria.</p></li>
+<li><p>Requerido: Sí</p></li>
+<li><p>Widget: TextInput</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">problemas</span></code></dt><dd><ul class="simple">
+<li><p>Etiqueta: Problemas</p></li>
+<li><p>Descripción: Lista de problemas detectados en la maquinaria.</p></li>
+<li><p>Requerido: No</p></li>
+<li><p>Widget: Select2MultipleWidget</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">comentario</span></code></dt><dd><ul class="simple">
+<li><p>Etiqueta: Comentario</p></li>
+<li><p>Descripción: Comentarios adicionales del solicitante.</p></li>
+<li><p>Requerido: No</p></li>
+<li><p>Widget: Textarea</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</section>
+<section id="id6">
+<h4>Consideraciones Adicionales<a class="headerlink" href="#id6" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">solicitante</span></code> es un campo obligatorio y está deshabilitado para su edición.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">turno</span></code> es opcional.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">problemas</span></code> es opcional y permite múltiples selecciones.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">maquinaria</span></code> se filtra para mostrar solo las disponibles según el contexto.</p></li>
+</ul>
+</section>
+</section>
+<section id="formprocesarsolicitudmantenimientomaquinaria">
+<h3>FormProcesarSolicitudMantenimientoMaquinaria<a class="headerlink" href="#formprocesarsolicitudmantenimientomaquinaria" title="Link to this heading">#</a></h3>
+<p>Este formulario permite actualizar el estado de una solicitud de mantenimiento de maquinaria.</p>
+<section id="id7">
+<h4>Campos del Formulario<a class="headerlink" href="#id7" title="Link to this heading">#</a></h4>
+<ol class="arabic simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">progreso</span></code></dt><dd><ul class="simple">
+<li><p>Etiqueta: Estado Solicitud</p></li>
+<li><p>Descripción: Indica el estado actual de la solicitud de mantenimiento.</p></li>
+<li><p>Requerido: Sí</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">empresaMantenimiento</span></code></dt><dd><ul class="simple">
+<li><p>Etiqueta: Empresa de Mantenimiento</p></li>
+<li><p>Descripción: Empresa encargada de realizar el mantenimiento.</p></li>
+<li><p>Requerido: No</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</section>
+<section id="id8">
+<h4>Consideraciones Adicionales<a class="headerlink" href="#id8" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">progreso</span></code> es obligatorio para registrar el estado de la solicitud.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">empresaMantenimiento</span></code> no es obligatorio, permitiendo flexibilidad en el registro de la información.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="vistas-views-py">
+<h2>Vistas (views.py)<a class="headerlink" href="#vistas-views-py" title="Link to this heading">#</a></h2>
+<p>Define la lógica para mostrar y procesar información en la interfaz.</p>
+<section id="new-maintenance-request">
+<h3>new_maintenance_request<a class="headerlink" href="#new-maintenance-request" title="Link to this heading">#</a></h3>
+<p>Esta vista permite crear una nueva solicitud de mantenimiento para un vehículo.</p>
+<section id="decoradores">
+<h4>Decoradores<a class="headerlink" href="#decoradores" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;login_required</span></code>:</dt><dd><p>Restringe el acceso a usuarios autenticados.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="funcionamiento">
+<h4>Funcionamiento<a class="headerlink" href="#funcionamiento" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Se obtiene el perfil del usuario a partir del modelo <code class="docutils literal notranslate"><span class="pre">UsuarioProfile</span></code>.</p></li>
+<li><p>Si el usuario no tiene una faena asignada, se muestran todos los vehículos activos.</p></li>
+<li><p>Si el usuario tiene una faena asignada, solo se muestran los vehículos asignados a esa faena.</p></li>
+<li><p>Se renderiza el formulario <code class="docutils literal notranslate"><span class="pre">FormNuevaSolicitudMantenimiento</span></code> con la lista de vehículos y el nombre del solicitante.</p></li>
+</ul>
+</section>
+<section id="retorno">
+<h4>Retorno<a class="headerlink" href="#retorno" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Se renderiza la plantilla <code class="docutils literal notranslate"><span class="pre">new_maintenance_request.html</span></code> con el formulario para crear la solicitud de mantenimiento.</p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="save-new-maintenance-request">
+<h3>save_new_maintenance_request<a class="headerlink" href="#save-new-maintenance-request" title="Link to this heading">#</a></h3>
+<p>Esta vista maneja la creación de una nueva solicitud de mantenimiento para un vehículo.</p>
+<section id="id9">
+<h4>Decoradores<a class="headerlink" href="#id9" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;login_required</span></code>:</dt><dd><p>Restringe el acceso a usuarios autenticados.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="id10">
+<h4>Funcionamiento<a class="headerlink" href="#id10" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>La vista recibe una solicitud <code class="docutils literal notranslate"><span class="pre">POST</span></code> con los datos del formulario <code class="docutils literal notranslate"><span class="pre">FormNuevaSolicitudMantenimiento</span></code>.</p></li>
+<li><p>Se procesan las fotografías enviadas en la solicitud, usando la función <code class="docutils literal notranslate"><span class="pre">procesar_fotografia_dos</span></code>.</p></li>
+<li><p>Se obtiene el vehículo y la faena asociada.</p></li>
+<li><p>Se crea un registro en el modelo <code class="docutils literal notranslate"><span class="pre">NuevaSolicitudMantenimiento</span></code> con los datos del formulario.</p></li>
+<li><p>Se crean los registros relacionados con los problemas reportados para el vehículo.</p></li>
+<li><p>Se crea un nuevo registro de kilometraje en el modelo <code class="docutils literal notranslate"><span class="pre">NuevoKilometraje</span></code>.</p></li>
+<li><p>Se envía una notificación por email y SMS informando sobre la nueva solicitud.</p></li>
+</ul>
+</section>
+<section id="id11">
+<h4>Retorno<a class="headerlink" href="#id11" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Si la solicitud es procesada con éxito, se redirige a la vista <code class="docutils literal notranslate"><span class="pre">new_maintenance_request</span></code> y se muestra un mensaje de éxito.</p></li>
+<li><p>Si no, se redirige de nuevo a la vista <code class="docutils literal notranslate"><span class="pre">new_maintenance_request</span></code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="manage-maintenance-request">
+<h3>manage_maintenance_request<a class="headerlink" href="#manage-maintenance-request" title="Link to this heading">#</a></h3>
+<p>Esta vista permite gestionar las solicitudes de mantenimiento para los vehículos.</p>
+<section id="id12">
+<h4>Decoradores<a class="headerlink" href="#id12" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;login_required</span></code>:</dt><dd><p>Restringe el acceso a usuarios autenticados.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;admin_or_jefe_mantencion_or_supervisor_required</span></code>:</dt><dd><p>Restringe el acceso a usuarios con roles de administrador, jefe de mantención o supervisor.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="id13">
+<h4>Funcionamiento<a class="headerlink" href="#id13" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Se obtiene el perfil del usuario a partir del modelo <code class="docutils literal notranslate"><span class="pre">UsuarioProfile</span></code>.</p></li>
+<li><p>Si el usuario no tiene una faena asignada, se muestran todas las solicitudes de mantenimiento.</p></li>
+<li><p>Si el usuario tiene una faena asignada, se filtran las solicitudes por faena.</p></li>
+<li><p>Se renderiza la plantilla <code class="docutils literal notranslate"><span class="pre">manage_maintenance_request.html</span></code> con las solicitudes de mantenimiento y el progreso.</p></li>
+</ul>
+</section>
+<section id="id14">
+<h4>Retorno<a class="headerlink" href="#id14" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Se renderiza la plantilla <code class="docutils literal notranslate"><span class="pre">manage_maintenance_request.html</span></code> con la lista de solicitudes y las opciones de progreso.</p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="edit-maintenance-request">
+<h3>edit_maintenance_request<a class="headerlink" href="#edit-maintenance-request" title="Link to this heading">#</a></h3>
+<p>Esta vista permite editar una solicitud de mantenimiento existente.</p>
+<section id="id15">
+<h4>Decoradores<a class="headerlink" href="#id15" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;login_required</span></code>:</dt><dd><p>Restringe el acceso a usuarios autenticados.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;admin_or_jefe_mantencion_or_supervisor_required</span></code>:</dt><dd><p>Restringe el acceso a usuarios con roles de administrador, jefe de mantención o supervisor.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="id16">
+<h4>Funcionamiento<a class="headerlink" href="#id16" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Se intenta obtener el <code class="docutils literal notranslate"><span class="pre">origen_id</span></code> y el <code class="docutils literal notranslate"><span class="pre">solicitud_id</span></code> de la solicitud desde la solicitud <code class="docutils literal notranslate"><span class="pre">POST</span></code>.</p></li>
+<li><p>Si no se encuentran, se usan los valores almacenados en la sesión.</p></li>
+<li><p>Se obtiene la solicitud de mantenimiento a partir del <code class="docutils literal notranslate"><span class="pre">solicitud_id</span></code>.</p></li>
+<li><p>Se obtienen los registros históricos de la solicitud y los problemas asociados.</p></li>
+<li><p>Si el usuario no tiene una faena asignada, se muestran todos los vehículos activos.</p></li>
+<li><p>Si el usuario tiene una faena asignada, solo se muestran los vehículos asignados a esa faena.</p></li>
+<li><p>Se renderiza el formulario de edición <code class="docutils literal notranslate"><span class="pre">FormEditSolicitudMantenimiento</span></code> con los datos de la solicitud y los vehículos.</p></li>
+<li><p>Se renderiza el formulario para procesar la solicitud <code class="docutils literal notranslate"><span class="pre">FormProcesarSolicitudMantenimiento</span></code> con el progreso y la empresa de mantenimiento.</p></li>
+<li><p>Se envía la información de las fotografías asociadas a la solicitud.</p></li>
+</ul>
+</section>
+<section id="id17">
+<h4>Retorno<a class="headerlink" href="#id17" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Se renderiza la plantilla <code class="docutils literal notranslate"><span class="pre">edit_maintenance_request.html</span></code> con los formularios de edición y los datos relacionados con la solicitud de mantenimiento.</p></li>
+</ul>
+</section>
+</section>
+<section id="save-edit-maintenance-request">
+<h3>save_edit_maintenance_request<a class="headerlink" href="#save-edit-maintenance-request" title="Link to this heading">#</a></h3>
+<p>Esta vista permite guardar los cambios en una solicitud de mantenimiento existente.</p>
+<section id="id18">
+<h4>Decoradores<a class="headerlink" href="#id18" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;login_required</span></code>:</dt><dd><p>Restringe el acceso a usuarios autenticados.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;admin_or_jefe_mantencion_or_supervisor_required</span></code>:</dt><dd><p>Restringe el acceso a usuarios con roles de administrador, jefe de mantención o supervisor.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="id19">
+<h4>Funcionamiento<a class="headerlink" href="#id19" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Si se recibe una solicitud <code class="docutils literal notranslate"><span class="pre">POST</span></code>, se procesan los datos y se actualizan los campos de la solicitud de mantenimiento.</p></li>
+<li><p>Si se proporciona una empresa de mantenimiento, se asocia a la solicitud.</p></li>
+<li><p>Los problemas asociados a la solicitud se actualizan según los datos enviados.</p></li>
+<li><p>Las fotografías de la solicitud se procesan, y si es necesario, se actualizan con las nuevas imágenes.</p></li>
+<li><p>Si el progreso de la solicitud cambia o la empresa de mantenimiento cambia, se crea un nuevo historial para reflejar la actualización.</p></li>
+<li><p>Se actualizan los valores de los servicios asociados a los problemas de la solicitud, y se manejan errores si el valor excede el máximo permitido.</p></li>
+<li><p>Se envían notificaciones sobre la actualización de la solicitud.</p></li>
+</ul>
+</section>
+<section id="id20">
+<h4>Retorno<a class="headerlink" href="#id20" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Se redirige al usuario a la vista de <code class="docutils literal notranslate"><span class="pre">manage_maintenance_request</span></code> si la solicitud se procesa correctamente.</p></li>
+<li><p>Si hay un error en el proceso, se muestra un mensaje de error y se redirige a la vista de <code class="docutils literal notranslate"><span class="pre">edit_maintenance_request</span></code>.</p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="status-maintenance-request">
+<h3>status_maintenance_request<a class="headerlink" href="#status-maintenance-request" title="Link to this heading">#</a></h3>
+<p>Esta vista permite cambiar el estado de una solicitud de mantenimiento.</p>
+<section id="id21">
+<h4>Decoradores<a class="headerlink" href="#id21" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;login_required</span></code>:</dt><dd><p>Restringe el acceso a usuarios autenticados.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;admin_or_jefe_mantencion_or_supervisor_required</span></code>:</dt><dd><p>Restringe el acceso a usuarios con roles de administrador, jefe de mantención o supervisor.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="id22">
+<h4>Funcionamiento<a class="headerlink" href="#id22" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Si se recibe una solicitud <code class="docutils literal notranslate"><span class="pre">POST</span></code>, se obtiene la solicitud de mantenimiento correspondiente.</p></li>
+<li><p>Si la solicitud está activa, se cambia su estado a «Terminada».</p></li>
+<li><p>Si la solicitud está terminada, se cambia su estado a «Activa».</p></li>
+<li><p>El cambio de estado se guarda y se muestra un mensaje de éxito al usuario.</p></li>
+</ul>
+</section>
+<section id="id23">
+<h4>Retorno<a class="headerlink" href="#id23" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Se redirige a la vista de <code class="docutils literal notranslate"><span class="pre">manage_maintenance_request</span></code> después de realizar el cambio de estado.</p></li>
+</ul>
+</section>
+</section>
+<section id="new-maintenance-machine-request">
+<h3>new_maintenance_machine_request<a class="headerlink" href="#new-maintenance-machine-request" title="Link to this heading">#</a></h3>
+<p>Esta vista permite crear una nueva solicitud de mantenimiento para maquinaria.</p>
+<section id="id24">
+<h4>Decoradores<a class="headerlink" href="#id24" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;login_required</span></code>:</dt><dd><p>Restringe el acceso a usuarios autenticados.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="id25">
+<h4>Funcionamiento<a class="headerlink" href="#id25" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Se obtiene el perfil del usuario logueado y se verifica si está asignado a una faena.</p></li>
+<li><p>Si no está asignado, se muestran todas las maquinarias disponibles; de lo contrario, se muestran solo las maquinarias asociadas a la faena del usuario.</p></li>
+<li><p>Se obtienen todas las fallas asociadas a las maquinarias y se muestran en la interfaz.</p></li>
+<li><p>Se renderiza un formulario donde el usuario puede llenar los detalles de la solicitud, como el solicitante, teléfono, maquinaria y los problemas a reportar.</p></li>
+</ul>
+</section>
+<section id="id26">
+<h4>Retorno<a class="headerlink" href="#id26" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>La vista retorna el formulario de nueva solicitud de mantenimiento para maquinaria, junto con las maquinarias y fallas disponibles.</p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="save-new-maintenance-machine-request">
+<h3>save_new_maintenance_machine_request<a class="headerlink" href="#save-new-maintenance-machine-request" title="Link to this heading">#</a></h3>
+<p>Esta vista guarda una nueva solicitud de mantenimiento para maquinaria.</p>
+<section id="id27">
+<h4>Decoradores<a class="headerlink" href="#id27" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;login_required</span></code>:</dt><dd><p>Restringe el acceso a usuarios autenticados.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="id28">
+<h4>Funcionamiento<a class="headerlink" href="#id28" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Si se recibe una solicitud <code class="docutils literal notranslate"><span class="pre">POST</span></code>, se procesan los datos de la solicitud.</p></li>
+<li><p>Se obtiene la maquinaria seleccionada y el solicitante.</p></li>
+<li><p>Los problemas seleccionados (fallas) se asocian a la solicitud.</p></li>
+<li><p>Se procesan las fotografías de la solicitud si están presentes (fotografía Uno y Dos).</p></li>
+<li><p>Se obtiene la faena de la maquinaria seleccionada.</p></li>
+<li><p>Se guarda una nueva solicitud de mantenimiento para la maquinaria, incluyendo detalles como horómetro, turno, comentarios, etc.</p></li>
+<li><p>Si el problema contiene la falla «Mantención mayor», se asigna el origen como «Mantención mayor», de lo contrario se usa «Mantención».</p></li>
+<li><p>Se registra el nuevo horómetro para la maquinaria.</p></li>
+<li><p>Se envía una notificación por correo electrónico y SMS sobre la nueva solicitud de mantenimiento.</p></li>
+</ul>
+</section>
+<section id="id29">
+<h4>Retorno<a class="headerlink" href="#id29" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Si la solicitud se guarda correctamente, se muestra un mensaje de éxito y se redirige a la vista de creación de nuevas solicitudes.</p></li>
+<li><p>Si ocurre un error, se redirige nuevamente a la misma vista para intentar nuevamente.</p></li>
+</ul>
+</section>
+</section>
+<section id="manage-maintenance-machine-request">
+<h3>manage_maintenance_machine_request<a class="headerlink" href="#manage-maintenance-machine-request" title="Link to this heading">#</a></h3>
+<p>Esta vista permite gestionar las solicitudes de mantenimiento para maquinaria.</p>
+<section id="id30">
+<h4>Decoradores<a class="headerlink" href="#id30" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;login_required</span></code>:</dt><dd><p>Restringe el acceso a usuarios autenticados.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;admin_or_jefe_mantencion_or_supervisor_required</span></code>:</dt><dd><p>Restringe el acceso solo a usuarios con permisos de administrador, jefe de mantención o supervisor.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="id31">
+<h4>Funcionamiento<a class="headerlink" href="#id31" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Se obtiene el perfil del usuario logueado y se verifica si está asignado a una faena.</p></li>
+<li><p>Si el usuario está asignado a una faena, se filtran las solicitudes de mantenimiento de maquinaria asociadas a esa faena. De lo contrario, se muestran todas las solicitudes.</p></li>
+<li><p>Las solicitudes se ordenan por la fecha de creación en orden descendente.</p></li>
+<li><p>Se renderiza una vista con las solicitudes de mantenimiento y las opciones de progreso disponibles.</p></li>
+</ul>
+</section>
+<section id="id32">
+<h4>Retorno<a class="headerlink" href="#id32" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>La vista retorna un listado de las solicitudes de mantenimiento para maquinaria con la opción de gestionar su progreso.</p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="edit-maintenance-machine-request">
+<h3>edit_maintenance_machine_request<a class="headerlink" href="#edit-maintenance-machine-request" title="Link to this heading">#</a></h3>
+<p>Esta vista permite editar una solicitud de mantenimiento para maquinaria.</p>
+<section id="id33">
+<h4>Decoradores<a class="headerlink" href="#id33" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;login_required</span></code>:</dt><dd><p>Restringe el acceso a usuarios autenticados.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;admin_or_jefe_mantencion_or_supervisor_required</span></code>:</dt><dd><p>Restringe el acceso solo a usuarios con permisos de administrador, jefe de mantención o supervisor.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="id34">
+<h4>Funcionamiento<a class="headerlink" href="#id34" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Se recuperan los datos de la solicitud de mantenimiento seleccionada a través de la sesión o el <code class="docutils literal notranslate"><span class="pre">POST</span></code>.</p></li>
+<li><p>Se obtiene el historial de la solicitud de mantenimiento.</p></li>
+<li><p>Se recuperan los problemas asociados a la solicitud de mantenimiento.</p></li>
+<li><p>Se obtiene la maquinaria seleccionada en la solicitud.</p></li>
+<li><p>Se procesan las fotografías de la solicitud de mantenimiento (si están presentes) y se extraen sus extensiones.</p></li>
+<li><p>Se obtiene la faena del usuario logueado y, en función de eso, se filtran las maquinarias disponibles.</p></li>
+<li><p>Se renderiza un formulario de edición de la solicitud de mantenimiento junto con su historial y las opciones de progreso.</p></li>
+</ul>
+</section>
+<section id="id35">
+<h4>Retorno<a class="headerlink" href="#id35" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>La vista retorna un formulario para editar la solicitud de mantenimiento, mostrando la información actual, problemas asociados, fotografías y el historial de la solicitud.</p></li>
+</ul>
+</section>
+</section>
+<section id="save-edit-maintenance-machine-request">
+<h3>save_edit_maintenance_machine_request<a class="headerlink" href="#save-edit-maintenance-machine-request" title="Link to this heading">#</a></h3>
+<p>Esta vista permite guardar la edición de una solicitud de mantenimiento para maquinaria.</p>
+<section id="id36">
+<h4>Decoradores<a class="headerlink" href="#id36" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;login_required</span></code>:</dt><dd><p>Restringe el acceso a usuarios autenticados.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;admin_or_jefe_mantencion_or_supervisor_required</span></code>:</dt><dd><p>Restringe el acceso solo a usuarios con permisos de administrador, jefe de mantención o supervisor.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="id37">
+<h4>Funcionamiento<a class="headerlink" href="#id37" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Se actualiza la solicitud de mantenimiento de maquinaria con los datos enviados por el formulario.</p></li>
+<li><p>Si se ha seleccionado una empresa de mantenimiento, se actualiza el campo <code class="docutils literal notranslate"><span class="pre">empresaMantenimiento</span></code>.</p></li>
+<li><p>Se actualiza la información de la solicitud, como teléfono, turno, maquinaria, horómetro, progreso, y comentario.</p></li>
+<li><p>Se procesan las fotografías asociadas a la solicitud y se guardan los cambios.</p></li>
+<li><p>Si el progreso de la solicitud o la empresa de mantenimiento ha cambiado, se guarda un historial de la solicitud.</p></li>
+<li><p>Se actualizan los valores de servicio y las descripciones asociadas a los problemas de mantenimiento.</p></li>
+<li><p>Se envía una notificación sobre la actualización de la solicitud.</p></li>
+<li><p>Se redirige a la vista de gestión de solicitudes de mantenimiento para maquinaria.</p></li>
+</ul>
+</section>
+<section id="id38">
+<h4>Retorno<a class="headerlink" href="#id38" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Si todo se procesa correctamente, se redirige a la vista de gestión de solicitudes de mantenimiento para maquinaria.</p></li>
+<li><p>Si ocurre un error, se muestra un mensaje de error y se redirige a la página de edición de la solicitud.</p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="maintenance-pdf-view">
+<h3>maintenance_pdf_view<a class="headerlink" href="#maintenance-pdf-view" title="Link to this heading">#</a></h3>
+<p>Esta vista genera un PDF de una solicitud de mantenimiento para vehículos.</p>
+<section id="id39">
+<h4>Decoradores<a class="headerlink" href="#id39" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;login_required</span></code>:</dt><dd><p>Restringe el acceso a usuarios autenticados.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="id40">
+<h4>Funcionamiento<a class="headerlink" href="#id40" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Se recupera la solicitud de mantenimiento correspondiente a través de su <code class="docutils literal notranslate"><span class="pre">solicitud_id</span></code>.</p></li>
+<li><p>Se obtiene el historial de la solicitud, los problemas asociados y las fotografías de la solicitud.</p></li>
+<li><p>Se crea un archivo PDF con la información de la solicitud y el historial de la solicitud.</p></li>
+<li><p>El PDF se guarda temporalmente en el servidor y se genera una URL para su descarga.</p></li>
+</ul>
+</section>
+<section id="id41">
+<h4>Retorno<a class="headerlink" href="#id41" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>La vista retorna un <code class="docutils literal notranslate"><span class="pre">JsonResponse</span></code> con la URL del PDF generado y un mensaje de éxito.</p></li>
+<li><p>Si ocurre un error durante la generación del PDF, se retorna un mensaje de error.</p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="maintenance-machine-pdf-view">
+<h3>maintenance_machine_pdf_view<a class="headerlink" href="#maintenance-machine-pdf-view" title="Link to this heading">#</a></h3>
+<p>Esta vista genera un PDF de una solicitud de mantenimiento para maquinaria.</p>
+<section id="id42">
+<h4>Decoradores<a class="headerlink" href="#id42" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&#64;login_required</span></code>:</dt><dd><p>Restringe el acceso a usuarios autenticados.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="id43">
+<h4>Funcionamiento<a class="headerlink" href="#id43" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Se recupera la solicitud de mantenimiento correspondiente a través de su <code class="docutils literal notranslate"><span class="pre">solicitud_id</span></code>.</p></li>
+<li><p>Se obtiene el historial de la solicitud, los problemas asociados y las fotografías de la solicitud.</p></li>
+<li><p>Se crea un archivo PDF con la información de la solicitud y el historial de la solicitud.</p></li>
+<li><p>El PDF se guarda temporalmente en el servidor y se genera una URL para su descarga.</p></li>
+</ul>
+</section>
+<section id="id44">
+<h4>Retorno<a class="headerlink" href="#id44" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>La vista retorna un <code class="docutils literal notranslate"><span class="pre">JsonResponse</span></code> con la URL del PDF generado y un mensaje de éxito.</p></li>
+<li><p>Si ocurre un error durante la generación del PDF, se retorna un mensaje de error.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="rutas-urls-py">
+<h2>Rutas (urls.py)<a class="headerlink" href="#rutas-urls-py" title="Link to this heading">#</a></h2>
+<p>Define las rutas de acceso a las vistas del módulo.</p>
+<section id="id45">
+<h3>new_maintenance_request<a class="headerlink" href="#id45" title="Link to this heading">#</a></h3>
+<p>Ruta para crear una nueva solicitud de mantención.</p>
+<section id="url">
+<h4>URL<a class="headerlink" href="#url" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/new_maintenance_request</span></code></p></li>
+</ul>
+</section>
+<section id="vista-asociada">
+<h4>Vista asociada<a class="headerlink" href="#vista-asociada" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">new_maintenance_request</span></code></p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="id46">
+<h3>save_new_maintenance_request<a class="headerlink" href="#id46" title="Link to this heading">#</a></h3>
+<p>Ruta para guardar una nueva solicitud de mantención.</p>
+<section id="id47">
+<h4>URL<a class="headerlink" href="#id47" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/save_new_maintenance_request</span></code></p></li>
+</ul>
+</section>
+<section id="id48">
+<h4>Vista asociada<a class="headerlink" href="#id48" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">save_new_maintenance_request</span></code></p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="id49">
+<h3>manage_maintenance_request<a class="headerlink" href="#id49" title="Link to this heading">#</a></h3>
+<p>Ruta para gestionar las solicitudes de mantención.</p>
+<section id="id50">
+<h4>URL<a class="headerlink" href="#id50" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/manage_maintenance_request</span></code></p></li>
+</ul>
+</section>
+<section id="id51">
+<h4>Vista asociada<a class="headerlink" href="#id51" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">manage_maintenance_request</span></code></p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="id52">
+<h3>edit_maintenance_request<a class="headerlink" href="#id52" title="Link to this heading">#</a></h3>
+<p>Ruta para editar una solicitud de mantención.</p>
+<section id="id53">
+<h4>URL<a class="headerlink" href="#id53" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/edit_maintenance_request</span></code></p></li>
+</ul>
+</section>
+<section id="id54">
+<h4>Vista asociada<a class="headerlink" href="#id54" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">edit_maintenance_request</span></code></p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="id55">
+<h3>save_edit_maintenance_request<a class="headerlink" href="#id55" title="Link to this heading">#</a></h3>
+<p>Ruta para guardar los cambios en la solicitud de mantención.</p>
+<section id="id56">
+<h4>URL<a class="headerlink" href="#id56" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/save_edit_maintenance_request</span></code></p></li>
+</ul>
+</section>
+<section id="id57">
+<h4>Vista asociada<a class="headerlink" href="#id57" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">save_edit_maintenance_request</span></code></p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="id58">
+<h3>status_maintenance_request<a class="headerlink" href="#id58" title="Link to this heading">#</a></h3>
+<p>Ruta para gestionar el estado de la solicitud de mantención.</p>
+<section id="id59">
+<h4>URL<a class="headerlink" href="#id59" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/status_maintenance_request</span></code></p></li>
+</ul>
+</section>
+<section id="id60">
+<h4>Vista asociada<a class="headerlink" href="#id60" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">status_maintenance_request</span></code></p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="id61">
+<h3>new_maintenance_machine_request<a class="headerlink" href="#id61" title="Link to this heading">#</a></h3>
+<p>Ruta para crear una nueva solicitud de mantención de máquina.</p>
+<section id="id62">
+<h4>URL<a class="headerlink" href="#id62" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/new_maintenance_machine_request</span></code></p></li>
+</ul>
+</section>
+<section id="id63">
+<h4>Vista asociada<a class="headerlink" href="#id63" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">new_maintenance_machine_request</span></code></p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="id64">
+<h3>save_new_maintenance_machine_request<a class="headerlink" href="#id64" title="Link to this heading">#</a></h3>
+<p>Ruta para guardar una nueva solicitud de mantención de máquina.</p>
+<section id="id65">
+<h4>URL<a class="headerlink" href="#id65" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/save_new_maintenance_machine_request</span></code></p></li>
+</ul>
+</section>
+<section id="id66">
+<h4>Vista asociada<a class="headerlink" href="#id66" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">save_new_maintenance_machine_request</span></code></p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="id67">
+<h3>manage_maintenance_machine_request<a class="headerlink" href="#id67" title="Link to this heading">#</a></h3>
+<p>Ruta para gestionar las solicitudes de mantención de máquinas.</p>
+<section id="id68">
+<h4>URL<a class="headerlink" href="#id68" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/manage_maintenance_machine_request</span></code></p></li>
+</ul>
+</section>
+<section id="id69">
+<h4>Vista asociada<a class="headerlink" href="#id69" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">manage_maintenance_machine_request</span></code></p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="id70">
+<h3>edit_maintenance_machine_request<a class="headerlink" href="#id70" title="Link to this heading">#</a></h3>
+<p>Ruta para editar una solicitud de mantención de máquina.</p>
+<section id="id71">
+<h4>URL<a class="headerlink" href="#id71" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/edit_maintenance_machine_request</span></code></p></li>
+</ul>
+</section>
+<section id="id72">
+<h4>Vista asociada<a class="headerlink" href="#id72" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">edit_maintenance_machine_request</span></code></p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="id73">
+<h3>save_edit_maintenance_machine_request<a class="headerlink" href="#id73" title="Link to this heading">#</a></h3>
+<p>Ruta para guardar los cambios en la solicitud de mantención de máquina.</p>
+<section id="id74">
+<h4>URL<a class="headerlink" href="#id74" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/save_edit_maintenance_machine_request</span></code></p></li>
+</ul>
+</section>
+<section id="id75">
+<h4>Vista asociada<a class="headerlink" href="#id75" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">save_edit_maintenance_machine_request</span></code></p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="id76">
+<h3>maintenance_pdf_view<a class="headerlink" href="#id76" title="Link to this heading">#</a></h3>
+<p>Ruta para generar la vista PDF de una solicitud de mantención.</p>
+<section id="id77">
+<h4>URL<a class="headerlink" href="#id77" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/maintenance_pdf_view</span></code></p></li>
+</ul>
+</section>
+<section id="id78">
+<h4>Vista asociada<a class="headerlink" href="#id78" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">maintenance_pdf_view</span></code></p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="id79">
+<h3>maintenance_machine_pdf_view<a class="headerlink" href="#id79" title="Link to this heading">#</a></h3>
+<p>Ruta para generar la vista PDF de una solicitud de mantención de máquina.</p>
+<section id="id80">
+<h4>URL<a class="headerlink" href="#id80" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/maintenance_machine_pdf_view</span></code></p></li>
+</ul>
+</section>
+<section id="id81">
+<h4>Vista asociada<a class="headerlink" href="#id81" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">maintenance_machine_pdf_view</span></code></p></li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="machine.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">Machine</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="messenger.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">Messenger</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#descripcion-general">Descripción General</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-de-datos-models-py">Modelos de Datos (models.py)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nuevasolicitudmantenimiento">NuevaSolicitudMantenimiento</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#historialsolicitudmantenimiento">HistorialSolicitudMantenimiento</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#signal-create-historial-solicitud-mantenimiento">Signal: create_historial_solicitud_mantenimiento</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solicitudmantenimientoproblemas">SolicitudMantenimientoProblemas</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nuevasolicitudmantenimientomaquinaria">NuevaSolicitudMantenimientoMaquinaria</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#historialsolicitudmantenimientomaquinaria">HistorialSolicitudMantenimientoMaquinaria</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#signal-create-historial-solicitud-mantenimiento-maquinaria">Signal: create_historial_solicitud_mantenimiento_maquinaria</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solicitudmantenimientoproblemasmaquinaria">SolicitudMantenimientoProblemasMaquinaria</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mantenimiento">Mantenimiento</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#formularios-forms-py">Formularios (forms.py)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formnuevasolicitudmantenimiento">FormNuevaSolicitudMantenimiento</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#campos-del-formulario">Campos del Formulario</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#consideraciones-adicionales">Consideraciones Adicionales</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formeditsolicitudmantenimiento">FormEditSolicitudMantenimiento</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Campos del Formulario</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Consideraciones Adicionales</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formprocesarsolicitudmantenimiento">FormProcesarSolicitudMantenimiento</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Campos del Formulario</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Consideraciones Adicionales</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formeditsolicitudmantenimientomaquinaria">FormEditSolicitudMantenimientoMaquinaria</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Campos del Formulario</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Consideraciones Adicionales</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formprocesarsolicitudmantenimientomaquinaria">FormProcesarSolicitudMantenimientoMaquinaria</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Campos del Formulario</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Consideraciones Adicionales</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vistas-views-py">Vistas (views.py)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#new-maintenance-request">new_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#decoradores">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#funcionamiento">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#retorno">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#save-new-maintenance-request">save_new_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manage-maintenance-request">manage_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#edit-maintenance-request">edit_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#save-edit-maintenance-request">save_edit_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#status-maintenance-request">status_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#new-maintenance-machine-request">new_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id26">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#save-new-maintenance-machine-request">save_new_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id27">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id28">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id29">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manage-maintenance-machine-request">manage_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id30">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id31">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id32">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#edit-maintenance-machine-request">edit_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id33">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id34">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id35">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#save-edit-maintenance-machine-request">save_edit_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id36">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id37">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id38">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maintenance-pdf-view">maintenance_pdf_view</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id39">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id40">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id41">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maintenance-machine-pdf-view">maintenance_machine_pdf_view</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id42">Decoradores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id43">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id44">Retorno</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rutas-urls-py">Rutas (urls.py)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id45">new_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#url">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#vista-asociada">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id46">save_new_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id47">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id48">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id49">manage_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id50">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id51">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id52">edit_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id53">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id54">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id55">save_edit_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id56">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id57">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id58">status_maintenance_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id59">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id60">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id61">new_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id62">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id63">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id64">save_new_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id65">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id66">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id67">manage_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id68">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id69">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id70">edit_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id71">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id72">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id73">save_edit_maintenance_machine_request</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id74">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id75">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id76">maintenance_pdf_view</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id77">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id78">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id79">maintenance_machine_pdf_view</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id80">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id81">Vista asociada</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por Isamax
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Isamax.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

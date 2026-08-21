@@ -1,0 +1,216 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Crear Bodegas{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+<link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+{% endblock css %}
+
+{% block content %}
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Crear Bodegas</h1>
+                </div>
+
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">Inventario</li>
+                        <li class="breadcrumb-item active">Bodegas</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <a href="{% url 'new_bodega' %}"
+                   class="btn btn-primary btn-size-new">
+                    Nueva Bodega
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="panel panel-primary">
+                    <div class="tab-menu-heading border-bottom-0">
+                        <div class="tabs-menu4 border-bottomo-sm">
+                            <nav class="nav d-sm-flex d-block">
+                                <a class="nav-link border border-bottom-0 br-sm-5 me-2 active"
+                                data-bs-toggle="tab"
+                                href="#habilitadas">
+                                    Habilitadas
+                                </a>
+
+                                <a class="nav-link border border-bottom-0 br-sm-5 me-2"
+                                data-bs-toggle="tab"
+                                href="#deshabilitadas">
+                                    Deshabilitadas
+                                </a>
+                            </nav>
+                        </div>
+                    </div>
+
+                    <div class="panel-body tabs-menu-body">
+                        <div class="tab-content">
+                    
+                <!-- HABILITADAS -->
+                <div class="tab-pane fade show active"
+                     id="habilitadas">
+
+                    <table id="datatable-habilitadas"
+                           class="display nowrap"
+                           style="width:100%">
+
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Nombre</th>
+                                <th>Dirección</th>
+                                <th>Descripción</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for bodega in bodegas %}
+
+                                {% if bodega.status %}
+
+                                <tr>
+
+                                    <td></td>
+
+                                    <td>{{ bodega.nombre }}</td>
+
+                                    <td>{{ bodega.direccion }}</td>
+
+                                    <td>{{ bodega.descripcion }}</td>
+
+                                    <td>
+
+                                        <a href="{% url 'edit_bodega' bodega.id %}"
+                                           class="btn btn-info btn-size-edit">
+                                            Editar
+                                        </a>
+
+                                        <form method="POST"
+                                              action="{% url 'status_bodega' %}"
+                                              style="display:inline;">
+                                            {% csrf_token %}
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="{{ bodega.id }}">
+
+                                            <button type="submit" class="btn btn-danger btn-size-adm">Deshabilitar</button>   
+                                        </form>
+
+                                    </td>
+
+                                </tr>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <!-- DESHABILITADAS -->
+                <div class="tab-pane fade"
+                     id="deshabilitadas">
+
+                    <table id="datatable-deshabilitadas"
+                           class="display nowrap"
+                           style="width:100%">
+
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Nombre</th>
+                                <th>Dirección</th>
+                                <th>Descripción</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for bodega in bodegas %}
+
+                                {% if not bodega.status %}
+
+                                <tr>
+
+                                    <td></td>
+
+                                    <td>{{ bodega.nombre }}</td>
+
+                                    <td>{{ bodega.direccion }}</td>
+
+                                    <td>{{ bodega.descripcion }}</td>
+
+                                    <td>
+
+                                        <form method="POST"
+                                              action="{% url 'status_bodega' %}">
+                                            {% csrf_token %}
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="{{ bodega.id }}">
+
+                                            <button type="submit" class="btn btn-primary btn-size-adm">Habilitar</button>
+                                        </form>
+
+                                    </td>
+
+                                </tr>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script src="{% static 'js/jquery-3.7.0.js' %}"></script>
+<script src="{% static 'js/jquery.dataTables.min1.13.7.js' %}"></script>
+<script src="{% static 'js/dataTables.responsive.min2.5.0.js' %}"></script>
+
+<script>
+
+new DataTable('#datatable-habilitadas', {
+    responsive: true,
+    language: {
+        url: '{% static "json/es-CL.json" %}'
+    }
+});
+
+new DataTable('#datatable-deshabilitadas', {
+    responsive: true,
+    language: {
+        url: '{% static "json/es-CL.json" %}'
+    }
+});
+
+</script>
+{% endblock javascript %}

@@ -1,0 +1,254 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Informes de Vehículos{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <meta name="csrf-token" content="{{ csrf_token }}">
+{% endblock css %}
+
+{% block content %}
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <a id="descargar_excel" class="btn btn-success btn-size-edit" data-bs-toggle="tooltip" title="Descargar Excel"><i class="fa fa-file-excel-o"></i></a>
+                    <!--
+                    <a id="descargar_pdf" class="btn btn-secondary btn-size-edit">Descargar PDF</a>
+                    -->
+
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Informe Vehicular</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Camionetas Faenas</li>
+                    </ol>
+                </div>
+            </div> <!-- PAGE-HEADER END --> <!-- row -->
+            <div class="mb-3">
+                <label>Selecciona los campos a incluir en el Excel:</label>
+                <div id="campo-seleccion" class="row g-1 ms-3">
+
+                    <!-- Fila 0 -->
+                    <div class="col-md-12 form-check mb-1">
+                        <input type="checkbox" class="form-check-input" id="todos" value="todos">
+                        <label class="form-check-label" for="todos">Todos</label>
+                    </div>
+                    
+                    <!-- Fila 1 -->
+                    <div class="col-md-4 form-check mb-1">
+                        <input type="checkbox" class="form-check-input" id="faena" value="faena">
+                        <label class="form-check-label" for="faena">Faena</label>
+                    </div>
+                    <div class="col-md-4 form-check mb-1">
+                        <input type="checkbox" class="form-check-input" id="tipo" value="tipo">
+                        <label class="form-check-label" for="tipo">Tipo Vehículo</label>
+                    </div>
+                    <div class="col-md-4 form-check mb-1">
+                        <input type="checkbox" class="form-check-input" id="vehiculo" value="vehiculo">
+                        <label class="form-check-label" for="vehiculo">Patente</label>
+                    </div>
+            
+                    <!-- Fila 2 -->
+                    <div class="col-md-4 form-check mb-1">
+                        <input type="checkbox" class="form-check-input" id="marca" value="marca">
+                        <label class="form-check-label" for="marca">Marca</label>
+                    </div>
+                    <div class="col-md-4 form-check mb-1">
+                        <input type="checkbox" class="form-check-input" id="modelo" value="modelo">
+                        <label class="form-check-label" for="modelo">Modelo</label>
+                    </div>
+                    <div class="col-md-4 form-check mb-1">
+                        <input type="checkbox" class="form-check-input" id="ano" value="ano">
+                        <label class="form-check-label" for="ano">Año</label>
+                    </div>
+            
+                    <!-- Fila 3 -->
+                    <div class="col-md-4 form-check mb-1">
+                        <input type="checkbox" class="form-check-input" id="kilometraje" value="kilometraje">
+                        <label class="form-check-label" for="kilometraje">Kilometraje</label>
+                    </div>
+                    <div class="col-md-4 form-check mb-1">
+                        <input type="checkbox" class="form-check-input" id="tieneTag" value="tieneTag">
+                        <label class="form-check-label" for="tieneTag">TAG</label>
+                    </div>
+                    <div class="col-md-4 form-check mb-1">
+                        <input type="checkbox" class="form-check-input" id="nombrePropietario" value="nombrePropietario">
+                        <label class="form-check-label" for="nombrePropietario">Nombre Propietario</label>
+                    </div>
+            
+                    <!-- Fila 4 -->
+                    <div class="col-md-4 form-check mb-1">
+                        <input type="checkbox" class="form-check-input" id="rutPropietario" value="rutPropietario">
+                        <label class="form-check-label" for="rutPropietario">RUT Propietario</label>
+                    </div>
+                    <div class="col-md-4 form-check mb-1">
+                        <input type="checkbox" class="form-check-input" id="fechaArriendoInicial" value="fechaArriendoInicial">
+                        <label class="form-check-label" for="fechaArriendoInicial">Inicio Fecha Arriendo</label>
+                    </div>
+                    <div class="col-md-4 form-check mb-1">
+                        <input type="checkbox" class="form-check-input" id="fechaArriendoFinal" value="fechaArriendoFinal">
+                        <label class="form-check-label" for="fechaArriendoFinal">Termino Fecha Arriendo</label>
+                    </div>
+            
+                    <!-- Fila 5 -->
+                    <div class="col-md-4 form-check mb-1">
+                        <input type="checkbox" class="form-check-input" id="numeroVin" value="numeroVin">
+                        <label class="form-check-label" for="numeroVin">N°. VIN</label>
+                    </div>
+                    <div class="col-md-4 form-check mb-1">
+                        <input type="checkbox" class="form-check-input" id="numeroMotor" value="numeroMotor">
+                        <label class="form-check-label" for="numeroMotor">N°. Motor</label>
+                    </div>
+                    <div class="col-md-4 form-check mb-1">
+                        <input type="checkbox" class="form-check-input" id="numeroChasis" value="numeroChasis">
+                        <label class="form-check-label" for="numeroChasis">N°. Chasis</label>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <h5 class="mb-5"></h5> 
+        {% if request.user.usuarioprofile.seccionVehicular == "ADMINISTRADOR" or request.user.is_superuser %} 
+        <div class="main-container container-fluid"> 
+            <a class="btn btn-secondary" href="{% url 'dashboard' %}">Regresar</a> 
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Descargar Excel con selección de campos
+        $('#descargar_excel').on('click', function (e) {
+            e.preventDefault();
+    
+            // Obtener los campos seleccionados
+            let camposSeleccionados = [];
+            $('#campo-seleccion input:checked').each(function () {
+                camposSeleccionados.push($(this).val());
+            });
+    
+            if (camposSeleccionados.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Atención',
+                    text: 'Por favor, selecciona al menos un campo.',
+                });
+                return;
+            }
+    
+            $.LoadingOverlay("show"); // Mostrar overlay de carga
+    
+            $.ajax({
+                url: "{% url 'generar_excel' %}",
+                method: "POST",
+                data: JSON.stringify({ campos: camposSeleccionados }),
+                contentType: "application/json",
+                headers: {
+                    "X-CSRFToken": $("meta[name='csrf-token']").attr("content") // CSRF token
+                },
+                xhrFields: {
+                    responseType: 'blob' // Necesario para descargar archivos
+                },
+                success: function (data, status, xhr) {
+                    const disposition = xhr.getResponseHeader('Content-Disposition');
+                    const filename = disposition ? disposition.split('filename=')[1] : 'informe_vehicular.xlsx';
+                    const blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename.replace(/"/g, '');
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    $.LoadingOverlay("hide"); // Ocultar overlay de carga
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Ocurrió un error al intentar descargar el archivo. Inténtalo nuevamente.',
+                    });
+                    $.LoadingOverlay("hide"); // Ocultar overlay de carga en caso de error
+                }
+            });
+        });
+
+        // Descargar PDF
+        $('#descargar_pdf').on('click', function (e) {
+            e.preventDefault(); // Prevenir el comportamiento predeterminado
+            $.LoadingOverlay("show"); // Mostrar overlay de carga
+            $.ajax({
+                url: "{% url 'generar_pdf' %}",
+                method: "GET",
+                xhrFields: {
+                    responseType: 'blob' // Necesario para descargar archivos
+                },
+                success: function (data, status, xhr) {
+                    const disposition = xhr.getResponseHeader('Content-Disposition');
+                    const filename = disposition ? disposition.split('filename=')[1] : 'informe_vehicular.pdf';
+                    const blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename.replace(/"/g, '');
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    $.LoadingOverlay("hide"); // Ocultar overlay de carga
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Ocurrió un error al intentar descargar el archivo. Inténtalo nuevamente.',
+                    });
+                    $.LoadingOverlay("hide"); // Ocultar overlay de carga en caso de error
+                }
+            });
+        });
+    });    
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const checkboxTodos = document.getElementById("todos");
+        const checkboxes = document.querySelectorAll(".form-check-input:not(#todos)");
+
+        checkboxTodos.addEventListener("change", function () {
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = checkboxTodos.checked;
+            });
+        });
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", function () {
+                // Si algún checkbox está desmarcado, desmarcar "Todos"
+                if (!this.checked) {
+                    checkboxTodos.checked = false;
+                }
+                // Si todos los checkboxes están marcados, marcar "Todos"
+                else if ([...checkboxes].every(cb => cb.checked)) {
+                    checkboxTodos.checked = true;
+                }
+            });
+        });
+    });
+</script>
+
+
+{% endblock javascript %}
+
+{% block messages %}
+
+{% endblock messages%}

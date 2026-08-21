@@ -1,0 +1,215 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Planificación Vehicular{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <style>
+        /* Ocultar la columna redundante de Disponibles/Faltantes en móviles para evitar el desborde */
+        @media (max-width: 475px) {
+            .col-disponibles {
+                display: none !important;
+            }
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Ver Planificación Vehicular por Tipo</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Panificación Vehicular</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Panificación por Tipo</li>
+                    </ol>
+                </div>
+            </div> <!-- PAGE-HEADER END --> <!-- row -->
+            <div class="row row-sm">
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">                        
+                        <div class="card-body">
+                            <h4 class="card-title">Datos Principales</h4>
+                            <form class="form-horizontal" id="form" action="#" method="POST">
+                                {% csrf_token %}                                
+                                <div class="row row-sm align-items-center">
+                                    {{ formselecttipo|crispy }}
+                                    <div style="margin-top: 12px;">
+                                        <button type="submit" class=" col-md-4 btn btn-primary">Consultar</button> 
+                                    </div>
+                                </div>
+                            </form>
+                        </div>  
+                    </div>
+                </div>                
+            </div>
+            <div class="row row-sm">
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">                        
+                        <div class="card-body">
+                            <h4 class="card-title">Planificación Anual</h4>                               
+                            <div class="row row-sm">
+                                <div class="table-responsive">
+                                    <table id="datatable-allinfo" class="table table-bordered" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Mes</th>
+                                                {% for faena in faenas %}
+                                                    <th>{{ faena }}</th>
+                                                {% endfor %}
+                                                <th>Total</th>
+                                                <th>Stock Actual</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>                    
+                                    </table>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                </div>                
+            </div> 
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script type="text/javascript">        
+    document.getElementById('div_id_tipo').classList.add('col-md-4');
+</script>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script type="application/javascript">
+    new DataTable('#datatable-allinfo', {
+        columnDefs: [
+            {
+                className: 'dtr-control',
+                orderable: false,
+                targets: 2
+            }
+        ],
+        responsive: true,
+        language: {
+            url: '{% static 'json/es-CL.json' %}',        
+        },
+        columnDefs: [    
+            { searchable: false, targets: [0,1,4,5] },
+            { orderable: false, targets: [0,1,5]}  
+        ],
+        paging: false,
+        info: false, 
+        lengthChange: false,
+        searching: false,    
+        ordering: false,
+        lengthMenu: [[15, 30], [15, 30]],
+        /*order: [1, 'desc'],*/
+        
+    });
+</script>
+<script type="text/javascript">
+    const form = document.querySelector('#form');
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();        
+        const formData = new FormData(form);
+        $.LoadingOverlay("show");
+        $.ajax({
+            url: '{% url 'get_planning_type' %}',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                $.LoadingOverlay("hide");
+                updateTable(response);
+            },
+            error: function(error) {
+                $.LoadingOverlay("hide");
+                Swal.fire({
+                    icon: 'error',
+                    titleText: 'Error al solicitar Información',
+                    text: 'Vuelva a intentarlo!',
+                    confirmButtonColor: '#ff00d9',
+                })
+            }
+        });
+    });
+
+    function updateTable(data) {
+        const tableBody = document.querySelector('#datatable-allinfo tbody');
+        tableBody.innerHTML = ''; // Clear existing table body
+
+        const faenas = data.faenas;
+        const planificacion = data.planificacion;
+        const totalMeses = data.total_meses;
+        const disponibles = data.disponibles;
+
+        const meses = data.meses; // Pass the meses directly to JS
+        meses.forEach(mes => {
+            const tr = document.createElement('tr');
+            //const dtrControlTd = document.createElement('td');
+            //dtrControlTd.classList.add('dtr-control');
+            //tr.appendChild(dtrControlTd);
+
+            const mesTd = document.createElement('td');
+            mesTd.textContent = mes[1];
+            tr.appendChild(mesTd);
+
+            faenas.forEach(faena => {
+                const td = document.createElement('td');
+                const item = planificacion.find(p => p.mes === mes[0] && p.faena === faena.id);
+                if (item) {
+                    td.textContent = item.cantidad;
+                } else {
+                    td.textContent = 0;
+                }
+                tr.appendChild(td);
+            });
+
+            const totalTd = document.createElement('td');
+            const totalItem = totalMeses.find(t => t.mes === mes[0]);
+            if (totalItem) {
+                totalTd.textContent = totalItem.total_cantidad;
+                totalPlan = totalItem.total_cantidad;
+            } else {
+                totalTd.textContent = 0;
+                totalPlan = 0;
+            }
+            tr.appendChild(totalTd);
+
+            const disponibleTd = document.createElement('td');
+            const disponibleItem = disponibles;
+            disponibleTd.textContent = disponibleItem;
+            tr.appendChild(disponibleTd);
+
+            const diferenciaTd = document.createElement('td');
+            diferenciaTd.classList.add('col-disponibles'); // Agregamos clase para ocultar en móviles
+            const diferencia = disponibleItem - totalPlan;
+            if (diferencia > 0) {
+                diferenciaTd.textContent = diferencia + '  Disponibles';
+            } else if (diferencia < 0) {
+                diferenciaTd.textContent = diferencia + '  Faltantes';
+            } else {
+                diferenciaTd.textContent = '0';
+            }
+            tr.appendChild(diferenciaTd);
+
+            tableBody.appendChild(tr);
+        });
+    }
+</script>
+{% endblock javascript %}
+
+{% block messages %}
+{% endblock messages%}

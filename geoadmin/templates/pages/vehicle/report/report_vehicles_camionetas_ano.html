@@ -1,0 +1,56 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Informes de Vehículos{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <meta name="csrf-token" content="{{ csrf_token }}">
+{% endblock css %}
+
+{% block content %}
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <a href="https://lookerstudio.google.com/embed/reporting/f9a93d41-5380-4576-a02c-9cd21ade6f8b/page/p_69wb8eqjnd" target="_blank" class="btn btn-warning btn-size-edit">Descargar PDF</a>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Informe Vehicular</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Camionetas Año</li>
+                    </ol>
+                </div>
+            </div> <!-- PAGE-HEADER END --> <!-- row -->
+            <div>
+                <iframe 
+                    width="1200" 
+                    height="650" 
+                    src="https://lookerstudio.google.com/embed/reporting/f9a93d41-5380-4576-a02c-9cd21ade6f8b/page/p_69wb8eqjnd" 
+                    frameborder="0" 
+                    style="border:0" 
+                    allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
+                </iframe>
+            </div>
+        </div>
+        <h5 class="mb-5"></h5> 
+        {% if request.user.usuarioprofile.seccionVehicular == "ADMINISTRADOR" or request.user.is_superuser %} 
+        <div class="main-container container-fluid"> 
+            <a class="btn btn-secondary" href="{% url 'dashboard' %}">Regresar</a> 
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+{% endblock javascript %}

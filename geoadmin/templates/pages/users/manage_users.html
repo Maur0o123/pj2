@@ -1,0 +1,272 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Administración de Usuarios{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <meta name="csrf-token" content="{{ csrf_token }}">
+{% endblock css %}
+
+{% block content %}
+<div class="app-content main-content mt-0">
+    <div class="side-app"> 
+        <div class="main-container container-fluid"> 
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Administrar Usuarios</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Usuarios</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Administrar Usuario</li>
+                    </ol>
+                </div>
+            </div> 
+            
+            <a class="btn btn-primary btn-size-new" href="{% url 'new_user' %}">Nuevo Usuario</a>  
+            <h5 class="mb-5"></h5> 
+
+            <div class="card"> 
+                <div class="panel panel-primary">
+                    <div class="tab-menu-heading border-bottom-0"> 
+                        <div class="tabs-menu4 border-bottomo-sm"> 
+                            <nav class="nav d-sm-flex d-block"> 
+                                <a id="nav-hab" class="nav-link border border-bottom-0 br-sm-5 me-2 active" data-bs-toggle="tab" href="#tab-hab">Habilitados</a> 
+                                <a id="nav-des" class="nav-link border border-bottom-0 br-sm-5 me-2" data-bs-toggle="tab" href="#tab-des">Deshabilitados</a>
+                            </nav> 
+                        </div> 
+                    </div>
+                    <div class="panel-body tabs-menu-body"> 
+                        <div class="tab-content">
+                            
+                            <div class="tab-pane fade show active" id="tab-hab">
+                                <div class="card mt-5">
+                                    <div class="card-body">
+                                        <div class="table-responsive"> 
+                                            <table id="datatable-users-hab" class="table table-bordered text-nowrap key-buttons" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 30px;"></th>
+                                                        <th>Rut</th>
+                                                        <th>Nombre Completo</th>
+                                                        <th>Rol</th>
+                                                        <th>Faena</th>
+                                                        <th>Telefono</th>
+                                                        <th>Acciones</th>                            
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for usuario in usuarios %}
+                                                        {% if usuario.id != 1 and usuario.is_active %}
+                                                            <tr>
+                                                                <td class="dtr-control"></td>
+                                                                <td>{{ usuario.username }}</td>
+                                                                <td>{{ usuario.first_name }} {{ usuario.last_name }}</td>
+                                                                <td>
+                                                                    {% for profile in usuariosProfile %}
+                                                                        {% if usuario.id == profile.user.id %}
+                                                                            <div style="font-size: 0.8rem; line-height: 1.1;">
+                                                                                <strong>Veh:</strong> {{ profile.seccionVehicular }}<br>
+                                                                                <strong>Sond:</strong> {{ profile.seccionSondaje }}<br>
+                                                                                <strong>Prev:</strong> {{ profile.seccionPrevencion }}<br>
+                                                                                <strong>Inv:</strong> {{ profile.seccionInventario }}<br>
+                                                                                <strong>Adm:</strong> {{ profile.seccionAdministracion }}
+                                                                            </div>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                </td>
+                                                                <td>
+                                                                    {% for profile in usuariosProfile %}
+                                                                        {% if usuario.id == profile.user.id %}
+                                                                            {{ profile.faena }}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                </td>
+                                                                <td>{{ usuario.phone }}</td>
+                                                                <td class="form-inline-btn"> 
+                                                                    <form action="{% url 'edit_user_profile' %}" method="POST">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="username" value="{{ usuario.username }}">
+                                                                        <button type="submit" class="btn btn-info btn-size-adm">Editar</button> 
+                                                                    </form> 
+                                                                    <form action="{% url 'status_user' %}" method="POST" class="status-form">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="username" value="{{ usuario.username }}">
+                                                                        <button type="submit" class="btn btn-danger btn-size-adm">Deshabilitar</button>                                              
+                                                                    </form> 
+                                                        </td>
+                                                    </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tbody>                    
+                                    </table>
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="tab-des"> 
+                                <div class="card mt-5">
+                                    <div class="card-body">
+                                        <div class="table-responsive"> 
+                                            <table id="datatable-users-des" class="table table-bordered text-nowrap key-buttons" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 30px;"></th>
+                                                        <th>Rut</th>
+                                                        <th>Nombre Completo</th>
+                                                        <th>Rol</th>
+                                                        <th>Faena</th>
+                                                        <th>Telefono</th>
+                                                        <th>Acciones</th>                            
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for usuario in usuarios %}
+                                                        {% if usuario.id != 1 and not usuario.is_active %}
+                                                            <tr>
+                                                                <td class="dtr-control"></td>
+                                                                <td>{{ usuario.username }}</td>
+                                                                <td>{{ usuario.first_name }} {{ usuario.last_name}}</td>
+                                                                <td>
+                                                                    {% for profile in usuariosProfile %}
+                                                                        {% if usuario.id == profile.user.id %}
+                                                                            <div style="font-size: 0.8rem; line-height: 1.1;">
+                                                                                <strong>Veh:</strong> {{ profile.seccionVehicular }}<br>
+                                                                                <strong>Sond:</strong> {{ profile.seccionSondaje }}<br>
+                                                                                <strong>Prev:</strong> {{ profile.seccionPrevencion }}<br>
+                                                                                <strong>Inv:</strong> {{ profile.seccionInventario }}<br>
+                                                                                <strong>Adm:</strong> {{ profile.seccionAdministracion }}
+                                                                            </div>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                </td>
+                                                                <td>
+                                                                {% for profile in usuariosProfile %}
+                                                                    {% if usuario.id == profile.user.id %}
+                                                                        {{ profile.faena }}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                                </td>
+                                                                <td>{{ usuario.phone }}</td>
+                                                                <td class="form-inline-btn"> 
+                                                                    <form action="{% url 'edit_user_profile' %}" method="POST" >
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="username" value="{{ usuario.username }}">
+                                                                        <button type="submit" class="btn btn-info btn-size-adm">Editar</button> 
+                                                                    </form> 
+                                                                    <form action="{% url 'status_user' %}" method="POST" class="status-form">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="username" value="{{ usuario.username }}">
+                                                                        <button type="submit" class="btn btn-primary btn-size-adm">Habilitar</button>
+                                                                    </form> 
+                                                                </td>
+                                                            </tr>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </tbody>                    
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>  
+                            </div>
+
+                        </div>
+                    </div>
+                        </div>
+                </div>
+            </div>
+            </div>
+            <h5 class="mb-5"></h5> 
+            <div class="main-container container-fluid"> 
+                <a class="btn btn-secondary" href="{% url 'dashboard' %}">Regresar</a> 
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+    <script src="{% static 'js/jquery-3.7.0.js'%}"></script>
+    <script src="{% static 'js/jquery.dataTables.min1.13.7.js'%}"></script>
+    <script src="{% static 'js/dataTables.responsive.min2.5.0.js'%}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script type="application/javascript">
+        $(document).ready(function() {
+            // Inicializar tabla de Habilitados
+            $('#datatable-users-hab').DataTable({
+                responsive: {
+                    details: {
+                        type: 'column',
+                        target: 'tr'
+                    }
+                },
+                language: {
+                    url: '{% static "json/es-CL.json" %}',
+                },
+                columnDefs: [
+                    { targets: 0, orderable: false, className: 'dtr-control' },
+                    { targets: 1, responsivePriority: 1 },
+                    { targets: 6, responsivePriority: 2 },
+                    { targets: [2, 3, 4, 5], responsivePriority: 100 }
+                ],
+                order: [[1, 'asc']]
+            });
+
+            // Inicializar tabla de Deshabilitados
+            $('#datatable-users-des').DataTable({
+                responsive: {
+                    details: {
+                        type: 'column',
+                        target: 'tr'
+                    }
+                },
+                language: {
+                    url: '{% static "json/es-CL.json" %}',
+                },
+                columnDefs: [
+                    { targets: 0, orderable: false, className: 'dtr-control' },
+                    { targets: 1, responsivePriority: 1 },
+                    { targets: 6, responsivePriority: 2 },
+                    { targets: [2, 3, 4, 5], responsivePriority: 100 }
+                ],
+                order: [[1, 'asc']]
+            });
+
+            // Ajustar columnas al cambiar de pestaña (evita que la tabla oculta se vea aplastada)
+            $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+                $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust().responsive.recalc();
+            });
+
+            $('.status-form').on('submit', function(e) {
+                e.preventDefault();
+                const form = this;
+                const boton = $(form).find('button[type="submit"]');
+                const esDeshabilitar = boton.hasClass('btn-danger');
+                
+                const accionTexto = esDeshabilitar ? 'deshabilitar' : 'habilitar';
+                const textoBoton = esDeshabilitar ? 'Sí, deshabilitar' : 'Sí, habilitar';
+                const colorBoton = esDeshabilitar ? '#d33' : '#3085d6';
+
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: `¿Deseas ${accionTexto} a este usuario?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: colorBoton,
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: textoBoton,
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock javascript %}

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mantención Vehículo PDF</title>
+    <style>
+        @page {
+            size: letter portrait;
+            @frame header_frame {  
+                -pdf-frame-content: header_content;
+                left: 30pt; width: 552pt; top: 30pt; height: 40pt;
+            }            
+            @frame content_frame {         
+                left: 30pt; width: 552pt; top: 70pt; height: 682pt;
+            }
+            @frame footer_frame {          
+                -pdf-frame-content: footer_content;
+                left: 30pt; width: 552pt; top: 752pt; height: 40pt;
+            }
+            @frame logo {             
+                -pdf-frame-content: logo;
+                left: 185pt; width: 40pt; top: 750pt; height: 50pt;
+            }
+            @frame footer_text {           
+                -pdf-frame-content: footer_text;
+                left: 30pt; width: 552pt; top: 772pt; height: 20pt;
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container-image {
+            display: flex;
+            flex-direction: column;
+        }
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .table-out td, th {
+            vertical-align: top;
+            width: 50%;
+        }
+        .table-images td, th {
+            border: 1px solid #dddddd;
+            vertical-align: top;
+
+        }
+        .table-in td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            vertical-align: top;
+            padding: 2px;
+        }
+        img {
+            max-width: 100%; 
+            height: auto;
+        }
+        h2, h3 { 
+            -pdf-keep-with-next: true; 
+        }
+        .header {
+            text-align: right;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="header_content" class="header">{{ current_datetime|date:"d-m-Y" }} - {{ current_datetime|time:"H:i" }}</div>
+    <div id="footer_text" style="text-align: center;vertical-align: middle;">
+        www.geoadmin.cl - Página <pdf:pagenumber> de <pdf:pagecount>
+    </div>
+    <img id="logo" src="static/images/logo/Logo GeoAdmin.png" style="width: 100px;" alt="logo"/>
+    
+    <div id="content_frame">
+        <div class="title">
+            <h1>INFORME MANTENIMIENTO {{ solicitud.vehiculo.placaPatente }}</h1>
+        </div>
+        <div class="container">
+            <div class="row row-sm">
+                <div>
+                    <table class="table-out">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <h2>Datos Solicitud</h2>
+                                    </div>
+                                    <table class="table-in">
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Fecha:</strong></td>
+                                                <td>{{ solicitud.fechacreacion|date:"d-m-Y" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Hora:</strong></td>
+                                                <td>{{ solicitud.fechacreacion|time:"H:i" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Placa Patente:</strong></td>
+                                                <td>{{ solicitud.vehiculo.placaPatente }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Tipo:</strong></td>
+                                                <td>{{ solicitud.vehiculo.tipo }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Marca:</strong></td>
+                                                <td>{{ solicitud.vehiculo.marca }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Modelo:</strong></td>
+                                                <td>{{ solicitud.vehiculo.modelo }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Año:</strong></td>
+                                                <td>{{ solicitud.vehiculo.ano }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Color:</strong></td>
+                                                <td>{{ solicitud.vehiculo.color }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Kilometraje:</strong></td>
+                                                <td>{{ solicitud.kilometraje }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Faena:</strong></td>
+                                                <td>{{ solicitud.faena.faena }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Turno:</strong></td>
+                                                <td>{{ solicitud.get_turno_display }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Solicitante:</strong></td>
+                                                <td>{{ solicitud.solicitante.first_name }} {{ solicitud.solicitante.last_name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Comentarios:</strong></td>
+                                                <td>{{ solicitud.comentario }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Problemas:</strong></td>
+                                                <td>
+                                                    {% for problema in problemas %}
+                                                        - {{ problema.fallaVehiculo }} <br>
+                                                    {% endfor %}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td style="width: 20px;"></td>
+                                <td>
+                                    <div>
+                                        <h2>Historial del Mantenimiento</h2>
+                                    </div>
+                                    <table class="table-in">
+                                        <thead>
+                                            <tr>
+                                                <th><strong>Fecha</strong></th>
+                                                <th><strong>Estado solicitud</strong></th>
+                                                <th><strong>Empresa Mantenimiento</strong></th>
+                                                <th><strong>Solicitante</strong></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for historial in historiales %}
+                                            <tr>
+                                                <td>{{ historial.fechacreacion|date:"d-m-Y" }}</td>
+                                                <td>{{ historial.get_progreso_display }}</td>
+                                                <td>{% if historial.empresaMantenimiento %}{{ historial.empresaMantenimiento }}{% else %}Sin empresa asignada{% endif %}</td>
+                                                <td>{{ historial.solicitante.first_name }} {{ historial.solicitante.last_name }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row row-sm">
+                <div>
+                    <h2>Evidencia Fotográfica</h2>
+                </div>
+                <div>
+                    <table class="table-images">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="container-image">
+                                        <h3>Fotografía 1</h3>
+                                        {% for foto in fotografiaUno  %}
+                                            <div>
+                                                <img src="{{ foto }}" alt="Documento">
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="container-image">
+                                        <h3>Fotografía 2</h3>
+                                        {% for foto in fotografiaDos  %}
+                                            <div>
+                                                <img src="{{ foto }}" alt="Documento">
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="container-image">
+                                        <h3>Fotografía 3</h3>
+                                        {% for foto in fotografiaTres %}
+                                            <div>
+                                                <img src="{{ foto }}" alt="Documento">
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,316 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Administrar Recomendaciones{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+
+    <style>
+        /* API Houdini para animar colores de degradado */
+        @property --c1 { syntax: '<color>'; inherits: false; initial-value: #95a5a6; }
+        @property --c2 { syntax: '<color>'; inherits: false; initial-value: #7f8c8d; }
+        @property --pos-x { syntax: '<percentage>'; inherits: false; initial-value: 50%; }
+
+        /* Estilo base del botón/selector */
+        .estado-selector {
+            padding: 6px 35px 6px 15px;
+            border-radius: 4px;
+            color: white; 
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none; 
+            text-align: center;
+            width: 140px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background-image: 
+                url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e"),
+                linear-gradient(to right, var(--c1), var(--c2), var(--c1));
+            background-size: 20px 20px, 200% 100%;
+            background-position: calc(100% - 8px) center, var(--pos-x) center;
+            background-repeat: no-repeat;
+            transition: --c1 0.6s ease, --c2 0.6s ease, box-shadow 0.3s;
+        }
+
+        .estado-selector option { color: #333333; background-color: #ffffff; font-weight: normal; }
+        .texto-claro { color: #ffffff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+        .texto-oscuro { color: #333333 !important; }
+
+        @keyframes shine {
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); transform: scale(1); }
+            50% { box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0); transform: scale(1.05); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); transform: scale(1); }
+        }
+        
+        .shine-active { animation: shine 0.5s ease-out; }
+
+        .form-inline-btn {
+            flex-wrap: nowrap !important;
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Administrar Recomendaciones</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Mantenedor Sistema</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Administrar Recomendaciones</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <a class="btn btn-primary btn-size-new" href="{% url 'new_recomendacion' %}">Nueva Recomendación</a>  
+            <h5 class="mb-5"></h5>
+       
+            <div class="card"> 
+                <div class="panel panel-primary">
+                    <div class="tab-menu-heading border-bottom-0"> 
+                        <div class="tabs-menu4 border-bottomo-sm"> 
+                            <nav class="nav d-sm-flex d-block"> 
+                                <a id="nav-hab" class="nav-link border border-bottom-0 br-sm-5 me-2 active" data-bs-toggle="tab" href="#tab-hab">Activos</a> 
+                                <a id="nav-des" class="nav-link border border-bottom-0 br-sm-5 me-2" data-bs-toggle="tab" href="#tab-des">Inactivos (Finalizados/Abortados)</a>
+                            </nav> 
+                        </div> 
+                    </div>
+   
+                    <div class="panel-body tabs-menu-body"> 
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab-hab">
+                                <div class="table-responsive">
+                                    <table id="datatable-allusers" class="display nowrap table table-bordered text-nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Recomendación</th>
+                                                <th>Pozo</th>
+                                                <th>Sonda</th>
+                                                <th>Fecha Inicio</th>
+                                                <th>Estado</th>
+                                                <th>Largo Prog.</th>
+                                                <th>Largo Real</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for documento in documentos %}                            
+                                                {% if documento.estado == '2' or documento.estado == '3' %}
+                                                    <tr>
+                                                        <td class="dtr-control"></td>
+                                                        <td>{{ documento.recomendacion }}</td>
+                                                        <td>{{ documento.pozo }}</td>
+                                                        <td>{{ documento.sonda }}</td>
+                                                        <td data-order="{{ documento.fecha_inicio|date:'U' }}">{{ documento.fecha_inicio|date:"Y-m-d" }}</td>
+                                                        <td data-search="{{ documento.get_estado_display }}">
+                                                            <select class="estado-selector" data-id="{{ documento.id }}" data-estado-inicial="{{ documento.estado|default:'default' }}" onchange="cambiarEstadoRecomendacion(this)" onmousemove="moverDegrade(event, this)" onmouseleave="resetDegrade(this)">
+                                                                <option value="1" {% if documento.estado == '1' %}selected{% endif %}>Abortado</option>
+                                                                <option value="2" {% if documento.estado == '2' %}selected{% endif %}>En Avance</option>
+                                                                <option value="3" {% if documento.estado == '3' %}selected{% endif %}>En Espera</option>
+                                                                <option value="4" {% if documento.estado == '4' %}selected{% endif %}>Finalizado</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>{% if documento.largo_programado is None %}Sin asignar{% else %}{{ documento.largo_programado }}{% endif %}</td>
+                                                        <td>{{ documento.largo_real }}</td>
+                                                        <td class="form-inline-btn">
+                                                            <form action="{% url 'edit_recomendacion' %}" method="POST" >
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="id" value="{{ documento.id }}">
+                                                                <button type="submit" class="btn btn-info btn-size-edit">Editar</button> 
+                                                            </form> 
+                                                        </td>                                 
+                                                    </tr>                          
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tbody>                    
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane" id="tab-des">
+                                <div class="table-responsive">
+                                    <table id="datatable-allusers-des" class="display nowrap table table-bordered text-nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Recomendación</th>
+                                                <th>Pozo</th>
+                                                <th>Sonda</th>
+                                                <th>Fecha Inicio</th>
+                                                <th>Estado</th>
+                                                <th>Largo Prog.</th>
+                                                <th>Largo Real</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for documento in documentos %}                            
+                                                {% if documento.estado == '1' or documento.estado == '4' %}
+                                                    <tr>
+                                                        <td class="dtr-control"></td>
+                                                        <td>{{ documento.recomendacion }}</td>
+                                                        <td>{{ documento.pozo }}</td>
+                                                        <td>{{ documento.sonda }}</td>
+                                                        <td data-order="{{ documento.fecha_inicio|date:'U' }}">{{ documento.fecha_inicio|date:"Y-m-d" }}</td>
+                                                        <td data-search="{{ documento.get_estado_display }}">
+                                                            <select class="estado-selector" data-id="{{ documento.id }}" data-estado-inicial="{{ documento.estado|default:'default' }}" onchange="cambiarEstadoRecomendacion(this)" onmousemove="moverDegrade(event, this)" onmouseleave="resetDegrade(this)">
+                                                                <option value="1" {% if documento.estado == '1' %}selected{% endif %}>Abortado</option>
+                                                                <option value="2" {% if documento.estado == '2' %}selected{% endif %}>En Avance</option>
+                                                                <option value="3" {% if documento.estado == '3' %}selected{% endif %}>En Espera</option>
+                                                                <option value="4" {% if documento.estado == '4' %}selected{% endif %}>Finalizado</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>{% if documento.largo_programado is None %}Sin asignar{% else %}{{ documento.largo_programado }}{% endif %}</td>
+                                                        <td>{{ documento.largo_real }}</td>
+                                                        <td class="form-inline-btn">
+                                                            <form action="{% url 'edit_recomendacion' %}" method="POST" >
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="id" value="{{ documento.id }}">
+                                                                <button type="submit" class="btn btn-info btn-size-edit">Editar</button> 
+                                                            </form> 
+                                                        </td>                                 
+                                                    </tr>                          
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tbody>                    
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+        <h5 class="mb-5"></h5> 
+        <div class="main-container container-fluid"> 
+            <a class="btn btn-secondary" href="{% url 'dashboardSondaje' %}">Regresar</a> 
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+<script type="text/javascript">
+    const COLORES = {
+        '1': { c1: '#e74c3c', c2: '#c0392b', texto: 'claro' }, 
+        '2': { c1: '#3498db', c2: '#2980b9', texto: 'claro' }, 
+        '3': { c1: '#f1c40f', c2: '#f39c12', texto: 'oscuro' }, 
+        '4': { c1: '#2ecc71', c2: '#27ae60', texto: 'claro' }, 
+        'default': { c1: '#95a5a6', c2: '#7f8c8d', texto: 'claro' }
+    };
+
+    function aplicarColores(selector, valor) {
+        const config = COLORES[valor] || COLORES['default'];
+        selector.style.setProperty('--c1', config.c1);
+        selector.style.setProperty('--c2', config.c2);
+        
+        if (config.texto === 'oscuro') {
+            selector.classList.add('texto-oscuro');
+            selector.classList.remove('texto-claro');
+        } else {
+            selector.classList.add('texto-claro');
+            selector.classList.remove('texto-oscuro');
+        }
+    }
+
+    function pintarSelectores() {
+        $('.estado-selector').each(function() {
+            let sel = $(this);
+            let estadoActual = sel.val() || sel.attr('data-estado-inicial');
+            aplicarColores(this, estadoActual);
+        });
+    }
+
+    function moverDegrade(e, selector) {
+        const rect = selector.getBoundingClientRect();
+        const x = e.clientX - rect.left; 
+        const porcentaje = (x / rect.width) * 100;
+        selector.style.setProperty('--pos-x', `${porcentaje}%`);
+    }
+
+    function resetDegrade(selector) {
+        selector.style.setProperty('--pos-x', '50%');
+    }
+
+    function cambiarEstadoRecomendacion(selector) {
+        let id = selector.getAttribute('data-id');
+        let nuevoEstado = selector.value;
+        let csrfToken = '{{ csrf_token }}';
+        
+        $.ajax({
+            url: "{% url 'update_estado_recomendacion' %}",
+            type: "POST",
+            data: { 'id': id, 'estado': nuevoEstado, 'csrfmiddlewaretoken': csrfToken },
+            success: function(response) {
+                if (response.success) {
+                    aplicarColores(selector, nuevoEstado);
+                    selector.classList.add('shine-active');
+                    setTimeout(() => { selector.classList.remove('shine-active'); }, 500);
+                    location.reload(); 
+                } else {
+                    if (response.estado_aplicado) {
+                        selector.value = response.estado_aplicado;
+                        aplicarColores(selector, response.estado_aplicado);
+                    }
+                    Swal.fire('Error', response.message, 'error');
+                }
+            } 
+        });
+    }
+
+    $(document).ready(function() {
+        const commonConfig = {
+            language: { url: '{% static "json/es-CL.json" %}' },
+            columnDefs: [    
+                { className: 'dtr-control', orderable: false, targets: 0, width: "5%", searchable: false },
+                { targets: 1, width: "15%", searchable: true },
+                { targets: 2, width: "10%", searchable: true },
+                { targets: 3, width: "10%", searchable: true },
+                { targets: 4, width: "15%", searchable: true },
+                { targets: 5, width: "15%", searchable: true },
+                { targets: 6, width: "10%", searchable: true },
+                { targets: 7, width: "10%", searchable: true },
+                { targets: 8, width: "10%", searchable: false, orderable: false, className: "text-center" }
+            ],
+            order: [[4, 'desc']],
+            responsive: { details: { type: 'column', target: 0 } },
+            autoWidth: false,
+            drawCallback: function(settings) {
+                pintarSelectores();
+            }
+        };
+
+        new DataTable('#datatable-allusers', commonConfig);
+        new DataTable('#datatable-allusers-des', commonConfig);
+
+        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+            $($.fn.dataTable.tables(true)).DataTable().columns.adjust().responsive.recalc();
+            pintarSelectores();
+        });
+
+        $("form").on("submit", function(e) {
+            if (this.checkValidity()) {
+                if (typeof $.LoadingOverlay !== "undefined") {
+                    $.LoadingOverlay("show");
+                } 
+            }
+        });
+    });
+</script>
+{% endblock javascript %}

@@ -1,0 +1,1498 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Documentacion Geoadmin &#8212; documentación de Geoadmin - Versión Web</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=ea490ea2"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="_static/translations.js?v=f85f4cfb"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="Antes de Comenzar" href="antesDeComenzar.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logobg.png" class="logo__image only-light" alt="documentación de Geoadmin - Versión Web - Home"/>
+    <script>document.write(`<img src="_static/logobg.png" class="logo__image only-dark" alt="documentación de Geoadmin - Versión Web - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Búsqueda</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="antesDeComenzar.html">Antes de Comenzar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="arquitectura.html">Arquitectura del Sistema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="databases.html">Database</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="secciones.html">Secciones</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="modulos/core.html">Core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/checklist.html">Checklist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/drilling.html">Drilling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/equipment.html">Equipment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/geoadmin.html">Geoadmin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/inventory.html">Inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/machine.html">Machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/maintenance.html">Maintenance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/messenger.html">Messenger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/mining.html">Mining</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/offline.html">Offline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/planning.html">Planning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/prevencion.html">Prevencion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/user.html">User</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/vehicle.html">Vehicle</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Api</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/Cconelli/Geoadmin" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Repositorio de origen"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/index.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="claro/oscuro" aria-label="claro/oscuro" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Documentacion Geoadmin</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-1-0">Versión 0.1.0</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="documentacion-geoadmin">
+<h1>Documentacion Geoadmin<a class="headerlink" href="#documentacion-geoadmin" title="Link to this heading">#</a></h1>
+<section id="version-0-1-0">
+<h2>Versión 0.1.0<a class="headerlink" href="#version-0-1-0" title="Link to this heading">#</a></h2>
+<p>Este proyecto ha sido desarrollado para optimizar y automatizar los procesos operacionales de Geoadmin en sus distintas areas de negocio.</p>
+<p>La documentación describe la arquitectura, los requisitos de despliegue, la API disponible y los módulos que hoy se encuentran activos dentro de la plataforma web.</p>
+<p>Actualmente la plataforma contempla funcionalidades para:</p>
+<ul class="simple">
+<li><p>gestión vehicular</p></li>
+<li><p>sondaje y reportes operacionales</p></li>
+<li><p>prevención de riesgos</p></li>
+<li><p>inventario y stock</p></li>
+<li><p>equipos y maquinaria</p></li>
+<li><p>mantenedores y documentación transversal</p></li>
+</ul>
+<p>A continuación se detalla la estructura principal de esta documentación:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="antesDeComenzar.html">Antes de Comenzar</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="antesDeComenzar.html#servidor">Servidor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antesDeComenzar.html#coneccion-al-servidor">Conección al Servidor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antesDeComenzar.html#instalacion-del-repositorio">Instalación del Repositorio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antesDeComenzar.html#configuracion-archivo-env">Configuración archivo <code class="docutils literal notranslate"><span class="pre">.env</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="arquitectura.html">Arquitectura del Sistema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="arquitectura.html#vista-general">Vista General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arquitectura.html#vista-detalle">Vista Detalle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arquitectura.html#detalle-diagrama">Detalle diagrama</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="databases.html">Database</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="databases.html#resumen-de-la-base-de-datos">Resumen de la Base de Datos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="databases.html#relaciones-entre-tablas">Relaciones entre Tablas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="databases.html#detalle-tablas-y-relaciones">Detalle tablas y relaciones</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#auth-group"><code class="docutils literal notranslate"><span class="pre">auth_group</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#auth-group-permissions"><code class="docutils literal notranslate"><span class="pre">auth_group_permissions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#auth-permission"><code class="docutils literal notranslate"><span class="pre">auth_permission</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#checklist-documentos-materiales-caseta"><code class="docutils literal notranslate"><span class="pre">checklist_documentos_materiales_caseta</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#checklist-documentos-materiales-sonda"><code class="docutils literal notranslate"><span class="pre">checklist_documentos_materiales_sonda</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#checklist-materiales-caseta"><code class="docutils literal notranslate"><span class="pre">checklist_materiales_caseta</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#checklist-materiales-sonda"><code class="docutils literal notranslate"><span class="pre">checklist_materiales_sonda</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#companies-maintenance-services"><code class="docutils literal notranslate"><span class="pre">companies_maintenance_services</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#companies-profile"><code class="docutils literal notranslate"><span class="pre">companies_profile</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#django-admin-log"><code class="docutils literal notranslate"><span class="pre">django_admin_log</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#django-content-type"><code class="docutils literal notranslate"><span class="pre">django_content_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#django-migrations"><code class="docutils literal notranslate"><span class="pre">django_migrations</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#django-session"><code class="docutils literal notranslate"><span class="pre">django_session</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#documents-help-manuals"><code class="docutils literal notranslate"><span class="pre">documents_help_manuals</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-aditivos"><code class="docutils literal notranslate"><span class="pre">drilling_aditivos</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-cant-water"><code class="docutils literal notranslate"><span class="pre">drilling_cant_water</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-casing"><code class="docutils literal notranslate"><span class="pre">drilling_casing</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-corona"><code class="docutils literal notranslate"><span class="pre">drilling_corona</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-details"><code class="docutils literal notranslate"><span class="pre">drilling_details</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-diameter"><code class="docutils literal notranslate"><span class="pre">drilling_diameter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-drilling"><code class="docutils literal notranslate"><span class="pre">drilling_drilling</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-escareador"><code class="docutils literal notranslate"><span class="pre">drilling_escareador</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-land-type"><code class="docutils literal notranslate"><span class="pre">drilling_land_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-largo-barra"><code class="docutils literal notranslate"><span class="pre">drilling_largo_barra</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-orientation"><code class="docutils literal notranslate"><span class="pre">drilling_orientation</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-perforista"><code class="docutils literal notranslate"><span class="pre">drilling_perforista</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-probe"><code class="docutils literal notranslate"><span class="pre">drilling_probe</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-recommendation"><code class="docutils literal notranslate"><span class="pre">drilling_recommendation</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-reporte-digital-aditivos"><code class="docutils literal notranslate"><span class="pre">drilling_reporte_digital_aditivos</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-reporte-digital-control-horario"><code class="docutils literal notranslate"><span class="pre">drilling_reporte_digital_control_horario</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-reporte-digital-insumos"><code class="docutils literal notranslate"><span class="pre">drilling_reporte_digital_insumos</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-reporte-digital-longitud"><code class="docutils literal notranslate"><span class="pre">drilling_reporte_digital_longitud</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-reporte-digital-observaciones"><code class="docutils literal notranslate"><span class="pre">drilling_reporte_digital_observaciones</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-reporte-digital-operacional"><code class="docutils literal notranslate"><span class="pre">drilling_reporte_digital_operacional</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-reporte-digital-perforaciones"><code class="docutils literal notranslate"><span class="pre">drilling_reporte_digital_perforaciones</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#drilling-zapata"><code class="docutils literal notranslate"><span class="pre">drilling_zapata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#machine-failure"><code class="docutils literal notranslate"><span class="pre">machine_failure</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#machine-horometres-registers"><code class="docutils literal notranslate"><span class="pre">machine_horometres_registers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#machine-kit-machine"><code class="docutils literal notranslate"><span class="pre">machine_kit_machine</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#machine-kits-machine-mining"><code class="docutils literal notranslate"><span class="pre">machine_kits_machine_mining</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#machine-kits-stock-history"><code class="docutils literal notranslate"><span class="pre">machine_kits_stock_history</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#machine-model"><code class="docutils literal notranslate"><span class="pre">machine_model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#machine-profile"><code class="docutils literal notranslate"><span class="pre">machine_profile</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#machine-type"><code class="docutils literal notranslate"><span class="pre">machine_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#maintenance-mantenimiento"><code class="docutils literal notranslate"><span class="pre">maintenance_mantenimiento</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#maintenance-register"><code class="docutils literal notranslate"><span class="pre">maintenance_register</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#maintenance-register-history"><code class="docutils literal notranslate"><span class="pre">maintenance_register_history</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#maintenance-register-history-machines"><code class="docutils literal notranslate"><span class="pre">maintenance_register_history_machines</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#maintenance-register-machines"><code class="docutils literal notranslate"><span class="pre">maintenance_register_machines</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#maintenance-register-problemas"><code class="docutils literal notranslate"><span class="pre">maintenance_register_problemas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#maintenance-solicitudmantenimientoproblemas"><code class="docutils literal notranslate"><span class="pre">maintenance_solicitudmantenimientoproblemas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#maintenance-solicitudmantenimientoproblemasmaquinaria"><code class="docutils literal notranslate"><span class="pre">maintenance_solicitudmantenimientoproblemasmaquinaria</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#mining-document-type"><code class="docutils literal notranslate"><span class="pre">mining_document_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#mining-document-type-general"><code class="docutils literal notranslate"><span class="pre">mining_document_type_general</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#mining-documents"><code class="docutils literal notranslate"><span class="pre">mining_documents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#mining-machines"><code class="docutils literal notranslate"><span class="pre">mining_machines</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#mining-profile"><code class="docutils literal notranslate"><span class="pre">mining_profile</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#mining-vehicles"><code class="docutils literal notranslate"><span class="pre">mining_vehicles</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#planning-minning-type"><code class="docutils literal notranslate"><span class="pre">planning_minning_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#report-errors"><code class="docutils literal notranslate"><span class="pre">report_errors</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#user-ciudad"><code class="docutils literal notranslate"><span class="pre">user_ciudad</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#user-documentacion"><code class="docutils literal notranslate"><span class="pre">user_documentacion</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#user-genero"><code class="docutils literal notranslate"><span class="pre">user_genero</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#user-licencia-conducir"><code class="docutils literal notranslate"><span class="pre">user_licencia_conducir</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#user-nacionalidad"><code class="docutils literal notranslate"><span class="pre">user_nacionalidad</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#user-user"><code class="docutils literal notranslate"><span class="pre">user_user</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#user-user-groups"><code class="docutils literal notranslate"><span class="pre">user_user_groups</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#user-user-user-permissions"><code class="docutils literal notranslate"><span class="pre">user_user_user_permissions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#user-usuarioprofile"><code class="docutils literal notranslate"><span class="pre">user_usuarioprofile</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#vehicle-ano"><code class="docutils literal notranslate"><span class="pre">vehicle_ano</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#vehicle-categories-failure"><code class="docutils literal notranslate"><span class="pre">vehicle_categories_failure</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#vehicle-color"><code class="docutils literal notranslate"><span class="pre">vehicle_color</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#vehicle-documentation"><code class="docutils literal notranslate"><span class="pre">vehicle_documentation</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#vehicle-failure"><code class="docutils literal notranslate"><span class="pre">vehicle_failure</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#vehicle-hide-options"><code class="docutils literal notranslate"><span class="pre">vehicle_hide_options</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#vehicle-important-dates"><code class="docutils literal notranslate"><span class="pre">vehicle_important_dates</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#vehicle-information"><code class="docutils literal notranslate"><span class="pre">vehicle_information</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#vehicle-kilometres-registers"><code class="docutils literal notranslate"><span class="pre">vehicle_kilometres_registers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#vehicle-marca"><code class="docutils literal notranslate"><span class="pre">vehicle_marca</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#vehicle-modelo"><code class="docutils literal notranslate"><span class="pre">vehicle_modelo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#vehicle-penalty"><code class="docutils literal notranslate"><span class="pre">vehicle_penalty</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#vehicle-profile"><code class="docutils literal notranslate"><span class="pre">vehicle_profile</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="databases.html#vehicle-tipo"><code class="docutils literal notranslate"><span class="pre">vehicle_tipo</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="secciones.html">Secciones</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modulos/core.html">Core</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modulos/core.html#descripcion-general">Descripción General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/core.html#modelos-de-datos-models-py">Modelos de Datos (models.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#genero">Genero</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#ciudad">Ciudad</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#nacionalidad">Nacionalidad</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#ano-ano">Año(ano)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#marca">Marca</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#modelo">Modelo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#color">Color</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#tipo">Tipo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#signal-create-informacion-vehiculo">Signal: create_informacion_vehiculo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#faena">Faena</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#tipodocumentofaena">TipoDocumentoFaena</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#empresaservicios">EmpresaServicios</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#empresatiposervicios">EmpresaTipoServicios</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#categoriafallavehiculo">CategoriaFallaVehiculo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#tipofallavehiculo">TipoFallaVehiculo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#ocultaropcionesvehiculo">OcultarOpcionesVehiculo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#tipodocumentofaenageneral">TipoDocumentoFaenaGeneral</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#tipomaquinaria">TipoMaquinaria</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#marcamaquinaria">MarcaMaquinaria</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#kitsmaquinaria">KitsMaquinaria</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#fallamaquinaria">FallaMaquinaria</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#fechasimportantes">FechasImportantes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#reporteerror">ReporteError</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#ayudamanuales">AyudaManuales</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#sondas">Sondas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#sondajes">Sondajes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#diametros">Diametros</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#tipoterreno">TipoTerreno</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#orientacion">Orientacion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#perforistas">Perforistas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#detallecontrolhorario">DetalleControlHorario</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#corona">Corona</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#escareador">Escareador</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#cantidadagua">CantidadAgua</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#aditivos">Aditivos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#casing">Casing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#zapata">Zapata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#largobarra">LargoBarra</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#recomendacion">Recomendacion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#materialessonda">MaterialesSonda</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#materialescaseta">MaterialesCaseta</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/core.html#decoradores-decorators-py">Decoradores (decorators.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#is-admin">is_admin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#is-jefe-mantencion">is_jefe_mantencion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#is-supervisor">is_supervisor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#is-conductor">is_conductor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#is-trabajador">is_trabajador</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#is-controlador">is_controlador</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#is-base-datos">is_base_datos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#is-admin-or-jefe-mantencion">is_admin_or_jefe_mantencion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#is-admin-or-controlador-or-base-datos-or-supervisor">is_admin_or_controlador_or_base_datos_or_supervisor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#is-admin-or-base-datos-or-supervisor">is_admin_or_base_datos_or_supervisor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#controlador-or-base-datos">controlador_or_base_datos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#is-admin-or-jefe-mantencion-or-supervisor">is_admin_or_jefe_mantencion_or_supervisor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#vehicle-admin-required">vehicle_admin_required</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#admin-or-jefe-mantencion-required">admin_or_jefe_mantencion_required</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#admin-or-jefe-mantencion-or-supervisor-required">admin_or_jefe_mantencion_or_supervisor_required</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#sondaje-admin-or-controlador-or-base-datos-or-supervisor-required">sondaje_admin_or_controlador_or_base_datos_or_supervisor_required</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#sondaje-admin-or-base-datos-or-supervisor-required">sondaje_admin_or_base_datos_or_supervisor_required</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#admin-required">admin_required</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/core.html#formularios-forms-py">Formularios (forms.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formgenero">FormGenero</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formciudad">FormCiudad</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formnacionalidad">FormNacionalidad</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formano">FormAno</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formmarca">FormMarca</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formmodelo">FormModelo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formcolor">FormColor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formtipo">FormTipo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formnuevafaena">FormNuevaFaena</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formnuevaempresaservicios">FormNuevaEmpresaServicios</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formempresatiposervicios">FormEmpresaTipoServicios</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formtipofallavehiculo">FormTipoFallaVehiculo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formcategoriafallavehiculo">FormCategoriaFallaVehiculo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formocultaropcionesvehiculoadicional">FormOcultarOpcionesVehiculoAdicional</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formocultaropcionesvehiculotecnica">FormOcultarOpcionesVehiculoTecnica</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formocultaropcionesvehiculodocumentacion">FormOcultarOpcionesVehiculoDocumentacion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formocultaropcionesvehiculointerior">FormOcultarOpcionesVehiculoInterior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formocultaropcionesvehiculoexterior">FormOcultarOpcionesVehiculoExterior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formtipodocumentofaenageneral">FormTipoDocumentoFaenaGeneral</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formtipomaquinaria">FormTipoMaquinaria</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formmarcamaquinaria">FormMarcaMaquinaria</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formkitreparacion">FormKitReparacion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formfallamaquinaria">FormFallaMaquinaria</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formmarcamaquinariaselect">FormMarcaMaquinariaSelect</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formnuevafechasimportantes">FormNuevaFechasImportantes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formreporteerror">FormReporteError</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formayudamanuales">FormAyudaManuales</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formseleccionseccion">FormSeleccionSeccion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formsondas">FormSondas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formsondajes">FormSondajes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formdiametros">FormDiametros</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formtipoterreno">FormTipoTerreno</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formorientacion">FormOrientacion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formdetallecontrolhorario">FormDetalleControlHorario</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formcorona">FormCorona</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formescareador">FormEscareador</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formcantidadagua">FormCantidadAgua</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formaditivos">FormAditivos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formcasing">FormCasing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formzapata">FormZapata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formlargobarra">FormLargoBarra</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formrecomendaciones">FormRecomendaciones</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formperforista">FormPerforista</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formmaterialessonda">FormMaterialesSonda</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#select">select</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#selectoption">selectOption</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#dashboard">dashboard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#dashboardsondaje">dashboardSondaje</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#dashboardprevencion">dashboardPrevencion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-genders">manage_genders</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-gender">new_gender</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-gender">save_new_gender</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-gender">status_gender</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-cities">manage_cities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-city">new_city</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-city">save_new_city</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-city">status_city</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-nationalities">manage_nationalities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-nationality">new_nationality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-nationality">save_new_nationality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-nationality">status_nationality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-years">manage_years</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-year">new_year</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-year">save_new_year</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-year">status_year</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-brands">manage_brands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-brand">new_brand</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-brand">status_brand</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-models">manage_models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-model">new_model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-model">save_new_model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-model">status_model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-colours">manage_colours</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-colour">new_colour</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-colour">save_new_colour</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-colour">status_colour</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-types">manage_types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-type">new_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-type">save_new_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-type">status_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-type">edit_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-type">save_edit_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-mining">manage_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-mining">new_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-mining">save_new_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-mining">status_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-mining">edit_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-mining">save_edit_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-mining-documents">manage_mining_documents</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-mining-document">new_mining_document</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-mining-document">save_new_mining_document</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-mining-document">status_mining_document</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-maintenance-companies">manage_maintenance_companies</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-maintenance-companie">new_maintenance_companie</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-maintenance-companie">save_new_maintenance_companie</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-maintenance-companie">status_maintenance_companie</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-maintenance-companie">edit_maintenance_companie</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id255">edit_maintenance_companie</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-maintenance-companie">save_edit_maintenance_companie</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-maintenance-services">manage_maintenance_services</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-maintenance-service">new_maintenance_service</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-maintenance-service">save_new_maintenance_service</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-maintenance-service">status_maintenance_service</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-failures">manage_failures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-failure">new_failure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-failure">save_new_failure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-failure">status_failure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-categories-failures">manage_categories_failures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-categories-failure">new_categories_failure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-categories-failure">save_new_categories_failure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-categories-failure">status_categories_failure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-mining-documents-general">manage_mining_documents_general</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-mining-document-general">new_mining_document_general</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-mining-document-general">save_new_mining_document_general</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-mining-document-general">status_mining_document_general</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-mining-document-general">edit_mining_document_general</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-mining-document-general">save_edit_mining_document_general</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-types-machines">manage_types_machines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-type-machine">new_type_machine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-type-machine">save_new_type_machine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-type-machine">status_type_machine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-brands-machines">manage_brands_machines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-kits-repairs">manage_kits_repairs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-kit-repair">new_kit_repair</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-kit-repair">save_new_kit_repair</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-kit-repair">status_kit_repair</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-kit-repair">edit_kit_repair</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-kit-repair">save_edit_kit_repair</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-failures-machines">manage_failures_machines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-failure-machine">new_failure_machine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-failure-machine">save_new_failure_machine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-failure-machine">status_failure_machine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#cargar-kits-por-marca">cargar_kits_por_marca</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-important-dates">new_important_dates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-important-dates">save_new_important_dates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-important-dates">manage_important_dates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-important-dates">status_important_dates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-important-dates">edit_important_dates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-important-dates">save_edit_important_dates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-report-error">manage_report_error</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-report-error">new_report_error</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-report-error">save_new_report_error</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#mostrar-reporte-error">mostrar_reporte_error</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-help-manuals">manage_help_manuals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-help-manuals">new_help_manuals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-help-manuals">save_new_help_manuals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-help-manuals">status_help_manuals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-help-manuals">edit_help_manuals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-help-manuals">save_edit_help_manuals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#view-help-manuals">view_help_manuals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-probe">manage_probe</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-probe">new_probe</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-probe">save_new_probe</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-probe">status_probe</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-probe">edit_probe</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-probe">save_edit_probe</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-aditivos">manage_aditivos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-aditivos">new_aditivos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-aditivos">save_new_aditivos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-aditivos">status_aditivos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-aditivos">edit_aditivos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-aditivos">save_edit_aditivos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-cantidadagua">manage_cantidadAgua</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-cantidadagua">new_cantidadAgua</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-cantidadagua">save_new_cantidadAgua</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-cantidadagua">status_cantidadAgua</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-cantidadagua">edit_cantidadAgua</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id466">save_new_cantidadAgua</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id470">status_cantidadAgua</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id474">edit_cantidadAgua</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-cantidadagua">save_edit_cantidadAgua</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-casing">manage_casing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-casing">new_casing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-casing">save_new_casing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-casing">status_casing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-casing">edit_casing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-casing">save_edit_casing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-corona">manage_corona</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-corona">new_corona</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-corona">save_new_corona</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-corona">status_corona</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-corona">edit_corona</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-corona">save_edit_corona</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-details">manage_details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-details">new_details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-details">save_new_details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-details">status_details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-details">edit_details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-details">save_edit_details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-diameter">manage_diameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-diameter">new_diameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-diameter">save_new_diameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-diameter">status_diameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-diameter">edit_diameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-diameter">save_edit_diameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-drilling">manage_drilling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-drilling">new_drilling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-drilling">save_new_drilling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-drilling">status_drilling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-drilling">edit_drilling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-drilling">save_edit_drilling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-escareador">manage_escareador</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-escareador">new_escareador</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-escareador">save_new_escareador</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-escareador">status_escareador</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-escareador">edit_escareador</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-escareador">save_edit_escareador</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-largobarra">manage_largoBarra</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-largobarra">new_largoBarra</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-largobarra">save_new_largoBarra</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-largobarra">status_largoBarra</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-largobarra">edit_largoBarra</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-largobarra">save_edit_largoBarra</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-orientation">manage_orientation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-orientation">new_orientation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-orientation">save_new_orientation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-orientation">status_orientation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-orientation">edit_orientation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-orientation">save_edit_orientation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-tipoterreno">manage_tipoTerreno</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-tipoterreno">new_tipoTerreno</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-tipoterreno">save_new_tipoTerreno</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-tipoterreno">status_tipoTerreno</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-tipoterreno">edit_tipoTerreno</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-tipoterreno">save_edit_tipoTerreno</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-zapata">manage_zapata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-zapata">new_zapata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-zapata">save_new_zapata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-zapata">status_zapata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-zapata">edit_zapata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-zapata">save_edit_zapata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-perforista">manage_perforista</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-perforista">new_perforista</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-perforista">save_new_perforista</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-perforista">status_perforista</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-perforista">edit_perforista</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-perforista">save_edit_perforista</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-recomendaciones">manage_recomendaciones</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-recomendacion">new_recomendacion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-recomendacion">save_new_recomendacion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-recomendacion">status_recomendacion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-recomendacion">edit_recomendacion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-recomendacion">save_edit_recomendacion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-materiales-sonda">manage_materiales_sonda</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-materiales-sonda">new_materiales_sonda</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-materiales-sonda">save_new_materiales_sonda</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-materiales-sonda">status_materiales_sonda</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-materiales-sonda">edit_materiales_sonda</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-materiales-sonda">save_edit_materiales_sonda</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#manage-materiales-caseta">manage_materiales_caseta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#new-materiales-caseta">new_materiales_caseta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-materiales-caseta">save_new_materiales_caseta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#status-materiales-caseta">status_materiales_caseta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#edit-materiales-caseta">edit_materiales_caseta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-edit-materiales-caseta">save_edit_materiales_caseta</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/core.html#utilidades-utils-py">Utilidades (utils.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#procesar-fotografia">procesar_fotografia</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#procesar-fotografia-dos">procesar_fotografia_dos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#validar-campo-vacio">validar_campo_vacio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#validar-archivo-vacio">validar_archivo_vacio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#get-filtered-queryset">get_filtered_queryset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#formatear-fecha">formatear_fecha</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#extension-archivo">extension_archivo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#extension-archivo-pdfs">extension_archivo_pdfs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#convert-pdf-to-images">convert_pdf_to_images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#check-and-convert-pdf">check_and_convert_pdf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#ordenar-por-mes-inicial">ordenar_por_mes_inicial</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/core.html#rutas-urls-py">Rutas (urls.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id755">select</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id756">selectOption</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id759">dashboard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id762">dashboardSondaje</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id765">dashboardPrevencion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id768">manage_genders</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id771">new_gender</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id774">save_new_gender</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id777">status_gender</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id780">manage_cities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id783">new_city</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id786">save_new_city</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id789">status_city</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id792">manage_nationalities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id795">new_nationality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id798">save_new_nationality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id801">status_nationality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id804">manage_years</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id807">new_year</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id810">save_new_year</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id813">status_year</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id816">manage_brands</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id819">new_brand</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#save-new-brand">save_new_brand</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id824">status_brand</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id827">manage_models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id830">new_model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id833">save_new_model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id836">status_model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id839">manage_colours</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id842">new_colour</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id845">save_new_colour</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id848">status_colour</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id851">manage_types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id854">new_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id857">save_new_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id860">status_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id863">edit_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/core.html#id866">save_edit_type</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/checklist.html">Checklist</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modulos/checklist.html#descripcion-general">Descripción General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/checklist.html#modelos-de-datos-models-py">Modelos de Datos (models.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#checklistmaterialessonda">ChecklistMaterialesSonda</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#checklistmaterialescaseta">ChecklistMaterialesCaseta</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/checklist.html#formularios-forms-py">Formularios (forms.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#checklistmaterialessondaentradaform">ChecklistMaterialesSondaEntradaForm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#checklistmaterialessondasalidaform">ChecklistMaterialesSondaSalidaForm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#checklistmaterialescasetaformtop">ChecklistMaterialesCasetaFormTop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#checklistmaterialescasetaformbottom">ChecklistMaterialesCasetaFormBottom</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/checklist.html#vistas-views-py">Vistas (views.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#manage-checklist-materiales-sonda">manage_checklist_materiales_sonda</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#save-checklist-materiales-sonda-entrada">save_checklist_materiales_sonda_entrada</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#save-checklist-materiales-sonda-salida">save_checklist_materiales_sonda_salida</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#edit-checklist-materiales-sonda">edit_checklist_materiales_sonda</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#save-edit-checklist-materiales-sonda-entrada">save_edit_checklist_materiales_sonda_entrada</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#save-edit-checklist-materiales-sonda-salida">save_edit_checklist_materiales_sonda_salida</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#manage-checklist-materiales-caseta">manage_checklist_materiales_caseta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#new-checklist-materiales-caseta">new_checklist_materiales_caseta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#edit-checklist-materiales-caseta">edit_checklist_materiales_caseta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#save-edit-checklist-materiales-caseta">save_edit_checklist_materiales_caseta</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/checklist.html#rutas-urls-py">Rutas (urls.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#id34">save_checklist_materiales_sonda_entrada</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#id35">save_checklist_materiales_sonda_salida</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#id38">edit_checklist_materiales_sonda</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#id41">manage_checklist_materiales_sonda</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#id44">save_edit_checklist_materiales_sonda_entrada</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#id47">save_edit_checklist_materiales_sonda_salida</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#id50">new_checklist_materiales_caseta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#id53">edit_checklist_materiales_caseta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#id56">manage_checklist_materiales_caseta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/checklist.html#id59">save_edit_checklist_materiales_caseta</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/drilling.html">Drilling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modulos/drilling.html#descripcion-general">Descripción General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/drilling.html#modelos-de-datos-models-py">Modelos de Datos (models.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#reportesoperacionales">ReportesOperacionales</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#detallesperforaciones">DetallesPerforaciones</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#controleshorarios">ControlesHorarios</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#detalleaditivos">DetalleAditivos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#insumos">Insumos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#longitudpozos">LongitudPozos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#observacionesreportes">ObservacionesReportes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/drilling.html#formularios-forms-py">Formularios (forms.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#formreportesoperacionales">FormReportesOperacionales</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#formdetallesperforaciones">FormDetallesPerforaciones</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#formcontroleshorarios">FormControlesHorarios</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#forminsumos">FormInsumos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#formaditivos">FormAditivos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#formlongitudpozos">FormLongitudPozos</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#formobservacionesreportes">FormObservacionesReportes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/drilling.html#vistas-views-py">Vistas (views.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#new-reporte-digital">new_reporte_digital</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#save-reporte-digital">save_reporte_digital</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#obtener-metro-inicial">obtener_metro_inicial</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#manage-mis-reportes-digitales">manage_mis_reportes_digitales</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#manage-revisar-reportes-digitales">manage_revisar_reportes_digitales</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#manage-todos-reportes-digitales">manage_todos_reportes_digitales</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#progreso-reporte-digital">progreso_reporte_digital</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#progreso-reporte-digital-corregir">progreso_reporte_digital_corregir</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#progreso-reporte-digital-aprobar">progreso_reporte_digital_aprobar</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#editar-reporte-digital">editar_reporte_digital</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#save-editar-reporte-digital">save_editar_reporte_digital</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#obtener-estado-sonda">obtener_estado_sonda</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#reporte-digital-pdf-view">reporte_digital_pdf_view</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/drilling.html#rutas-urls-py">Rutas (urls.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#id49">new_reporte_digital</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#id50">save_reporte_digital</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#id53">obtener-metro-inicial</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#id56">manage_mis_reportes_digitales</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#id59">manage_revisar_reportes_digitales</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#id62">manage_todos_reportes_digitales</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#id65">progreso_reporte_digital</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#id68">progreso_reporte_digital_corregir</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#id71">progreso_reporte_digital_aprobar</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#id74">editar_reporte_digital</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#id77">save_editar_reporte_digital</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#id80">obtener-estado-sonda</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/drilling.html#id83">reporte_digital_pdf_view</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/documentation.html">Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modulos/documentation.html#descripcion-general">Descripción General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/documentation.html#archivos-principales">Archivos principales</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/documentation.html#nota-sobre-modelos">Nota sobre modelos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/documentation.html#rutas-del-modulo">Rutas del módulo</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/equipment.html">Equipment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modulos/equipment.html#descripcion-general">Descripción General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/equipment.html#capacidades-actuales">Capacidades actuales</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/equipment.html#modelos-principales">Modelos principales</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/equipment.html#tipoequipo"><code class="docutils literal notranslate"><span class="pre">TipoEquipo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/equipment.html#marcaequipo"><code class="docutils literal notranslate"><span class="pre">MarcaEquipo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/equipment.html#nuevoequipamiento"><code class="docutils literal notranslate"><span class="pre">NuevoEquipamiento</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/equipment.html#rutas-del-modulo">Rutas del módulo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/equipment.html#notas-de-implementacion">Notas de implementación</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/geoadmin.html">Geoadmin</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modulos/geoadmin.html#descripcion-general">Descripción General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/geoadmin.html#archivos-principales">Archivos principales</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/geoadmin.html#responsabilidades">Responsabilidades</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/geoadmin.html#rutas-globales-urls-py">Rutas Globales (urls.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/geoadmin.html#ruta-administrativa">Ruta administrativa</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/geoadmin.html#rutas-incluidas-sin-prefijo">Rutas incluidas sin prefijo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/geoadmin.html#rutas-con-prefijo">Rutas con prefijo</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/geoadmin.html#archivos-estaticos-y-media">Archivos estáticos y media</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/geoadmin.html#configuraciones-complementarias">Configuraciones complementarias</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/geoadmin.html#settings-py"><code class="docutils literal notranslate"><span class="pre">settings.py</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/geoadmin.html#production-py"><code class="docutils literal notranslate"><span class="pre">production.py</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/geoadmin.html#celery-py"><code class="docutils literal notranslate"><span class="pre">celery.py</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/geoadmin.html#asgi-py-y-wsgi-py"><code class="docutils literal notranslate"><span class="pre">asgi.py</span></code> y <code class="docutils literal notranslate"><span class="pre">wsgi.py</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/inventory.html">Inventory</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modulos/inventory.html#descripcion-general">Descripción General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/inventory.html#capacidades-actuales">Capacidades actuales</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/inventory.html#modelos-principales">Modelos principales</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/inventory.html#seccionitems"><code class="docutils literal notranslate"><span class="pre">SeccionItems</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/inventory.html#categoriaitems"><code class="docutils literal notranslate"><span class="pre">CategoriaItems</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/inventory.html#duracionitems"><code class="docutils literal notranslate"><span class="pre">DuracionItems</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/inventory.html#items"><code class="docutils literal notranslate"><span class="pre">Items</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/inventory.html#stockitems"><code class="docutils literal notranslate"><span class="pre">StockItems</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/inventory.html#stockitemshistorico"><code class="docutils literal notranslate"><span class="pre">StockItemsHistorico</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/inventory.html#stockegresoitems"><code class="docutils literal notranslate"><span class="pre">StockEgresoItems</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/inventory.html#rutas-del-modulo">Rutas del módulo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/inventory.html#notas-de-implementacion">Notas de implementación</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/machine.html">Machine</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modulos/machine.html#descripcion-general">Descripción General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/machine.html#modelos-de-datos-models-py">Modelos de Datos (models.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#maquinaria">Maquinaria</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#maquinariafaena">MaquinariaFaena</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#nuevohorometro">NuevoHorometro</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#kitsmaquinariafaena">KitsMaquinariaFaena</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#historialstockkitsmaquinariafaena">HistorialStockKitsMaquinariaFaena</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/machine.html#formularios-forms-py">Formularios (forms.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#formmaquinaria">FormMaquinaria</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#formnuevohorometro">FormNuevoHorometro</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#formnuevokitreparacionfaena">FormNuevoKitReparacionFaena</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#formeditkitsmaquinariafaena">FormEditKitsMaquinariaFaena</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#formeditkitsmaquinariafaenaadd">FormEditKitsMaquinariaFaenaAdd</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/machine.html#vistas-views-py">Vistas (views.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#new-machine">new_machine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#manage-machines">manage_machines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#save-new-machine">save_new_machine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#status-machine">status_machine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#edit-machine-profile">edit_machine_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#save-edit-machine-profile">save_edit_machine_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#cargar-marca-por-tipo">cargar_marca_por_tipo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#new-horometro-register">new_horometro_register</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#save-new-horometro-register">save_new_horometro_register</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#machine-pdf-view">machine_pdf_view</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#manage-machines-kits-repair">manage_machines_kits_repair</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#new-machines-kits-repair">new_machines_kits_repair</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#save-new-machines-kits-repair">save_new_machines_kits_repair</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#status-machines-kits-repair">status_machines_kits_repair</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#edit-machines-kits-repair">edit_machines_kits_repair</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#save-edit-machines-kits-repair">save_edit_machines_kits_repair</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/machine.html#rutas-urls-py">Rutas (urls.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#id54">manage_machines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#id55">new_machine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#id58">save_new_machine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#id61">status_machine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#id64">edit_machine_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#id67">save_edit_machine_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#id70">cargar_marca_por_tipo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#id73">machine_pdf_view</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#id76">new_horometro_register</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#id79">save_new_horometro_register</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#id82">manage_machines_kits_repair</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#id85">new_machines_kits_repair</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#id88">save_new_machines_kits_repair</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#id91">edit_machines_kits_repair</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#id94">status_machines_kits_repair</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/machine.html#id97">save_edit_machines_kits_repair</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/maintenance.html">Maintenance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modulos/maintenance.html#descripcion-general">Descripción General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/maintenance.html#modelos-de-datos-models-py">Modelos de Datos (models.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#nuevasolicitudmantenimiento">NuevaSolicitudMantenimiento</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#historialsolicitudmantenimiento">HistorialSolicitudMantenimiento</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#signal-create-historial-solicitud-mantenimiento">Signal: create_historial_solicitud_mantenimiento</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#solicitudmantenimientoproblemas">SolicitudMantenimientoProblemas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#nuevasolicitudmantenimientomaquinaria">NuevaSolicitudMantenimientoMaquinaria</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#historialsolicitudmantenimientomaquinaria">HistorialSolicitudMantenimientoMaquinaria</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#signal-create-historial-solicitud-mantenimiento-maquinaria">Signal: create_historial_solicitud_mantenimiento_maquinaria</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#solicitudmantenimientoproblemasmaquinaria">SolicitudMantenimientoProblemasMaquinaria</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#mantenimiento">Mantenimiento</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/maintenance.html#formularios-forms-py">Formularios (forms.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#formnuevasolicitudmantenimiento">FormNuevaSolicitudMantenimiento</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#formeditsolicitudmantenimiento">FormEditSolicitudMantenimiento</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#formprocesarsolicitudmantenimiento">FormProcesarSolicitudMantenimiento</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#formeditsolicitudmantenimientomaquinaria">FormEditSolicitudMantenimientoMaquinaria</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#formprocesarsolicitudmantenimientomaquinaria">FormProcesarSolicitudMantenimientoMaquinaria</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/maintenance.html#vistas-views-py">Vistas (views.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#new-maintenance-request">new_maintenance_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#save-new-maintenance-request">save_new_maintenance_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#manage-maintenance-request">manage_maintenance_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#edit-maintenance-request">edit_maintenance_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#save-edit-maintenance-request">save_edit_maintenance_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#status-maintenance-request">status_maintenance_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#new-maintenance-machine-request">new_maintenance_machine_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#save-new-maintenance-machine-request">save_new_maintenance_machine_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#manage-maintenance-machine-request">manage_maintenance_machine_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#edit-maintenance-machine-request">edit_maintenance_machine_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#save-edit-maintenance-machine-request">save_edit_maintenance_machine_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#maintenance-pdf-view">maintenance_pdf_view</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#maintenance-machine-pdf-view">maintenance_machine_pdf_view</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/maintenance.html#rutas-urls-py">Rutas (urls.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#id45">new_maintenance_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#id46">save_new_maintenance_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#id49">manage_maintenance_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#id52">edit_maintenance_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#id55">save_edit_maintenance_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#id58">status_maintenance_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#id61">new_maintenance_machine_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#id64">save_new_maintenance_machine_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#id67">manage_maintenance_machine_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#id70">edit_maintenance_machine_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#id73">save_edit_maintenance_machine_request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#id76">maintenance_pdf_view</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/maintenance.html#id79">maintenance_machine_pdf_view</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/messenger.html">Messenger</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modulos/messenger.html#descripcion-general">Descripción General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/messenger.html#modelos-de-datos-models-py">Modelos de Datos (models.py)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/messenger.html#vistas-views-py">Vistas (views.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/messenger.html#send-sms-message">send_sms_message</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/messenger.html#send-email-message">send_email_message</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/messenger.html#notificacion-vehiculos-email">notificacion_vehiculos_email</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/messenger.html#notificacion-maquinarias-email">notificacion_maquinarias_email</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/messenger.html#notificacion-usuarios-email">notificacion_usuarios_email</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/messenger.html#notificacion-mantenedor-email">notificacion_mantenedor_email</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/messenger.html#notificacion-mi-usuario-email">notificacion_mi_usuario_email</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/messenger.html#notificacion-admin-jefe-mantencion-email">notificacion_admin_jefe_mantencion_email</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/messenger.html#notificacion-cambio-faena-vehiculo-email">notificacion_cambio_faena_vehiculo_email</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/messenger.html#notificacion-nuevo-mantenimiento-vehiculos-email-sms">notificacion_nuevo_mantenimiento_vehiculos_email_sms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/messenger.html#notificacion-update-mantenimiento-vehiculos-email-sms">notificacion_update_mantenimiento_vehiculos_email_sms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/messenger.html#notificacion-nuevo-mantenimiento-maquinaria-email-sms">notificacion_nuevo_mantenimiento_maquinaria_email_sms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/messenger.html#notificacion-update-mantenimiento-maquinaria-email-sms">notificacion_update_mantenimiento_maquinaria_email_sms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/messenger.html#notificacion-celery-email">notificacion_celery_email</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/messenger.html#rutas-urls-py">Rutas (urls.py)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/mining.html">Mining</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modulos/mining.html#descripcion-general">Descripción General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/mining.html#modelos-de-datos-models-py">Modelos de Datos (models.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/mining.html#vehiculoasignado">VehiculoAsignado</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/mining.html#documentoporfaena">DocumentoPorFaena</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/mining.html#formularios-forms-py">Formularios (forms.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/mining.html#formvehiculoasignacion">FormVehiculoAsignacion</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/mining.html#vistas-views-py">Vistas (views.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/mining.html#manage-vehicles-mining">manage_vehicles_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/mining.html#edit-vehicle-mining">edit_vehicle_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/mining.html#save-edit-vehicle-mining">save_edit_vehicle_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/mining.html#select-documents-mining">select_documents_mining</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/mining.html#rutas-urls-py">Rutas (urls.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/mining.html#id10">manage_vehicles_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/mining.html#id11">edit_vehicle_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/mining.html#id14">save_edit_vehicle_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/mining.html#id17">select_documents_mining</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/offline.html">Offline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modulos/offline.html#descripcion-general">Descripción General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/offline.html#modelos-de-datos-models-py">Modelos de Datos (models.py)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/offline.html#vistas-views-py">Vistas (views.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/offline.html#service-worker">service_worker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/offline.html#sondajeoffline">sondajeOffline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/offline.html#reportedigitaloffline">reporteDigitalOffline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/offline.html#editarreportedigitaloffline">editarReporteDigitalOffline</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/offline.html#rutas-urls-py">Rutas (urls.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/offline.html#id10">sondajeOffline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/offline.html#service-worker-js">service-worker.js</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/planning.html">Planning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modulos/planning.html#descripcion-general">Descripción General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/planning.html#modelos-de-datos-models-py">Modelos de Datos (models.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#planificacionfaenas">PlanificacionFaenas</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/planning.html#formularios-forms-py">Formularios (forms.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#formplanificacionfaenas">FormPlanificacionFaenas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#formselectfaena">FormSelectFaena</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#formselecttipo">FormSelectTipo</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/planning.html#vistas-views-py">Vistas (views.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#new-planning-select-mining">new_planning_select_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#view-planning-mining">view_planning_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#view-planning-type">view_planning_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#edit-planning-mining">edit_planning_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#get-planning-mining">get_planning_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#get-planning-type">get_planning_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#update-planning-value">update_planning_value</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/planning.html#rutas-urls-py">Rutas (urls.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#id23">new_planning_select_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#id24">view_planning_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#id27">view_planning_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#id30">edit_planning_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#id33">get_planning_mining</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#id36">get_planning_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#id39">update_planning_value</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#new-planning-drilling">new_planning_drilling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#edit-drilling-program">edit_drilling_program</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/planning.html#update-drilling-program">update_drilling_program</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/prevencion.html">Prevencion</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modulos/prevencion.html#descripcion-general">Descripción General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/prevencion.html#capacidades-actuales">Capacidades actuales</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/prevencion.html#modelos-principales">Modelos principales</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/prevencion.html#prevencionplantilla"><code class="docutils literal notranslate"><span class="pre">PrevencionPlantilla</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/prevencion.html#prevenciondocumento"><code class="docutils literal notranslate"><span class="pre">PrevencionDocumento</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/prevencion.html#prevencionevidenciageneral-y-prevencionevidenciaseccion"><code class="docutils literal notranslate"><span class="pre">PrevencionEvidenciaGeneral</span></code> y <code class="docutils literal notranslate"><span class="pre">PrevencionEvidenciaSeccion</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/prevencion.html#prevencionevidenciaitem"><code class="docutils literal notranslate"><span class="pre">PrevencionEvidenciaItem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/prevencion.html#vigilanciaopcion"><code class="docutils literal notranslate"><span class="pre">VigilanciaOpcion</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/prevencion.html#vigilanciamedica"><code class="docutils literal notranslate"><span class="pre">VigilanciaMedica</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/prevencion.html#vigilanciaadjunto"><code class="docutils literal notranslate"><span class="pre">VigilanciaAdjunto</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/prevencion.html#rutas-del-modulo">Rutas del módulo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/prevencion.html#notas-de-implementacion">Notas de implementación</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/user.html">User</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modulos/user.html#descripcion-general">Descripción General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/user.html#modelos-de-datos-models-py">Modelos de Datos (models.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#id1">User</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#usuariomanager">UsuarioManager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#usuario">Usuario</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#usuarioprofile">UsuarioProfile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#licenciasusuario">LicenciasUsuario</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#documentacionusuario">DocumentacionUsuario</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#signal-create-usuario-profile">Signal: create_usuario_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#signal-create-licencias-usuario">Signal: create_licencias_usuario</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#signal-create-documentacion-usuario">Signal: create_documentacion_usuario</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/user.html#formularios-forms-py">Formularios (forms.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#get-filtered-queryset">get_filtered_queryset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#formregistro">FormRegistro</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#formregistroextra">FormRegistroExtra</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#formregistroseccion">FormRegistroSeccion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#formregistrolicenciasusuariofecha">FormRegistroLicenciasUsuarioFecha</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#formregistrolicenciasusuarionoprofesionales">FormRegistroLicenciasUsuarioNoProfesionales</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#formregistrolicenciasusuarioprofesionales">FormRegistroLicenciasUsuarioProfesionales</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#formregistrolicenciasusuarioprofesionalesantiguas">FormRegistroLicenciasUsuarioProfesionalesAntiguas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#formdocumentacionusuario">FormDocumentacionUsuario</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/user.html#vistas-views-py">Vistas (views.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#customloginview">CustomLoginView</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#customlogoutview">CustomLogoutView</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#register">register</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#new-user">new_user</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#save-new-user">save_new_user</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#error-rut-origen">error_rut_origen</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#error-campos-origen">error_campos_origen</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#manage-users">manage_users</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#status-user">status_user</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#edit-user-profile">edit_user_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#save-edit-user-profile">save_edit_user_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#edit-my-profile">edit_my_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#save-edit-my-profile">save_edit_my_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#save-password-change">save_password_change</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#password-reset-send">password_reset_send</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/user.html#rutas-urls-py">Rutas (urls.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#logincustom">logincustom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#logoutcustom">logoutcustom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#id66">register</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#id69">new_user</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#id72">save_new_user</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#id75">manage_users</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#id78">status_user</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#id81">edit_user_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#id84">save_edit_user_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#id87">edit_my_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#id90">save_edit_my_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#password-change">password_change</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#id95">save_password_change</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#password-reset">password_reset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#id100">password_reset_send</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#password-reset-confirm">password_reset_confirm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/user.html#password-reset-complete">password_reset_complete</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/vehicle.html">Vehicle</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modulos/vehicle.html#descripcion-general">Descripción General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/vehicle.html#modelos-de-datos-models-py">Modelos de Datos (models.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#vehiculo">Vehiculo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#informaciontecnicavehiculo">InformacionTecnicaVehiculo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#documentacionesvehiculo">DocumentacionesVehiculo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#signal-create-documentacion-vehiculo">Signal: create_documentacion_vehiculo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#create-informacion-vehiculo">create_informacion_vehiculo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#infraccionesvehiculo">InfraccionesVehiculo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#nuevokilometraje">NuevoKilometraje</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#formnuevovehiculo">FormNuevoVehiculo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#forminformaciontecnica">FormInformacionTecnica</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#formdocumentacionvehiculo">FormDocumentacionVehiculo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#formdocumentacionvehiculoexterior">FormDocumentacionVehiculoExterior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#formdocumentacionvehiculointerior">FormDocumentacionVehiculointerior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#forminfraccionesvehiculo">FormInfraccionesVehiculo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#formnuevokilometraje">FormNuevoKilometraje</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/vehicle.html#vistas-views-py">Vistas (views.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#new-vehicle">new_vehicle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#manage-vehicles">manage_vehicles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#save-new-vehicle">save_new_vehicle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#status-vehicle">status_vehicle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#edit-vehicle-profile">edit_vehicle_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#save-edit-vehicle-profile">save_edit_vehicle_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#hide-options-vehicle">hide_options_vehicle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#save-penalty">save_penalty</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#new-kilometraje-register">new_kilometraje_register</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#save-new-kilometraje-register">save_new_kilometraje_register</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#vehicle-pdf-view">vehicle_pdf_view</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#report-vehicles-kilometrajes">report_vehicles_kilometrajes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#report-vehicles-general">report_vehicles_general</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#report-vehicles-faenas">report_vehicles_faenas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#report-vehicles-camionetas-ano">report_vehicles_camionetas_ano</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#report-vehicles-camionetas-faenas">report_vehicles_camionetas_faenas</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/vehicle.html#rutas-urls-py">Rutas (urls.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#id73">new_vehicle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#id74">manage_vehicles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#id77">save_new_vehicle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#id80">status_vehicle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#id83">edit_vehicle_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#id86">save_edit_vehicle_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#id89">hide_options_vehicle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#id92">save_penalty</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#id95">new_kilometraje_register</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#id98">save_new_kilometraje_register</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#id101">vehicle_pdf_view</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#id104">report_vehicles_kilometrajes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#id107">report_vehicles_general</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#id110">report_vehicles_camionetas_faenas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#id113">report_vehicles_camionetas_ano</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#id116">report_vehicles_faenas</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modulos/vehicle.html#tareas-tasks-py">Tareas (tasks.py)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#create-vehicle-pdf">create_vehicle_pdf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#create-zip-file">create_zip_file</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modulos/vehicle.html#generate-vehicle-pdfs-and-send-email">generate_vehicle_pdfs_and_send_email</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Api</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#cobertura-actual">Cobertura actual</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#endpoints-principales">Endpoints principales</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#autenticacion">Autenticación</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#catalogos-y-sincronizacion-de-sondaje">Catálogos y sincronización de sondaje</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#vehiculos">Vehículos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#dashboards">Dashboards</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#comportamiento-relevante">Comportamiento relevante</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="right-next"
+       href="antesDeComenzar.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">Antes de Comenzar</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-1-0">Versión 0.1.0</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por Isamax
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Isamax.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

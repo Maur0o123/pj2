@@ -1,0 +1,235 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Egreso{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+<link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+<style>
+    .filter-wrapper {
+        width: 100%;
+    }
+    .form-inline-btn {
+        flex-wrap: nowrap !important;
+        display: flex;
+        gap: 5px;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+{% endblock css %}
+
+{% block content %}
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+
+            <div class="page-header">
+                <h1 class="page-title">Egreso</h1>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Prevención</a></li>
+                        <li class="breadcrumb-item active">Egreso</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="w-100">
+                        <div class="row g-3">
+                            {% if mostrar_filtro_faena %}
+                            <div class="col-xl-3 col-lg-6 col-md-6">
+                                <div class="filter-wrapper">
+                                    <label class="form-label fw-bold">Filtrar por Faena:</label>
+                                    <select id="faenaFilter" class="form-control">
+                                        <option value="">Todas las Faenas</option>
+                                    </select>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <div class="{% if mostrar_filtro_faena %}col-xl-3 col-lg-6 col-md-6{% else %}col-xl-4 col-md-6{% endif %}">
+                                <div class="filter-wrapper">
+                                    <label class="form-label fw-bold">Filtrar por Contrato:</label>
+                                    <select id="contratoFilter" class="form-control">
+                                        <option value="">Todos los Contratos</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="{% if mostrar_filtro_faena %}col-xl-3 col-lg-6 col-md-6{% else %}col-xl-4 col-md-6{% endif %}">
+                                <div class="filter-wrapper">
+                                    <label class="form-label fw-bold">Filtrar por Area:</label>
+                                    <select id="areaFilter" class="form-control">
+                                        <option value="">Todas las Areas</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="{% if mostrar_filtro_faena %}col-xl-3 col-lg-6 col-md-6{% else %}col-xl-4 col-md-12{% endif %}">
+                                <div class="filter-wrapper">
+                                    <label class="form-label fw-bold">Filtrar por GES:</label>
+                                    <select id="gesFilter" class="form-control">
+                                        <option value="">Todos los GES</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row row-sm">
+                <table id="datatable-egreso" class="display nowrap table table-bordered text-nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Fecha</th>
+                            <th>Cuantitativa</th>
+                            <th>Codigo Vigilancia</th>
+                            <th>Nombre Vigilancia</th>
+                            <th>Faena</th>
+                            <th>Area</th>
+                            <th>GES</th>
+                            <th>Agente</th>
+                            <th>Trabajadores</th>
+                            <th>Contrato (oculto)</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for v in vigilancias %}
+                        <tr>
+                            <td class="dtr-control"></td>
+                            <td data-order="{{ v.fechacreacion|date:'U' }}">{{ v.fechacreacion|date:"Y-m-d" }}</td>
+                            <td>{{ v.cuantitativa.codigo }} - {{ v.cuantitativa.nombre }}</td>
+                            <td>{{ v.codigo }}</td>
+                            <td>{{ v.nombre }}</td>
+                            <td>{{ v.faena.faena }}</td>
+                            <td>{{ v.area|default:"-" }}</td>
+                            <td>{{ v.ges|default:"-" }}</td>
+                            <td>{{ v.cuantitativa.agente_texto|default:"-" }}</td>
+                            <td>{{ v.total_trabajadores|default:0 }}</td>
+                            <td>{{ v.contrato_filtro_texto|default:"-" }}</td>
+                            <td class="form-inline-btn">
+                                <a href="{% url 'egreso_detalle' v.id %}" class="btn btn-warning btn-size-adm">Ver</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script>
+    function escapeRegex(string) {
+        return string ? string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : "";
+    }
+
+    function appendOptionIfMissing(select, value) {
+        if (!select || !value) return;
+        if (select.find('option[value="' + value + '"]').length === 0) {
+            select.append('<option value="' + value + '">' + value + '</option>');
+        }
+    }
+
+    function collectOptionsFromColumn(api, columnIndex, select, shouldSplitPipe) {
+        if (!select || !select.length) return;
+        api.column(columnIndex).data().unique().sort().each(function (raw) {
+            if (!raw) return;
+            const text = $('<div>').html(raw).text().trim();
+            if (!text || text === '-') return;
+
+            if (!shouldSplitPipe) {
+                appendOptionIfMissing(select, text);
+                return;
+            }
+
+            text.split('|').forEach(function (part) {
+                const value = part.trim();
+                if (value && value !== '-') {
+                    appendOptionIfMissing(select, value);
+                }
+            });
+        });
+    }
+
+    $(document).ready(function() {
+        const table = new DataTable('#datatable-egreso', {
+            language: { url: '{% static "json/es-CL.json" %}' },
+            columnDefs: [
+                { className: 'dtr-control', orderable: false, targets: 0, width: "5%", searchable: false },
+                { targets: 1, width: "8%", searchable: true },
+                { targets: 2, width: "10%", searchable: true },
+                { targets: 3, width: "8%", searchable: true },
+                { targets: 4, width: "10%", searchable: true },
+                { targets: 5, width: "8%", searchable: true },
+                { targets: 6, width: "8%", searchable: true },
+                { targets: 7, width: "8%", searchable: true },
+                { targets: 8, width: "8%", searchable: true },
+                { targets: 9, width: "7%", searchable: true },
+                { visible: false, searchable: true, targets: 10 },
+                { targets: 11, width: "10%", searchable: false, orderable: false, className: "text-center" }
+            ],
+            order: [[1, 'desc']],
+            responsive: { details: { type: 'column', target: 0 } },
+            autoWidth: false,
+            initComplete: function () {
+                const api = this.api();
+                const faenaSelect = $('#faenaFilter');
+                const contratoSelect = $('#contratoFilter');
+                const areaSelect = $('#areaFilter');
+                const gesSelect = $('#gesFilter');
+
+                if (faenaSelect.length) {
+                    api.column(5).data().unique().sort().each(function (d) {
+                        if (!d) return;
+                        const text = $('<div>').html(d).text().trim();
+                        if (!text || text.toUpperCase() === 'SIN ASIGNAR') return;
+                        appendOptionIfMissing(faenaSelect, text);
+                    });
+                }
+
+                collectOptionsFromColumn(api, 6, areaSelect, false);
+                collectOptionsFromColumn(api, 7, gesSelect, false);
+                collectOptionsFromColumn(api, 10, contratoSelect, true);
+            }
+        });
+
+        $('#faenaFilter').on('change', function () {
+            const val = escapeRegex($(this).val());
+            table.column(5).search(val ? '^' + val + '$' : '', true, false).draw();
+        });
+
+        $('#areaFilter').on('change', function () {
+            const val = escapeRegex($(this).val());
+            table.column(6).search(val ? '^' + val + '$' : '', true, false).draw();
+        });
+
+        $('#gesFilter').on('change', function () {
+            const val = escapeRegex($(this).val());
+            table.column(7).search(val ? '^' + val + '$' : '', true, false).draw();
+        });
+
+        $('#contratoFilter').on('change', function () {
+            const val = ($(this).val() || '').trim();
+            if (!val) {
+                table.column(10).search('', true, false).draw();
+                return;
+            }
+
+            const pattern = '(^|\\s\\|\\s)' + escapeRegex(val) + '(\\s\\|\\s|$)';
+            table.column(10).search(pattern, true, false).draw();
+        });
+    });
+</script>
+{% endblock %}

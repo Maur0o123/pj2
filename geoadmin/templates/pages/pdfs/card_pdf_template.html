@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Vehículo PDF</title>
+    <style>
+        @page {
+            size: letter portrait;
+            @frame header_frame {  
+                -pdf-frame-content: header_content;
+                left: 30pt; width: 552pt; top: 30pt; height: 40pt;
+            } 
+            @frame content_frame {         
+                left: 30pt; width: 552pt; top: 70pt; height: 682pt;
+            }
+            @frame footer_frame {          
+                -pdf-frame-content: footer_content;
+                left: 30pt; width: 552pt; top: 752pt; height: 40pt;
+            }
+            @frame logo {             
+                -pdf-frame-content: logo;
+                left: 185pt; width: 40pt; top: 750pt; height: 50pt;
+            }
+            @frame footer_text {           
+                -pdf-frame-content: footer_text;
+                left: 30pt; width: 552pt; top: 772pt; height: 20pt;
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container-image {
+            display: flex;
+            flex-direction: column;
+        }
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        img {
+            max-width: 100%; 
+            height: auto;
+        }
+        h2, h3 { 
+            -pdf-keep-with-next: true; 
+        }
+        .header {
+            text-align: right;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="header_content" class="header">{{ current_datetime|date:"d-m-Y" }} - {{ current_datetime|time:"H:i" }}</div>
+    <div id="footer_text" style="text-align: center;vertical-align: middle;">
+        www.geoadmin.cl - Página <pdf:pagenumber> de <pdf:pagecount>
+    </div>
+    <img id="logo" src="static/images/logo/Logo GeoAdmin.png" style="width: 100px;" alt="logo"/>
+    
+    <div id="content_frame">
+        <div class="title">
+            <h1>TARJETA COPEC {{ vehiculo.placaPatente }}</h1>
+        </div>
+        <div class="container">
+            <div class="row row-sm">
+                
+                
+                <table class="table-out">
+                    <tbody>
+                        <tr>
+                            <td colspan="4">
+                                <div style="width: 400px; height: 300px;">
+                                    <img src="static/images/tarjeta_copec.png"  style="width: 100%; height: 100%;">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1">
+                                <div style="
+                                    color: black;
+                                    font-size: 30px;
+                                    font-weight: bold;
+                                    background-color: rgb(177, 179, 180);
+                                    padding-top: 10px;
+                                    padding-left: 15px;
+                                    margin-bottom: 50px;">
+                                    {{ tarjeta.patente}}
+                                </div>
+                            </td>
+                            <td colspan="2">
+                                <div style="
+                                    color: black;
+                                    font-size: 30px;
+                                    font-weight: bold;
+                                    background-color: rgb(177, 179, 180);
+                                    padding-top: 10px;
+                                    padding-left: 15px;
+                                    width: 100px;">
+                                    {{ tarjeta.tipoVehiculo}}
+                                </div>
+                            </td>
+                            <td colspan="1">
+                                <div style="
+                                    color: black;
+                                    font-size: 30px;
+                                    font-weight: bold;
+                                    background-color: rgb(177, 179, 180);
+                                    padding-top: 10px;
+                                    padding-left: 15px;
+                                    width: 100px;">
+                                    &nbsp;
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div style="
+                                    color: black;
+                                    font-size: 30px;
+                                    font-weight: bold;
+                                    background-color: rgb(177, 179, 180);
+                                    padding-top: 2px;
+                                    padding-left: 15px;
+                                    width: 100px;">
+                                    {{ tarjeta.numeroTarjeta}}
+                                </div>
+                            </td>
+                            <td colspan="1">
+                                <div style="
+                                    color: black;
+                                    font-size: 30px;
+                                    font-weight: bold;
+                                    color: rgb(43, 145, 74);
+                                    background-color: rgb(177, 179, 180);
+                                    padding-top: 2px;
+                                    padding-left: 0px;
+                                    width: 100px;">
+                                    {% if tarjeta.tipoCombustible == 'Diesel' %}
+                                        <div style="
+                                            color: rgb(3, 48, 197);">
+                                            Petróleo
+                                        </div>
+                                    {% else %} 
+                                        {{ tarjeta.tipoCombustible}}
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div style="
+                                    color: black;
+                                    font-size: 25px;
+                                    background-color: rgb(177, 179, 180);
+                                    padding-top: 2px;
+                                    padding-left: 15px;
+                                    width: 100px;">
+                                    {{ tarjeta.nombrePropietario}}
+                                </div>
+                            </td>
+                            <td rowspan="2">
+                                <div style="
+                                    font-size: 69px;
+                                    font-weight: bold;
+                                    color: rgb(43, 145, 74);
+                                    background-color: rgb(177, 179, 180);
+                                    padding-top: 2px;
+                                    padding-left: 0px;
+                                    padding-bottom: -20px;">
+                                    {% if tarjeta.tipoCombustible == 'Diesel' %}
+                                        <div style="
+                                            font-size: 59px;
+                                            padding-bottom: -5px;
+                                            color: rgb(3, 48, 197);">
+                                            Diésel
+                                        </div>
+                                    {% elif tarjeta.tipoCombustible == 'Gasolina 97'%}
+                                        G97
+                                    {% elif tarjeta.tipoCombustible == 'Gasolina 95'%}
+                                        G95
+                                    {% else%}
+                                        G93
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1">
+                                <div style="
+                                    color: black;
+                                    font-size: 24px;
+                                    background-color: rgb(177, 179, 180);
+                                    padding-top: 6px;
+                                    padding-left: 15px;
+                                    padding-bottom: 4px;
+                                    width: 100px;">
+                                    {{ tarjeta.rutPropietario}}
+                                </div>
+                            </td>
+                            <td colspan="1">
+                                <div style="
+                                    color: black;
+                                    font-size: 24px;
+                                    font-weight: bold;
+                                    background-color: rgb(177, 179, 180);
+                                    padding-top: 6px;
+                                    padding-left: 5px;
+                                    padding-bottom: 4px;
+                                    width: 100px;">
+                                    {{ tarjeta.tipoDocumento}}
+                                </div>
+                            </td>
+                            <td colspan="1">
+                                <div style="
+                                    color: black;
+                                    font-size: 24px;
+                                    background-color: rgb(177, 179, 180);
+                                    padding-top: 6px;
+                                    padding-left: 15px;
+                                    padding-bottom: 4px;
+                                    width: 100px;">
+                                    {{ tarjeta.fechaVencimiento|date:"m-Y" }}
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

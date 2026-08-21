@@ -1,0 +1,185 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Editar Kits Mantenimiento{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+{% endblock css %}
+
+{% block select2 %}
+    <link rel="stylesheet" href="{% static 'css/multi-select-tag.css' %}">
+    <script src="{% static 'js/multi-select-tag.js' %}"></script>
+{% endblock select2 %}
+
+{% block content %}
+
+<form class="form-horizontal" id="form" action="#" method="POST" enctype="multipart/form-data">                                
+{% csrf_token %}   
+
+<button type="submit" class="btn btn-primary save-float">Guardar</button>
+<a href="{% url 'manage_machines_kits_repair' %}" class="btn btn-secondary back-float">Regresar</a>
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Editar Kits Mantenimiento {{ solicitud.maquinaria.maquinaria }}</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Registro Mantenimiento</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Editar Kits Mantenimiento</li>
+                    </ol>
+                </div>
+            </div> <!-- PAGE-HEADER END --> <!-- row -->
+            <div class="row row-sm">
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">                        
+                        <div class="card-body">
+                            <h4 class="card-title">Información Kit de Mantenimiento</h4>
+                            <p class="card-title"></p>                     
+                            <div class="row row-sm">
+                                <input type="hidden" name="kit_faena_id" value="{{ kit_faena_id }}">
+                                <input type="hidden" name="faena_id" value="{{ faena_id }}">
+                                {{ formeditkit|crispy }}
+                            </div> 
+                        </div> 
+                    </div> 
+                </div> 
+            </div>
+            <div class="row row-sm">
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">                        
+                        <div class="card-body">
+                            <h4 class="card-title">Ajustar o Agregar Stock</h4>
+                            <p class="card-title"></p>                     
+                            <div class="row row-sm">
+                                {{ formeditkitadd|crispy }}
+                            </div> 
+                        </div> 
+                    </div> 
+                </div> 
+            </div>
+            <div class="row row-sm">
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">                        
+                        <div class="card-body">
+                            <h4 class="card-title">Historial Kit de Mantenimiento</h4>
+                            <p class="card-title"></p>                     
+                            <div class="row row-sm">
+                                <table id="datatable-allusers" class="display nowrap" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Fecha</th>
+                                            <th>Usuario</th>
+                                            <th>Descripción</th>
+                                            <th>Cantidad</th>
+                                            <th>Stock Final</th>                        
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for stock in historial %}                           
+                                            <tr>
+                                                <td class="dtr-control"></td>
+                                                <td>{{ stock.fechacreacion|date:"d-m-Y H:i" }}</td>
+                                                <td>{{ stock.creador }}</td>
+                                                <td>{{ stock.descripcion }}</td>
+                                                <td>{{ stock.stockMovimiento }}</td>
+                                                <td>{{ stock.stockActual }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>                    
+                                </table>
+                            </div> 
+                        </div> 
+                    </div> 
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+{% endblock content %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script type="text/javascript">        
+    document.getElementById('div_id_kitMaquinaria').classList.add('col-md-4');
+    document.getElementById('div_id_faena').classList.add('col-md-4');
+    document.getElementById('div_id_stockActual').classList.add('col-md-4');
+    document.getElementById('div_id_stockMovimiento').classList.add('col-md-4');
+    document.getElementById('div_id_descripcion').classList.add('col-md-4');
+</script> 
+<script type="application/javascript">
+    new DataTable('#datatable-allusers', {
+        columnDefs: [
+            {
+                className: 'dtr-control',
+                orderable: false,
+                targets: 2
+            }
+        ],
+        language: {
+            url: '{% static 'json/es-CL.json' %}',        
+        },
+        columnDefs: [    
+            { searchable: false, targets: [0] },
+            { orderable: false, targets: [0]}  
+        ],
+        /*order: [1, 'asc'],*/
+        responsive: {
+            details: {
+                type: 'column'
+            }
+        }
+    });
+</script>
+<script src="{% static 'js/custommaintenancemachinerequest.js' %}"></script>
+<script src="{% static 'js/uploadimagemaintenance.js' %}"></script>
+<script src="{% static 'js/formatmoney.js' %}"></script>
+<script type="text/javascript"> 
+    const form = document.querySelector('#form');
+    form.addEventListener('submit', (event) => {
+    event.preventDefault();        
+    const formData = new FormData(form);
+    $.LoadingOverlay("show");
+    $.ajax({
+        url: '{% url 'save_edit_machines_kits_repair' %}',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            $.LoadingOverlay("hide");
+            Swal.fire({
+                icon: 'success',
+                title: 'Stock Agregado Correctamente',
+                confirmButtonColor: '#ff00d9',
+            }).then(() => {
+                window.location.href = '{% url 'manage_machines_kits_repair' %}';
+            });
+        },
+        error: function(error) {
+            $.LoadingOverlay("hide");
+            Swal.fire({
+                icon: 'error',        
+                titleText: 'Error al Agregar Stock',
+                text: 'Vuelva a intentarlo!',  
+                confirmButtonColor: '#ff00d9',
+            })
+        }
+        });
+    });
+</script>
+{% endblock javascript %}
+
+{% block messages %}
+{% endblock messages%}

@@ -1,0 +1,129 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Administrar Checklist Materiales Caseta{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <style>
+        .form-inline-btn {
+            flex-wrap: nowrap !important;
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Administrar Checklist Materiales Caseta</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Mantenedor Sistema</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Checklist Materiales Caseta</li>
+                    </ol>
+                </div>
+            </div> <!-- PAGE-HEADER END --> <!-- row -->  
+            <h5 class="mb-5"></h5>
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <label class="form-label">Filtrar por Caseta</label>
+                    <select id="filtroCaseta" class="form-control">
+                        <option value="">Todas las casetas</option>
+                        {% for caseta in nombres_casetas %}
+                            <option value="{{ caseta }}">{{ caseta }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row row-sm"> 
+                <table id="datatable-allusers" class="display nowrap table table-bordered text-nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Fecha Creación</th>
+                            <th>Nombre Caseta</th>
+                            <th>Turno</th>
+                            <th>Responsable</th>
+                            <th>Cargo</th>
+                            <th>Supervisor</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for documento in documentos %}                            
+                            <tr>
+                                <td class="dtr-control"></td>
+                                <td>{{ documento.fecha_checklist|date:"Y-m-d" }}</td>
+                                <td>{{ documento.nombre_caseta }}</td>
+                                <td>{% if documento.turno == '1' %}Turno A{% elif documento.turno == '2' %}Turno B{% endif %}</td>
+                                <td>{{ documento.creador }}</td>
+                                <td>{{ documento.creador_cargo }}</td>
+                                <td>{% if documento.supervisor %}{{ documento.supervisor }}{% else %}Sin Revisar{% endif %}</td>
+                                <td class="form-inline-btn">
+                                    <form action="{% url 'edit_checklist_materiales_caseta' %}" method="POST" >
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ documento.id_checklist }}">
+                                        <button type="submit" class="btn btn-info btn-size-edit">Editar</button> 
+                                    </form>
+                                </td>                                 
+                            </tr>                          
+                        {% endfor %}
+                    </tbody>                    
+                </table>
+            </div>            
+        </div>
+        <h5 class="mb-5"></h5> 
+        <div class="main-container container-fluid"> 
+            <a class="btn btn-secondary" href="{% url 'dashboardSondaje' %}">Regresar</a> 
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script type="application/javascript">
+    $(document).ready(function() {
+        const tabla = new DataTable('#datatable-allusers', {
+            destroy: true, // Soluciona el error de re-inicialización
+            language: {
+                url: '{% static "json/es-CL.json" %}',
+            },
+            columnDefs: [
+                { className: 'dtr-control', orderable: false, targets: 0, width: "5%" },
+                { targets: 1, width: "10%" },
+                { targets: 2, width: "15%" },
+                { targets: 3, width: "10%" },
+                { targets: 4, width: "15%" },
+                { targets: 5, width: "15%" },
+                { targets: 6, width: "15%" },
+                { targets: 7, width: "15%", orderable: false, searchable: false, className: "text-center" }
+            ],
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: 0
+                }
+            },
+            autoWidth: false
+        });
+
+        document.getElementById('filtroCaseta').addEventListener('change', function () {
+            tabla.column(2).search(this.value).draw();
+        });
+    });
+</script>
+{% endblock javascript %}

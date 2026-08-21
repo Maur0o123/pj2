@@ -1,0 +1,2375 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Configurar Estructura: {{ titulo_categoria }}{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+<style>
+    /* === Estilos Compatibles Light/Dark Mode === */
+    .section-title-input { 
+        background: transparent !important; 
+        font-weight: bold; 
+        text-transform: uppercase; 
+        border: 1px solid rgba(128, 128, 128, 0.3); 
+        color: inherit; 
+    }
+    .section-title-input:focus { border-color: var(--primary-bg-color); box-shadow: none; }
+
+    /* Inputs "Fantasma" (Bloqueados - Para celdas vacías) */
+    .input-ghost {
+        background-color: transparent !important;
+        border: none !important;
+        color: inherit !important;
+        font-style: italic;
+        opacity: 0.6;
+        width: 100%;
+        cursor: default;
+        pointer-events: none; 
+        box-shadow: none !important;
+    }
+
+    /* NUEVO: Input Editable para el ITEM (Mismo estilo visual pero habilitado) */
+    .input-item-writable {
+        background-color: transparent !important;
+        border: none !important;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.2) !important; /* Sutil línea para guiar */
+        color: inherit !important;
+        width: 100%;
+        padding-left: 8px;
+        cursor: text; /* Cursor de texto */
+    }
+    .input-item-writable:focus {
+        border-bottom: 1px solid var(--primary-bg-color) !important;
+        outline: none;
+    }
+    .input-item-writable::placeholder {
+        opacity: 0.5;
+        font-style: italic;
+    }
+
+    /* Headers de Tabla */
+    .th-fixed {
+        background-color: #343a40 !important; 
+        color: #fff !important;
+        vertical-align: middle !important;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        border-bottom: none !important;
+    }
+    .th-title-normal {
+        text-transform: none;
+    }
+    
+    .th-dynamic {
+        background-color: var(--primary-bg-color) !important;
+        color: #fff !important;
+        position: relative;
+        vertical-align: middle !important;
+    }
+
+    .header-input {
+        background: transparent;
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        text-align: center;
+        width: 100%;
+        text-transform: uppercase;
+    }
+    .header-input::placeholder { color: rgba(255,255,255,0.6); font-weight: normal; font-size: 0.8rem; }
+    .header-input:focus { outline: none; }
+
+    .btn-close-col {
+        position: absolute; top: 0; right: 0; bottom: 0;
+        width: 24px; background: rgba(0,0,0,0.2); color: #fff; border: none; cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .btn-close-col:hover { background: rgba(255,0,0,0.6); }
+
+    .cell-nopad { padding: 0 !important; vertical-align: middle !important; }
+    .row-index { font-weight: bold; opacity: 0.7; }
+
+    #formDinamico {
+        padding-bottom: 110px;
+    }
+
+    /* Igualar altura del input de nombre con los select.form-control */
+    .template-name-input {
+        height: 2.375rem;
+    }
+    .pdf-preview-frame {
+        width: 100%;
+        height: 640px;
+        border: 1px solid rgba(128, 128, 128, 0.3);
+        border-radius: 7px;
+        background: #fff;
+    }
+    .pdf-preview-empty {
+        border: 1px dashed rgba(128, 128, 128, 0.4);
+        border-radius: 7px;
+        padding: 2.5rem 1rem;
+        text-align: center;
+        opacity: 0.8;
+    }
+    .pdf-upload-group {
+        display: flex;
+        align-items: stretch;
+        height: 2.375rem;
+        border: 1px solid #eaedf1;
+        border-radius: 7px;
+        overflow: hidden;
+        background-color: transparent;
+    }
+    .pdf-upload-group .btn,
+    .pdf-upload-group .form-control {
+        height: 100%;
+        border: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        font-size: 0.875rem !important;
+    }
+    .pdf-upload-group .btn {
+        display: inline-flex;
+        align-items: center;
+    }
+    .pdf-upload-group .pdf-select-btn {
+        color: rgba(73, 80, 87, 0.75) !important;
+        background: #fff !important;
+        border-right: 1px solid #eaedf1 !important;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+        font-family: inherit !important;
+        font-weight: 400 !important;
+        line-height: 1.2;
+        white-space: nowrap;
+        flex: 0 0 auto;
+    }
+    .pdf-upload-group #btn-remove-existing-pdf {
+        min-width: 2.375rem;
+        justify-content: center;
+        border-left: 1px solid #eaedf1 !important;
+    }
+    .pdf-upload-group .pdf-select-btn:hover,
+    .pdf-upload-group .pdf-select-btn:focus {
+        color: rgba(73, 80, 87, 0.8) !important;
+        background: #f8f9fa !important;
+    }
+
+    .dark-mode .pdf-upload-group {
+        border-color: var(--dark-border);
+    }
+    .dark-mode .pdf-upload-group .pdf-select-btn {
+        color: rgba(255, 255, 255, 0.8) !important;
+        background: rgba(0, 0, 0, 0.3) !important;
+        border-right: 1px solid var(--dark-border) !important;
+    }
+    .dark-mode .pdf-upload-group #btn-remove-existing-pdf {
+        border-left: 1px solid var(--dark-border) !important;
+    }
+    .dark-mode .pdf-upload-group .pdf-select-btn:hover,
+    .dark-mode .pdf-upload-group .pdf-select-btn:focus {
+        color: #fff !important;
+        background: rgba(0, 0, 0, 0.38) !important;
+    }
+
+    .course-question-card {
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+    }
+    .course-question-card .course-question-text,
+    .course-question-card .course-option-input,
+    .course-question-card .course-justification-input,
+    .course-question-card .course-answer-select {
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        background: transparent;
+        color: inherit;
+    }
+    .course-question-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        line-height: 1.25;
+        margin: 0;
+        padding: 0.15rem 0.25rem;
+    }
+    .course-question-card .course-answer-select {
+        height: 2.375rem;
+    }
+    .course-question-card .course-justification-input {
+        min-height: 84px;
+        resize: vertical;
+    }
+    .course-question-card .course-question-text {
+        min-height: 84px;
+        resize: vertical;
+    }
+    .course-image-upload-wrap {
+        text-align: center;
+    }
+    .course-image-preview-frame {
+        width: 360px;
+        max-width: 100%;
+        height: 220px;
+        margin: 0.5rem auto 0;
+        border: 1px dashed rgba(255, 255, 255, 0.25);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background: rgba(0, 0, 0, 0.12);
+    }
+    .course-image-preview {
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+    }
+    .course-image-empty {
+        opacity: 0.7;
+        font-size: 0.9rem;
+    }
+    .course-options-box {
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        border-radius: 6px;
+        padding: 0.75rem;
+    }
+    .course-option-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.4rem;
+    }
+    .course-option-row:last-child {
+        margin-bottom: 0;
+    }
+    .course-option-letter {
+        min-width: 22px;
+        text-transform: lowercase;
+        opacity: 0.85;
+        font-weight: 700;
+    }
+    .autorizacion-box .autorizacion-inline {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        max-width: 100%;
+    }
+    .autorizacion-box .autorizador-select {
+        flex: 0 0 25%;
+        max-width: 25%;
+        min-width: 0;
+    }
+    .autorizacion-box .btn-delete-autorizador {
+        flex: 0 0 auto;
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .autorizacion-box .approval-inline-controls {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        width: 240px;
+        min-width: 240px;
+    }
+    .autorizacion-box .approval-inline-controls.approval-controls-rechazado {
+        width: 520px;
+        min-width: 520px;
+    }
+    .autorizacion-box .approval-inline-controls .btn {
+        white-space: nowrap;
+        font-size: 0.75rem;
+        padding: 0.3rem 0.55rem;
+        line-height: 1.2;
+    }
+    .autorizacion-box .approval-inline-controls .btn-request-approval {
+        width: 100%;
+    }
+    .autorizacion-box .approval-pending-wrap {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+    }
+    .autorizacion-box .approval-pending-wrap.single-status {
+        grid-template-columns: 1fr;
+    }
+    .autorizacion-box .approval-pending-wrap .btn {
+        width: 100%;
+    }
+    .autorizacion-box .approval-inline-controls.approval-controls-rechazado .approval-pending-wrap {
+        grid-template-columns: 0.8fr 1.2fr 1.2fr;
+    }
+    @media (max-width: 1200px) {
+        .autorizacion-box .autorizacion-inline {
+            width: 100%;
+            max-width: 100%;
+        }
+        .autorizacion-box .autorizador-select {
+            flex: 1 1 auto;
+            max-width: 100%;
+        }
+    }
+    .approval-history-scroll {
+        max-height: 430px;
+        overflow-y: auto;
+    }
+    .approval-history-scroll thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background-color: #2b3048;
+        color: #ffffff !important;
+        border-color: rgba(255, 255, 255, 0.18);
+    }
+    #table-approval-history .approval-status-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        min-height: 26px;
+        padding: 0.3rem 0.45rem;
+        text-align: center;
+        line-height: 1.1;
+    }
+    #table-approval-history .approval-history-rejected-badge {
+        cursor: pointer;
+    }
+    #table-approval-history .approval-history-rejected-badge:focus {
+        outline: 2px solid rgba(143, 189, 86, 0.6);
+        outline-offset: 1px;
+    }
+    body.light-mode .approval-history-scroll thead th {
+        background-color: #2f3a58;
+        color: #ffffff !important;
+        border-color: #3f4c72;
+    }
+    body.light-mode #table-approval-history {
+        background-color: #ffffff;
+    }
+    body.light-mode #table-approval-history tbody td {
+        color: #1f2f4b;
+        border-color: #d8e0ee;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+            
+            <div class="page-header">
+                <h1 class="page-title">Estructura Base: {{ titulo_categoria }}</h1>
+            </div>
+
+            <div class="card">
+                <div class="panel panel-primary">
+                    <div class="tab-menu-heading border-bottom-0">
+                        <div class="tabs-menu4 border-bottomo-sm">
+                            <nav class="nav d-sm-flex d-block">
+                                <a class="nav-link border border-bottom-0 br-sm-5 me-2 {% if active_tab == 'principal' %}active{% endif %}" data-bs-toggle="tab" href="#tab-prevencion-principal">{{ titulo_categoria }}</a>
+                                {% if autorizacion_habilitada %}
+                                    <a class="nav-link border border-bottom-0 br-sm-5 me-2 {% if active_tab == 'autorizacion' %}active{% endif %}" data-bs-toggle="tab" href="#tab-prevencion-autorizacion">Autorización</a>
+                                    <a class="nav-link border border-bottom-0 br-sm-5 me-2 {% if active_tab == 'historial' %}active{% endif %}" data-bs-toggle="tab" href="#tab-prevencion-historial">Historial Autorizaciones</a>
+                                {% else %}
+                                    <a class="nav-link border border-bottom-0 br-sm-5 me-2 disabled" href="javascript:void(0);" title="Guarda primero para habilitar la autorización.">Autorización</a>
+                                    <a class="nav-link border border-bottom-0 br-sm-5 me-2 disabled" href="javascript:void(0);" title="Guarda primero para habilitar el historial.">Historial Autorizaciones</a>
+                                {% endif %}
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="panel-body tabs-menu-body">
+                        <div class="tab-content">
+                            <div class="tab-pane {% if active_tab == 'principal' %}active{% endif %}" id="tab-prevencion-principal">
+                                <div class="alert alert-primary mb-4" role="alert">
+                                    <span class="alert-inner--icon"><i class="fe fe-info"></i></span>
+                                    <span class="alert-inner--text">
+                                        <strong>Modo Diseño:</strong>
+                                        {% if es_curso %}
+                                            Defina las preguntas, opciones y respuesta correcta.
+                                        {% else %}
+                                            Defina las secciones y las preguntas ({% if permitir_columnas_extras %}items{% else %}detalle{% endif %}).
+                                        {% endif %}
+                                    </span>
+                                </div>
+
+                                <form id="formDinamico" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="item_indices" id="item_indices">
+                                    <input type="hidden" name="question_indices" id="question_indices">
+                                    <input type="hidden" name="autorizador_ids" id="autorizador_ids">
+                                    <input type="hidden" name="has_unselected_autorizadores" id="has_unselected_autorizadores" value="0">
+                                    {% if modo_duplicado %}
+                                        <input type="hidden" name="duplicate_from" value="{{ duplicate_from_id }}">
+                                        <div class="alert alert-warning mb-4" role="alert">
+                                            <span class="alert-inner--icon"><i class="fe fe-alert-triangle"></i></span>
+                                            <span class="alert-inner--text">
+                                                <strong>Modo Duplicación:</strong> Debes cambiar al menos la faena, el nombre, el cargo o el tiempo estimado para poder guardar.
+                                            </span>
+                                        </div>
+                                    {% endif %}
+
+                                    <div class="card mb-4">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label">Faena Asociada</label>
+                                                    <select name="faena" class="form-control" required>
+                                                        <option value="">Seleccione Faena...</option>
+                                                        {% for f in faenas %}
+                                                            <option value="{{ f.id }}" {% if plantilla.faena_id == f.id %}selected{% endif %}>{{ f.faena }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label">Nombre de la Plantilla</label>
+                                                    <input type="text" name="nombre" class="form-control template-name-input" value="{{ plantilla.nombre|default:'' }}" required>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label">Cargo Asociado</label>
+                                                    <select name="cargo" class="form-control">
+                                                        <option value="" {% if not selected_cargo_id and not plantilla.id and not modo_duplicado %}selected{% endif %}>Seleccione Cargo Asociado...</option>
+                                                        <option value="all" {% if not selected_cargo_id %}{% if plantilla.id or modo_duplicado %}selected{% endif %}{% endif %}>Todos</option>
+                                                        {% for cargo in cargos %}
+                                                            <option value="{{ cargo.id }}" {% if selected_cargo_id == cargo.id %}selected{% endif %}>{{ cargo.valor }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label">Tiempo Estimado</label>
+                                                    <select name="tiempo_estimado_minutos" class="form-control">
+                                                        <option value="">Seleccione Tiempo...</option>
+                                                        {% for minutos in tiempos_estimados_disponibles %}
+                                                            <option value="{{ minutos }}" {% if plantilla.tiempo_estimado_minutos == minutos %}selected{% endif %}>
+                                                                {% if minutos == 3 %}
+                                                                    30 segundos
+                                                                {% else %}
+                                                                    {{ minutos }} minutos
+                                                                {% endif %}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                {% if es_curso %}
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">Total de intentos</label>
+                                                        <select name="curso_total_intentos" class="form-control" required>
+                                                            <option value="">Seleccione intentos...</option>
+                                                            {% for intentos in curso_intentos_disponibles %}
+                                                                <option value="{{ intentos }}" {% if plantilla.curso_total_intentos == intentos %}selected{% endif %}>
+                                                                    {{ intentos }}
+                                                                </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">Porcentaje de aprobación</label>
+                                                        <select name="curso_porcentaje_aprobacion" class="form-control" required>
+                                                            <option value="">Seleccione porcentaje...</option>
+                                                            {% for porcentaje in curso_porcentajes_aprobacion_disponibles %}
+                                                                <option value="{{ porcentaje }}" {% if plantilla.curso_porcentaje_aprobacion == porcentaje %}selected{% endif %}>
+                                                                    {{ porcentaje }}%
+                                                                </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                {% endif %}
+                                                {% if habilitar_modo_pdf %}
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">Modo de Creación</label>
+                                                        <select name="modo_contenido" id="modo_contenido" class="form-control">
+                                                            <option value="estructura" {% if modo_contenido_actual != 'pdf' %}selected{% endif %}>Crear {{ titulo_categoria }}</option>
+                                                            <option value="pdf" {% if modo_contenido_actual == 'pdf' %}selected{% endif %}>Adjuntar PDF</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4 mb-3 d-none" id="pdf-upload-col">
+                                                        <label class="form-label">PDF de la Plantilla</label>
+                                                        <input type="hidden" name="remove_existing_pdf" id="remove_existing_pdf" value="0">
+                                                        <input type="file" name="archivo_pdf" id="archivo_pdf" class="d-none" accept=".pdf,application/pdf">
+                                                        <div class="input-group pdf-upload-group">
+                                                            <button type="button" id="btn-select-pdf" class="btn pdf-select-btn">Seleccionar archivo</button>
+                                                            <input type="text" id="pdf-file-display" class="form-control pdf-file-display" value="{% if archivo_pdf_nombre %}{{ archivo_pdf_nombre }}{% else %}Sin archivos seleccionados{% endif %}" onkeydown="return false;" tabindex="-1" style="pointer-events: none;">
+                                                            <button type="button" id="btn-remove-existing-pdf" class="btn btn-danger-light {% if not archivo_pdf_nombre %}d-none{% endif %}" title="Quitar PDF">
+                                                                <i class="fe fe-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {% if es_curso %}
+                                        <div id="course-builder-container">
+                                            <div id="course-main-container"></div>
+                                            <div class="text-center mb-5">
+                                                <button type="button" id="btn-add-question" class="btn btn-outline-primary btn-pill">
+                                                    <i class="fe fe-plus me-1"></i> Agregar pregunta
+                                                </button>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div id="builder-container">
+                                            <div id="main-container"></div>
+
+                                            <div class="text-center mb-5" id="add-section-wrap">
+                                                <button type="button" class="btn btn-outline-info btn-pill" onclick="addItem()">
+                                                    <i class="fe fe-plus me-1"></i> Agregar Nueva Sección
+                                                </button>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if habilitar_modo_pdf %}
+                                        <div id="pdf-preview-row" class="row d-none">
+                                            <div class="col-12 col-xl-8">
+                                                <div id="pdf-preview-container" class="card mb-4">
+                                                    <div class="card-body">
+                                                        <div id="pdf-preview-empty" class="pdf-preview-empty">
+                                                            Adjunta un PDF para visualizarlo aquí.
+                                                        </div>
+                                                        <iframe id="pdf-preview-frame" class="pdf-preview-frame d-none" title="Vista previa PDF"></iframe>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    <a href="{% url 'manage_prevencion' slug_categoria %}" class="btn btn-secondary back-float">Cancelar</a>
+                                    <button type="submit" class="btn btn-primary save-float">Guardar</button>
+                                </form>
+                            </div>
+                            <div class="tab-pane {% if active_tab == 'autorizacion' %}active{% endif %}" id="tab-prevencion-autorizacion">
+                                <div class="autorizacion-box">
+                                    {% if not autorizacion_habilitada %}
+                                        <div class="alert alert-warning mb-4" role="alert">
+                                            <span class="alert-inner--icon"><i class="fe fe-alert-triangle"></i></span>
+                                            <span class="alert-inner--text">
+                                                Debes guardar la plantilla para habilitar la autorización.
+                                            </span>
+                                        </div>
+                                    {% endif %}
+                                    <div class="card mb-4">
+                                        <div class="card-body">
+                                            <h4 class="card-title">Proceso de Autorización</h4>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table id="datatable-autorizacion" class="table border text-nowrap text-md-nowrap" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Autorizador</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="card-body pt-0">
+                                            <button type="button" id="agregarAutorizador" class="btn btn-primary">Agregar</button>
+                                            <small class="d-block mt-2 opacity-75">Máximo 5 autorizadores.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="{% url 'manage_prevencion' slug_categoria %}" class="btn btn-secondary back-float">Regresar</a>
+                            </div>
+                            <div class="tab-pane {% if active_tab == 'historial' %}active{% endif %}" id="tab-prevencion-historial">
+                                <div class="card mb-4">
+                                    <div class="card-body border-bottom">
+                                        <h4 class="card-title mb-0">Historial de Autorizaciones</h4>
+                                    </div>
+                                    <div class="table-responsive approval-history-scroll">
+                                        <table id="table-approval-history" class="table border text-nowrap text-md-nowrap mb-0" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Fecha</th>
+                                                    <th>Evento</th>
+                                                    <th>Usuario</th>
+                                                    <th>Autorizador</th>
+                                                    <th>Estado</th>
+                                                    <th>Fecha Respuesta</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbody-approval-history">
+                                                {% for item in historial_autorizaciones %}
+                                                    <tr>
+                                                        <td>{{ item.fecha }}</td>
+                                                        <td>{{ item.evento }}</td>
+                                                        <td>{{ item.solicitante }}</td>
+                                                        <td>{{ item.destinatario }}</td>
+                                                        <td>
+                                                            {% if item.estado == 'aceptada' %}
+                                                                <span class="badge bg-success approval-status-badge">{{ item.estado_display }}</span>
+                                                            {% elif item.estado == 'rechazada' %}
+                                                                <span class="badge bg-danger approval-status-badge approval-history-rejected-badge" role="button" tabindex="0" data-reason="{{ item.motivo_rechazo|default:''|urlencode }}" title="Ver motivo de rechazo">{{ item.estado_display }}</span>
+                                                            {% elif item.estado == 'pendiente' %}
+                                                                <span class="badge bg-warning text-dark approval-status-badge">{{ item.estado_display }}</span>
+                                                            {% elif item.estado == 'cancelada' %}
+                                                                <span class="badge bg-secondary approval-status-badge">{{ item.estado_display }}</span>
+                                                            {% elif item.estado == 'agregado' %}
+                                                                <span class="badge bg-primary approval-status-badge">{{ item.estado_display }}</span>
+                                                            {% elif item.estado == 'eliminado' %}
+                                                                <span class="badge bg-dark approval-status-badge">{{ item.estado_display }}</span>
+                                                            {% else %}
+                                                                <span class="badge bg-info approval-status-badge">{{ item.estado_display }}</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{{ item.fecha_respuesta }}</td>
+                                                    </tr>
+                                                {% empty %}
+                                                    <tr>
+                                                        <td colspan="6" class="text-center py-4">Aún no hay movimientos registrados para esta plantilla.</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <a href="{% url 'manage_prevencion' slug_categoria %}" class="btn btn-secondary back-float">Regresar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<template id="tpl-item">
+    <div class="card mb-4 item-container shadow-sm" id="item_IDX">
+        <div class="card-header border-bottom">
+            <div class="d-flex w-100 align-items-center">
+                <span class="badge bg-dark me-3">SECCIÓN <span class="sect-num"></span></span>
+                <input type="text" class="form-control section-title-input" name="nombre_item_IDX" placeholder="TÍTULO DE LA SECCIÓN (Ej: EPP)" required>
+            </div>
+            <div class="card-options">
+                <button type="button" class="btn btn-sm btn-icon btn-danger-light btn-del-section" onclick="delItem(IDX)" title="Eliminar Sección"><i class="fe fe-trash"></i></button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <input type="hidden" name="head_indices_IDX" id="head_indices_IDX">
+            <input type="hidden" name="row_indices_IDX" id="row_indices_IDX">
+            
+            <div class="table-responsive">
+                <table class="table table-bordered mb-0 text-nowrap" id="table_IDX">
+                    <thead>
+                        <tr id="thead_row_IDX">
+                            <th class="th-fixed text-center" style="width: 50px;">#</th>
+                            <th class="th-fixed text-center" {% if permitir_columnas_extras %}style="width: 45%;"{% else %}style="width: calc(100% - 90px);"{% endif %}>
+                                <span class="th-title-normal">{% if permitir_columnas_extras %}ITEMS{% else %}Detalle{% endif %}</span>
+                            </th> 
+                            {% if permitir_columnas_extras %}
+                                <th style="width: 40px; padding:0; background: #e9ecef;" id="th_add_btn_IDX">
+                                    <button type="button" class="btn btn-success w-100 h-100 rounded-0" onclick="addHead(IDX)" title="Añadir Columna">+</button>
+                                </th>
+                            {% else %}
+                                <th class="th-fixed text-center" style="width: 40px;"></th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_IDX"></tbody>
+                </table>
+            </div>
+            <div class="p-3 text-center border-top">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addRow(IDX)">
+                    <i class="fe fe-plus"></i> Agregar Fila Estructural
+                </button>
+            </div>
+        </div>
+    </div>
+</template>
+
+{% if permitir_columnas_extras %}
+    <template id="tpl-head">
+        <th id="th_IDX_HIDX" class="th-dynamic" data-head-id="HIDX">
+            <input type="text" class="header-input" name="nombre_head_IDX_HIDX" placeholder="TITULO" required>
+            <button type="button" class="btn-close-col" onclick="delHead(IDX, HIDX)">×</button>
+        </th>
+    </template>
+{% endif %}
+
+<template id="tpl-row">
+    <tr id="tr_IDX_RIDX">
+        <td class="text-center row-index bg-light-transparent">
+            <span class="sub-num"></span>
+        </td>
+        <td class="cell-nopad">
+            <textarea class="form-control input-item-writable" name="nombre_row_IDX_RIDX" placeholder="{% if permitir_columnas_extras %}Escriba el ítem...{% else %}Escriba el detalle...{% endif %}" rows="3" required></textarea>
+        </td>
+        <td class="text-center cell-nopad" id="td_del_btn_IDX_RIDX">
+            <button type="button" class="btn btn-link text-danger p-2 btn-del-row" onclick="delRow(IDX, RIDX)">
+                <i class="fe fe-x"></i>
+            </button>
+        </td>
+    </tr>
+</template>
+
+{% if permitir_columnas_extras %}
+    <template id="tpl-cell">
+        <td class="cell-nopad" data-head-id="HIDX">
+             <input type="text" class="form-control input-ghost text-center" value="-" readonly>
+        </td>
+    </template>
+{% endif %}
+
+{% if es_curso %}
+    <template id="tpl-course-question">
+        <div class="course-question-card" id="course_question_QID">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="course-question-title">Pregunta QNUM</h5>
+                <input type="hidden" name="pregunta_titulo_QID" value="Pregunta QNUM">
+                <button type="button" class="btn btn-sm btn-danger-light" onclick="delCourseQuestion(QID)" title="Eliminar pregunta">
+                    <i class="fe fe-trash"></i>
+                </button>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label mb-1">Descripcion de la pregunta</label>
+                <textarea class="form-control course-question-text" name="pregunta_texto_QID" placeholder="Escribe el enunciado de la pregunta..." required></textarea>
+            </div>
+
+            <div class="course-image-upload-wrap mb-3">
+                <label class="form-label mb-1 d-block">Foto de la pregunta</label>
+                <input type="hidden" name="imagen_actual_QID" id="imagen_actual_QID">
+                <input type="file" class="d-none" name="pregunta_imagen_QID" id="pregunta_imagen_QID" accept="image/*">
+                <button type="button" class="btn btn-outline-primary btn-sm btn-pill" onclick="triggerCourseImage(QID)">
+                    Seleccionar foto
+                </button>
+                <div class="course-image-preview-frame">
+                    <img id="pregunta_imagen_preview_QID" class="course-image-preview d-none" alt="Foto de la pregunta">
+                    <span id="pregunta_imagen_empty_QID" class="course-image-empty">Sin foto seleccionada</span>
+                </div>
+            </div>
+
+            <label class="form-label mb-1">Alternativas</label>
+            <div class="course-options-box mb-3">
+                <input type="hidden" name="option_indices_QID" id="option_indices_QID">
+                <div id="course_options_QID"></div>
+            </div>
+
+            <div class="text-center mb-3">
+                <button type="button" class="btn btn-outline-success btn-sm btn-pill" onclick="addCourseOption(QID)">
+                    Agregar opcion
+                </button>
+            </div>
+
+            <div class="row g-2 align-items-center">
+                <div class="col-md-2">
+                    <label class="form-label mb-1">Alternativa correcta</label>
+                    <select class="form-control course-answer-select" name="respuesta_QID" id="respuesta_QID" required>
+                        <option value="">-</option>
+                    </select>
+                </div>
+                <div class="col-md-10">
+                    <label class="form-label mb-1">Justificacion</label>
+                    <textarea class="form-control course-justification-input" name="justificacion_QID" placeholder="justificacion: ..." rows="3" required></textarea>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-course-option">
+        <div class="course-option-row" id="course_option_QID_OID">
+            <span class="course-option-letter">a</span>
+            <input type="text" class="form-control course-option-input" name="opcion_QID_OID" placeholder="opción" required>
+            <button type="button" class="btn btn-sm btn-link text-danger p-0 px-1" onclick="delCourseOption(QID, OID)" title="Eliminar opción">
+                <i class="fe fe-x"></i>
+            </button>
+        </div>
+    </template>
+{% endif %}
+
+{% endblock %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
+<script>
+    let cItem = 0;
+    const cHead = {};
+    const cRow = {};
+    let cQuestion = 0;
+    const cOption = {};
+    const courseImageBlobUrls = {};
+    const isCourseMode = {{ es_curso|yesno:"true,false" }};
+    const allowExtraColumns = {{ permitir_columnas_extras|yesno:"true,false" }};
+    const pdfModeEnabled = {{ habilitar_modo_pdf|yesno:"true,false" }};
+    let existingPdfUrl = "{{ archivo_pdf_url|default:''|escapejs }}";
+    let existingPdfName = "{{ archivo_pdf_nombre|default:''|escapejs }}";
+    let previewBlobUrl = null;
+    let existingPdfPreviewPromise = null;
+    const authorizationWorkers = JSON.parse('{{ trabajadores_autorizacion_json|default:"[]"|escapejs }}');
+    const selectedAuthorizationWorkerIds = JSON.parse('{{ selected_autorizadores_ids_json|default:"[]"|escapejs }}');
+    const MAX_AUTORIZADORES = 5;
+    let autorizadorCount = 0;
+    const approvalSyncAutorizadoresUrl = "{% url 'ajax_sync_autorizadores_prevencion' %}";
+    const approvalNotificationCreateUrl = "{% url 'ajax_create_approval_notification' %}";
+    const approvalNotificationCancelUrlTemplate = "{% url 'ajax_cancel_approval_notification' 0 %}";
+    const currentPlantillaId = {% if plantilla.id %}{{ plantilla.id }}{% else %}null{% endif %};
+    const currentTipoDocumento = "{{ slug_categoria|default:''|escapejs }}";
+    const currentTipoDocumentoTitulo = "{{ titulo_categoria|default:'Documento'|escapejs }}";
+    const requesterDisplayName = "{{ request.user.first_name|default:''|escapejs }} {{ request.user.last_name|default:''|escapejs }}".trim() || "{{ request.user.username|escapejs }}";
+    const authorizationStatusByUser = JSON.parse('{{ autorizadores_estado_json|default:"{}"|escapejs }}');
+    const authorizationIncompleteFromServer = {{ autorizacion_incompleta|yesno:"true,false" }};
+    const approvalHistoryListUrl = `{% if plantilla.id %}{% url 'ajax_list_approval_history_prevencion' plantilla.id %}{% else %}{% endif %}`;
+    const approvalStatusListUrl = `{% if plantilla.id %}{% url 'ajax_list_approval_status_prevencion' plantilla.id %}{% else %}{% endif %}`;
+    const APPROVAL_HISTORY_REFRESH_MS = 12000;
+    const APPROVAL_STATUS_REFRESH_MS = 12000;
+    let approvalHistoryRequestInFlight = false;
+    let approvalHistoryIntervalId = null;
+    let approvalStatusRequestInFlight = false;
+    let approvalStatusIntervalId = null;
+    // Obtenemos los datos guardados desde la vista
+    const savedData = JSON.parse('{{ estructura_json|escapejs }}');
+
+    function getCookie(name) {
+        const cookieValue = document.cookie
+            .split('; ')
+            .find((row) => row.startsWith(`${name}=`));
+        return cookieValue ? decodeURIComponent(cookieValue.split('=')[1]) : '';
+    }
+
+    function escapeHtml(value) {
+        const text = String(value == null ? '' : value);
+        return text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function getHistoryBadgeClass(estado) {
+        const normalized = String(estado || '').trim().toLowerCase();
+        if (normalized === 'aceptada') return 'bg-success';
+        if (normalized === 'rechazada') return 'bg-danger';
+        if (normalized === 'pendiente') return 'bg-warning text-dark';
+        if (normalized === 'cancelada') return 'bg-secondary';
+        if (normalized === 'agregado') return 'bg-primary';
+        if (normalized === 'eliminado') return 'bg-dark';
+        return 'bg-info';
+    }
+
+    function renderApprovalHistoryRows(historyRows) {
+        const $tbody = $('#tbody-approval-history');
+        if (!$tbody.length) return;
+
+        if (!Array.isArray(historyRows) || historyRows.length === 0) {
+            $tbody.html('<tr><td colspan="6" class="text-center py-4">Aún no hay movimientos registrados para esta plantilla.</td></tr>');
+            return;
+        }
+
+        let html = '';
+        historyRows.forEach((item) => {
+            const estado = String((item && item.estado) || '').trim().toLowerCase();
+            const estadoDisplay = escapeHtml((item && item.estado_display) || '-');
+            const badgeClass = getHistoryBadgeClass(estado);
+            const rejectionReason = String((item && item.motivo_rechazo) || '').trim();
+            const rejectionReasonEncoded = encodeURIComponent(rejectionReason);
+            let badgeHtml = `<span class="badge ${badgeClass} approval-status-badge">${estadoDisplay}</span>`;
+            if (estado === 'rechazada') {
+                badgeHtml = `<span class="badge ${badgeClass} approval-status-badge approval-history-rejected-badge" role="button" tabindex="0" data-reason="${rejectionReasonEncoded}" title="Ver motivo de rechazo">${estadoDisplay}</span>`;
+            }
+            html += `
+                <tr>
+                    <td>${escapeHtml((item && item.fecha) || '-')}</td>
+                    <td>${escapeHtml((item && item.evento) || '-')}</td>
+                    <td>${escapeHtml((item && item.solicitante) || '-')}</td>
+                    <td>${escapeHtml((item && item.destinatario) || '-')}</td>
+                    <td>${badgeHtml}</td>
+                    <td>${escapeHtml((item && item.fecha_respuesta) || '-')}</td>
+                </tr>
+            `;
+        });
+        $tbody.html(html);
+    }
+
+    function normalizeApprovalStatusMap(rawMap) {
+        const normalized = {};
+        if (!rawMap || typeof rawMap !== 'object') return normalized;
+
+        Object.entries(rawMap).forEach(([workerId, payload]) => {
+            const key = String(workerId || '').trim();
+            if (!key) return;
+            const item = payload && typeof payload === 'object' ? payload : {};
+            normalized[key] = {
+                notification_id: String(item.notification_id || '').trim(),
+                estado: String(item.estado || '').trim().toLowerCase(),
+                motivo_rechazo: String(item.motivo_rechazo || '').trim(),
+            };
+        });
+        return normalized;
+    }
+
+    function replaceAuthorizationStatusMap(statusMap) {
+        Object.keys(authorizationStatusByUser).forEach((key) => {
+            delete authorizationStatusByUser[key];
+        });
+        Object.entries(statusMap).forEach(([key, value]) => {
+            authorizationStatusByUser[key] = value;
+        });
+    }
+
+    function applyAuthorizationStatusToRows() {
+        $('#datatable-autorizacion tbody tr').each(function() {
+            const $row = $(this);
+            const workerId = (($row.find('select[name^="autorizador_"]').val() || '') + '').trim();
+            const storedState = getStoredApprovalStateForWorker(workerId);
+            if (storedState) {
+                setApprovalRowState($row, storedState.estado, storedState.notificationId, storedState.motivoRechazo);
+            } else {
+                setApprovalRowState($row, '', '');
+            }
+        });
+    }
+
+    async function refreshApprovalStatus(force = false) {
+        if (!approvalStatusListUrl || !currentPlantillaId) return;
+        if (approvalStatusRequestInFlight && !force) return;
+
+        approvalStatusRequestInFlight = true;
+        try {
+            const response = await fetch(approvalStatusListUrl, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                credentials: 'same-origin',
+            });
+            const data = await response.json();
+            if (!response.ok || !data.success) return;
+            const normalizedStatusMap = normalizeApprovalStatusMap(data.status_by_user || {});
+            replaceAuthorizationStatusMap(normalizedStatusMap);
+            applyAuthorizationStatusToRows();
+        } catch (error) {
+            // Ignora errores intermitentes para no bloquear la pantalla.
+        } finally {
+            approvalStatusRequestInFlight = false;
+        }
+    }
+
+    function startApprovalStatusAutoRefresh() {
+        if (!approvalStatusListUrl || !currentPlantillaId) return;
+        if (approvalStatusIntervalId) clearInterval(approvalStatusIntervalId);
+        approvalStatusIntervalId = setInterval(() => {
+            refreshApprovalStatus(false);
+        }, APPROVAL_STATUS_REFRESH_MS);
+    }
+
+    function requestApprovalStatusRefresh() {
+        refreshApprovalStatus(true);
+    }
+
+    async function refreshApprovalHistory(force = false) {
+        if (!approvalHistoryListUrl || !currentPlantillaId) return;
+        if (approvalHistoryRequestInFlight && !force) return;
+
+        approvalHistoryRequestInFlight = true;
+        try {
+            const response = await fetch(approvalHistoryListUrl, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                credentials: 'same-origin',
+            });
+            const data = await response.json();
+            if (!response.ok || !data.success) return;
+            renderApprovalHistoryRows(data.history || []);
+        } catch (error) {
+            // Ignora errores intermitentes para no bloquear la pantalla.
+        } finally {
+            approvalHistoryRequestInFlight = false;
+        }
+    }
+
+    function startApprovalHistoryAutoRefresh() {
+        if (!approvalHistoryListUrl || !currentPlantillaId) return;
+        if (approvalHistoryIntervalId) clearInterval(approvalHistoryIntervalId);
+        approvalHistoryIntervalId = setInterval(() => {
+            refreshApprovalHistory(false);
+        }, APPROVAL_HISTORY_REFRESH_MS);
+    }
+
+    function requestApprovalHistoryRefresh() {
+        refreshApprovalHistory(true);
+    }
+
+    function buildApprovalNotificationCancelUrl(notificationId) {
+        return approvalNotificationCancelUrlTemplate.replace('/0/', `/${notificationId}/`);
+    }
+
+    async function postJson(url, payload = {}) {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: JSON.stringify(payload),
+        });
+        let data = {};
+        try {
+            data = await response.json();
+        } catch (error) {
+            data = {};
+        }
+        return { response, data };
+    }
+
+    function showAuthAlert(message, iconType = 'warning', titleText = 'Aviso') {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                titleText: titleText,
+                text: message,
+                icon: iconType,
+                confirmButtonColor: '#ff00d9',
+            });
+        } else {
+            alert(message);
+        }
+    }
+
+    function decodeUrlEncodedValue(value) {
+        const raw = String(value || '').trim();
+        if (!raw) return '';
+        try {
+            return decodeURIComponent(raw.replace(/\+/g, '%20'));
+        } catch (error) {
+            return raw;
+        }
+    }
+
+    async function showRejectionReasonModal(reasonText) {
+        const reason = String(reasonText || '').trim();
+        if (!reason) {
+            showAuthAlert('No hay motivo de rechazo registrado.', 'info', 'Motivo de rechazo');
+            return;
+        }
+
+        if (typeof Swal !== 'undefined') {
+            await Swal.fire({
+                titleText: 'Motivo de rechazo',
+                text: reason,
+                icon: 'info',
+                confirmButtonColor: '#8fbd56',
+            });
+        } else {
+            alert(reason);
+        }
+    }
+
+    async function confirmDeleteApprovedAutorizador(displayName = '') {
+        const nombre = String(displayName || '').trim();
+        const targetLabel = nombre ? `"${nombre}"` : 'este autorizador';
+        const confirmationText = `¿Estás seguro de eliminar a ${targetLabel}?`;
+        if (typeof Swal !== 'undefined') {
+            const result = await Swal.fire({
+                titleText: 'Confirmar eliminación',
+                text: confirmationText,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true,
+                focusCancel: true,
+                confirmButtonColor: '#ff00d9',
+            });
+            return !!result.isConfirmed;
+        }
+        return window.confirm(confirmationText);
+    }
+
+    async function syncAutorizadoresRealtime(showError = false) {
+        if (!currentPlantillaId) return true;
+        const uniqueIds = [...new Set(getSelectedAutorizadores().filter((v) => String(v || '').trim()))];
+        const hasUnselectedRows = hasUnselectedAutorizadorRows();
+        const { response, data } = await postJson(approvalSyncAutorizadoresUrl, {
+            plantilla_id: currentPlantillaId,
+            autorizador_ids: uniqueIds,
+            has_unselected_rows: hasUnselectedRows,
+            autorizador_row_count: $('#datatable-autorizacion tbody tr').length,
+        });
+        if (!response.ok || !data.success) {
+            if (showError) {
+                showAuthAlert(data.error || 'No se pudo guardar la autorización en tiempo real.', 'error', 'Error');
+            }
+            return false;
+        }
+        if (Array.isArray(data.removed_ids)) {
+            data.removed_ids.forEach((rawId) => {
+                const key = String(rawId || '').trim();
+                if (key && authorizationStatusByUser[key]) {
+                    delete authorizationStatusByUser[key];
+                }
+            });
+        }
+        const hasHistoryChanges = (
+            (Array.isArray(data.added_ids) && data.added_ids.length > 0) ||
+            (Array.isArray(data.removed_ids) && data.removed_ids.length > 0)
+        );
+        if (hasHistoryChanges) {
+            requestApprovalHistoryRefresh();
+        }
+        return true;
+    }
+
+    function buildApprovalDescription() {
+        const nombrePlantilla = ($('input[name="nombre"]').val() || '').trim() || 'Sin nombre';
+        const faenaLabel = ($('select[name="faena"] option:selected').text() || '').trim() || 'Sin faena';
+        const cargoLabel = ($('select[name="cargo"] option:selected').text() || '').trim() || 'Sin cargo';
+        return `${requesterDisplayName} solicita tu aprobación para ${currentTipoDocumentoTitulo}: "${nombrePlantilla}". Faena: ${faenaLabel}. Cargo: ${cargoLabel}.`;
+    }
+
+    function getApprovalTipoLabel() {
+        const tipo = String(currentTipoDocumento || '').trim().toLowerCase();
+        const tiposLabel = {
+            charlas: 'Charla',
+            informativos: 'Informativo',
+            difusiones: 'Difusión',
+            cursos: 'Curso',
+        };
+        return tiposLabel[tipo] || String(currentTipoDocumentoTitulo || 'Documento').trim() || 'Documento';
+    }
+
+    function buildApprovalTitle() {
+        return `Aprobación pendiente: ${getApprovalTipoLabel()}`;
+    }
+
+    function getStoredApprovalStateForWorker(workerId) {
+        const key = String(workerId || '').trim();
+        if (!key || !authorizationStatusByUser[key]) {
+            return null;
+        }
+        const item = authorizationStatusByUser[key];
+        return {
+            estado: String(item.estado || '').trim().toLowerCase(),
+            notificationId: String(item.notification_id || '').trim(),
+            motivoRechazo: String(item.motivo_rechazo || '').trim(),
+        };
+    }
+
+    function resetStatusButtonClass($statusBtn) {
+        $statusBtn.removeClass('btn-warning btn-success btn-danger');
+    }
+
+    function setRequestButtonDefault($requestBtn) {
+        $requestBtn
+            .text('Solicitar aprobación')
+            .removeClass('btn-outline-danger')
+            .addClass('btn-outline-warning');
+    }
+
+    function setApprovalRowState($row, estado, notificationId = '', motivoRechazo = '') {
+        const normalized = String(estado || '').trim().toLowerCase();
+        const reason = String(motivoRechazo || '').trim();
+        const $requestBtn = $row.find('.btn-request-approval');
+        const $controls = $row.find('.approval-inline-controls');
+        const $pendingWrap = $row.find('.approval-pending-wrap');
+        const $statusBtn = $pendingWrap.find('.approval-status-label');
+        const $cancelBtn = $pendingWrap.find('.btn-cancel-approval');
+        const $retryBtn = $pendingWrap.find('.btn-retry-approval');
+        const $reasonBtn = $pendingWrap.find('.btn-view-rejection-reason');
+        const $select = $row.find('select[name^="autorizador_"]');
+
+        $row.attr('data-approval-state', normalized || '');
+        if (notificationId) {
+            $row.attr('data-approval-notification-id', String(notificationId));
+        } else {
+            $row.removeAttr('data-approval-notification-id');
+        }
+        if (reason) {
+            $row.attr('data-rejection-reason', reason);
+        } else {
+            $row.removeAttr('data-rejection-reason');
+        }
+
+        resetStatusButtonClass($statusBtn);
+        setRequestButtonDefault($requestBtn);
+        $pendingWrap.removeClass('single-status');
+        $controls.removeClass('approval-controls-rechazado');
+        $retryBtn.addClass('d-none');
+        $cancelBtn.addClass('d-none');
+        $reasonBtn.addClass('d-none');
+
+        if (normalized === 'pendiente') {
+            $statusBtn.addClass('btn-warning').text('Pendiente');
+            $cancelBtn.removeClass('d-none');
+            $requestBtn.addClass('d-none');
+            $pendingWrap.removeClass('d-none');
+            $select.prop('disabled', true);
+            return;
+        }
+
+        if (normalized === 'aceptada') {
+            $statusBtn.addClass('btn-success').text('Aprobado');
+            $cancelBtn.addClass('d-none');
+            $retryBtn.addClass('d-none');
+            $pendingWrap.addClass('single-status').removeClass('d-none');
+            $requestBtn.addClass('d-none');
+            $select.prop('disabled', true);
+            return;
+        }
+
+        if (normalized === 'rechazada') {
+            $statusBtn.addClass('btn-danger').text('Rechazado');
+            $cancelBtn.addClass('d-none');
+            $retryBtn.removeClass('d-none');
+            if (reason) {
+                $reasonBtn.removeClass('d-none');
+            }
+            $controls.addClass('approval-controls-rechazado');
+            $pendingWrap.removeClass('single-status').removeClass('d-none');
+            $requestBtn.addClass('d-none');
+            $select.prop('disabled', true);
+            return;
+        }
+
+        $statusBtn.addClass('btn-warning').text('Pendiente');
+        $cancelBtn.addClass('d-none');
+        $retryBtn.addClass('d-none');
+        $pendingWrap.addClass('d-none');
+        $requestBtn.removeClass('d-none');
+        $select.prop('disabled', false);
+    }
+
+    async function handleRequestApproval($row, $btn) {
+        $btn.prop('disabled', true);
+        try {
+            const notification = await createApprovalNotificationForRow($row);
+            if (!notification || !notification.id) {
+                return;
+            }
+            setApprovalRowState($row, 'pendiente', notification.id);
+            requestApprovalHistoryRefresh();
+            if (typeof window.refreshHeaderApprovalNotifications === 'function') {
+                window.refreshHeaderApprovalNotifications();
+            }
+        } catch (error) {
+            const errorMessage = error.message || 'No se pudo enviar la solicitud.';
+            const isSelectionWarning = String(errorMessage).toLowerCase().includes('seleccionar un autorizador');
+            showAuthAlert(errorMessage, isSelectionWarning ? 'warning' : 'error', isSelectionWarning ? 'Aviso' : 'Error');
+        } finally {
+            $btn.prop('disabled', false);
+        }
+    }
+
+    async function createApprovalNotificationForRow($row) {
+        const destinatarioId = (($row.find('select[name^="autorizador_"]').val() || '') + '').trim();
+        if (!destinatarioId) {
+            throw new Error('Debes seleccionar un autorizador.');
+        }
+
+        const payload = {
+            destinatario_id: destinatarioId,
+            plantilla_id: currentPlantillaId,
+            tipo_documento: currentTipoDocumento,
+            titulo: buildApprovalTitle(),
+            descripcion: buildApprovalDescription(),
+        };
+        const { response, data } = await postJson(approvalNotificationCreateUrl, payload);
+        if (!response.ok || !data.success || !data.notification || !data.notification.id) {
+            throw new Error(data.error || 'No se pudo enviar la solicitud de aprobación.');
+        }
+        authorizationStatusByUser[destinatarioId] = {
+            notification_id: data.notification.id,
+            estado: 'pendiente',
+            motivo_rechazo: '',
+        };
+        return data.notification;
+    }
+
+    async function cancelApprovalNotificationForRow($row) {
+        const notificationId = (($row.attr('data-approval-notification-id') || '') + '').trim();
+        if (!notificationId) {
+            return;
+        }
+        const { response, data } = await postJson(buildApprovalNotificationCancelUrl(notificationId), {});
+        if (!response.ok || !data.success) {
+            throw new Error(data.error || 'No se pudo cancelar la solicitud.');
+        }
+        const destinatarioId = (($row.find('select[name^="autorizador_"]').val() || '') + '').trim();
+        if (destinatarioId && authorizationStatusByUser[destinatarioId]) {
+            delete authorizationStatusByUser[destinatarioId];
+        }
+        $row.removeAttr('data-approval-notification-id').removeAttr('data-approval-state');
+        requestApprovalHistoryRefresh();
+    }
+
+    function releasePdfBlobUrl() {
+        if (previewBlobUrl) {
+            URL.revokeObjectURL(previewBlobUrl);
+            previewBlobUrl = null;
+        }
+    }
+
+    function renderPdfPreview(url) {
+        if (!pdfModeEnabled) return;
+        const $frame = $('#pdf-preview-frame');
+        const $empty = $('#pdf-preview-empty');
+
+        if (url) {
+            $frame.attr('src', url).removeClass('d-none');
+            $empty.addClass('d-none');
+        } else {
+            $frame.attr('src', '').addClass('d-none');
+            $empty.removeClass('d-none');
+        }
+    }
+
+    function loadExistingPdfPreview() {
+        if (!pdfModeEnabled) return Promise.resolve();
+        if (!existingPdfUrl) {
+            renderPdfPreview('');
+            return Promise.resolve();
+        }
+
+        if (existingPdfPreviewPromise) {
+            return existingPdfPreviewPromise;
+        }
+
+        existingPdfPreviewPromise = fetch(existingPdfUrl, { credentials: 'same-origin' })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`No se pudo cargar el PDF (${response.status})`);
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const isPdfBlob = (blob.type || '').toLowerCase().includes('pdf') || existingPdfUrl.toLowerCase().includes('.pdf');
+                if (!isPdfBlob) {
+                    throw new Error('El archivo no es PDF');
+                }
+                releasePdfBlobUrl();
+                previewBlobUrl = URL.createObjectURL(blob);
+                renderPdfPreview(previewBlobUrl);
+            })
+            .catch(() => {
+                // Fallback por si el fetch no está disponible/permitido en el entorno
+                renderPdfPreview(existingPdfUrl);
+            })
+            .finally(() => {
+                existingPdfPreviewPromise = null;
+            });
+
+        return existingPdfPreviewPromise;
+    }
+
+    function updatePdfFileDisplay() {
+        if (!pdfModeEnabled) return;
+        const fileInput = document.getElementById('archivo_pdf');
+        const file = fileInput && fileInput.files ? fileInput.files[0] : null;
+        const displayName = file ? file.name : (existingPdfName || 'Sin archivos seleccionados');
+        $('#pdf-file-display').val(displayName);
+        $('#btn-remove-existing-pdf').toggleClass('d-none', !(file || existingPdfName));
+    }
+
+    function setBuilderFieldsRequired(isRequired) {
+        $('#builder-container input[name^="nombre_item_"], #builder-container textarea[name^="nombre_row_"], #builder-container input[name^="nombre_head_"]')
+            .prop('required', isRequired);
+    }
+
+    function updateCreationModeUI() {
+        if (!pdfModeEnabled) return;
+
+        const isPdfMode = $('#modo_contenido').val() === 'pdf';
+        $('#pdf-upload-col').toggleClass('d-none', !isPdfMode);
+        $('#builder-container').toggleClass('d-none', isPdfMode);
+        $('#pdf-preview-row').toggleClass('d-none', !isPdfMode);
+        setBuilderFieldsRequired(!isPdfMode);
+
+        if (isPdfMode) {
+            const fileInput = document.getElementById('archivo_pdf');
+            const file = fileInput && fileInput.files ? fileInput.files[0] : null;
+
+            releasePdfBlobUrl();
+            if (file) {
+                previewBlobUrl = URL.createObjectURL(file);
+                renderPdfPreview(previewBlobUrl);
+            } else if (existingPdfUrl) {
+                loadExistingPdfPreview();
+            } else {
+                renderPdfPreview('');
+            }
+        } else {
+            releasePdfBlobUrl();
+            renderPdfPreview('');
+        }
+
+        updatePdfFileDisplay();
+    }
+
+    function updateCourseQuestionIndices() {
+        if (!isCourseMode) return;
+        const ids = [];
+        $('#course-main-container .course-question-card').each(function() {
+            ids.push(this.id.replace('course_question_', ''));
+        });
+        $('#question_indices').val(ids.join(','));
+    }
+
+    function updateCourseOptionIndices(qid) {
+        const ids = [];
+        $(`#course_options_${qid} .course-option-row`).each(function() {
+            ids.push(this.id.replace(`course_option_${qid}_`, ''));
+        });
+        $(`#option_indices_${qid}`).val(ids.join(','));
+    }
+
+    function refreshCourseAnswerSelect(qid) {
+        const $select = $(`#respuesta_${qid}`);
+        if (!$select.length) return;
+
+        const selected = ($select.val() || '').toUpperCase();
+        $select.empty().append('<option value="">-</option>');
+
+        $(`#course_options_${qid} .course-option-row`).each(function(index) {
+            const letter = String.fromCharCode(65 + index);
+            $select.append(`<option value="${letter}">${letter}</option>`);
+        });
+
+        if (selected && $select.find(`option[value="${selected}"]`).length) {
+            $select.val(selected);
+        }
+    }
+
+    function refreshCourseOptionLabels(qid) {
+        $(`#course_options_${qid} .course-option-row`).each(function(index) {
+            const letter = String.fromCharCode(97 + index);
+            $(this).find('.course-option-letter').text(letter);
+        });
+        refreshCourseAnswerSelect(qid);
+        updateCourseOptionIndices(qid);
+    }
+
+    function releaseCourseImageBlobUrl(qid) {
+        if (courseImageBlobUrls[qid]) {
+            URL.revokeObjectURL(courseImageBlobUrls[qid]);
+            delete courseImageBlobUrls[qid];
+        }
+    }
+
+    function renderCourseImagePreview(qid, imageUrl) {
+        const $img = $(`#pregunta_imagen_preview_${qid}`);
+        const $empty = $(`#pregunta_imagen_empty_${qid}`);
+        if (!$img.length || !$empty.length) return;
+
+        if (imageUrl) {
+            $img.attr('src', imageUrl).removeClass('d-none');
+            $empty.addClass('d-none');
+        } else {
+            $img.attr('src', '').addClass('d-none');
+            $empty.removeClass('d-none');
+        }
+    }
+
+    function triggerCourseImage(qid) {
+        const input = document.getElementById(`pregunta_imagen_${qid}`);
+        if (input) input.click();
+    }
+
+    function onCourseImageChange(qid, input) {
+        const file = input && input.files ? input.files[0] : null;
+        if (!file) return;
+
+        if (!(file.type || '').toLowerCase().startsWith('image/')) {
+            input.value = '';
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    titleText: "Archivo inválido",
+                    text: "Solo se permiten fotos.",
+                    icon: "error",
+                    confirmButtonColor: "#ff00d9"
+                });
+            } else {
+                alert('Solo se permiten fotos.');
+            }
+            return;
+        }
+
+        releaseCourseImageBlobUrl(qid);
+        courseImageBlobUrls[qid] = URL.createObjectURL(file);
+        $(`#imagen_actual_${qid}`).val('');
+        renderCourseImagePreview(qid, courseImageBlobUrls[qid]);
+    }
+
+    function updateCourseDeleteLocks() {
+        const total = $('#course-main-container .course-question-card').length;
+        $('#course-main-container .course-question-card').each(function() {
+            const $btn = $(this).find('.btn-danger-light').first();
+            if (total <= 1) {
+                $btn.addClass('d-none').prop('disabled', true);
+            } else {
+                $btn.removeClass('d-none').prop('disabled', false);
+            }
+        });
+    }
+
+    function renumberCourseQuestions() {
+        $('#course-main-container .course-question-card').each(function(index) {
+            const n = index + 1;
+            const title = `Pregunta ${n}`;
+            $(this).find('.course-question-title').text(title);
+            $(this).find('input[name^="pregunta_titulo_"]').val(title);
+        });
+        updateCourseDeleteLocks();
+        updateCourseQuestionIndices();
+    }
+
+    function addCourseOption(qid, text = '') {
+        if (!cOption[qid]) cOption[qid] = 0;
+        cOption[qid] += 1;
+        const oid = cOption[qid];
+        const tpl = document.getElementById('tpl-course-option').innerHTML
+            .replace(/QID/g, qid)
+            .replace(/OID/g, oid);
+        $(`#course_options_${qid}`).append(tpl);
+
+        const $row = $(`#course_option_${qid}_${oid}`);
+        if (text) {
+            $row.find(`input[name="opcion_${qid}_${oid}"]`).val(text);
+        }
+        refreshCourseOptionLabels(qid);
+    }
+
+    function delCourseOption(qid, oid) {
+        const $options = $(`#course_options_${qid} .course-option-row`);
+        if ($options.length <= 2) return;
+
+        const $optionRow = $(`#course_option_${qid}_${oid}`);
+        const optionText = $optionRow.find('.course-option-input').val().trim();
+
+        if (optionText !== '') {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    titleText: 'Confirmar eliminación',
+                    text: 'Esta opción contiene texto. ¿Estás seguro de eliminarla?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar',
+                    reverseButtons: true,
+                    confirmButtonColor: '#ff00d9'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $optionRow.remove();
+                        refreshCourseOptionLabels(qid);
+                    }
+                });
+            } else {
+                if (window.confirm('Esta opción contiene texto. ¿Estás seguro de eliminarla?')) {
+                    $optionRow.remove();
+                    refreshCourseOptionLabels(qid);
+                }
+            }
+        } else {
+            $optionRow.remove();
+            refreshCourseOptionLabels(qid);
+        }
+    }
+
+    function addCourseQuestion(data = null) {
+        cQuestion += 1;
+        const qid = cQuestion;
+        const qnum = $('#course-main-container .course-question-card').length + 1;
+        const tpl = document.getElementById('tpl-course-question').innerHTML
+            .replace(/QID/g, qid)
+            .replace(/QNUM/g, qnum);
+
+        $('#course-main-container').append(tpl);
+        cOption[qid] = 0;
+
+        const $card = $(`#course_question_${qid}`);
+        const statement = data && data.enunciado ? data.enunciado : '';
+        const options = data && Array.isArray(data.opciones) ? data.opciones : [];
+        const answer = data && data.respuesta_correcta ? String(data.respuesta_correcta).toUpperCase() : '';
+        const justification = data && data.justificacion ? data.justificacion : '';
+        const imageUrl = data && data.imagen_url ? String(data.imagen_url).trim() : '';
+
+        $card.find(`textarea[name="pregunta_texto_${qid}"]`).val(statement);
+        $card.find(`[name="justificacion_${qid}"]`).val(justification);
+        $card.find(`input[name="imagen_actual_${qid}"]`).val(imageUrl);
+        renderCourseImagePreview(qid, imageUrl);
+        $card.find(`#pregunta_imagen_${qid}`).on('change', function() {
+            onCourseImageChange(qid, this);
+        });
+
+        if (options.length) {
+            options.forEach(opt => addCourseOption(qid, opt));
+        } else {
+            addCourseOption(qid, '');
+            addCourseOption(qid, '');
+        }
+
+        if (answer) {
+            $(`#respuesta_${qid}`).val(answer);
+        }
+
+        renumberCourseQuestions();
+    }
+
+    function delCourseQuestion(qid) {
+        const total = $('#course-main-container .course-question-card').length;
+        if (total <= 1) return;
+
+        const $card = $(`#course_question_${qid}`);
+        let hasContent = false;
+
+        if ($card.find(`textarea[name="pregunta_texto_${qid}"]`).val().trim() !== '') {
+            hasContent = true;
+        }
+        
+        if ($card.find(`textarea[name="justificacion_${qid}"]`).val().trim() !== '') {
+            hasContent = true;
+        }
+
+        $card.find('.course-option-input').each(function() {
+            if ($(this).val().trim() !== '') {
+                hasContent = true;
+            }
+        });
+
+        if (hasContent) {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    titleText: 'Confirmar eliminación',
+                    text: 'Esta pregunta contiene texto en su enunciado, opciones o justificación. ¿Estás seguro de eliminarla por completo?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar',
+                    reverseButtons: true,
+                    confirmButtonColor: '#ff00d9'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        releaseCourseImageBlobUrl(qid);
+                        $card.remove();
+                        renumberCourseQuestions();
+                    }
+                });
+            } else {
+                if (window.confirm('Esta pregunta contiene texto en su enunciado, opciones o justificación. ¿Estás seguro de eliminarla por completo?')) {
+                    releaseCourseImageBlobUrl(qid);
+                    $card.remove();
+                    renumberCourseQuestions();
+                }
+            }
+        } else {
+            releaseCourseImageBlobUrl(qid);
+            $card.remove();
+            renumberCourseQuestions();
+        }
+    }
+
+    function extractCourseQuestionFromLegacy(raw, idx) {
+        const question = {
+            titulo: (raw && raw.titulo) ? String(raw.titulo).trim() : `Pregunta ${idx + 1}`,
+            enunciado: (raw && raw.enunciado) ? String(raw.enunciado).trim() : '',
+            imagen_url: (raw && raw.imagen_url) ? String(raw.imagen_url).trim() : '',
+            opciones: (raw && Array.isArray(raw.opciones)) ? raw.opciones.filter(Boolean).map(v => String(v)) : [],
+            respuesta_correcta: (raw && raw.respuesta_correcta) ? String(raw.respuesta_correcta).trim().toUpperCase() : '',
+            justificacion: (raw && raw.justificacion) ? String(raw.justificacion).trim() : '',
+        };
+
+        const filas = (raw && Array.isArray(raw.filas)) ? raw.filas : [];
+        if (!question.enunciado && filas.length) {
+            const first = String(filas[0] || '').trim();
+            const isOptionLike = /^[a-zA-Z]\s*[-.)]\s*/.test(first);
+            const isAnswerLike = /^respuesta/i.test(first);
+            const isJustLike = /^justificaci[oó]n/i.test(first);
+            if (!isOptionLike && !isAnswerLike && !isJustLike) {
+                question.enunciado = first;
+            }
+        }
+
+        if (!question.opciones.length && filas.length) {
+            filas.forEach(line => {
+                const text = String(line || '').trim();
+                const optionMatch = text.match(/^[a-zA-Z]\s*[-.)]\s*(.+)$/);
+                if (optionMatch) {
+                    question.opciones.push(optionMatch[1].trim());
+                }
+            });
+        }
+
+        if (!question.respuesta_correcta && filas.length) {
+            const answerLine = filas.find(line => /^respuesta/i.test(String(line || '').trim()));
+            if (answerLine) {
+                const m = String(answerLine).match(/:\s*([A-Za-z])/);
+                if (m) question.respuesta_correcta = m[1].toUpperCase();
+            }
+        }
+
+        if (!question.justificacion && filas.length) {
+            const justLine = filas.find(line => /^justificaci[oó]n/i.test(String(line || '').trim()));
+            if (justLine) {
+                const m = String(justLine).match(/:\s*(.+)$/);
+                question.justificacion = m ? m[1].trim() : '';
+            }
+        }
+
+        return question;
+    }
+
+    function addItem(titulo = "") {
+        cItem++;
+        let html = document.getElementById('tpl-item').innerHTML.replace(/IDX/g, cItem);
+        $('#main-container').append(html);
+        // Asignamos el título al input recién creado
+        if(titulo) {
+            $(`input[name="nombre_item_${cItem}"]`).val(titulo);
+        }
+        
+        cHead[cItem] = 0; cRow[cItem] = 0;
+        updateIndices(); 
+        renumberAll();
+        return cItem;
+    }
+
+    function ensureMinimumStructure() {
+        if ($('.item-container').length === 0) {
+            const idItem = addItem();
+            addRow(idItem);
+            return;
+        }
+
+        const $firstSection = $('.item-container').first();
+        if ($firstSection.find('tbody tr').length === 0) {
+            const firstSectionId = $firstSection.attr('id').split('_')[1];
+            addRow(firstSectionId);
+        }
+    }
+
+    function updateMandatoryLocks() {
+        $('.item-container .btn-del-section').removeClass('d-none').prop('disabled', false);
+        $('.item-container .btn-del-row').removeClass('d-none').prop('disabled', false);
+        $('.item-container').removeClass('mandatory-section');
+        $('.item-container tbody tr').removeClass('mandatory-row');
+
+        const $sections = $('.item-container');
+        if (!$sections.length) return;
+
+        const $firstSection = $sections.first();
+
+        if ($sections.length === 1) {
+            $firstSection.addClass('mandatory-section');
+            $firstSection.find('.btn-del-section').first().addClass('d-none').prop('disabled', true);
+        }
+
+        const $rowsInFirstSection = $firstSection.find('tbody tr');
+        const $firstRow = $rowsInFirstSection.first();
+        const onlyOneRowInFirstSection = $rowsInFirstSection.length === 1;
+        if ($firstRow.length && onlyOneRowInFirstSection) {
+            $firstRow.addClass('mandatory-row');
+            $firstRow.find('.btn-del-row').first().addClass('d-none').prop('disabled', true);
+        }
+    }
+
+    function addHead(idxItem, titulo = "") {
+        if(!allowExtraColumns) return;
+        if(!cHead[idxItem]) cHead[idxItem] = 0; cHead[idxItem]++;
+        let idxHead = cHead[idxItem];
+        let tpl = document.getElementById('tpl-head').innerHTML.replace(/HIDX/g, idxHead).replace(/IDX/g, idxItem);
+        $(`#thead_row_${idxItem} #th_add_btn_${idxItem}`).before(tpl);
+        
+        if(titulo) $(`input[name="nombre_head_${idxItem}_${idxHead}"]`).val(titulo);
+
+        $(`#tbody_${idxItem} tr`).each(function() {
+            let idxRow = this.id.split('_')[2];
+            let cellHtml = document.getElementById('tpl-cell').innerHTML.replace(/HIDX/g, idxHead);
+            $(`#tr_${idxItem}_${idxRow} #td_del_btn_${idxItem}_${idxRow}`).before(cellHtml);
+        });
+        updateHeadIndices(idxItem);
+    }
+    // MODIFICADO: Acepta 'text' para rellenar si estamos editando
+    function addRow(idxItem, text = null) {
+        if(!cRow[idxItem]) cRow[idxItem] = 0; cRow[idxItem]++;
+        let idxRow = cRow[idxItem];
+        let tpl = document.getElementById('tpl-row').innerHTML.replace(/RIDX/g, idxRow).replace(/IDX/g, idxItem);
+        $(`#tbody_${idxItem}`).append(tpl);
+        // Si hay texto guardado, lo ponemos en el input
+        if (text) {
+            // Limpieza por si viene el texto antiguo de relleno
+            if(text === "RELLENAR EN REPORTE") text = ""; 
+            $(`[name="nombre_row_${idxItem}_${idxRow}"]`).val(text);
+        }
+        
+        if (allowExtraColumns) {
+            $(`#thead_row_${idxItem} .th-dynamic`).each(function() {
+                let headID = this.getAttribute('data-head-id');
+                let cellHtml = document.getElementById('tpl-cell').innerHTML.replace(/HIDX/g, headID);
+                $(`#tr_${idxItem}_${idxRow} #td_del_btn_${idxItem}_${idxRow}`).before(cellHtml);
+            });
+        }
+        updateRowIndices(idxItem); 
+        renumberAll();
+    }
+    // Funciones de eliminación
+    function delItem(i) {
+        const $item = $(`#item_${i}`);
+        if ($item.hasClass('mandatory-section')) return;
+
+        const sectionTitle = $item.find(`input[name="nombre_item_${i}"]`).val().trim();
+        let hasContent = false;
+
+        if (sectionTitle !== '') {
+            hasContent = true;
+        }
+
+        $item.find('tbody tr').each(function() {
+            const r = $(this).attr('id').split('_')[2];
+            const rowText = $(this).find(`textarea[name="nombre_row_${i}_${r}"]`).val().trim();
+            if (rowText !== '') {
+                hasContent = true;
+            }
+        });
+
+        if (hasContent) {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    titleText: 'Confirmar eliminación',
+                    text: 'Esta sección contiene texto en su título o en sus filas. ¿Estás seguro de eliminarla por completo?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar',
+                    reverseButtons: true,
+                    confirmButtonColor: '#ff00d9'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $item.remove();
+                        updateIndices();
+                        renumberAll();
+                    }
+                });
+            } else {
+                if (window.confirm('Esta sección contiene texto en su título o en sus filas. ¿Estás seguro de eliminarla por completo?')) {
+                    $item.remove();
+                    updateIndices();
+                    renumberAll();
+                }
+            }
+        } else {
+            $item.remove();
+            updateIndices();
+            renumberAll();
+        }
+    }
+    function delHead(i, h) {
+        if(!allowExtraColumns) return;
+        $(`#th_${i}_${h}`).remove();
+        $(`#tbody_${i} td[data-head-id="${h}"]`).remove();
+        updateHeadIndices(i);
+    }
+    function delRow(i, r) {
+        const $row = $(`#tr_${i}_${r}`);
+        if ($row.hasClass('mandatory-row')) return;
+
+        const rowText = $row.find(`textarea[name="nombre_row_${i}_${r}"]`).val().trim();
+
+        if (rowText !== '') {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    titleText: 'Confirmar eliminación',
+                    text: 'Esta fila contiene texto. ¿Estás seguro de eliminarla?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar',
+                    reverseButtons: true,
+                    confirmButtonColor: '#ff00d9'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $row.remove();
+                        updateRowIndices(i);
+                        renumberAll();
+                    }
+                });
+            } else {
+                if (window.confirm('Esta fila contiene texto. ¿Estás seguro de eliminarla?')) {
+                    $row.remove();
+                    updateRowIndices(i);
+                    renumberAll();
+                }
+            }
+        } else {
+            $row.remove();
+            updateRowIndices(i);
+            renumberAll();
+        }
+    }
+    // Actualizar índices para el POST
+    function updateIndices() { 
+        let arr=[]; $('.item-container').each(function(){arr.push(this.id.split('_')[1])}); 
+        $('#item_indices').val(arr.join(',')); 
+    }
+    function updateHeadIndices(i) { 
+        if(!allowExtraColumns) {
+            $(`#head_indices_${i}`).val('');
+            return;
+        }
+        let arr=[]; $(`#thead_row_${i} .th-dynamic`).each(function(){arr.push(this.getAttribute('data-head-id'))}); 
+        $(`#head_indices_${i}`).val(arr.join(',')); 
+    }
+    function updateRowIndices(i) { 
+        let arr=[]; $(`#tbody_${i} tr`).each(function(){arr.push(this.id.split('_')[2])}); 
+        $(`#row_indices_${i}`).val(arr.join(',')); 
+    }
+    // Renumeración Visual (1.1, 1.2...)
+    function renumberAll() {
+        $('.item-container').each(function(indexSection) {
+            let numSeccion = indexSection + 1;
+            $(this).find('.sect-num').text(numSeccion);
+
+            $(this).find('tbody tr').each(function(indexRow) {
+                let numSubItem = indexRow + 1;
+                $(this).find('.sub-num').text(`${numSeccion}.${numSubItem}`);
+            });
+        });
+        updateMandatoryLocks();
+    }
+
+    function getSelectedAutorizadores() {
+        const selected = [];
+        $('#datatable-autorizacion tbody select[name^="autorizador_"]').each(function() {
+            const value = ($(this).val() || '').toString().trim();
+            if (value) selected.push(value);
+        });
+        return selected;
+    }
+
+    function hasUnselectedAutorizadorRows() {
+        return $('#datatable-autorizacion tbody select[name^="autorizador_"]').toArray()
+            .some((el) => !String($(el).val() || '').trim());
+    }
+
+    function quedanAutorizadoresDisponibles() {
+        const selected = new Set(getSelectedAutorizadores());
+        return authorizationWorkers.some((worker) => !selected.has(String(worker.id)));
+    }
+
+    function buildAutorizadorOptions(currentValue = '') {
+        const current = String(currentValue || '');
+        const selectedByOthers = new Set(
+            getSelectedAutorizadores().filter((value) => value && value !== current)
+        );
+
+        let optionsHtml = '<option value="">Seleccione autorizador...</option>';
+        authorizationWorkers.forEach((worker) => {
+            const workerId = String(worker.id);
+            if (!selectedByOthers.has(workerId) || workerId === current) {
+                const selectedAttr = workerId === current ? ' selected' : '';
+                optionsHtml += `<option value="${workerId}"${selectedAttr}>${worker.texto}</option>`;
+            }
+        });
+        return optionsHtml;
+    }
+
+    function toggleAddAutorizadorButton() {
+        const rowCount = $('#datatable-autorizacion tbody tr').length;
+        $('#agregarAutorizador').prop('disabled', rowCount >= MAX_AUTORIZADORES);
+    }
+
+    function updateAutorizadoresHiddenInput() {
+        const uniqueIds = [...new Set(getSelectedAutorizadores())];
+        $('#autorizador_ids').val(uniqueIds.join(','));
+    }
+
+    function refreshAutorizadorSelects() {
+        $('#datatable-autorizacion tbody select[name^="autorizador_"]').each(function() {
+            const $select = $(this);
+            const currentValue = ($select.val() || '').toString();
+            $select.html(buildAutorizadorOptions(currentValue));
+            if (currentValue && $select.find(`option[value="${currentValue}"]`).length) {
+                $select.val(currentValue);
+            } else {
+                $select.val('');
+            }
+        });
+        updateAutorizadoresHiddenInput();
+        toggleAddAutorizadorButton();
+    }
+
+    function createAutorizadorRow(workerId = '', skipLimit = false, skipRealtimeSync = false) {
+        if (!skipLimit && $('#datatable-autorizacion tbody tr').length >= MAX_AUTORIZADORES) {
+            showAuthAlert(`Solo se permiten ${MAX_AUTORIZADORES} autorizadores en Autorización.`);
+            return;
+        }
+        if (!workerId && !quedanAutorizadoresDisponibles()) {
+            showAuthAlert('No quedan autorizadores disponibles para agregar.');
+            return;
+        }
+
+        autorizadorCount += 1;
+        const rowHtml = `
+            <tr>
+                <td>
+                    <div class="autorizacion-inline">
+                        <select class="form-control autorizador-select" id="id_autorizador_${autorizadorCount}" name="autorizador_${autorizadorCount}">
+                        </select>
+                        <button type="button" class="btn btn-sm btn-danger-light btn-delete-autorizador" title="Eliminar autorizador">
+                            <i class="fe fe-trash"></i>
+                        </button>
+                        <div class="approval-inline-controls">
+                            <button type="button" class="btn btn-sm btn-outline-warning btn-request-approval">Solicitar aprobación</button>
+                            <div class="approval-pending-wrap d-none">
+                                <button type="button" class="btn btn-sm btn-warning approval-status-label" disabled>Pendiente</button>
+                                <button type="button" class="btn btn-sm btn-danger-light btn-cancel-approval">Cancelar</button>
+                                
+                                <button type="button" class="btn btn-sm btn-outline-warning btn-retry-approval d-none">Quitar rechazo</button>
+                                <button type="button" class="btn btn-sm btn-outline-info btn-view-rejection-reason d-none">Motivo de rechazo</button>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>`;
+        $('#datatable-autorizacion tbody').append(rowHtml);
+
+        const $newRow = $('#datatable-autorizacion tbody tr').last();
+        const $newSelect = $(`#id_autorizador_${autorizadorCount}`);
+        $newSelect.html(buildAutorizadorOptions(workerId));
+        if (workerId) {
+            $newSelect.val(String(workerId));
+        }
+        refreshAutorizadorSelects();
+
+        const selectedWorkerId = ($newSelect.val() || '').toString().trim();
+        const storedState = getStoredApprovalStateForWorker(selectedWorkerId);
+        if (storedState) {
+            setApprovalRowState($newRow, storedState.estado, storedState.notificationId, storedState.motivoRechazo);
+        } else {
+            setApprovalRowState($newRow, '', '');
+        }
+        if (!skipRealtimeSync) {
+            syncAutorizadoresRealtime(false);
+        }
+    }
+    // CARGA AUTOMÁTICA
+    $(document).ready(function() {
+        if (approvalHistoryListUrl && currentPlantillaId) {
+            refreshApprovalHistory(true);
+            startApprovalHistoryAutoRefresh();
+        }
+        if (approvalStatusListUrl && currentPlantillaId) {
+            refreshApprovalStatus(true);
+            startApprovalStatusAutoRefresh();
+        }
+
+        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function() {
+            const tabHref = $(this).attr('href') || '';
+            if (tabHref === '#tab-prevencion-historial') {
+                requestApprovalHistoryRefresh();
+            } else if (tabHref === '#tab-prevencion-autorizacion') {
+                requestApprovalStatusRefresh();
+            }
+        });
+
+        if (isCourseMode) {
+            $('#item_indices').val('');
+            if (savedData && savedData.length > 0) {
+                savedData.forEach((rawQuestion, idx) => {
+                    addCourseQuestion(extractCourseQuestionFromLegacy(rawQuestion, idx));
+                });
+            } else {
+                addCourseQuestion();
+            }
+
+            $('#btn-add-question').on('click', function() {
+                addCourseQuestion();
+            });
+        } else {
+            if (savedData && savedData.length > 0) {
+                savedData.forEach(seccion => {
+                    let idItem = addItem(seccion.titulo);
+                    
+                    if(allowExtraColumns && seccion.columnas_extras) {
+                        seccion.columnas_extras.forEach(col => addHead(idItem, col));
+                    }
+                    
+                    if(seccion.filas) {
+                        // Pasamos el texto de la fila (item) a addRow
+                        seccion.filas.forEach(filaText => addRow(idItem, filaText));
+                    }
+                });
+            } else {
+                const idItem = addItem();
+                addRow(idItem);
+            }
+
+            ensureMinimumStructure();
+            renumberAll();
+        }
+
+        if (pdfModeEnabled) {
+            $('#btn-select-pdf').on('click', function() {
+                $('#archivo_pdf').trigger('click');
+            });
+
+            $('#btn-remove-existing-pdf').on('click', function() {
+                const fileInput = document.getElementById('archivo_pdf');
+                const hasSelectedFile = fileInput && fileInput.files && fileInput.files.length > 0;
+
+                if (hasSelectedFile) {
+                    fileInput.value = '';
+                } else if (existingPdfName || existingPdfUrl) {
+                    $('#remove_existing_pdf').val('1');
+                    existingPdfUrl = '';
+                    existingPdfName = '';
+                }
+
+                releasePdfBlobUrl();
+                updateCreationModeUI();
+            });
+
+            $('#modo_contenido').on('change', function() {
+                updateCreationModeUI();
+            });
+
+            $('#archivo_pdf').on('change', function() {
+                const file = this.files && this.files[0] ? this.files[0] : null;
+                if (file && !file.name.toLowerCase().endsWith('.pdf')) {
+                    this.value = '';
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            titleText: "Archivo inválido",
+                            text: "Solo se permiten archivos PDF.",
+                            icon: "error",
+                            confirmButtonColor: "#ff00d9"
+                        });
+                    } else {
+                        alert('Solo se permiten archivos PDF.');
+                    }
+                }
+                updateCreationModeUI();
+            });
+
+            updateCreationModeUI();
+        }
+
+        $('#datatable-autorizacion tbody').empty();
+        if (Array.isArray(selectedAuthorizationWorkerIds) && selectedAuthorizationWorkerIds.length > 0) {
+            selectedAuthorizationWorkerIds.forEach((workerId) => {
+                createAutorizadorRow(workerId, true, true);
+            });
+        }
+        if (
+            authorizationIncompleteFromServer &&
+            $('#datatable-autorizacion tbody tr').length < MAX_AUTORIZADORES &&
+            quedanAutorizadoresDisponibles()
+        ) {
+            createAutorizadorRow('', true, true);
+        }
+        toggleAddAutorizadorButton();
+        updateAutorizadoresHiddenInput();
+
+        $('#agregarAutorizador').on('click', function() {
+            const rows = $('#datatable-autorizacion tbody tr');
+            if (rows.length >= MAX_AUTORIZADORES) {
+                showAuthAlert(`Solo se permiten ${MAX_AUTORIZADORES} autorizadores en Autorización.`);
+                return;
+            }
+
+            const $lastSelect = rows.last().find('select[name^="autorizador_"]');
+            if ($lastSelect.length && !($lastSelect.val() || '').toString().trim()) {
+                showAuthAlert('Debes seleccionar un autorizador.');
+                return;
+            }
+
+            createAutorizadorRow('', false, false);
+        });
+
+        $('#datatable-autorizacion').on('click', '.btn-delete-autorizador', async function() {
+            const $row = $(this).closest('tr');
+            const removedWorkerId = (($row.find('select[name^="autorizador_"]').val() || '') + '').trim();
+            const rowState = (($row.attr('data-approval-state') || '') + '').trim().toLowerCase();
+            const removedWorkerName = (($row.find('select[name^="autorizador_"] option:selected').text() || '') + '').trim();
+
+            if (rowState === 'aceptada' || rowState === 'aprobada') {
+                const confirmed = await confirmDeleteApprovedAutorizador(removedWorkerName);
+                if (!confirmed) {
+                    return;
+                }
+            }
+
+            if (rowState === 'pendiente') {
+                try {
+                    await cancelApprovalNotificationForRow($row);
+                } catch (error) {
+                    showAuthAlert(error.message || 'No se pudo cancelar la solicitud antes de eliminar la fila.', 'error', 'Error');
+                    return;
+                }
+            }
+            if (removedWorkerId && authorizationStatusByUser[removedWorkerId]) {
+                delete authorizationStatusByUser[removedWorkerId];
+            }
+            $row.remove();
+            refreshAutorizadorSelects();
+            syncAutorizadoresRealtime(true);
+            if (typeof window.refreshHeaderApprovalNotifications === 'function') {
+                window.refreshHeaderApprovalNotifications();
+            }
+        });
+
+        $('#datatable-autorizacion').on('change', 'select[name^="autorizador_"]', function() {
+            const $row = $(this).closest('tr');
+            refreshAutorizadorSelects();
+            const selectedWorkerId = (($row.find('select[name^="autorizador_"]').val() || '') + '').trim();
+            const storedState = getStoredApprovalStateForWorker(selectedWorkerId);
+            if (storedState) {
+                setApprovalRowState($row, storedState.estado, storedState.notificationId, storedState.motivoRechazo);
+            } else {
+                setApprovalRowState($row, '', '');
+            }
+            syncAutorizadoresRealtime(true);
+        });
+
+        $('#datatable-autorizacion').on('click', '.btn-request-approval', async function() {
+            const $btn = $(this);
+            const $row = $btn.closest('tr');
+            await handleRequestApproval($row, $btn);
+        });
+
+        $('#datatable-autorizacion').on('click', '.btn-retry-approval', async function() {
+            const $btn = $(this);
+            const $row = $btn.closest('tr');
+            await handleRequestApproval($row, $btn);
+        });
+
+        $('#datatable-autorizacion').on('click', '.btn-cancel-approval', async function() {
+            const $row = $(this).closest('tr');
+            const $cancelBtn = $(this);
+            $cancelBtn.prop('disabled', true);
+            try {
+                await cancelApprovalNotificationForRow($row);
+                setApprovalRowState($row, '', '');
+                if (typeof window.refreshHeaderApprovalNotifications === 'function') {
+                    window.refreshHeaderApprovalNotifications();
+                }
+            } catch (error) {
+                showAuthAlert(error.message || 'No se pudo cancelar la solicitud.', 'error', 'Error');
+            } finally {
+                $cancelBtn.prop('disabled', false);
+            }
+        });
+
+        window.addEventListener('approvalNotificationResolved', function(event) {
+            const detail = (event && event.detail) ? event.detail : {};
+            const notificationId = String(detail.notificationId || '').trim();
+            const estado = String(detail.estado || '').trim().toLowerCase();
+            const motivoRechazo = String(detail.motivo_rechazo || '').trim();
+            if (!notificationId || !estado) {
+                return;
+            }
+            $('#datatable-autorizacion tbody tr').each(function() {
+                const $row = $(this);
+                const rowNotificationId = (($row.attr('data-approval-notification-id') || '') + '').trim();
+                if (rowNotificationId === notificationId) {
+                    const workerId = (($row.find('select[name^="autorizador_"]').val() || '') + '').trim();
+                    if (workerId) {
+                        authorizationStatusByUser[workerId] = {
+                            notification_id: notificationId,
+                            estado: estado,
+                            motivo_rechazo: motivoRechazo,
+                        };
+                    }
+                    setApprovalRowState($row, estado, notificationId, motivoRechazo);
+                }
+            });
+            requestApprovalHistoryRefresh();
+            requestApprovalStatusRefresh();
+        });
+
+        $('#datatable-autorizacion').on('click', '.btn-view-rejection-reason', async function() {
+            const $row = $(this).closest('tr');
+            const reasonText = String($row.attr('data-rejection-reason') || '').trim();
+            await showRejectionReasonModal(reasonText);
+        });
+
+        $('#table-approval-history').on('click', '.approval-history-rejected-badge', async function() {
+            const encodedReason = ($(this).attr('data-reason') || '').toString();
+            await showRejectionReasonModal(decodeUrlEncodedValue(encodedReason));
+        });
+
+        $('#table-approval-history').on('keydown', '.approval-history-rejected-badge', async function(event) {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            event.preventDefault();
+            const encodedReason = ($(this).attr('data-reason') || '').toString();
+            await showRejectionReasonModal(decodeUrlEncodedValue(encodedReason));
+        });
+        
+        $('#formDinamico').on('submit', function(e){
+            $('#has_unselected_autorizadores').val(hasUnselectedAutorizadorRows() ? '1' : '0');
+
+            if (getSelectedAutorizadores().length > MAX_AUTORIZADORES) {
+                e.preventDefault();
+                showAuthAlert(`Solo se permiten ${MAX_AUTORIZADORES} autorizadores en Autorización.`);
+                return;
+            }
+
+            updateAutorizadoresHiddenInput();
+
+            if (isCourseMode) {
+                $('#item_indices').val('');
+                $('#course-main-container .course-question-card').each(function() {
+                    const qid = this.id.replace('course_question_', '');
+                    refreshCourseOptionLabels(qid);
+                    updateCourseOptionIndices(qid);
+                });
+                updateCourseQuestionIndices();
+
+                if ($('#course-main-container .course-question-card').length === 0) {
+                    e.preventDefault();
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            titleText: "Falta contenido",
+                            text: "Debes crear al menos una pregunta.",
+                            icon: "error",
+                            confirmButtonColor: "#ff00d9"
+                        });
+                    } else {
+                        alert('Debes crear al menos una pregunta.');
+                    }
+                }
+                return;
+            }
+
+            const isPdfMode = pdfModeEnabled && $('#modo_contenido').val() === 'pdf';
+            if (isPdfMode) {
+                $('#item_indices').val('');
+                setBuilderFieldsRequired(false);
+
+                const fileInput = document.getElementById('archivo_pdf');
+                const hasNewPdf = fileInput && fileInput.files && fileInput.files.length > 0;
+                const hasExistingPdf = !!existingPdfUrl;
+                if (!hasNewPdf && !hasExistingPdf) {
+                    e.preventDefault();
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            titleText: "PDF requerido",
+                            text: "Debes adjuntar un PDF para continuar.",
+                            icon: "error",
+                            confirmButtonColor: "#ff00d9"
+                        });
+                    } else {
+                        alert('Debes adjuntar un PDF para continuar.');
+                    }
+                }
+            } else {
+                updateIndices();
+                setBuilderFieldsRequired(true);
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es" dir="ltr" style="
+        --primary01: rgba(37, 99, 235, 0.1);
+        --primary02: rgba(37, 99, 235, 0.2);
+        --primary03: rgba(37, 99, 235, 0.3);
+        --primary06: rgba(37, 99, 235, 0.6);
+        --primary09: rgba(37, 99, 235, 0.9);
+    ">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!-- META DATA -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="Geoadmin &amp; Portal Dashboard" />
+    <meta name="author" content="www.isamax.cl" />
+    <meta name="keywords" content="" />
+    <!-- FAVICON -->   
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/logo/Logo GeoAdmin.png' %}?v=1.1"/> 
+    <!-- TITLE -->
+    <title>Geoadmin</title>
+    <!-- BOOTSTRAP CSS -->
+    {% block css %}
+    {% endblock css %}
+    <link id="style" href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+    <!-- STYLE CSS -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/skin-modes.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/sweetalert2.min.css' %}" rel="stylesheet"/>
+    <!--- FONT-ICONS CSS -->
+    <link href="{% static 'css/icons.css' %}" rel="stylesheet" />
+    <link href="{% static 'iconfonts/materialdesignicons/materialdesignicons.css' %}" rel="stylesheet" />
+    <!-- INTERNAL Switcher css -->
+    <link href="{% static 'css/switcher.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/demo.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/simple-line-icons.css' %}" rel="stylesheet" /> 
+    <meta http-equiv="imagetoolbar" content="no" />
+    <style type="text/css">
+        <!-- input,textarea{-webkit-touch-callout:default;-webkit-user-select:auto;-khtml-user-select:auto;-moz-user-select:text;-ms-user-select:text;user-select:text} *{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:-moz-none;-ms-user-select:none;user-select:none} 
+        -->
+    </style>
+    <style type="text/css" media="print">
+        <!-- body{display:none} 
+        -->
+    </style>
+    <style>
+        .btn-geoadmin {
+            background-color: #2563EB !important;
+            border-color: #2563EB !important;
+            color: #fff !important;
+        }
+        .btn-geoadmin:hover {
+            background-color: #1D4ED8 !important;
+            border-color: #1D4ED8 !important;
+        }
+        .login-img::before {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(37, 99, 235, 0.7) 50%, rgba(124, 58, 237, 0.8) 100%) !important;
+            backdrop-filter: blur(3px); /* Un ligero efecto de cristal para darle un toque ultra moderno */
+        }
+        .topbar-login {
+            position: absolute;
+            top: 0; left: 0; width: 100%;
+            padding: 1rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        .topbar-login .brand {
+            display: flex; align-items: center; gap: 0.8rem; text-decoration: none;
+        }
+        .topbar-login .brand img { width: 45px; height: 45px; object-fit: contain; }
+        .topbar-login .brand span { font-size: 1.7rem; color: #00b4db; font-family: "Poppins", sans-serif; font-weight: 400; }
+        .topbar-login nav { display: flex; gap: 1.5rem; align-items: center; }
+        .topbar-login nav a {
+            color: #4b5563;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s, transform 0.2s;
+        }
+        .topbar-login nav a:hover { color: #2563EB; transform: translateY(-1px); }
+        
+        .btn-ingresar {
+            background-color: #3b82f6;
+            color: #ffffff !important;
+            padding: 0.45rem 1.25rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        .btn-ingresar:hover {
+            background-color: #2563eb;
+        }
+        
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #111827;
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        /* Mobile Dropdown */
+        .mobile-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 2.5rem;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1.5rem;
+            min-width: 200px;
+            z-index: 999;
+        }
+        .mobile-dropdown.active {
+            display: flex;
+        }
+        .mobile-dropdown a {
+            color: #4b5563;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        .mobile-dropdown a:hover { color: #2563eb; }
+        .mobile-dropdown .btn-ingresar {
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .topbar-login { padding: 1rem 1.5rem; }
+            .topbar-login nav.desktop-nav { display: none; }
+            .mobile-menu-btn { display: block; }
+            .mobile-dropdown { right: 1.5rem; }
+            .container-login100 { padding-top: 6rem; padding-bottom: 2rem; }
+        }
+    </style>
+</head>
+<body class="ltr login-img">  
+        <!-- GLOBAL-LOADER -->
+        <div id="global-loader" style="display: none">
+            <img src="{% static 'images/loader.svg' %}" class="loader-img" alt="Loader" />
+        </div>
+        <!-- /GLOBAL-LOADER -->
+        {% block topbar %}
+        <!-- ─── TOPBAR ─────────────────────────────────────── -->
+        <header class="topbar-login">
+            <a href="{% url 'landing' %}" class="brand" aria-label="GeoAdmin inicio">
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" alt="GeoAdmin logo">
+                <span>GeoAdmin</span>
+            </a>
+            
+            <nav class="desktop-nav">
+                <a href="{% url 'landing' %}">Inicio</a>
+                <a href="{% url 'landing' %}#nosotros">Nosotros</a>
+                <a href="{% url 'landing' %}#servicios">Servicios</a>
+                <a href="{% url 'logincustom' %}" class="btn-ingresar">Ingresar</a>
+            </nav>
+
+            <button class="mobile-menu-btn" aria-label="Menú">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <!-- Menú Desplegable Móvil -->
+            <div class="mobile-dropdown" id="mobileMenu">
+                <a href="{% url 'landing' %}">Inicio</a>
+                <a href="{% url 'landing' %}#nosotros">Nosotros</a>
+                <a href="{% url 'landing' %}#servicios">Servicios</a>
+                <a href="{% url 'logincustom' %}" class="btn-ingresar">Ingresar</a>
+            </div>
+        </header>
+        {% endblock topbar %}
+        <!-- PAGE -->
+        <div class="page is-expanded">
+            <div class="page-main">                
+                <!-- APP-CONTENT START -->
+                {% block content %}
+                {% endblock content %}                
+                <!-- APP CONTENT END -->                
+            </div>             
+        </div>
+        <!-- BACK-TO-TOP -->
+        <a href="#top" id="back-to-top"><i class="fa fa-long-arrow-up"></i></a>
+    {% block javascript %}
+    {% endblock javascript %}    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var menuBtn = document.querySelector('.mobile-menu-btn');
+            var mobileMenu = document.getElementById('mobileMenu');
+            if (menuBtn && mobileMenu) {
+                menuBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    mobileMenu.classList.toggle('active');
+                });
+                
+                document.addEventListener('click', function(e) {
+                    if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                        mobileMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+    <!-- JQUERY JS -->
+    <script src="{% static 'js/jquery.min.js' %}"></script> 
+    <!-- BOOTSTRAP JS -->
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- SWEETALERT2 JS -->
+    <script src="{% static 'js/sweetalert2.all.min.js' %}"></script>
+    <!-- APEXCHART JS -->
+    <script src="{% static 'js/apexcharts.js' %}"></script>
+    <!-- INTERNAL SELECT2 JS -->
+    <script src="{% static 'js/select2.full.min.js' %}"></script>
+    <!-- CHART-CIRCLE JS--> 
+    <script src="{% static 'js/circle-progress.min.js' %}"></script>
+    <!-- INTERNAL DATA-TABLES JS -->
+    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'js/dataTables.bootstrap5.js' %}"></script>
+    <script src="{% static 'js/dataTables.responsive.min.js' %}"></script>
+    <!-- INDEX JS -->
+    <script src="{% static 'js/index1.js' %}"></script>
+    <script src="{% static 'js/reply.js' %}"></script>
+    <!-- STICKY JS -->
+    <script src="{% static 'js/sticky.js' %}"></script>
+    <!-- COLOR THEME JS -->
+    <script src="{% static 'js/themeColors.js' %}"></script>
+    <!-- CUSTOM JS -->
+    <script src="{% static 'js/custom.js' %}"></script>
+    <!-- SWITCHER JS -->
+    <script src="{% static 'js/switcher.js' %}"></script>
+    {% block messages %}
+    {% endblock messages%}    
+    {% if messages %}    
+        {% for message in messages %}            
+            {% if 'success' in message.tags %}
+                <script>
+                Swal.fire({
+                    "titleText": "{{ message }}",
+                    "text": "{{ message.extra_tags }}", 
+                    "icon": "success",
+                    "confirmButtonColor": "#ff00d9",
+                })
+                </script>   
+            {% endif %} 
+            {% if 'error' in message.tags %}
+                <script>
+                Swal.fire({
+                    "titleText": "{{ message }}",
+                    "text": "{{ message.extra_tags }}",  
+                    "icon": "error",
+                    "confirmButtonColor": "#ff00d9"
+                })    
+                </script>   
+            {% endif %}  
+        {% endfor %}  
+    {% endif %} 
+    {% if form.errors %}
+        {% for message in field.errors %}
+            <script>
+            Swal.fire({
+                "titleText": "Usuario/Password Incorrectos",
+                "text": "{{message|escape}}",  
+                "icon": "success",
+                "confirmButtonColor": "#ff00d9"
+            })          
+            </script> 
+        {% endfor%} 
+        {% for message in form.non_field_errors %}
+            <script>
+            Swal.fire({
+                "titleText": "{{message|escape}}".includes("pendiente") ? "Usuario Pendiente de Aprobación" : "Usuario/Password Incorrectos",
+                "text": "{{message|escape}}",  
+                "icon": "error",
+                "confirmButtonColor": "#ff00d9"
+            })          
+            </script>        
+        {% endfor %}
+    {% endif%}
+</body>
+</html>

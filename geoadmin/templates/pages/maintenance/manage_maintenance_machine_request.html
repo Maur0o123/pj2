@@ -1,0 +1,100 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Administración de Matenimientos{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <meta name="csrf-token" content="{{ csrf_token }}">
+{% endblock css %}
+
+{% block content %}
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Administrar Mantenimientos</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Registro Maquinaria</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Administrar Mantenimientos</li>
+                    </ol>
+                </div>
+            </div> <!-- PAGE-HEADER END --> <!-- row -->
+            <h5 class="mb-5"></h5> 
+            <div class="row row-sm"> 
+                <div class="card">
+                    <div class="card-body">
+                        <table id="datatable-allusers" class="table table-bordered text-nowrap key-buttons" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Maquinaria</th>
+                                    <th>Solicitante</th>
+                                    <th>Faena</th>
+                                    <th>Turno</th>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>                            
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for solicitud in solicitudes %}                            
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ solicitud.maquinaria.maquinaria }}</td>
+                                        <td>{{ solicitud.solicitante.first_name }} {{ solicitud.solicitante.last_name }}</td>
+                                        <td>{{ solicitud.faena}}</td>
+                                        <td>{% if solicitud.turno == '1' %}Turno A{% elif solicitud.turno == '2' %}Turno B{%else%}No Aplica{% endif %}</td>
+                                        <td>{{ solicitud.fechacreacion|date:"Y-m-d H:i" }}</td>
+                                        <td>
+                                            {% for opcion in choicesprogreso %}
+                                                {% if solicitud.progreso == opcion.0 %} 
+                                                    {{ opcion.1 }}
+                                                {% endif %}
+                                            {% endfor%}
+                                        </td>
+                                        <td class="form-inline-btn"> 
+                                            <form action="{% url 'edit_maintenance_machine_request' %}" method="POST" >
+                                                {% csrf_token %}
+                                                <input type="hidden" name="solicitud_id" value="{{ solicitud.id }}">
+                                                <input type="hidden" name="origen_id" value="mantenimiento">
+                                                <button type="submit" class="btn btn-info btn-size-adm" title="Revisar"><i class="fa fa-search"></i></button> 
+                                            </form>
+                                            <form class="maintenance-form" id="formulario-{{ solicitud.id }}" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="solicitud_id" value="{{ solicitud.id }}">
+                                                <button type="submit" class="btn btn-warning btn-size-edit" title="Pdf"><i class="fa fa-file-pdf-o"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>                    
+                        </table>
+                    </div>
+                </div>
+            </div>            
+        </div>
+        <h5 class="mb-5"></h5> 
+        <div class="main-container container-fluid"> 
+            <a class="btn btn-secondary" href="{% url 'dashboard' %}">Regresar</a> 
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascript2 %}
+<script>
+    const pdfViewUrl = '{% url "maintenance_machine_pdf_view" %}';
+    const classForm = '.maintenance-form';
+    const idDataTable = '#datatable-allusers';
+    const urlLenguage = '{% static "json/es-CL.json" %}';
+</script>
+<script src="{% static 'js/createpdf.js' %}"></script>
+{% endblock javascript2 %}

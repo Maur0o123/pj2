@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escanear Carnet</title>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            text-align: center; 
+            padding: 15px; 
+            background-color: #1a1a1a; 
+            color: #ffffff;
+            margin: 0;
+        }
+        .container { max-width: 500px; margin: 0 auto; width: 100%; }
+        #reader { 
+            width: 100%;
+            margin: 10px auto; 
+            border: 3px solid #0d6efd; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            background-color: #000;
+        }
+        #mensaje { 
+            margin-top: 10px;
+            font-weight: bold; 
+            font-size: 1.1rem; 
+            padding: 12px; 
+            border-radius: 8px; 
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        body.in-iframe { 
+            padding: 0px; 
+            background-color: transparent; 
+        }
+        .in-iframe .hide-in-iframe { 
+            display: none; 
+        }
+        .in-iframe #reader { 
+            margin: 0 auto; 
+            border-width: 2px; 
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2 class="hide-in-iframe">Validación de Identidad</h2>
+        <p class="hide-in-iframe" style="font-size: 0.9rem; color: #b3b3b3;">
+            Enfoca el código QR pequeño de tu carnet.
+        </p>
+        
+        <div id="reader"></div>
+        <div id="mensaje">Cargando cámara...</div>
+    </div>
+
+    <script>
+        const isInIframe = window !== window.parent;
+        if (isInIframe) {
+            document.body.classList.add('in-iframe');
+        }
+
+        const token = "{{ token }}";
+        const mensajeDiv = document.getElementById('mensaje');
+        
+        const html5QrCode = new Html5Qrcode("reader", { 
+            formatsToSupport: [ 
+                Html5QrcodeSupportedFormats.QR_CODE,
+                Html5QrcodeSupportedFormats.PDF_417
+            ] 
+        });
+
+        function extraerRut(textoEscaneado) {
+            const textoLimpio = textoEscaneado.replace(/\s+/g, '');
+            const regexRut = /(\d{1,2}\.?\d{3}\.?\d{3}-?[\dkK]|\b\d{7,8}-?[\dkK]\b)/i;
+            const match = textoLimpio.match(regexRut);
+            return match ? match[1] : textoEscaneado;
+        }
+
+        const config = { 
+            fps: 15, 
+            qrbox: function(viewfinderWidth, viewfinderHeight) {
+                const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+                const size = Math.floor(minEdge * 0.80);
+                return { width: size, height: size };
+            },
+            experimentalFeatures: {
+                useBarCodeDetectorIfSupported: true 
+            }
+        };
+
+        html5QrCode.start(
+            { facingMode: "environment" }, 
+            config,
+            (decodedText, decodedResult) => {
+                html5QrCode.stop().then(() => {
+                    document.getElementById('reader').style.display = 'none';
+                    
+                    mensajeDiv.style.color = "#0dcaf0";
+                    mensajeDiv.innerText = "Código leído. Procesando...";
+
+                    let rutEscaneado = extraerRut(decodedText);
+
+                    fetch(`/prevencion/procesar-carnet-movil/${token}/`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ rut: rutEscaneado })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            mensajeDiv.style.color = "#28a745";
+                            
+                            if (isInIframe) {
+                                mensajeDiv.innerHTML = "<h4>¡Identidad Verificada!</h4>Completando proceso...";
+                            } else {
+                                mensajeDiv.innerHTML = "<h4>¡Identidad Verificada!</h4>Puedes continuar en tu computador.";
+                            }
+                        } else {
+                            mensajeDiv.style.color = "#dc3545";
+                            mensajeDiv.innerText = "Error: " + data.message;
+                            
+                            setTimeout(() => {
+                                if (isInIframe) {
+                                    window.parent.location.reload();
+                                } else {
+                                    window.location.reload();
+                                }
+                            }, 2500);
+                        }
+                    })
+                    .catch(error => {
+                        mensajeDiv.style.color = "#dc3545";
+                        mensajeDiv.innerText = "Error de comunicación con el servidor.";
+                    });
+                }).catch(err => console.error(err));
+            },
+            (errorMessage) => {
+                mensajeDiv.style.color = "#ffc107";
+                mensajeDiv.innerText = "Buscando código QR...";
+            }
+        ).catch((err) => {
+            mensajeDiv.style.color = "#dc3545";
+            mensajeDiv.innerText = "Permiso denegado. Revisa que la cámara no esté en uso.";
+        });
+    </script>
+</body>
+</html>

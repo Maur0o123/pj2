@@ -1,0 +1,199 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Tarjetas de Combustible{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <style>
+        /* Evitar superposición y cortes de palabras en cabeceras de tablas vacías en móviles */
+        #datatable-allusers th, #datatable-allusers-des th {
+            white-space: normal !important;
+        }
+        @media (max-width: 768px) {
+            #datatable-allusers, #datatable-allusers-des {
+                width: 100% !important;
+            }
+            #datatable-allusers th, #datatable-allusers-des th {
+                font-size: 10.5px !important;
+                padding: 4px 2px !important;
+            }
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <div class="main-container container-fluid"> <div class="page-header">
+                <div>
+                    <h1 class="page-title">Tarjetas de Combustible</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Registro Vehicular</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Tarjetas de Combustible</li>
+                    </ol>
+                </div>
+            </div> {% if request.user.usuarioprofile.seccionVehicular == "ADMINISTRADOR" or request.user.is_superuser %} 
+            <a class="btn btn-primary btn-size-new" href="{% url 'new_fuel_cards' %}">Nueva Tarjeta</a>
+            {% endif %}
+            <h5 class="mb-5"></h5>
+
+            <div class="card"> 
+                <div class="panel panel-primary">
+                    <div class="tab-menu-heading border-bottom-0"> 
+                        <div class="tabs-menu4 border-bottomo-sm"> 
+                            <!-- Tabs --> 
+                            <nav class="nav d-sm-flex d-block"> 
+                                <a id="nav25" class="nav-link border border-bottom-0 br-sm-5 me-2 active" data-bs-toggle="tab" href="#tab25">Habilitados</a> 
+                                <a id="nav26" class="nav-link border border-bottom-0 br-sm-5 me-2" data-bs-toggle="tab" href="#tab26">Deshabilitados</a>
+                            </nav> 
+                        </div> 
+                    </div>
+                    <div class="panel-body tabs-menu-body"> 
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab25">
+                                <div class="row row-sm"> 
+                                    <table id="datatable-allusers" class="table table-bordered text-nowrap key-buttons" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Placa Patente</th>
+                                                <th>Tipo Vehiculo</th>
+                                                <th>Faena</th>
+                                                <th>Tipo Combustible</th>
+                                                <th>Tipo Documento</th>
+                                                <th>Vencimiento</th>
+                                                <th>Acciones</th>                            
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for tarjeta in tarjetas %} 
+                                                {% if tarjeta.status %}
+                                                <tr>
+                                                    <td class="dtr-control"></td>
+                                                    <td>{{ tarjeta.patente }}</td>
+                                                    <td>{{ tarjeta.tipoVehiculo}}</td>
+                                                    <td>{{ tarjeta.faena}}</td>
+                                                    <td>{{ tarjeta.tipoCombustible }}</td>
+                                                    <td>{{ tarjeta.tipoDocumento }}</td>
+                                                    <td>{{ tarjeta.fechaVencimiento|date:"m-Y" }}</td>
+                                                    <td class="form-inline-btn"> 
+                                                        <form action="{% url 'edit_fuel_card' tarjeta.id %}" method="POST" >
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="id" value="{{ tarjeta.id }}">
+                                                            <button type="submit" class="btn btn-info btn-size-edit">Editar</button> 
+                                                        </form>
+                                                        <form action="{% url 'fuel_cards_pdf_view' %}" method="POST" target="_blank">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="id" value="{{ tarjeta.id }}">
+                                                            <button type="submit" class="btn btn-warning btn-size-edit">Pdf</button>
+                                                        </form>
+                                                        {% if request.user.usuarioprofile.seccionVehicular == "ADMINISTRADOR" or request.user.is_superuser %}
+                                                        <form action="{% url 'status_fuel_cards' %}" method="POST" >
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="id" value="{{ tarjeta.id }}">
+                                                            {% if tarjeta.status %}   
+                                                                <button type="submit" class="btn btn-danger btn-size-adm">Deshabilitar</button>     
+                                                            {% else %}
+                                                                <button type="submit" class="btn btn-primary btn-size-adm">Habilitar</button>
+                                                            {% endif%}
+                                                        </form>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                                {% endif%}
+                                            {% endfor %}
+                                        </tbody>                    
+                                    </table>
+                                </div>  
+                            </div>
+                            <div class="tab-pane" id="tab26"> 
+                                <div class="row row-sm"> 
+                                    <table id="datatable-allusers-des" class="table table-bordered text-nowrap key-buttons" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Placa Patente</th>
+                                                <th>Tipo Vehículo</th>
+                                                <th>Faena</th>
+                                                <th>Tipo Combustible</th>
+                                                <th>Tipo Documento</th>
+                                                <th>Vencimiento</th>
+                                                <th>Acciones</th>                            
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for tarjeta in tarjetas %}
+                                                {% if not tarjeta.status %}
+                                                <tr>
+                                                    <td class="dtr-control"></td>
+                                                    <td>{{ tarjeta.patente }}</td>
+                                                    <td>{{ tarjeta.tipoVehiculo}}</td>
+                                                    <td>{{ tarjeta.faena}}</td>
+                                                    <td>{{ tarjeta.tipoCombustible }}</td>
+                                                    <td>{{ tarjeta.tipoDocumento }}</td>
+                                                    <td>{{ tarjeta.fechaVencimiento|date:"m-Y" }}</td>
+                                                    <td class="form-inline-btn"> 
+                                                        <form action="{% url 'edit_fuel_card' tarjeta.id %}" method="POST" >
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="id" value="{{ tarjeta.id }}">
+                                                            <button type="submit" class="btn btn-info btn-size-edit">Editar</button> 
+                                                        </form>
+                                                        <form action="{% url 'fuel_cards_pdf_view' %}" method="POST" target="_blank">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="id" value="{{ tarjeta.id }}">
+                                                            <button type="submit" class="btn btn-warning btn-size-edit">Pdf</button>
+                                                        </form>
+                                                        {% if request.user.usuarioprofile.seccionVehicular == "ADMINISTRADOR" or request.user.is_superuser %}
+                                                        <form action="{% url 'status_fuel_cards' %}" method="POST" >
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="id" value="{{ tarjeta.id }}">
+                                                            {% if tarjeta.status %}   
+                                                                <button type="submit" class="btn btn-danger btn-size-adm">Deshabilitar</button>                                      
+                                                            {% else %}                              
+                                                                <button type="submit" class="btn btn-primary btn-size-adm">Habilitar</button>
+                                                            {% endif%}
+                                                        </form>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                                {% endif%}
+                                            {% endfor %}
+                                        </tbody>    
+                                    </table>
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h5 class="mb-5"></h5> 
+        {% if request.user.usuarioprofile.seccionVehicular == "ADMINISTRADOR" or request.user.is_superuser %}
+        <div class="main-container container-fluid"> 
+            <a class="btn btn-secondary" href="{% url 'dashboard' %}">Regresar</a> 
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script>
+    const pdfViewUrl = '{% url "fuel_cards_pdf_view" %}';
+    const classForm = '.vehicle-form';
+    const idDataTable = '#datatable-allusers';
+    const idDataTableDes = '#datatable-allusers-des';
+    const urlLenguage = '{% static "json/es-CL.json" %}';
+</script>
+<script src="{% static 'js/createpdftarjeta.js' %}"></script>
+{% endblock javascript %}

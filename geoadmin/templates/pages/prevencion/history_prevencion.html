@@ -1,0 +1,387 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Difusiones{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <style>
+        .filter-wrapper {
+            width: 100%;
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+
+            <div class="page-header">
+                <h1 class="page-title">Capacitaciones</h1>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Prevención</a></li>
+                        <li class="breadcrumb-item active">Capacitaciones</li>
+                    </ol>
+                </div>
+            </div>
+   
+            <div class="mb-3">
+                <a href="{% url 'new_documento' %}?tipo=difusiones" class="btn btn-primary btn-size-new">Crear Capacitación</a>
+            </div>
+
+            <div class="card">
+                <div class="panel panel-primary">
+                    <div class="tab-menu-heading border-bottom-0">
+                        <div class="tabs-menu4 border-bottomo-sm">
+                            <nav class="nav d-sm-flex d-block">
+                                <a
+                                    class="nav-link border border-bottom-0 br-sm-5 me-2 {% if active_tab == 'aprobados' %}active{% endif %}"
+                                    data-bs-toggle="tab"
+                                    href="#tab-difusiones-aprobados"
+                                >Aprobados</a>
+                                <a
+                                    class="nav-link border border-bottom-0 br-sm-5 me-2 {% if active_tab == 'eliminados' %}active{% endif %}"
+                                    data-bs-toggle="tab"
+                                    href="#tab-difusiones-eliminados"
+                                >Eliminados</a>
+                            </nav>
+                        </div>
+                    </div>
+
+                    <div class="panel-body tabs-menu-body">
+                        <div class="tab-content">
+                            <div class="tab-pane {% if active_tab == 'aprobados' %}active{% endif %}" id="tab-difusiones-aprobados">
+                                <div class="row g-3 mb-4">
+                                    <div class="col-xl-4 col-lg-6 col-md-6">
+                                        <div class="filter-wrapper">
+                                            <label class="form-label fw-bold">Filtrar por Faena:</label>
+                                            <select id="faenaFilter" class="form-control">
+                                                <option value="">Todas las Faenas</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-md-6">
+                                        <div class="filter-wrapper">
+                                            <label class="form-label fw-bold">Filtrar por Cargo:</label>
+                                            <select id="cargoFilter" class="form-control">
+                                                <option value="">Todos los Cargos</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-md-6">
+                                        <div class="filter-wrapper">
+                                            <label class="form-label fw-bold">Filtrar por Tipo:</label>
+                                            <select id="tipoFilter" class="form-control">
+                                                <option value="">Todos los Tipos</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row row-sm">
+                                    <table id="datatable-history" class="display nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Fecha</th>
+                                                <th>Tipo</th>
+                                                <th>Faena</th>
+                                                <th>Cargo</th>
+                                                <th>Nombre Capacitación</th>
+                                                <th>Creador</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for d in documentos_aprobados %}
+                                            <tr>
+                                                <td class="dtr-control"></td>
+                                                <td data-order="{{ d.fecha_creacion|date:'U' }}">{{ d.fecha_creacion|date:"Y-m-d H:i" }}</td>
+                                                <td data-search="{% if d.plantilla_base %}{{ d.plantilla_base.get_tipo_display }}{% else %}-{% endif %}">
+                                                    {% if d.plantilla_base %}
+                                                        <span class="badge bg-primary-transparent rounded-pill text-primary p-2">
+                                                            {{ d.plantilla_base.get_tipo_display }}
+                                                        </span>
+                                                    {% else %}
+                                                        <span class="text-muted">-</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ d.faena.faena }}</td>
+                                                <td>{{ d.cargo_display|default:'-' }}</td>
+                                                <td>
+                                                    {% if d.plantilla_base %}
+                                                        {{ d.plantilla_base.nombre }}
+                                                    {% else %}
+                                                        <span class="text-muted fst-italic">Eliminada</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ d.creador }}</td>
+                                                <td class="form-inline-btn">
+                                                    <a href="{% url 'view_documento' d.id %}" class="btn btn-warning btn-size-adm" title="Ver">
+                                                        Ver
+                                                    </a>
+                                                    <a href="{% url 'documento_difusion_trabajadores' d.id %}" class="btn btn-info btn-size-adm" title="Trabajadores">
+                                                        Trabajadores
+                                                    </a>
+                                                    <a
+                                                        href="javascript:void(0);"
+                                                        data-url="{% url 'delete_documento' d.id %}"
+                                                        class="btn btn-danger btn-size-adm btn-delete-confirm"
+                                                        title="Eliminar"
+                                                    >
+                                                        Eliminar
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane {% if active_tab == 'eliminados' %}active{% endif %}" id="tab-difusiones-eliminados">
+                                <div class="row row-sm">
+                                    <table id="datatable-history-deleted" class="display nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Fecha</th>
+                                                <th>Tipo</th>
+                                                <th>Faena</th>
+                                                <th>Cargo</th>
+                                                <th>Nombre Capacitación</th>
+                                                <th>Creador</th>
+                                                <th>Estado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for d in documentos_eliminados %}
+                                            <tr>
+                                                <td class="dtr-control"></td>
+                                                <td data-order="{{ d.fecha_creacion|date:'U' }}">{{ d.fecha_creacion|date:"Y-m-d H:i" }}</td>
+                                                <td data-search="{% if d.plantilla_base %}{{ d.plantilla_base.get_tipo_display }}{% else %}-{% endif %}">
+                                                    {% if d.plantilla_base %}
+                                                        <span class="badge bg-primary-transparent rounded-pill text-primary p-2">
+                                                            {{ d.plantilla_base.get_tipo_display }}
+                                                        </span>
+                                                    {% else %}
+                                                        <span class="text-muted">-</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ d.faena.faena }}</td>
+                                                <td>{{ d.cargo_display|default:'-' }}</td>
+                                                <td>
+                                                    {% if d.plantilla_base %}
+                                                        {{ d.plantilla_base.nombre }}
+                                                    {% else %}
+                                                        <span class="text-muted fst-italic">Eliminada</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ d.creador }}</td>
+                                                <td>
+                                                    <span class="badge bg-danger-transparent rounded-pill text-danger p-2">Eliminado</span>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(document).ready(function() {
+            function escapeRegex(string) {
+                return string ? string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : "";
+            }
+
+            var tableAprobados = new DataTable('#datatable-history', {
+                language: { url: '{% static "json/es-CL.json" %}' },
+                columnDefs: [
+                    { className: 'dtr-control', orderable: false, targets: 0 },
+                    { orderable: false, targets: 7 }
+                ],
+                order: [[ 1, "desc" ]],
+                responsive: { details: { type: 'column' } }
+            });
+
+            var tableEliminados = new DataTable('#datatable-history-deleted', {
+                language: { url: '{% static "json/es-CL.json" %}' },
+                columnDefs: [
+                    { className: 'dtr-control', orderable: false, targets: 0 },
+                    { orderable: false, targets: 7 }
+                ],
+                order: [[ 1, "desc" ]],
+                responsive: { details: { type: 'column' } }
+            });
+
+            var FILTERS = [
+                { key: 'faena', column: 3, select: $('#faenaFilter'), emptyLabel: 'Todas las Faenas' },
+                { key: 'cargo', column: 4, select: $('#cargoFilter'), emptyLabel: 'Todos los Cargos' },
+                { key: 'tipo',  column: 2, select: $('#tipoFilter'),  emptyLabel: 'Todos los Tipos' }
+            ];
+
+            function normalizeText(value) {
+                return $('<div>').html(value || '').text().trim();
+            }
+
+            function getCurrentFilters() {
+                return {
+                    faena: ($('#faenaFilter').val() || '').trim(),
+                    cargo: ($('#cargoFilter').val() || '').trim(),
+                    tipo: ($('#tipoFilter').val() || '').trim()
+                };
+            }
+
+            function getRowValues(row) {
+                return {
+                    tipo: normalizeText(row[2]),
+                    faena: normalizeText(row[3]),
+                    cargo: normalizeText(row[4])
+                };
+            }
+
+            function rowMatchesFilters(values, filters, ignoreKey) {
+                return Object.keys(filters).every(function (key) {
+                    if (key === ignoreKey) return true;
+                    var expected = (filters[key] || '').trim();
+                    if (!expected) return true;
+                    return (values[key] || '') === expected;
+                });
+            }
+
+            function collectOptionsForKey(filters, targetKey) {
+                var found = new Set();
+                var colIndex = FILTERS.find(f => f.key === targetKey).column;
+
+                tableAprobados.rows().every(function (rowIdx) {
+                    var data = this.data();
+                    var matches = true;
+                    Object.keys(filters).forEach(function(key) {
+                        if (key === targetKey) return;
+                        var val = tableAprobados.cell(rowIdx, FILTERS.find(f => f.key === key).column).render('filter');
+                        if (filters[key] && filters[key] !== val) matches = false;
+                    });
+
+                    if (matches) {
+                        var val = tableAprobados.cell(rowIdx, colIndex).render('filter');
+                        if (val && val !== '-') {
+                            found.add(val);
+                        }
+                    }
+                });
+
+                return Array.from(found).sort(function (a, b) {
+                    return a.localeCompare(b, 'es', { sensitivity: 'base' });
+                });
+            }
+
+            function applyColumnFilters() {
+                var filters = getCurrentFilters();
+                tableAprobados.column(3).search(filters.faena ? '^' + escapeRegex(filters.faena) + '$' : '', true, false);
+                tableAprobados.column(4).search(filters.cargo ? '^' + escapeRegex(filters.cargo) + '$' : '', true, false);
+                tableAprobados.column(2).search(filters.tipo  ? '^' + escapeRegex(filters.tipo) + '$'   : '', true, false);
+            }
+
+            function rebuildFilterOptions() {
+                var rows = tableAprobados.rows().data().toArray();
+                var baseFilters = getCurrentFilters();
+                var changedSelection = false;
+
+                FILTERS.forEach(function (cfg) {
+                    var select = cfg.select;
+                    if (!select.length) return;
+
+                    var options = collectOptionsForKey(baseFilters, cfg.key);
+                    var current = (select.val() || '').trim();
+
+                    select.empty().append('<option value="">' + cfg.emptyLabel + '</option>');
+                    options.forEach(function (value) {
+                        select.append('<option value="' + value + '">' + value + '</option>');
+                    });
+
+                    if (current && options.indexOf(current) !== -1) {
+                        select.val(current);
+                    } else {
+                        if (current) changedSelection = true;
+                        select.val('');
+                    }
+                });
+                return changedSelection;
+            }
+
+            function refreshCascadeFilters() {
+                applyColumnFilters();
+                tableAprobados.draw();
+
+                var selectionChanged = rebuildFilterOptions();
+                if (selectionChanged) {
+                    applyColumnFilters();
+                    tableAprobados.draw();
+                }
+            }
+
+            rebuildFilterOptions();
+            applyColumnFilters();
+            tableAprobados.draw();
+
+            $('#faenaFilter, #cargoFilter, #tipoFilter').on('change', function () {
+                refreshCascadeFilters();
+            });
+
+            $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
+                if (tableAprobados && typeof tableAprobados.columns === 'function') {
+                    tableAprobados.columns.adjust();
+                    if (tableAprobados.responsive && typeof tableAprobados.responsive.recalc === 'function') {
+                        tableAprobados.responsive.recalc();
+                    }
+                }
+                if (tableEliminados && typeof tableEliminados.columns === 'function') {
+                    tableEliminados.columns.adjust();
+                    if (tableEliminados.responsive && typeof tableEliminados.responsive.recalc === 'function') {
+                        tableEliminados.responsive.recalc();
+                    }
+                }
+            });
+
+            $('body').on('click', '.btn-delete-confirm', function(e) {
+                e.preventDefault();
+                var deleteUrl = $(this).data('url');
+
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "La difusión se eliminará",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#8fbd56',
+                    cancelButtonColor: '#e984b1',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = deleteUrl;
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

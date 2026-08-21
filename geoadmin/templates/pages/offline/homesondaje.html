@@ -1,0 +1,43 @@
+{% extends 'pages/offline/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Dashboard Sondaje{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+{% endblock css %}
+
+{% block content %}
+    <div class="app-content main-content mt-0">
+        <div class="side-app">
+            <!-- CONTAINER -->
+            <div class="main-container container-fluid">
+                <!-- PAGE-HEADER -->
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Dashboard Sondaje</h1>
+                    </div>
+                    <div class="ms-auto pageheader-btn">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="javascript:void(0);">Dashboard Sondaje</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Dashboard Sondaje
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascript %}
+<script src="{% static 'js/jquery-3.7.0.js'%}"></script>
+<script src="{% static 'js/jquery.dataTables.min1.13.7.js'%}"></script>
+<script src="{% static 'js/dataTables.responsive.min2.5.0.js'%}"></script>
+{% endblock javascript %}

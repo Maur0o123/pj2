@@ -1,0 +1,82 @@
+{% load static %}
+<div class="sticky is-expanded" style="margin-bottom: -74px;">
+    <div class="app-sidebar__overlay active" data-bs-toggle="sidebar"></div>
+    <div class="app-sidebar ps">
+        <div class="side-header">
+            <a class="header-brand1" href="{% url 'logincustom' %}">
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img desktop-logo" alt="logo" />
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img toggle-logo" alt="logo" />
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img light-logo" alt="logo" />
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img light-logo1" alt="logo" />
+                <h3>GeoAdmin</h3>
+            </a>
+        </div>
+        <div class="main-sidemenu is-expanded">
+            <div class="slide-left disabled active d-none" id="slide-left">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
+                </svg>
+            </div>
+            <ul class="side-menu open" style="margin-right: 0px; margin-left: 0px;">
+                <li>
+                    <h3>Menu Sondaje</h3>
+                </li>
+                <li class="slide {% if sidebarmain == 'capacitaciones' %}is-expanded{% endif %}">
+                    <a class="side-menu__item {% if sidebarmain == 'capacitaciones' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#">
+                        <i class="icon-note icons-size"></i>
+                        <span class="side-menu__label">Capacitaciones</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Capacitaciones</a></li>
+                        <li><a href="{% url 'manage_capacitaciones' 'charlas' %}" class="slide-item {% if sidebarmenu == 't-charlas' %}active{% endif %}">Charlas</a></li>
+                        <li><a href="{% url 'manage_capacitaciones' 'informativos' %}" class="slide-item {% if sidebarmenu == 't-informativos' %}active{% endif %}">Informativos</a></li>
+                        <li><a href="{% url 'manage_capacitaciones' 'difusiones' %}" class="slide-item {% if sidebarmenu == 't-difusiones' %}active{% endif %}">Difusiones</a></li>
+                        <li><a href="{% url 'manage_capacitaciones' 'cursos' %}" class="slide-item {% if sidebarmenu == 't-cursos' %}active{% endif %}">Cursos</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <h3>Secciones</h3>
+                </li>
+                <li class="slide {% if sidebarmain == 'manage_documentation' %}is-expanded{% endif %}">
+                    <a class="side-menu__item {% if sidebarmain == 'manage_documentation' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#">
+                        <i class="icon-layers icons-size"></i>
+                        <span class="side-menu__label">Documentación</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Documentación</a></li>
+                        <li><a href="{% url 'view_general_mining_documents' %}" class="slide-item {% if sidebar == 'manage_viewdocuemntationmining' %}active{% endif %}">Para Faena</a></li>
+                    </ul>
+                </li>
+                <li class="slide {% if sidebarmain == 'manage_system' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'manage_system' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-organization icons-size"></i>
+                        <span class="side-menu__label">Mantenedor Sistema</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Mantenedor Sistema</a></li>
+                        <li class="sub-slide {% if sidebar == 'manage_notifications' %}is-expanded active{% endif %}"> 
+                            <a class="sub-side-menu__item {% if sidebar == 'manage_notifications' %}active{% endif %}" data-bs-toggle="sub-slide" href="{% url 'manage_notifications' %}">
+                                <span class="sub-side-menu__label ">Notificaciones</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="slide-right" id="slide-right">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
+                </svg>
+            </div>
+        </div>
+        <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+            <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+        </div>
+        <div class="ps__rail-y" style="top: 100px;">
+            <div class="ps__thumb-y" tabindex="0"></div>
+        </div>
+    </div>
+</div>

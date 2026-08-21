@@ -1,0 +1,873 @@
+{% extends 'pages/offline/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Editar Reporte Digital{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/flatpickr.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/tempus-dominus.min.css' %}" rel="stylesheet"  crossorigin="anonymous">
+{% endblock css %}
+{% block select2 %}
+    <link href="{% static 'css/select2.min.css' %}" rel="stylesheet" />
+{% endblock select2 %}
+
+{% block content %}
+<form class="form-horizontal" id="form" action="#" method="POST">
+{% csrf_token %}
+<input type="hidden" name="origin" value="{{origen}}">
+<input type="hidden" name="id" value="{{reporte.id}}">
+{% if reporte.progreso != 'Aprobado' %}
+<button type="submit" class="btn btn-primary save-float">Guardar</button>
+{% endif %}
+{% if reporte.progreso == 'Creado' or reporte.progreso == 'Por Corregir' %}
+<a href="{% url 'manage_mis_reportes_digitales' %}" class="btn btn-secondary back-float">Regresar</a>
+{% endif %}
+{% if reporte.progreso == 'Por Revisar' or reporte.progreso == 'Corregido' %}
+<a href="{% url 'manage_revisar_reportes_digitales' %}" class="btn btn-secondary back-float">Regresar</a>
+{% endif %}
+{% if reporte.progreso == 'Aprobado' %}
+<a href="{% url 'manage_todos_reportes_digitales' %}" class="btn btn-secondary back-float">Regresar</a>
+{% endif %}
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Editar Reporte Digital</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Reportes Digitales</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Editar Reporte</li>
+                    </ol>
+                </div>
+            </div> <!-- PAGE-HEADER END --> <!-- row -->
+            <div class="row row-sm">
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">                        
+                        <div class="card-body">
+                            <h4 class="card-title">Datos Principales</h4>
+                            <p class="card-title">Atención: No podrás eliminar este registro</p>
+                            <div class="row row-sm">
+                                <div class="form-group" id="div_id_fechacreacion">
+                                    {{ formreporteoperacional.fechacreacion.label_tag }}
+                                    {{ formreporteoperacional.fechacreacion }}
+                                </div>
+                                <div class="form-group" id="div_id_perforista">
+                                    {{ formreporteoperacional.perforista.label_tag }}
+                                    {{ formreporteoperacional.perforista }}
+                                </div>
+                                <div class="form-group" id="div_id_metroInicial">
+                                    {{ formreporteoperacional.metroInicial.label_tag }}
+                                    {{ formreporteoperacional.metroInicial }}
+                                </div>
+                                <div class="form-group" id="div_id_turno">
+                                    {{ formreporteoperacional.turno.label_tag }}
+                                    {{ formreporteoperacional.turno }}
+                                </div>
+                                <div class="form-group" id="div_id_sonda">
+                                    {{ formreporteoperacional.sonda.label_tag }}
+                                    {{ formreporteoperacional.sonda }}
+                                </div>
+                                <div class="form-group" id="div_id_metroFinal">
+                                    {{ formreporteoperacional.metroFinal.label_tag }}
+                                    {{ formreporteoperacional.metroFinal }}
+                                </div>
+                                <div class="form-group" id="div_id_controlador">
+                                    {{ formreporteoperacional.controlador.label_tag }}
+                                    {{ formreporteoperacional.controlador }}
+                                </div>
+                                <div class="form-group" id="div_id_sondaje" style="display: flex;">
+                                    <div class="col-md-5" style="padding-left: 3px;padding-right: 3px;">
+                                        {{ formreporteoperacional.sondajeCodigo.label_tag }}
+                                        {{ formreporteoperacional.sondajeCodigo }}
+                                    </div>
+                                    <div class="col-md-5" style="padding-left: 3px;padding-right: 3px;">
+                                        {{ formreporteoperacional.sondajeSerie.label_tag }}
+                                        {{ formreporteoperacional.sondajeSerie }}
+                                    </div>
+                                    <div class="col-md-2" style="padding-left: 3px;padding-right: 3px;">
+                                        {{ formreporteoperacional.sondajeEstado.label_tag }}
+                                        {{ formreporteoperacional.sondajeEstado }}
+                                    </div>
+                                </div>
+                                <div class="form-group" id="div_id_totalPerforado">
+                                    {{ formreporteoperacional.totalPerforado.label_tag }}
+                                    {{ formreporteoperacional.totalPerforado }}
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="card-body">
+                                <h4 class="card-title">Detalle Perforación</h4>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="datatable-perforacion" class="table border text-nowrap text-md-nowrap" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Diam.</th>
+                                            <th>Perfo.</th>
+                                            <th>Desde</th>                            
+                                            <th>Hasta</th>                            
+                                            <th>Recup</th>                            
+                                            <th>Recup %</th>
+                                            <th>Barra</th>
+                                            <th>Total Hta</th>
+                                            <th>Contra</th>
+                                            <th>Terreno</th>
+                                            <th>Orient</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>                    
+                                </table>
+                                <div class="row row-sm" style="display: ruby-text;;margin-left: 15px;margin-top: 20px;">
+                                    <div class="col-sm-10 col-md-4">
+                                        <button type="button" id="eliminarPerforacion" class="btn btn-secondary">Eliminar</button>
+                                        <button type="button" id="agregarPerforacion" class="btn btn-primary">Agregar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="card-body">
+                                <h4 class="card-title">Control Horario</h4>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="datatable-controlhorario" class="table border text-nowrap text-md-nowrap" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th class='col-md-2'>Hora Inicio</th>
+                                            <th class='col-md-2'>Hora Final</th>
+                                            <th class='col-md-2'>Total Horas</th>                            
+                                            <th class='col-md-6'>Detalle</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody> 
+                                </table>
+                                <div class="row row-sm" style="display: ruby-text;;margin-left: 15px;margin-top: 20px;">
+                                    <div class="col-sm-10 col-md-4">
+                                        <button type="button" id="eliminarHorario" class="btn btn-secondary">Eliminar</button>
+                                        <button type="button" id="agregarHorario" class="btn btn-primary">Agregar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row row-sm">
+                                <div class="col-lg-6 col-xl-6 col-md-6 col-sm-6">
+                                    <div class="card box-shadow-0"> 
+                                        <div class="card-body">
+                                            <h4 class="card-title">Control de Insumos y Aditivos</h4>
+                                            <div class="row row-sm">
+                                                {{ forminsumos|crispy }}
+                                            </div>
+                                            <div class="form-group" style="display: flex;">
+                                                <div>
+                                                    <h4 class="card-title">Aditivos</h4>
+                                                    <div class="row row-sm">
+                                                        <table id="datatable-aditivos" class="display nowrap" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class='col-md-8'>Detalle</th>
+                                                                    <th class='col-md-4'>Cant. Sacos</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody> 
+                                                        </table>
+                                                        <div class="row row-sm" style="display: ruby-text;;margin-left: 15px;margin-top: 20px;">
+                                                            <div class="col-sm-10 col-md-10">
+                                                                <button type="button" id="eliminarAditivo" class="btn btn-secondary">Eliminar</i></button>
+                                                                <button type="button" id="agregarAditivo" class="btn btn-primary">Agregar</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-xl-6 col-md-6 col-sm-6">
+                                    <div class="card box-shadow-0"> 
+                                        <div class="card-body">
+                                            <h4 class="card-title">Longitud de Pozo</h4>
+                                            <div class="row row-sm">
+                                                {{ formlongitudpozo|crispy }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title">Observaciones</h4>
+                            <div class="row row-sm">
+                                {{ formobservaciones|crispy }}
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+            </div> 
+        </div>
+    </div>
+</div>
+</form>
+{% endblock content %}
+
+{% block javascript %}
+<script type="text/javascript">        
+    document.getElementById('div_id_fechacreacion').classList.add('col-md-4');
+    document.getElementById('div_id_perforista').classList.add('col-md-4');
+    document.getElementById('div_id_metroInicial').classList.add('col-md-4');
+    document.getElementById('div_id_turno').classList.add('col-md-4');
+    document.getElementById('div_id_sonda').classList.add('col-md-4');
+    document.getElementById('div_id_metroFinal').classList.add('col-md-4');
+    document.getElementById('div_id_controlador').classList.add('col-md-4');
+    document.getElementById('div_id_sondaje').classList.add('col-md-4');
+    document.getElementById('div_id_totalPerforado').classList.add('col-md-4');
+</script>
+<script src="{% static 'js/checkchanged.js'%}"></script>
+<script src="{% static 'js/jquery-3.7.0.js'%}"></script>
+<script src="{% static 'js/jquery.dataTables.min1.13.7.js'%}"></script>
+<script src="{% static 'js/dataTables.responsive.min2.5.0.js'%}"></script>
+<script type="text/javascript">
+    const form = document.querySelector('#form');
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+        $.LoadingOverlay("show");
+        $.ajax({
+            url: '{% url 'save_editar_reporte_digital' %}',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                $.LoadingOverlay("hide");
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Reporte Actualizado con éxito!',
+                    confirmButtonColor: '#ff00d9',
+                }).then(() => {
+                    let redirectUrl = '';
+                    const origen = "{{ origen }}";
+                    
+                    if (origen === 'my_report') {
+                        redirectUrl = '{% url 'manage_mis_reportes_digitales' %}';
+                    } else if (origen === 'check_report') {
+                        redirectUrl = '{% url 'manage_revisar_reportes_digitales' %}';
+                    } else if (origen === 'all_report') {
+                        redirectUrl = '{% url 'manage_todos_reportes_digitales' %}';
+                    } else {
+                        redirectUrl = '{% url 'dashboardSondaje' %}';
+                    }
+                    window.location.href = redirectUrl;
+                });
+            },
+            error: function(error) {
+                $.LoadingOverlay("hide");
+                Swal.fire({
+                    icon: 'error',        
+                    titleText: error.responseJSON.titleText,
+                    text: error.responseJSON.text,  
+                    confirmButtonColor: '#ff00d9',
+                })
+            }
+        });
+    });
+</script>
+<script type="application/javascript">
+    new DataTable('#datatable-aditivos', {
+        columnDefs: [
+            {
+                className: 'dtr-control',
+                orderable: false,
+                targets: 2
+            }
+        ],
+        language: {
+            url: '{% static 'json/es-CL.json' %}',        
+        },
+        columnDefs: [    
+            { searchable: false, targets: [0,1] },
+            { orderable: false, targets: [0,1]}  
+        ],
+        paging: false,
+        info: false, 
+        lengthChange: false,
+        searching: false,    
+        ordering: false,
+        lengthMenu: [[15, 30], [15, 30]],
+        /*order: [1, 'desc'],*/
+        responsive: {
+            details: {
+                type: 'column'
+            }
+        }
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        let rowCount = 0;
+        const reporteDetallePerforacion = JSON.parse('{{ reporte_detalle_perforacion|safe }}');
+
+        function updateSummaryFields() {
+            let maxHasta = 0;
+            let maxBarras = 0;
+            let maxContra = 0;
+
+            $('#datatable-perforacion tbody tr').each(function() {
+                const $row = $(this);
+                const hasta = parseFloat($row.find('input[name^="hasta_"]').val()) || 0;
+                const barras = parseFloat($row.find('input[name^="barra_"]').val()) || 0;
+                const contra = parseFloat($row.find('input[name^="contra_"]').val()) || 0;
+
+                if (hasta > maxHasta) maxHasta = hasta;
+                if (barras > maxBarras) maxBarras = barras;
+                if (contra > maxContra) maxContra = contra;
+            });
+
+            $('#id_longitudPozo').val(maxHasta.toFixed(2));
+            $('#id_numeroBarras').val(maxBarras);
+            $('#id_restoBarra').val(maxContra);
+            $('#id_metroFinal').val(maxHasta.toFixed(2));
+            $('#id_totalPerforado').val((maxHasta - parseFloat($('#id_metroInicial').val())).toFixed(2));
+        }
+
+        function updateFields() {
+            const largoBarril = parseFloat($('#id_largoBarril').val()) || 0;
+            const puntoMuerto = parseFloat($('#id_puntoMuerto').val()) || 0;
+            let barraAnterior = 0;
+            let contraAnterior = 0;
+            let perforadoAnterior = 0;
+            let lastHasta = parseFloat($('#id_metroInicial').val()) || 0;
+        
+            $('#datatable-perforacion tbody tr').each(function(index) {
+                const $row = $(this);
+                const perforado = parseFloat($row.find('input[name^="perforado_"]').val()) || 0;
+                const recuperacion = parseFloat($row.find('input[name^="recuperacion_"]').val()) || 0;
+                const barra = parseFloat($row.find('input[name^="barra_"]').val()) || 0;
+                
+                $row.find('input[name^="barra_"]').val(barra);
+                // Actualizar campo 'desde' con el 'hasta' anterior
+                $row.find('input[name^="desde_"]').val(lastHasta.toFixed(2));
+        
+                // Calcular 'hasta' basado en el valor de 'desde' y 'perforado'
+                const hastaActual = lastHasta + perforado;
+                $row.find('input[name^="hasta_"]').val(hastaActual.toFixed(2));
+
+                const ultimoHasta = lastHasta; 
+                // Actualizar 'lastHasta' para la siguiente fila
+                lastHasta = hastaActual;
+        
+                // Validar y calcular porcentaje de recuperación
+                if (recuperacion <= perforado) {
+                    const porcentajeRecuperacion = (recuperacion / perforado) * 100;
+                    $row.find('input[name^="porcentajeRecuperacion_"]').val(porcentajeRecuperacion.toFixed(2));
+                } else {
+                    alert('La recuperación no puede ser mayor que el valor de Perforado.');
+                    $row.find('input[name^="recuperacion_"]').val(perforado.toFixed(2));
+                    $row.find('input[name^="porcentajeRecuperacion_"]').val('100');
+                }
+        
+                // Si es la primera fila
+                if (index === 0) {
+                    
+                        const ultimoLargoBarril = parseFloat($('#id_largoBarril').val()) || 0;
+                        const ultimoPuntoMuerto = parseFloat($('#id_puntoMuerto').val()) || 0;
+                        const barraActual = barra || 0;
+                        const ultimoHasta = parseFloat($row.find('input[name^="desde_"]').val()) || 0;
+        
+                        const totalHtas = (ultimoLargoBarril - ultimoPuntoMuerto) + (barraActual * 3);
+                        const contra = totalHtas - ultimoHasta;
+        
+                        $row.find('input[name^="totalHtas_"]').val(totalHtas.toFixed(2));
+                        $row.find('input[name^="contra_"]').val(contra.toFixed(2));
+                } else {
+                    // Para las demás filas
+                    const ultimoLargoBarril = largoBarril;
+                    const ultimoPuntoMuerto = puntoMuerto;
+                    const barraActual = barra || 0;
+        
+                    const totalHtas = (ultimoLargoBarril - ultimoPuntoMuerto) + (barraActual * 3);
+                    const contra = totalHtas - ultimoHasta;
+        
+                    $row.find('input[name^="totalHtas_"]').val(totalHtas.toFixed(2));
+                    $row.find('input[name^="contra_"]').val(contra.toFixed(2));
+                }
+        
+                // Actualizar valores de referencia para la siguiente fila
+                barraAnterior = barra;
+                contraAnterior = parseFloat($row.find('input[name^="contra_"]').val()) || 0;
+                perforadoAnterior = perforado;
+            });
+        
+            // Actualizar campos resumen
+            updateSummaryFields();
+        }
+
+        function createRow(detalle = {}) {
+            rowCount++;
+            const lastRow = $('#datatable-perforacion tbody tr:last');
+            let lastHasta = 0;
+
+            if (lastRow.length > 0) {
+                lastHasta = parseFloat(lastRow.find('input[name^="hasta_"]').val()) || 0;
+            }
+            const newRowHtml = `
+                <tr>
+                    <td class='col-md-1 new-td'>
+                        <select id="id_diametros_${rowCount}" name="diametros_${rowCount}" class="form-control" required>
+                            {% for diametro in diametros %}
+                                <option value="{{ diametro.id }}" ${detalle.diametros == {{ diametro.id }} ? 'selected' : ''}>{{ diametro.diametro }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td class='col-md-1 new-td'><input type="number" step="0.01" id="id_perforado_${rowCount}" name="perforado_${rowCount}" class="form-control perforado-input" autocomplete="off" value="${detalle.perforado || ''}" required></td>
+                    <td class='col-md-1 new-td'><input type="number" step="0.01" id="id_desde_${rowCount}" name="desde_${rowCount}" class="form-control" autocomplete="off" value="${lastHasta.toFixed(2)}" readonly></td>
+                    <td class='col-md-1 new-td'><input type="number" step="0.01" id="id_hasta_${rowCount}" name="hasta_${rowCount}" class="form-control" autocomplete="off" readonly></td>
+                    <td class='col-md-1 new-td'><input type="number" step="0.01" id="id_recuperacion_${rowCount}" name="recuperacion_${rowCount}" class="form-control recuperacion-input" autocomplete="off" value="${detalle.recuperacion || ''}" required></td>
+                    <td class='col-md-1 new-td'><input type="number" step="0.01" id="id_porcentajeRecuperacion_${rowCount}" name="porcentajeRecuperacion_${rowCount}" class="form-control" autocomplete="off" readonly></td>
+                    <td class='col-md-1 new-td'><input type="number" step="1" min="0" id="id_barra_${rowCount}" name="barra_${rowCount}" class="form-control" autocomplete="off" value="${detalle.barra || ''}" required></td>
+                    <td class='col-md-1 new-td'><input type="number" step="0.01" id="id_totalHtas_${rowCount}" name="totalHtas_${rowCount}" class="form-control" autocomplete="off" readonly></td>
+                    <td class='col-md-1 new-td'><input type="number" step="0.01" id="id_contra_${rowCount}" name="contra_${rowCount}" class="form-control" autocomplete="off" readonly></td>
+                    <td class='col-md-1 new-td'>
+                        <select id="id_tipoTerreno_${rowCount}" name="tipoTerreno_${rowCount}" class="form-control" required>
+                            {% for terreno in tipos_terreno %}
+                                <option value="{{ terreno.id }}" ${detalle.tipoTerreno === {{ terreno.id }} ? 'selected' : ''}>{{ terreno.tipoTerreno }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td class='col-md-1 new-td'>
+                        <select id="id_orientacion_${rowCount}" name="orientacion_${rowCount}" class="form-control" required>
+                            {% for orientacion in orientaciones %}
+                                <option value="{{ orientacion.id }}" ${detalle.orientacion === {{ orientacion.id }} ? 'selected' : ''}>{{ orientacion.orientacion }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>`;
+            $('#datatable-perforacion tbody').append(newRowHtml);5
+        }
+
+        // Crear filas iniciales desde los datos de la vista
+        $('#datatable-perforacion tbody').empty();
+        reporteDetallePerforacion.forEach(detalle => {
+            createRow(detalle);
+        });
+        updateFields();
+
+        $('#agregarPerforacion').on('click', function() {
+            const lastRow = $('#datatable-perforacion tbody tr:last');
+            const isCompletePerforacion = lastRow.find('input').toArray().every(input => input.value.trim() !== '');
+
+            if (isCompletePerforacion) {
+                createRow();
+            } else {
+                alert('Debe completar todos los campos de la fila actual antes de agregar una nueva.');
+            }
+        });
+
+        $('#eliminarPerforacion').on('click', function() {
+            if ($('#datatable-perforacion tbody tr').length > 1) {
+                $('#datatable-perforacion tbody tr:last').remove();
+                updateFields();
+            } else {
+                alert('Debe haber al menos una fila en la tabla.');
+            }
+        });
+
+        $('#datatable-perforacion').on('input', 'input', function() {
+            updateFields();
+        });
+
+        $('#id_largoBarril, #id_puntoMuerto').on('input', function() {
+            updateFields();
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        let rowCount = 0;
+
+        // Obtener datos desde el JSON proporcionado por la vista
+        const reporteDetalleAditivos = JSON.parse('{{ reporte_detalle_aditivos|escapejs }}');
+
+        function createRow(aditivoId = null, cantidad = '') {
+            rowCount++;
+            const newRowHtml = `
+                <tr>
+                    <td class='col-md-7'>
+                        <select id="id_aditivo_${rowCount}" name="aditivo_${rowCount}" class="form-control" required>
+                            {% for aditivo in aditivos %}
+                                <option value="{{ aditivo.id }}" ${aditivoId == '{{ aditivo.id }}' ? 'selected' : ''}>{{ aditivo.aditivo }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td class='col-md-5'><input type="number" step="1" min="0" id="id_cantidad_${rowCount}" name="cantidad_${rowCount}" class="form-control" autocomplete="off" required value="${cantidad}"></td>
+                </tr>`;
+            $('#datatable-aditivos tbody').append(newRowHtml);
+        }
+        
+        function initializeTable() {
+            if (reporteDetalleAditivos.length > 0) {
+                reporteDetalleAditivos.forEach((item) => {
+                    createRow(item.aditivo, item.cantidad);
+                });
+            } else {
+                
+                //createRow();
+            }
+        }
+        $('#datatable-aditivos tbody').empty();
+        initializeTable();
+
+        $('#agregarAditivo').on('click', function() {
+            if (rowCount === 0) {
+                $('#datatable-aditivos tbody').empty();
+            }
+            const lastRow = $('#datatable-aditivos tbody tr:last');
+            const isCompleteAditivos = lastRow.find('input').toArray().every(input => input.value.trim() !== '');
+            if (isCompleteAditivos) {
+                createRow();
+            } else {
+                alert('Completa todos los campos antes de agregar una nueva fila.');
+            }
+        });
+
+        $('#eliminarAditivo').on('click', function() {
+            const rowCount = $('#datatable-aditivos tbody tr').length;
+            if (rowCount > 0) {
+                $('#datatable-aditivos tbody tr:last').remove();
+            } else {
+                alert('No hay filas que eliminar.');
+            }
+        });
+    });
+</script>
+
+<script src="{% static 'js/tempus-dominus.min.js'%}" crossorigin="anonymous"></script>
+<script src="{% static 'js/moment.min.js'%}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const options = {
+            display: {
+                viewMode: 'calendar',
+                icons: {
+                    type: 'icons',
+                    up: 'icon-arrow-up',
+                    down: 'icon-arrow-down',
+                },
+                components: {
+                    calendar: false,
+                    minutes: true,
+                    seconds: false,
+                },
+            },
+            stepping: 15,
+            localization: {
+                hourCycle: 'h23',
+                dateFormats: {
+                    LT: 'HH:mm',
+                },
+                ordinal: (n) => n,
+                format: 'LT',
+            }
+        };
+
+        let rowCount = 0;
+
+        function disableManualInput(selector) {
+            document.querySelectorAll(selector).forEach(input => {
+                input.addEventListener('keypress', (e) => e.preventDefault());  // Previene escribir
+                input.addEventListener('keydown', (e) => e.preventDefault());    // Previene usar teclas
+                input.addEventListener('paste', (e) => e.preventDefault());      // Previene pegar
+            });
+        }
+        // Obtener los datos desde Django
+        const reporteControlHorario = JSON.parse('{{ reporte_control_horario|safe }}');
+        function initializeTempusDominus(row) {
+            const inicioId = `#id_inicio_${row}`;
+            const finalId = `#id_final_${row}`;
+            
+            if (document.querySelector(inicioId) && document.querySelector(finalId)) {
+                const inicioPicker = new tempusDominus.TempusDominus(document.querySelector(inicioId), options);
+                const finalPicker = new tempusDominus.TempusDominus(document.querySelector(finalId), options);
+
+                // Deshabilitar la entrada manual
+                disableManualInput(inicioId);
+                disableManualInput(finalId);
+
+                $(inicioId + ', ' + finalId).on('change', function() {
+                    recalculateSequentialHours();
+                });
+            } else {
+                console.error(`No se encontró el elemento para Tempus Dominus con los ids: ${inicioId} o ${finalId}`);
+            }
+        }
+
+        function recalculateSequentialHours() {
+            let previousFinal = null;
+
+            $('#datatable-controlhorario tbody tr').each(function(index) {
+                const row = index + 1;
+                const $inicio = $(`#id_inicio_${row}`);
+                const $final = $(`#id_final_${row}`);
+                const $total = $(`#id_total_${row}`);
+
+                // Hacer que el inicio sea readonly desde la segunda fila en adelante
+                if (index > 0) {
+                    $inicio.prop('readonly', true);
+                }
+
+                if ($inicio.length && $final.length && $total.length) {
+                    let inicioVal = $inicio.val();
+                    let finalVal = $final.val();
+
+                    // Si hay una fila anterior, usar el final de la fila anterior como el inicio de la actual
+                    if (previousFinal) {
+                        inicioVal = previousFinal;
+                        $inicio.val(inicioVal); // Actualiza el valor del inicio
+                    }
+
+                    if (inicioVal && finalVal) {
+                        const format = 'HH:mm';
+                        const inicioDate = moment(inicioVal, format);
+                        let finalDate = moment(finalVal, format);
+
+                        // Si la hora final es anterior a la hora de inicio, sumar un día
+                        if (finalDate.isBefore(inicioDate)) {
+                            finalDate.add(1, 'day');
+                        }
+
+                        const duration = moment.duration(finalDate.diff(inicioDate));
+                        const hours = String(Math.floor(duration.asHours())).padStart(2, '0');
+                        const minutes = String(duration.minutes()).padStart(2, '0');
+                        const totalTime = `${hours}:${minutes}`;
+                        $total.val(totalTime);
+
+                        // Guardar el valor final para la siguiente fila
+                        previousFinal = finalVal;
+                    }
+                }
+            });
+        }
+
+        function createRow(data = {}) {
+            rowCount++;
+
+            const newRowHtml = `
+                <tr>
+                    <td><input type="text" id="id_inicio_${rowCount}" name="inicio_${rowCount}" class="form-control tempus-dominus" autocomplete="off" value="${data.inicio || ''}" ${rowCount > 1 ? 'readonly' : ''} required></td>
+                    <td><input type="text" id="id_final_${rowCount}" name="final_${rowCount}" class="form-control tempus-dominus" autocomplete="off" value="${data.final || ''}" required></td>
+                    <td><input type="text" id="id_total_${rowCount}" name="total_${rowCount}" class="form-control" autocomplete="off" value="${data.total || ''}" readonly></td>
+                    <td>
+                        <select id="id_detalleControlHorario_${rowCount}" name="detalleControlHorario_${rowCount}" class="form-control" required>
+                            <option value="" selected>Seleccione una opción</option>
+                            {% for detalle in detalles_control_horario %}
+                                <option value="{{ detalle.id }}" ${data.detalleControlHorario === {{ detalle.id }} ? 'selected' : ''}>{{ detalle.detalle }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>`;
+            
+            $('#datatable-controlhorario tbody').append(newRowHtml);
+            $('#id_detalleControlHorario_' + rowCount).select2({
+                placeholder: "Seleccione una opción",
+                allowClear: true
+            });
+            initializeTempusDominus(rowCount);
+        }
+
+        // Crear filas iniciales desde los datos de la vista
+        $('#datatable-controlhorario tbody').empty();
+        reporteControlHorario.forEach(data => {
+            createRow(data);
+        });
+
+        $('#agregarHorario').on('click', function() {
+            const lastRow = $('#datatable-controlhorario tbody tr:last');
+            const isCompleteHorario = lastRow.find('input').toArray().every(input => input.value.trim() !== '');
+
+            if (isCompleteHorario) {
+                rowCount++;
+
+                const lastFinalValue = lastRow.find('input[name^="final"]').val(); 
+
+                const newRowHtml = `
+                    <tr>
+                        <td><input type="text" id="id_inicio_${rowCount}" name="inicio_${rowCount}" class="form-control tempus-dominus" autocomplete="off" value="${lastFinalValue}" readonly></td>
+                        <td><input type="text" id="id_final_${rowCount}" name="final_${rowCount}" class="form-control tempus-dominus" autocomplete="off" required></td>
+                        <td><input type="text" id="id_total_${rowCount}" name="total_${rowCount}" class="form-control" autocomplete="off" readonly></td>
+                        <td>
+                            <select id="id_detalleControlHorario_${rowCount}" name="detalleControlHorario_${rowCount}" class="form-control" required>
+                                <option value="" selected>Seleccione una opción</option>
+                                {% for detalle in detalles_control_horario %}
+                                    <option value="{{ detalle.id }}">{{ detalle.detalle }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>`;
+
+                $('#datatable-controlhorario tbody').append(newRowHtml);
+                $('#id_detalleControlHorario_' + rowCount).select2({
+                    placeholder: "Seleccione una opción",
+                    allowClear: true
+                });
+                initializeTempusDominus(rowCount);
+
+                // Recalcular las horas después de agregar una nueva fila
+                recalculateSequentialHours();
+            } else {
+                alert('Completa todos los campos antes de agregar una nueva fila.');
+            }
+        });
+
+        $('#eliminarHorario').on('click', function() {
+            const rowCount = $('#datatable-controlhorario tbody tr').length;
+            if (rowCount > 1) {
+                $('#datatable-controlhorario tbody tr:last').remove();
+
+                // Recalcular las horas después de eliminar una fila
+                recalculateSequentialHours();
+            } else {
+                alert('Debe haber al menos una fila en la tabla.');
+            }
+        });
+
+        // Configurar readonly para todas las filas iniciales y bloquear clic en campos readonly
+        recalculateSequentialHours();
+    });
+</script>
+<script>
+    let ultimoRegistro = {};
+    $(document).ready(function() {
+        function obtenerMetroInicial() {
+            const sondajeCodigo = $('#id_sondajeCodigo').val();
+            const sondajeSerie = $('#id_sondajeSerie').val();
+            const sondajeEstado = $('#id_sondajeEstado').val();
+            if (sondajeCodigo && sondajeSerie) {
+                $.LoadingOverlay("show");
+                $.ajax({
+                    url: "{% url 'obtener_metro_inicial' %}",
+                    method: 'GET',
+                    data: {
+                        'sondajeCodigo': sondajeCodigo,
+                        'sondajeSerie': sondajeSerie,
+                        'sondajeEstado': sondajeEstado,
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        $.LoadingOverlay("hide");
+                        ultimoRegistro = response;
+                        var metroFinal = parseFloat(response.reporte.metroFinal) || 0;
+                        var largoBarril = parseFloat(response.longitudPozo.largoBarril) || 0;
+                        var puntoMuerto = parseFloat(response.longitudPozo.puntoMuerto) || 0;
+                        
+                        $('#id_metroInicial').val(metroFinal.toFixed(2));
+                        //$('#id_desde_1').val(metroFinal.toFixed(2));
+                        $('#id_corona').val(response.insumos.corona);
+                        $('#id_escareador').val(response.insumos.escareador);
+                        $('#id_cantidadAgua').val(response.insumos.cantidadAgua);
+                        $('#id_casing').val(response.insumos.casing);
+                        $('#id_zapata').val(response.insumos.zapata);
+                        $('#id_largoBarril').val(largoBarril.toFixed(2));
+                        $('#id_largoBarra').val(largoBarra.toFixed(2));
+                        $('#id_puntoMuerto').val(puntoMuerto.toFixed(2));
+                    },
+                    error: function(xhr, status, error) {
+                        $.LoadingOverlay("hide");
+                        alert('Ocurrió un error al obtener los datos.');
+                    }
+                });
+            } else {
+                alert("Debe ingresar tanto el código como la serie del sondaje.");
+            }
+        }
+        $('#id_sondajeCodigo, #id_sondajeSerie, #id_sondajeEstado').on('change', obtenerMetroInicial);
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        // Selecciona el campo que quieres deshabilitar
+        var selectField = $('#id_sondajeCodigo');
+        var selectFieldEstado = $('#id_sondajeEstado');
+        var selectFieldSonda = $('#id_sonda');
+
+        // Si está deshabilitado, evitamos que se abra el desplegable
+        if (selectField.attr('readonly')) {
+            selectField.on('mousedown', function(e) {
+                e.preventDefault(); // Evitar el despliegue de opciones
+            });
+        }
+        if (selectFieldEstado.attr('readonly')) {
+            selectFieldEstado.on('mousedown', function(e) {
+                e.preventDefault(); // Evitar el despliegue de opciones
+            });
+        }
+        if (selectFieldSonda.attr('readonly')) {
+            selectFieldSonda.on('mousedown', function(e) {
+                e.preventDefault(); // Evitar el despliegue de opciones
+            });
+        }
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        function obtenerEstadoSonda() {
+            const sonda = $('#id_sonda').val();
+            if (sonda) {
+                $.LoadingOverlay("show");
+                $.ajax({
+                    url: "{% url 'obtener_estado_sonda' %}",
+                    method: 'GET',
+                    data: {
+                        'sonda': sonda,
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        $.LoadingOverlay("hide");
+                    },
+                    error: function(xhr, status, error) {
+                        $.LoadingOverlay("hide");
+                        $('.changed').removeClass('changed');
+                        Swal.fire({
+                            icon: 'error',
+                            titleText: 'Reportes Pendientes!',
+                            text: 'Reviselos o contacte a su supervisor',
+                            confirmButtonColor: '#ff00d9',
+                        }).then(() => {
+                            window.location.href = '{% url 'manage_mis_reportes_digitales' %}';
+                        });
+                    }
+                });
+            } else {
+                //alert("Debe ingresar tanto el código como la serie del sondaje.");
+            }
+        }
+        //$('#id_sonda').on('change', obtenerEstadoSonda);
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        // Selecciona el campo que quieres deshabilitar
+        var selectField = $('#id_sondajeCodigo');
+
+        // Si está deshabilitado, evitamos que se abra el desplegable
+        if (selectField.attr('readonly')) {
+            selectField.on('mousedown', function(e) {
+                e.preventDefault(); // Evitar el despliegue de opciones
+            });
+        }
+    });
+</script>
+{% endblock javascript %}
+
+{% block messages %}
+{% endblock messages%}

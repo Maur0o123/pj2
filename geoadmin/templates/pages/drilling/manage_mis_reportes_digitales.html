@@ -1,0 +1,183 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Reportes Digitales por Corregir{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <style>
+        .form-inline-btn {
+            flex-wrap: nowrap !important;
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Reportes Digitales por Corregir</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Reportes Digitales</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Mis Reportes</li>
+                    </ol>
+                </div>
+            </div> <!-- PAGE-HEADER END --> <!-- row -->  
+            
+            <h5 class="mb-5"></h5>
+            <div class="row row-sm"> 
+                <table id="datatable-allusers" class="display nowrap table table-bordered text-nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>#</th>
+                            <th>Fecha - Hora</th>
+                            <th>Sondaje-N°-Gemelo</th>
+                            <th>Sonda</th>
+                            <th>Controlador</th>
+                            <th>Turno</th>                            
+                            <th class="text-center">Acciones Reportes</th>  
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reporte in reportes %}
+                            {% if reporte.progreso == 'Creado' or reporte.progreso == 'Por Corregir' %}
+                            <tr>
+                                <td class="dtr-control"></td>
+                                <td>{{ reporte.id_checklist }}</td>
+                                <td>{{ reporte.fecha_checklist|date:"Y-m-d" }} - {{ reporte.fecha_checklist|date:"H:i" }}</td> 
+                                <td>{{ reporte.sondajeCodigo }}-{{ reporte.sondajeSerie }}{% if reporte.sondajeEstado %}{{ reporte.get_sondajeEstado_display }} {% else%} {% endif %}</td>
+                                <td>{{ reporte.sonda }}</td>
+                                <td>{{ reporte.creador }}</td>
+                                <td>{{ reporte.get_turno_display }}</td>
+                                <td class="form-inline-btn">
+                                    <form action="{% url 'editar_reporte_digital' %}" method="POST" >
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ reporte.id_checklist }}">
+                                        <input type="hidden" name="origin" value="my_report">
+                                        <button type="submit" class="btn btn-info btn-size-edit">Editar</button>
+                                    </form>
+                                    <form action="{% url 'progreso_reporte_digital' %}" method="POST" >
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ reporte.id }}">
+                                        <button type="submit" class="btn btn-primary btn-size-edit">Enviar</button>
+                                    </form>
+                                    {% if request.user.usuarioprofile.seccionSondaje == "ADMINISTRADOR" or request.user.is_superuser %} 
+                                        <form action="{% url 'eliminar_reporte_digital_action' %}" method="POST" class="form-delete">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id" value="{{ reporte.id}}">
+                                            <button type="submit" class="btn btn-danger btn-size-edit">Eliminar</button>
+                                        </form>
+                                    {% endif %}
+                                </td>                               
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>                    
+                </table>
+            </div>            
+        </div>
+        <h5 class="mb-5"></h5> 
+        <div class="main-container container-fluid"> 
+            <a class="btn btn-secondary" href="{% url 'dashboardSondaje' %}">Regresar</a> 
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+<script src="{% static 'js/jquery-3.7.0.js'%}"></script>
+<script src="{% static 'js/jquery.dataTables.min1.13.7.js'%}"></script>
+<script src="{% static 'js/dataTables.responsive.min2.5.0.js'%}"></script>
+<script type="application/javascript">
+    $(document).ready(function() {
+        $.fn.dataTable.ext.errMode = 'throw';
+
+        // 1. INICIALIZACIÓN
+        var table = new DataTable('#datatable-allusers', {
+            destroy: true,
+            language: { url: '{% static 'json/es-CL.json' %}' },
+            columnDefs: [    
+                { className: 'dtr-control', orderable: false, targets: 0, width: "5%" },
+                { targets: 1, width: "5%" },
+                { targets: 2, width: "15%" },
+                { targets: 3, width: "15%" },
+                { targets: 4, width: "10%" },
+                { targets: 5, width: "15%" },
+                { targets: 6, width: "10%" },
+                { targets: 7, width: "15%", searchable: false, orderable: false, className: "text-center" }
+            ],
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: 0
+                }
+            },
+            autoWidth: false
+        });
+
+        // 2. FUNCIÓN RELOAD
+        function reloadTable() {
+            $.ajax({
+                url: window.location.href,
+                type: 'GET',
+                success: function(response) {
+                    var doc = new DOMParser().parseFromString(response, 'text/html');
+                    var newRows = $(doc).find('#datatable-allusers tbody tr');
+                    
+                    table.clear();
+                    if (newRows.length > 0) { table.rows.add(newRows); }
+                    table.draw(false); 
+                }
+            });
+        }
+
+        // 3. LÓGICA ELIMINAR/ENVIAR
+        $('#datatable-allusers').on('submit', 'form', function(e) {
+            var form = $(this);
+            if (form.attr('action').includes('editar')) return;
+
+            e.preventDefault();
+            var isDelete = form.hasClass('form-delete');
+            
+            Swal.fire({
+                title: isDelete ? '¿Estás seguro?' : '¿Enviar reporte?',
+                text: isDelete ? "Se enviará a la bandeja de eliminados." : "El reporte pasará a revisión.",
+                icon: isDelete ? 'warning' : 'question',
+                showCancelButton: true,
+                confirmButtonColor: isDelete ? '#d33' : '#3085d6',
+                confirmButtonText: 'Sí, proceder',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: form.attr('action'),
+                        type: 'POST',
+                        data: form.serialize(),
+                        headers: {'X-Requested-With': 'XMLHttpRequest'},
+                        success: function(response) {
+                            Swal.fire('¡Éxito!', response.message || 'Acción realizada.', 'success');
+                            reloadTable();
+                        },
+                        error: function(xhr) {
+                            var msg = xhr.responseJSON ? xhr.responseJSON.message : 'Error en el servidor';
+                            Swal.fire('Error', msg, 'error');
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+{% endblock javascript %}

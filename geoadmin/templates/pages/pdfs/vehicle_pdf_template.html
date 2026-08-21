@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Vehículo PDF</title>
+    <style>
+        @page {
+            size: letter portrait;
+            @frame header_frame {  
+                -pdf-frame-content: header_content;
+                left: 30pt; width: 552pt; top: 30pt; height: 40pt;
+            } 
+            @frame content_frame {         
+                left: 30pt;
+                width: 552pt; top: 70pt; height: 682pt;
+            }
+            @frame footer_frame {          
+                -pdf-frame-content: footer_content;
+                left: 30pt; width: 552pt; top: 752pt; height: 40pt;
+            }
+            @frame logo {             
+                -pdf-frame-content: logo;
+                left: 185pt; width: 40pt; top: 750pt; height: 50pt;
+            }
+            @frame footer_text {           
+                -pdf-frame-content: footer_text;
+                left: 30pt; width: 552pt; top: 772pt; height: 20pt;
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10pt;
+        }
+        
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .table-out td, th {
+            vertical-align: top;
+            width: 50%;
+        }
+        
+        .table-in td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            vertical-align: top;
+            padding: 2px;
+        }
+        
+        h2, h3 { 
+            -pdf-keep-with-next: true;
+        }
+        
+        .header {
+            text-align: right;
+        }
+        
+        .container-doc {
+            page-break-before: always; 
+            page-break-inside: avoid;
+            padding-top: 10px;
+            text-align: center;
+        }
+
+        .titulo-doc {
+            background-color: #007bff;
+            color: white;
+            padding: 6px 10px;
+            font-size: 11pt;
+            font-weight: bold;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+        
+        .preview-container {
+            display: block;
+            margin: 0 auto;
+            padding: 5px;
+        }
+        
+        .preview-img {
+            width: 350pt;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div id="header_content" class="header">{{ current_datetime|date:"d-m-Y" }} - {{ current_datetime|time:"H:i" }}</div>
+    <div id="footer_text" style="text-align: center;vertical-align: middle;">
+        www.geoadmin.cl - Página <pdf:pagenumber> de <pdf:pagecount>
+    </div>
+    <img id="logo" src="static/images/logo/Logo GeoAdmin.png" style="width: 100px;" alt="logo"/>
+    
+    <div id="content_frame">
+        <div class="title">
+            <h1>INFORME Y DOCUMENTACIÓN {{ vehiculo.placaPatente }}</h1>
+        </div>
+        
+        <div class="container">
+            <div class="row row-sm">
+                <div>
+                    <h2>Datos Principales</h2>
+                </div>
+                <div>
+                    <table class="table-out">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <table class="table-in">
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Placa Patente:</strong></td>
+                                                <td>{{ vehiculo.placaPatente }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Tipo:</strong></td>
+                                                <td>{{ vehiculo.tipo }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Marca:</strong></td>
+                                                <td>{{ vehiculo.marca }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Modelo:</strong></td>
+                                                <td>{{ vehiculo.modelo }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Año:</strong></td>
+                                                <td>{{ vehiculo.ano }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Color:</strong></td>
+                                                <td>{{ vehiculo.color }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>N° Motor:</strong></td>
+                                                <td>{{ vehiculo.numeroMotor }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>N° Chasis:</strong></td>
+                                                <td>{{ vehiculo.numeroChasis }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>N° Vin:</strong></td>
+                                                <td>{{ vehiculo.numeroVin }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Nombre Propietario:</strong></td>
+                                                <td>{{ vehiculo.nombrePropietario }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Rut Propietario:</strong></td>
+                                                <td>{{ vehiculo.rutPropietario }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Domicilio:</strong></td>
+                                                <td>{{ vehiculo.domicilio }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Tenencia:</strong></td>
+                                                {% if vehiculo.tenencia == "1" %}
+                                                    <td>Propio</td>
+                                                {% else %}
+                                                    <td>Arrendado</td>
+                                                {% endif %}
+                                            </tr>
+                                            {% if vehiculo.tenencia == "1" %}
+                                            <tr>
+                                                <td><strong>Fecha Adquisición:</strong></td>
+                                                <td>{% if vehiculo.fechaAdquisicion %}{{ vehiculo.fechaAdquisicion|date:"d-m-Y" }}{% else %} Sin información {% endif %}</td>
+                                            </tr>
+                                            {% else %}
+                                            <tr>
+                                                <td><strong>Fecha Inicio Arriendo:</strong></td>
+                                                <td>{% if vehiculo.fechaArriendoInicial %}{{ vehiculo.fechaArriendoInicial|date:"d-m-Y" }}{% else %} Sin información {% endif %}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Fecha Final Arriendo:</strong></td>
+                                                <td>{% if vehiculo.fechaArriendoFinal %}{{ vehiculo.fechaArriendoFinal|date:"d-m-Y" }}{% else %} Sin información {% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td style="width: 20px;"></td>
+                                <td>
+                                    <table class="table-in">
+                                        <tbody>
+                                            {% if opciones.fechaVencimientoPermisoCirculacion == "Si" %}
+                                            <tr>
+                                                <td><strong>Fecha Vencimiento Permiso Circulación:</strong></td>
+                                                <td>{% if vehiculo.fechaVencimientoPermisoCirculacion %}{{ vehiculo.fechaVencimientoPermisoCirculacion|date:"d-m-Y" }}{% else %} Sin información {% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.fechaVencimientoRevisionTecnica == "Si" %}
+                                            <tr>
+                                                <td><strong>Fecha Vencimiento Revisión Técnica:</strong></td>
+                                                <td>{% if vehiculo.fechaVencimientoRevisionTecnica %}{{ vehiculo.fechaVencimientoRevisionTecnica|date:"d-m-Y" }}{% else %} Sin información {% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.fechaVencimientoSeguroObligatorio == "Si" %}
+                                            <tr>
+                                                <td><strong>Fecha Vencimiento Seguro Obligatorio:</strong></td>
+                                                <td>{% if vehiculo.fechaVencimientoSeguroObligatorio %}{{ vehiculo.fechaVencimientoSeguroObligatorio|date:"d-m-Y" }}{% else %} Sin información {% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.fechaInstalacionGps == "Si" %}
+                                            <tr>
+                                                <td><strong>Fecha Instalación GPS:</strong></td>
+                                                <td>{% if vehiculo.fechaInstalacionGps %}{{ vehiculo.fechaInstalacionGps|date:"d-m-Y" }}{% else %} Sin información {% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.fechaVencimientoLamina == "Si" %}
+                                            <tr>
+                                                <td><strong>Fecha Vencimiento Lámina:</strong></td>
+                                                <td>{% if vehiculo.fechaVencimientoLamina %}{{ vehiculo.fechaVencimientoLamina|date:"d-m-Y" }}{% else %} Sin información {% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.fechaInstalacionBarraAntiVuelco == "Si" %}
+                                            <tr>
+                                                <td><strong>Fecha Instalación Barra AntiVuelco:</strong></td>
+                                                <td>{% if vehiculo.fechaInstalacionBarraAntiVuelco %}{{ vehiculo.fechaInstalacionBarraAntiVuelco|date:"d-m-Y" }}{% else %} Sin información {% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.fechaVencimientoTransportePrivado == "Si" %}
+                                            <tr>
+                                                <td><strong>Fecha Vencimiento Transporte Privado:</strong></td>
+                                                <td>{% if vehiculo.fechaVencimientoTransportePrivado %}{{ vehiculo.fechaVencimientoTransportePrivado|date:"d-m-Y" }}{% else %} Sin información {% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.fechaCertificadoOperatividad == "Si" %}
+                                            <tr>
+                                                <td><strong>Fecha Certificado Operatividad:</strong></td>
+                                                <td>{% if vehiculo.fechaCertificadoOperatividad %}{{ vehiculo.fechaCertificadoOperatividad|date:"d-m-Y" }}{% else %} Sin información {% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.fechaCertificadoMantencion == "Si" %}
+                                            <tr>
+                                                <td><strong>Fecha Certificado Mantención:</strong></td>
+                                                <td>{% if vehiculo.fechaCertificadoMantencion %}{{ vehiculo.fechaCertificadoMantencion|date:"d-m-Y" }}{% else %} Sin información {% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.fechaCertificadoGrua == "Si" %}
+                                            <tr>
+                                                <td><strong>Fecha Certificado Grúa:</strong></td>
+                                                <td>{% if vehiculo.fechaCertificadoGrua %}{{ vehiculo.fechaCertificadoGrua|date:"d-m-Y" }}{% else %} Sin información {% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.tieneTag == "Si" %}
+                                            <tr>
+                                                <td><strong>Posee Tag:</strong></td>
+                                                <td>{% if vehiculo.tieneTag %}{{ vehiculo.tieneTag }}{% else %} Sin información {% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.tarjetaCombustible == "Si" %}
+                                            <tr>
+                                                <td><strong>Posee Tarjeta Combustible:</strong></td>
+                                                <td>{% if vehiculo.tarjetaCombustible %}{{ vehiculo.tarjetaCombustible }}{% else %} Sin información {% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="row row-sm">
+                <div>
+                    <h2>Información Técnica</h2>
+                </div>
+                <div>
+                    <table class="table-out">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <table class="table-in">
+                                        <tbody>
+                                            {% if opciones.tipoTraccion == "Si" %}
+                                            <tr>
+                                                <td><strong>Tipo de Tracción:</strong></td>
+                                                <td>{% if informacion.tipoTraccion %}{{ informacion.tipoTraccion }}{% else %}Sin información{% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.pesoBrutoVehicular == "Si" %}
+                                            <tr>
+                                                <td><strong>Peso Bruto Vehicular:</strong></td>
+                                                <td>{% if informacion.pesoBrutoVehicular %}{{ informacion.pesoBrutoVehicular }}{% else %}Sin información{% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.capacidadCarga == "Si" %}
+                                            <tr>
+                                                <td><strong>Capacidad Carga:</strong></td>
+                                                <td>{% if informacion.capacidadCarga %}{{ informacion.capacidadCarga }}{% else %}Sin información{% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.tipoNeumatico == "Si" %}
+                                            <tr>
+                                                <td><strong>Tipo Neumático:</strong></td>
+                                                <td>{% if informacion.tipoNeumatico %}{{ informacion.tipoNeumatico }}{% else %}Sin información{% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.tipoAceiteMotor == "Si" %}
+                                            <tr>
+                                                <td><strong>Tipo Aceite Motor:</strong></td>
+                                                <td>{% if informacion.tipoAceiteMotor %}{{ informacion.tipoAceiteMotor }}{% else %}Sin información{% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.tipoRefrigeranteMotor == "Si" %}
+                                            <tr>
+                                                <td><strong>Tipo Refrigerante Motor:</strong></td>
+                                                <td>{% if informacion.tipoRefrigeranteMotor %}{{ informacion.tipoRefrigeranteMotor }}{% else %}Sin información{% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.tipoFiltroAireMotor == "Si" %}
+                                            <tr>
+                                                <td><strong>Tipo Filtro Aire Motor:</strong></td>
+                                                <td>{% if informacion.tipoFiltroAireMotor %}{{ informacion.tipoFiltroAireMotor }}{% else %}Sin información{% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.tipoFiltroCombustible == "Si" %}
+                                            <tr>
+                                                <td><strong>Tipo Filtro Combustible:</strong></td>
+                                                <td>{% if informacion.tipoFiltroCombustible %}{{ informacion.tipoFiltroCombustible }}{% else %}Sin información{% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.frecuenciaMantenimiento == "Si" %}
+                                            <tr>
+                                                <td><strong>Frecuencia Mantenimiento (Kms):</strong></td>
+                                                <td>{% if informacion.frecuenciaMantenimiento %}{{ informacion.frecuenciaMantenimiento }}{% else %}Sin información{% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.proximoMantenimiento == "Si" %}
+                                            <tr>
+                                                <td><strong>Próximo Mantenimiento (Kms):</strong></td>
+                                                <td>{% if informacion.proximoMantenimiento %}{{ informacion.proximoMantenimiento }}{% else %}Sin información{% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% if opciones.proximoMantenimientoGrua == "Si" %}
+                                            <tr>
+                                                <td><strong>Próximo Mantenimiento Grúa (Horas):</strong></td>
+                                                <td>{% if informacion.proximoMantenimientoGrua %}{{ informacion.proximoMantenimientoGrua }}{% else %}Sin información{% endif %}</td>
+                                            </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container">
+            {% for doc in documentos %}
+                <div class="container-doc">
+                    
+                    <div class="titulo-doc">
+                        Estado de Documentación del Vehículo: {{ doc.nombre|upper }}
+                    </div>
+
+                    <div class="preview-container">
+                        {% if doc.archivo_url %}
+                            <img class="preview-img" src="{{ doc.archivo_url }}" alt="Vista previa de {{ doc.nombre }}" />
+                        {% else %}
+                            <span style="color: #999; font-style: italic; font-size: 9pt;">Sin archivo adjunto para previsualizar</span>
+                        {% endif %}
+                    </div>
+
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

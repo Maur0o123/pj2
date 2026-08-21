@@ -1,0 +1,353 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Capacitaciones {{ titulo_categoria }}{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <style>
+        .swal-btn-si-wide {
+            min-width: 76px !important;
+            padding-left: 1.2rem !important;
+            padding-right: 1.2rem !important;
+        }
+        .col-intentos-restantes {
+            width: 150px !important;
+            max-width: 150px !important;
+            min-width: 150px !important;
+            white-space: nowrap;
+            text-align: center;
+        }
+        .btn-ver-disabled-warning,
+        .btn-ver-disabled-warning:disabled {
+            background-color: #b39b4a !important;
+            border-color: #b39b4a !important;
+            color: #f7f0d2 !important;
+            opacity: 1 !important;
+            cursor: not-allowed;
+        }
+        .btn-ver-disabled-warning:hover,
+        .btn-ver-disabled-warning:focus,
+        .btn-ver-disabled-warning:active {
+            background-color: #b39b4a !important;
+            border-color: #b39b4a !important;
+            color: #f7f0d2 !important;
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+            <div class="page-header">
+                <h1 class="page-title">Capacitaciones - {{ titulo_categoria }}</h1>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Prevención</a></li>
+                        <li class="breadcrumb-item active">Capacitaciones</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="row row-sm">
+                <table id="datatable-capacitaciones" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Fecha Capacitación</th>
+                            <th>Faena</th>
+                            <th>Cargo</th>
+                            <th>Nombre Capacitación</th>
+                            <th>Difundido por</th>
+                            {% if slug_categoria == 'cursos' %}
+                                <th class="col-intentos-restantes">Intentos restantes</th>
+                            {% endif %}
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fila in documentos_difundidos %}
+                        <tr>
+                            <td class="dtr-control"></td>
+                            <td data-order="{{ fila.fecha_difusion|date:'U' }}">{{ fila.fecha_difusion|date:"Y-m-d H:i" }}</td>
+                            <td>{{ fila.faena_nombre }}</td>
+                            <td>{{ fila.cargo_display }}</td>
+                            <td>{{ fila.plantilla_nombre }}</td>
+                            <td>{{ fila.difundido_por }}</td>
+                            {% if slug_categoria == 'cursos' %}
+                                <td class="col-intentos-restantes" data-order="{{ fila.curso_intentos_restantes|default:0 }}">{{ fila.curso_intentos_restantes|default:0 }}</td>
+                            {% endif %}
+                            
+                            <td data-order="{% if fila.motivo_rechazo or fila.estado_notificacion_key == 'rechazado' %}3{% elif fila.estado_notificacion_key == 'activo' %}1{% elif fila.estado_notificacion_key == 'entregado' %}2{% elif fila.estado_notificacion_key == 'leido' %}4{% elif fila.estado_notificacion_key == 'aprobado' %}5{% else %}9{% endif %}">
+                                {% if fila.motivo_rechazo or fila.estado_notificacion_key == 'rechazado' %}
+                                    <span class="badge bg-danger-transparent rounded-pill text-danger p-2">Rechazado</span>
+                                {% elif fila.estado_notificacion_key == 'activo' %}
+                                    <span class="badge bg-info-transparent rounded-pill text-info p-2">{{ fila.estado_notificacion }}</span>
+                                {% elif fila.estado_notificacion_key == 'aprobado' %}
+                                    <span class="badge bg-success-transparent rounded-pill text-success p-2">{{ fila.estado_notificacion }}</span>
+                                {% elif fila.estado_notificacion_key == 'leido' %}
+                                    <span class="badge bg-success-transparent rounded-pill text-success p-2">{{ fila.estado_notificacion }}</span>
+                                {% else %}
+                                    <span class="badge bg-warning-transparent rounded-pill text-warning p-2">{{ fila.estado_notificacion }}</span>
+                                {% endif %}
+                            </td>
+                            
+                            <td class="form-inline-btn d-flex align-items-center gap-1">
+                                {% if fila.puede_abrir %}
+                                    <a
+                                        href="{% url 'view_documento' fila.documento_id %}?origen=capacitaciones&tipo={{ slug_categoria }}"
+                                        class="btn btn-warning btn-size-adm js-open-capacitacion"
+                                        data-documento-id="{{ fila.documento_id }}"
+                                        data-estado-key="{{ fila.estado_notificacion_key }}"
+                                    >
+                                        Ver
+                                    </a>
+                                {% else %}
+                                    <button
+                                        type="button"
+                                        class="btn btn-size-adm btn-ver-disabled-warning js-ver-disabled-info"
+                                        title="{{ fila.bloqueo_apertura_motivo|default:'No disponible' }}"
+                                        data-bloqueo-motivo="{{ fila.bloqueo_apertura_motivo|default:'No disponible'|escape }}"
+                                        aria-disabled="true"
+                                    >
+                                        Ver
+                                    </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script>
+    new DataTable('#datatable-capacitaciones', {
+        language: { url: '{% static "json/es-CL.json" %}' },
+        columnDefs: [
+            { className: 'dtr-control', orderable: false, targets: 0 },
+            { orderable: false, targets: {% if slug_categoria == 'cursos' %}8{% else %}7{% endif %} }
+        ],
+        order: [[{% if slug_categoria == 'cursos' %}7{% else %}6{% endif %}, 'asc'], [1, 'desc']],
+        responsive: { details: { type: 'column' } }
+    });
+
+    (function () {
+        const alertaCapacitacionActiva = {
+            documentoId: parseInt('{{ alerta_capacitacion_activa.documento_id|default:0 }}', 10) || 0,
+            remainingSeconds: parseInt('{{ alerta_capacitacion_activa.remaining_seconds|default:0 }}', 10) || 0,
+            cursoFinalizado: {{ alerta_capacitacion_activa.curso_finalizado|yesno:"true,false" }},
+            nombre: '{{ alerta_capacitacion_activa.nombre_documento_activo|default:""|escapejs }}',
+            tipoActivoSlug: '{{ alerta_capacitacion_activa.tipo_activo_slug|default:""|escapejs }}',
+            urlVolver: '{{ alerta_capacitacion_activa.url_volver_activo|default:""|escapejs }}',
+        };
+        const slugCategoria = '{{ slug_categoria|default:""|escapejs }}';
+
+        function metaCategoriaSegunSlug(slug) {
+            const key = String(slug || '').toLowerCase();
+            if (key === 'charlas') return { nombre: 'charla', articulo: 'esta', otro: 'otra', adjetivo: 'activa' };
+            if (key === 'cursos') return { nombre: 'curso', articulo: 'este', otro: 'otro', adjetivo: 'activo' };
+            if (key === 'difusiones') return { nombre: 'difusión', articulo: 'esta', otro: 'otra', adjetivo: 'activa' };
+            if (key === 'informativos') return { nombre: 'informativo', articulo: 'este', otro: 'otro', adjetivo: 'activo' };
+            return { nombre: 'capacitación', articulo: 'esta', otro: 'otra', adjetivo: 'activa' };
+        }
+
+        document.addEventListener('click', function (event) {
+            // Lógica para botones bloqueados
+            const botonBloqueado = event.target.closest('.js-ver-disabled-info');
+            if (botonBloqueado) {
+                event.preventDefault();
+
+                const motivo = String(
+                    botonBloqueado.getAttribute('data-bloqueo-motivo')
+                    || botonBloqueado.getAttribute('title')
+                    || 'No disponible.'
+                ).trim();
+
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        titleText: 'No disponible',
+                        text: motivo,
+                        icon: 'info',
+                        confirmButtonColor: '#8FBD56',
+                        confirmButtonText: 'Entendido',
+                    });
+                    return;
+                }
+                alert(motivo);
+            }
+        });
+
+        if (!alertaCapacitacionActiva.documentoId) {
+            return;
+        }
+        const bloqueoCargadoAtMs = Date.now();
+        if (
+            String(slugCategoria || '').trim().toLowerCase() === 'cursos'
+            && alertaCapacitacionActiva.remainingSeconds > 0
+        ) {
+            const recargaEnMs = (alertaCapacitacionActiva.remainingSeconds + 1) * 1000;
+            window.setTimeout(() => {
+                window.location.reload();
+            }, recargaEnMs);
+        }
+
+        function formatoTiempo(totalSeconds) {
+            const total = Math.max(0, parseInt(totalSeconds, 10) || 0);
+            const minutos = Math.floor(total / 60);
+            const segundos = total % 60;
+            const minLabel = minutos === 1 ? 'minuto' : 'minutos';
+            const secLabel = segundos === 1 ? 'segundo' : 'segundos';
+            return `${minutos} ${minLabel} y ${segundos} ${secLabel}`;
+        }
+
+        function segundosRestantesActuales() {
+            const inicial = Math.max(0, parseInt(alertaCapacitacionActiva.remainingSeconds, 10) || 0);
+            const transcurridos = Math.floor((Date.now() - bloqueoCargadoAtMs) / 1000);
+            return Math.max(0, inicial - transcurridos);
+        }
+
+        document.querySelectorAll('.js-open-capacitacion').forEach((link) => {
+            link.addEventListener('click', function (event) {
+                const documentoDestinoId = parseInt(link.dataset.documentoId || '0', 10) || 0;
+                if (!documentoDestinoId) {
+                    return;
+                }
+                const estadoDestinoKey = String(link.dataset.estadoKey || '').trim().toLowerCase();
+                const esTipoLibreTrasValidacion = ['charlas', 'informativos', 'difusiones'].includes(String(slugCategoria || '').trim().toLowerCase());
+                const destinoYaValidado = (estadoDestinoKey === 'leido');
+
+                if (esTipoLibreTrasValidacion && destinoYaValidado) {
+                    return;
+                }
+
+                if (documentoDestinoId === alertaCapacitacionActiva.documentoId) {
+                    const segundosRestantesMismoDocumento = segundosRestantesActuales();
+                    if (alertaCapacitacionActiva.cursoFinalizado && segundosRestantesMismoDocumento > 0) {
+                        event.preventDefault();
+                        let countdownSeconds = segundosRestantesMismoDocumento;
+                        if (typeof Swal !== 'undefined') {
+                            let countdownInterval = null;
+                            Swal.fire({
+                                titleText: 'Este curso ya fue finalizado',
+                                html: `Podrás volver a abrirlo cuando termine el tiempo restante: <span id="swal-realtime-countdown-finalizado">${formatoTiempo(countdownSeconds)}</span>.`,
+                                icon: 'info',
+                                confirmButtonColor: '#8FBD56',
+                                didOpen: () => {
+                                    const container = Swal.getHtmlContainer();
+                                    const countdownNode = container ? container.querySelector('#swal-realtime-countdown-finalizado') : null;
+                                    if (!countdownNode) {
+                                        return;
+                                    }
+                                    countdownInterval = window.setInterval(() => {
+                                        countdownSeconds = segundosRestantesActuales();
+                                        countdownNode.textContent = formatoTiempo(countdownSeconds);
+                                        if (countdownSeconds <= 0) {
+                                            window.clearInterval(countdownInterval);
+                                            countdownInterval = null;
+                                        }
+                                    }, 1000);
+                                },
+                                willClose: () => {
+                                    if (countdownInterval) {
+                                        window.clearInterval(countdownInterval);
+                                        countdownInterval = null;
+                                    }
+                                },
+                            });
+                            return;
+                        }
+                        const detalleTiempo = formatoTiempo(segundosRestantesMismoDocumento);
+                        alert(`Este curso ya fue finalizado.\nPodrás volver a abrirlo cuando termine el tiempo restante: ${detalleTiempo}.`);
+                    }
+                    return;
+                }
+
+                const hrefOriginal = link.getAttribute('href') || '#';
+                event.preventDefault();
+
+                const segundosRestantes = segundosRestantesActuales();
+                if (segundosRestantes > 0) {
+                    let countdownSeconds = segundosRestantes;
+                    if (typeof Swal !== 'undefined') {
+                        let countdownInterval = null;
+                        Swal.fire({
+                            titleText: 'Aún no puedes abrir otro archivo',
+                            html: `Tiempo restante: <span id="swal-realtime-countdown">${formatoTiempo(countdownSeconds)}</span>.`,
+                            icon: 'error',
+                            confirmButtonColor: '#ff00d9',
+                            didOpen: () => {
+                                const container = Swal.getHtmlContainer();
+                                const countdownNode = container ? container.querySelector('#swal-realtime-countdown') : null;
+                                if (!countdownNode) {
+                                    return;
+                                }
+                                countdownInterval = window.setInterval(() => {
+                                    countdownSeconds = segundosRestantesActuales();
+                                    countdownNode.textContent = formatoTiempo(countdownSeconds);
+                                }, 1000);
+                            },
+                            willClose: () => {
+                                if (countdownInterval) {
+                                    window.clearInterval(countdownInterval);
+                                    countdownInterval = null;
+                                }
+                            },
+                        });
+                        return;
+                    }
+                    alert(`Aún no puedes abrir otro archivo.\nTiempo restante: ${formatoTiempo(countdownSeconds)}.`);
+                    return;
+                }
+
+                const separador = hrefOriginal.includes('?') ? '&' : '?';
+                const hrefContinuar = `${hrefOriginal}${separador}confirmar_cambio=1`;
+                const tipoDestino = metaCategoriaSegunSlug(slugCategoria);
+                const tipoActivo = metaCategoriaSegunSlug(alertaCapacitacionActiva.tipoActivoSlug);
+                const mensajeActivo = `¿Estás seguro de entrar a ${tipoDestino.articulo} ${tipoDestino.nombre}, cuando hay ${tipoActivo.otro} ${tipoActivo.nombre} ${tipoActivo.adjetivo}?`;
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        titleText: 'Capacitación activa sin finalizar',
+                        text: mensajeActivo,
+                        icon: 'warning',
+                        confirmButtonColor: '#ff00d9',
+                        denyButtonColor: '#8FBD56',
+                        confirmButtonText: 'Regresar',
+                        denyButtonText: 'Sí',
+                        customClass: {
+                            denyButton: 'swal-btn-si-wide',
+                        },
+                        showDenyButton: true,
+                        reverseButtons: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                    }).then((result) => {
+                        if (result.isDenied) {
+                            window.location.href = hrefContinuar;
+                        }
+                    });
+                    return;
+                }
+
+                const continuar = window.confirm(
+                    `${mensajeActivo}\n\nAceptar: Sí.\nCancelar: Regresar.`
+                );
+                if (continuar) {
+                    window.location.href = hrefContinuar;
+                }
+            });
+        });
+
+    })();
+</script>
+{% endblock %}

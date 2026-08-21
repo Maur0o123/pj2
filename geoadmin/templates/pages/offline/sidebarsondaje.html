@@ -1,0 +1,56 @@
+{% load static %}
+<div class="sticky is-expanded" style="margin-bottom: -74px;">
+    <div class="app-sidebar__overlay active" data-bs-toggle="sidebar"></div>
+    <div class="app-sidebar ps">
+        <div class="side-header"> 
+            <a class="header-brand1" href="{% url 'logincustom' %}"> 
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img desktop-logo" alt="logo" />
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img toggle-logo" alt="logo" />
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img light-logo"  alt="logo" />
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img light-logo1" alt="logo" /> 
+                <h3>GeoAdmin</h3>
+            </a>   
+        </div>
+        <!-- LOGO --> 
+        <div class="main-sidemenu is-expanded">
+            <div class="slide-left disabled active d-none" id="slide-left">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
+                </svg> 
+            </div>
+            <ul class="side-menu open" style="margin-right: 0px; margin-left: 0px;">
+                <li>
+                    <h3>Menu Sondaje</h3>
+                </li>
+                <li>
+                    <h3>Secciones</h3>
+                </li>
+                <li class="slide {% if sidebarmain == 'system_drilling' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'system_drilling' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-notebook icons-size"></i>
+                        <span class="side-menu__label">Reportes Digitales</span>
+                        <i class="angle fa fa-angle-right"></i> 
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Reporte Digital</a></li>
+                        <li><a href="{% url 'new_reporte_digital' %}" class="slide-item {% if sidebar == 'manage_new_report' %}active{% endif %}">Nuevo Reporte</a></li>
+                        <li><a href="{% url 'manage_mis_reportes_digitales' %}" class="slide-item {% if sidebar == 'manage_my_digital_reports' %}active{% endif %}">Reportes Digitales</a></li>
+                    </ul>
+                </li>
+                <div class="mt-5"></div>
+            </ul>
+            <div class="slide-right" id="slide-right">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24"
+                    height="24" viewBox="0 0 24 24">
+                    <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
+                </svg> 
+            </div>
+        </div>
+        <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+            <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+        </div>
+        <div class="ps__rail-y" style="top: 100px;">
+            <div class="ps__thumb-y" tabindex="0" ></div>
+        </div>
+    </div>
+</div>

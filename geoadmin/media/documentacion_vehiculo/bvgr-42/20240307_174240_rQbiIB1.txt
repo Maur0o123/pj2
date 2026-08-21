@@ -1,0 +1,59 @@
+
+<?php
+$host = "127.0.0.1";
+$user = "root";
+$password = "Casa2036";
+$database = "sistemaGPS";
+$table_actual = "ubicacion_actual";
+$table_historica = "ubicacion_historica";
+
+
+
+try {
+  $db = new PDO("mysql:host=$host;dbname=$database", $user, $password);
+
+  if(isset($_GET['patente'])) {
+    $newpatente = $_GET['patente'];
+    $newlatitud = $_GET['latitud'];
+    $newlongitud = $_GET['longitud'];
+    $newnivel_bateria = $_GET['nivel_bateria'];
+
+    $stmt_historial = $db->prepare("INSERT INTO $table_historica (patente, latitud, longitud, nivel_bateria) VALUES (:patente, :latitud, :longitud, :nivel_bateria)");
+    $stmt_historial->bindParam(':patente', $newpatente);
+    $stmt_historial->bindParam(':latitud', $newlatitud);
+    $stmt_historial->bindParam(':longitud', $newlongitud);
+    $stmt_historial->bindParam(':nivel_bateria', $newnivel_bateria);
+    $stmt_historial->execute();
+
+    $stmt_check = $db->prepare("SELECT * FROM $table_actual WHERE patente = :patente");
+    $stmt_check->bindParam(':patente', $newpatente);
+    $stmt_check->execute();
+
+    if($stmt_check->rowCount() == 0) {
+        // La patente no existe en la tabla, así que la insertamos
+        $stmt_insert = $db->prepare("INSERT INTO $table_actual (patente, latitud, longitud, nivel_bateria) VALUES (:patente, :latitud, :longitud, :nivel_bateria)");
+        $stmt_insert->bindParam(':patente', $newpatente);
+        $stmt_insert->bindParam(':latitud', $newlatitud);
+        $stmt_insert->bindParam(':longitud', $newlongitud);
+        $stmt_insert->bindParam(':nivel_bateria', $newnivel_bateria);
+        $stmt_insert->execute();
+    } else {
+        // La patente ya existe en la tabla, así que la actualizamos
+        $stmt_update =  $db->prepare("UPDATE $table_actual SET fecha_hora = CURRENT_TIMESTAMP,  latitud = :latitud, longitud = :longitud, nivel_bateria = :nivel_bateria WHERE patente = :patente");
+        $stmt_update->bindParam(':patente', $newpatente);
+        $stmt_update->bindParam(':latitud', $newlatitud);
+        $stmt_update->bindParam(':longitud', $newlongitud);
+        $stmt_update->bindParam(':nivel_bateria', $newnivel_bateria);
+        $stmt_update->execute();
+    }
+
+  }
+} catch (PDOException $e) {
+    print "Error!: " . $e->getMessage() . "<br/>";
+    die();
+}
+
+?>
+
+
+

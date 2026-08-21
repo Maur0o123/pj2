@@ -1,0 +1,318 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Asignación de Vehículo{% endblock %}
+
+
+{% block css %}
+    <link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+{% endblock css %}
+
+{% block content %}
+<form class="form-horizontal" id="form" action="{% url 'save_edit_vehicle_mining' %}" method="POST" enctype="multipart/form-data">
+{% csrf_token %}    
+
+<button type="submit" class="btn btn-primary save-float">Guardar</button>
+<a href="{% url 'manage_vehicles' %}" class="btn btn-secondary back-float">Regresar</a>
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Opciones del Vehículo</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Registro Vehicular</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Asignación de Vehículos</li>
+                    </ol>
+                </div>
+            </div> <!-- PAGE-HEADER END --> <!-- row -->
+            <div class="row row-sm">
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">                        
+                        <div class="card-body">
+                            <h4 class="card-title">Asignación de Vehículo a Faena</h4>  
+                            <input type="hidden" name="vehiculo_id" value="{{ vehiculo.id }}">
+                            <input type="hidden" name="placa_Patente" value="{{ vehiculo.placaPatente }}">
+                            <input type="hidden" name="faena_Anterior" value="{{ faenaAnterior }}">
+                            <div class="row row-sm">
+                                {{ formasignacionvehiculo|crispy }}
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+            </div> 
+            <div id="documentacion-box">
+            </div>
+            <div class="row row-sm"> 
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">                        
+                        <div class="card-body">
+                            <h4 class="card-title">Historial de Movimientos</h4>  
+                            <table id="datatable-allusers" class="display nowrap" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Estado</th>
+                                        <th>Faena</th>
+                                        <th>Fecha Inicio</th>
+                                        <th>Fecha Final</th>                                        
+                                        <th>Asignado por</th>                         
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for vehiculo in historial_vehiculos_asignados %} 
+                                        <tr>
+                                            <td class="dtr-control"></td>
+                                            <td>
+                                                {%if vehiculo.status %}
+                                                    Activa
+                                                {% else%}
+                                                    Histórica
+                                                {% endif%}
+                                            </td>
+                                            <td>{{ vehiculo.faena }}</td>
+                                            <td>{{ vehiculo.fechaInicial|date:"d-m-Y" }}</td>
+                                            <td>
+                                                {% if vehiculo.fechaFinal is none %}
+                                                Vigente
+                                                {% else %}
+                                                    {{ vehiculo.fechaFinal|date:"d-m-Y" }}
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ vehiculo.creador }}</td>                                            
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>                    
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+            <h1 class="mb-7"></h1> 
+        </div>
+    </div>
+</div>
+</form>
+{% endblock content %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script type="application/javascript">
+    new DataTable('#datatable-allusers', {
+        columnDefs: [
+            {
+                className: 'dtr-control',
+                orderable: false,
+                targets: 2
+            }
+        ],
+        language: {
+            url: '{% static 'json/es-CL.json' %}',
+        },
+        columnDefs: [    
+            { searchable: false, targets: [0,3] },
+            { orderable: false, targets: [0,1,3]}  
+        ],
+        /*order: [1, 'asc'],*/
+        responsive: {
+            details: {
+                type: 'column'
+            }
+        }
+    });
+</script>
+<script src="{% static 'js/uploadimagevehicle.js' %}"></script>
+<script>
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Buscar el nombre del cookie
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+<script>
+$(document).ready(function() {
+    $('#id_faena').change(function(){
+        var faena_id = $(this).val();
+        var faena_anterior = document.getElementById('id_faenaAnterior').value;
+        var faena_texto = $(this).find('option:selected').text();
+        const inputElement = document.getElementById('id_vehiculo');
+        const patente = inputElement.value;
+        if (faena_texto == faena_anterior || faena_texto == '---------'){
+            document.getElementById("id_fechaInicial").disabled = true;
+        }else{
+            document.getElementById("id_fechaInicial").disabled = false;
+        }
+        //valida que la seleccion no sea nula o sin asignar
+        if (faena_id !== '' && faena_texto !== 'SIN ASIGNAR') {
+            //realiza la consulta por faena y devuelve documentos que necesita esa faena
+            $.LoadingOverlay("show");
+            $.ajax({
+                url: '{% url 'select_documents_mining' %}',
+                method: 'POST',
+                headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                data: {
+                'faena_id': faena_id,
+                'faena_texto': faena_texto,
+                'patente': patente,
+                },
+                dataType: 'json',                
+                success: function(data) {
+                    $.LoadingOverlay("hide");
+                    if (data.documentos.length != 0){
+                        var contenido = `
+                        <div class="row row-sm">
+                            <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                                <div class="card box-shadow-0">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Vencimientos de la Documentación (Faena)</h4>  
+                                        <div class="row row-sm" id="vencimientos_documentacion">                                
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-sm">
+                            <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                                <div class="card box-shadow-0">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Documentación de la Faena</h4>  
+                                        <div class="row row-sm" id="documentacion">                                
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        `;                    
+                        // Agregar el contenido al div documentacion-box
+                        $('#documentacion-box').html(contenido);
+                        $('#documentacion').empty();
+                        $('#vencimientos_documentacion').empty();
+                    }else{
+                        $('#documentacion-box').empty();
+                    }
+                    data.documentos.forEach(function(documento) {
+                        var cadena = documento.tipoDocumento;
+                        var documento_faena = cadena.replace(/\s+/g, '');
+                        if (documento.fechaVencimiento === null) {
+                            fechaVencimiento = "";
+                        }else{
+                            fechaVencimiento = documento.fechaVencimiento
+                        }
+                        var contenido_vencimientos = `
+                            <div id="div_id_vencimiento`+ documento_faena +`" class="form-group col-md-4"> 
+                                <label for="id_vencimiento`+ documento_faena +`" class=" requiredField">
+                                    `+ documento.tipoDocumentoOriginal +`                                    
+                                </label> 
+                                <div> 
+                                    <input 
+                                        type="date" 
+                                        name="vencimiento`+ documento_faena +`" 
+                                        value="`+ fechaVencimiento +`" 
+                                        style="text-align:center" 
+                                        min="1920-01-01" 
+                                        class="datetimeinput form-control" 
+                                        id="id_vencimiento`+ documento_faena +`" 
+                                        data-value="`+ fechaVencimiento +`"
+                                    > 
+                                </div> 
+                            </div>
+                        `;
+                        //agrega la informacion al elemento html
+                        $('#vencimientos_documentacion').append(contenido_vencimientos);
+
+                        var rutaDocumento = documento.documento;
+                        var extension = rutaDocumento.split('.').pop().toLowerCase();
+                        if (extension === 'pdf') {
+                            rutaDocumento = "/media/base/archivo-pdf.png";
+                        } else if (extension === 'jpg' || extension === 'jpeg' || extension === 'png' || extension === 'gif' || extension === 'bmp' || extension === 'svg+xml') {
+                            rutaDocumento = rutaDocumento;
+                        } else {
+                            rutaDocumento = "/media/base/archivo-otro.png";
+                        }
+                        var contenido_documento = `
+                            <div class="card card-custom" style="width:250px">     
+                                <h6 class="form-group">`+ documento.tipoDocumentoOriginal +`</h6>                                 
+                                <a href="`+ documento.documento +`" target="_blank" id="href`+ documento_faena +`">                                         
+                                    <img src= "`+ rutaDocumento +`"  value="`+ documento.documento +`" id="imagen`+ documento_faena +`" class="imagen-size"> 
+                                </a>                                          
+                                <div class="card-body card-body-custom">
+                                    <div>
+                                        <label for="foto" class="form-label"></label>
+                                        <input type="file" name="`+ documento_faena +`" id="`+ documento_faena +`" class="form-control foto-size">
+                                    </div>
+                                </div>
+                                <div>
+                                    <h6 class="form-group" style="display: flex; align-items: center; justify-content: space-around;">
+                                        Eliminar Archivo? 
+                                        <label class="switch">
+                                            <input type="checkbox" id="toggle-`+ documento_faena +`" name="toggle-`+ documento_faena +`" value="no" onclick="toggleSwitch('toggle-`+ documento_faena +`')">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </h6> 
+                                </div> 
+                            </div>
+                        `;
+                        //agrega la informacion al elemento html
+                        $('#documentacion').append(contenido_documento);
+
+                        var inputElement = $('#' + documento_faena);
+                        var imagenElement = $('#imagen' + documento_faena);
+                        var hrefElement = $('#href' + documento_faena);                                    
+                        if (inputElement.length && imagenElement.length && hrefElement.length) {
+                            updateImages(inputElement[0], imagenElement[0], hrefElement[0]);
+                        }
+                    });
+                },
+                error: function(error) {
+                    $.LoadingOverlay("hide");
+                    Swal.fire({
+                        icon: 'error',        
+                        titleText: 'Error al Obtener las Opciones',
+                        text: 'Vuelva a intentarlo!',  
+                        confirmButtonColor: '#ff00d9',
+                    })
+                }
+            });
+        }else{
+            $('#documentacion-box').empty();
+        }
+    });
+});
+</script>
+<script>
+function toggleSwitch(elementId) {
+    var checkBox = document.getElementById(elementId);
+    if (checkBox.checked == true){
+        checkBox.setAttribute('value', "si");        
+    } else {
+        checkBox.setAttribute('value', "no");
+    }
+}
+$(document).ready(function() {
+    $("form").on("submit", function(e) {
+        if (this.checkValidity()) {
+            $.LoadingOverlay("show"); 
+        }
+    });
+});
+</script>
+<script src="{% static 'js/customvehiclemining.js' %}"></script>
+{% endblock javascript %}

@@ -1,0 +1,141 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Editar Ocultar Opciones{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+{% endblock css %}
+
+{% block content %}
+<form class="form-horizontal" id="form" action="#" method="POST">
+{% csrf_token %}
+
+<button type="submit" class="btn btn-primary save-float">Guardar</button>
+<a href="{% url 'manage_types' %}" class="btn btn-secondary back-float">Regresar</a>
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Editar Ocultar Opciones de {{ opciones.tipo_vehiculo }}</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Mantenedor Sistema</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Editar Ocultar Opciones</li>
+                    </ol>
+                </div>
+            </div> <!-- PAGE-HEADER END --> <!-- row -->
+                        
+            <input type="hidden" name="tipo_vehiculo" value="{{ opciones.tipo_vehiculo }}">
+            <div class="row row-sm">
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">                        
+                        <div class="card-body">
+                            <h6 class="card-title">Información Adiccional</h6>
+                            <div class="row">
+                                {{ formocultaropcionesadicional|crispy }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row row-sm">
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">                        
+                        <div class="card-body">
+                            <h6 class="card-title">Información Técnica</h6>
+                            <div class="row">
+                                {{ formocultaropcionestecnica|crispy }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row row-sm">
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">                        
+                        <div class="card-body">
+                            <h6 class="card-title">Documentación Vehiculo</h6>
+                            <div class="row">
+                                {{ formocultaropcionesdocumentacion|crispy }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row row-sm">
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">                        
+                        <div class="card-body">
+                            <h6 class="card-title">Fotografías Exterior</h6>
+                            <div class="row">
+                                {{ formocultaropcionesexterior|crispy }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row row-sm">
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">                        
+                        <div class="card-body">
+                            <h6 class="card-title">Fotografías Interior</h6>
+                            <div class="row">
+                                {{ formocultaropcionesinterior|crispy }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3"></div>
+        </div>
+    </div>
+</div>
+</form>
+{% endblock content %}
+
+{% block javascript %}
+
+<script src="{% static 'js/customedittype.js' %}"></script>
+<script type="text/javascript"> 
+    const form = document.querySelector('#form');
+    form.addEventListener('submit', (event) => {
+    event.preventDefault();        
+    const formData = new FormData(form);
+    $.LoadingOverlay("show");
+    $.ajax({
+        url: '{% url 'save_edit_type' %}',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            $.LoadingOverlay("hide");
+            Swal.fire({
+                icon: 'success',
+                title: 'Opciones Actualizadas con éxito!',
+                confirmButtonColor: '#ff00d9',
+            }).then(() => {
+                window.location.href = '{% url 'manage_types' %}';
+            });
+        },
+        error: function(error) {
+            $.LoadingOverlay("hide");
+            Swal.fire({
+                icon: 'error',        
+                titleText: 'Opciones no se Actualizaron',
+                text: 'Vuelva a intentarlo!',  
+                confirmButtonColor: '#ff00d9',
+            })
+        }
+        });
+    });
+</script>
+{% endblock javascript %}
+
+{% block messages %}
+{% endblock messages%}

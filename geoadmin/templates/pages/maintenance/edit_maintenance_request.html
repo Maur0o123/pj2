@@ -1,0 +1,356 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Revisar Solicitud Mantenimiento{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+{% endblock css %}
+
+{% block select2 %}
+    <link rel="stylesheet" href="{% static 'css/multi-select-tag.css' %}">
+    <script src="{% static 'js/multi-select-tag.js' %}"></script>
+{% endblock select2 %}
+
+{% block content %}
+
+<form class="form-horizontal" id="form" action="#" method="POST"  enctype="multipart/form-data">                                
+{% csrf_token %}   
+
+<button type="submit" class="btn btn-primary save-float">Guardar</button>
+<a href="{% url 'manage_maintenance_request' %}" class="btn btn-secondary back-float">Regresar</a>
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Revisar Solicitud Mantenimiento {{ solicitud.vehiculo.placaPatente }}</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Registro Vehicular</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Editar Mantenimiento</li>
+                    </ol>
+                </div>
+            </div> <!-- PAGE-HEADER END --> <!-- row -->
+            <div class="card"> 
+                <div class="panel panel-primary"> 
+                    <div class="tab-menu-heading border-bottom-0"> 
+                        <div class="tabs-menu4 border-bottomo-sm"> 
+                            <!-- Tabs --> 
+                            <nav class="nav d-sm-flex d-block"> 
+                                <a class="nav-link border border-bottom-0 br-sm-5 me-2 active" data-bs-toggle="tab" href="#tab25"> Revisar Solicitud </a> 
+                                <a class="nav-link border border-bottom-0 br-sm-5 me-2" data-bs-toggle="tab" href="#tab26"> Procesar Solicitud </a>
+                            </nav> 
+                        </div> 
+                    </div> 
+                    <div class="panel-body tabs-menu-body"> 
+                        <div class="tab-content"> 
+                            <div class="tab-pane active" id="tab25"> 
+                                <div class="row row-sm">
+                                    <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                                        <div class="card box-shadow-0">                        
+                                            <div class="card-body">
+                                                <h4 class="card-title">Datos Principales</h4>
+                                                <p class="card-title">Atención: Asegurate de ingresar correctamente toda la información</p>
+                                                <input type="hidden" name="solicitud_id" value="{{ solicitud.id }}">                        
+                                                <div class="row row-sm">
+                                                    {{ formeditsolicitud|crispy }}
+                                                </div> 
+                                                <div class="row">
+                                                    <div class="card card-custom" style="width:250px">     
+                                                        <h6 class="form-group">Fotografía 1</h6>     
+                                                        {% if extensionFotografiaUno == "imagen" %}
+                                                        <a href="{{ fotografiaUno.url }}" target="_blank" id="hrefUno">   
+                                                            <img class="card-img-top" src="{{ fotografiaUno.url }}" value="{{ fotografiaUno.url }}" id="imagenUno" style="width:100%">
+                                                        </a>
+                                                        {% elif extensionFotografiaUno == "pdf" %}
+                                                        <a href="{{ fotografiaUno.url }}" target="_blank" id="hrefUno">   
+                                                            <img class="card-img-top" src="/media/base/archivo-pdf.png" value="/media/base/archivo-pdf.png" id="imagenUno" style="width:100%">
+                                                        </a>
+                                                        {% else %}
+                                                        <a href="{{ fotografiaUno.url }}" target="_blank" id="hrefUno">   
+                                                            <img class="card-img-top" src="/media/base/archivo-otro.png" value="/media/base/archivo-otro.png" id="imagenUno" style="width:100%">
+                                                        </a>
+                                                        {% endif %} 
+                                                        <div class="card-body card-body-custom">                                        
+                                                            <div>
+                                                                <label for="foto" class="form-label"></label>
+                                                                <input type="file" name="fotografiaUno" id="fotografiaUno" class="form-control foto-size">
+                                                            </div>  
+                                                        </div>
+                                                        <div>
+                                                            <h6 class="form-group" style="display: flex; align-items: center; justify-content: space-around;">
+                                                                Eliminar Fotografía? 
+                                                                <label class="switch">
+                                                                    <input type="checkbox" id="toggle-Uno" name="toggle-Uno" value="no" onclick="toggleSwitch('toggle-Uno')">
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                            </h6> 
+                                                        </div>                                    
+                                                    </div>
+                                                    <div class="card card-custom" style="width:250px">     
+                                                        <h6 class="form-group">Fotografía 2</h6>     
+                                                        {% if extensionFotografiaDos == "imagen" %}
+                                                        <a href="{{ fotografiaDos.url }}" target="_blank" id="hrefDos">   
+                                                            <img class="card-img-top" src="{{ fotografiaDos.url }}" value="{{ fotografiaDos.url }}" id="imagenDos" style="width:100%">
+                                                        </a>
+                                                        {% elif extensionFotografiaDos == "pdf" %}
+                                                        <a href="{{ fotografiaDos.url }}" target="_blank" id="hrefDos">   
+                                                            <img class="card-img-top" src="/media/base/archivo-pdf.png" value="/media/base/archivo-pdf.png" id="imagenDos" style="width:100%">
+                                                        </a>
+                                                        {% else %}
+                                                        <a href="{{ fotografiaDos.url }}" target="_blank" id="hrefDos">   
+                                                            <img class="card-img-top" src="/media/base/archivo-otro.png" value="/media/base/archivo-otro.png" id="imagenDos" style="width:100%">
+                                                        </a>
+                                                        {% endif %}
+                                                        <div class="card-body card-body-custom">                                        
+                                                            <div>
+                                                                <label for="foto" class="form-label"></label>
+                                                                <input type="file" name="fotografiaDos" id="fotografiaDos" class="form-control foto-size">
+                                                            </div>  
+                                                        </div>
+                                                        <div>
+                                                            <h6 class="form-group" style="display: flex; align-items: center; justify-content: space-around;">
+                                                                Eliminar Fotografía? 
+                                                                <label class="switch">
+                                                                    <input type="checkbox" id="toggle-Dos" name="toggle-Dos" value="no" onclick="toggleSwitch('toggle-Dos')">
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                            </h6> 
+                                                        </div>
+                                                    </div>
+                                                    <div class="card card-custom" style="width:250px">     
+                                                        <h6 class="form-group">Fotografía 3</h6>     
+                                                        {% if extensionFotografiaTres == "imagen" %}
+                                                        <a href="{{ fotografiaTres.url }}" target="_blank" id="hrefDos">   
+                                                            <img class="card-img-top" src="{{ fotografiaTres.url }}" value="{{ fotografiaTres.url }}" id="imagenDos" style="width:100%">
+                                                        </a>
+                                                        {% elif extensionFotografiaTres == "pdf" %}
+                                                        <a href="{{ fotografiaTres.url }}" target="_blank" id="hrefDos">   
+                                                            <img class="card-img-top" src="/media/base/archivo-pdf.png" value="/media/base/archivo-pdf.png" id="imagenDos" style="width:100%">
+                                                        </a>
+                                                        {% else %}
+                                                        <a href="{{ fotografiaTres.url }}" target="_blank" id="hrefDos">   
+                                                            <img class="card-img-top" src="/media/base/archivo-otro.png" value="/media/base/archivo-otro.png" id="imagenDos" style="width:100%">
+                                                        </a>
+                                                        {% endif %}
+                                                        <div class="card-body card-body-custom">                                        
+                                                            <div>
+                                                                <label for="foto" class="form-label"></label>
+                                                                <input type="file" name="fotografiaTres" id="fotografiaTres" class="form-control foto-size">
+                                                            </div>  
+                                                        </div>
+                                                        <div>
+                                                            <h6 class="form-group" style="display: flex; align-items: center; justify-content: space-around;">
+                                                                Eliminar Fotografía? 
+                                                                <label class="switch">
+                                                                    <input type="checkbox" id="toggle-Tres" name="toggle-Tres" value="no" onclick="toggleSwitch('toggle-Tres')">
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                            </h6> 
+                                                        </div>                                    
+                                                    </div>
+                                                </div>
+                                                <div class="mt-5"></div>                            
+                                            </div>  
+                                        </div>
+                                    </div>                
+                                </div>
+                            </div> 
+                            <div class="tab-pane" id="tab26"> 
+                                <div class="row row-sm">
+                                    <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                                        <div class="card box-shadow-0">                        
+                                            <div class="card-body">
+                                                <h4 class="card-title">Procesar Solicitud de Mantenimiento</h4>
+                                                <p class="card-title"></p>                     
+                                                <div class="row row-sm">
+                                                    {{ formprocesarsolicitud|crispy }}
+                                                </div> 
+                                            </div> 
+                                        </div> 
+                                    </div> 
+                                </div>
+                                <div class="row row-sm">
+                                    <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                                        <div class="card box-shadow-0">                        
+                                            <div class="card-body">
+                                                <h4 class="card-title">Detalle Costo Mantenimiento</h4>
+                                                <p class="card-title"></p>                     
+                                                <div class="row row-sm">
+                                                    <table id="datatable-allusers" class="display nowrap" style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th>Problema</th>
+                                                                <th>Comentario</th>
+                                                                <th>Valor</th>                            
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for problema in problemas %}                           
+                                                                <tr>
+                                                                    <td class="dtr-control"></td>
+                                                                    <td>{{ problema.fallaVehiculo.falla }}</td>
+                                                                    <td>
+                                                                        <input type="text" name="descripcion{{ problema.id }}" value="{% if problema.descripcion %}{{ problema.descripcion }}{% endif %}" class="textinput form-control" id="id_descripcion{{ problema.id }}" data-value="{{ problema.descripcion }}">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" maxlength='10' style="text-align: right;" name="valorServicio{{ problema.id }}" value="{% if problema.valorServicio %}{{ problema.valorServicio }}{% endif %}" class="cambiarNumero textinput form-control" id="id_valorServicio{{ problema.id }}" data-value="{{ problema.valorServicio }}">
+                                                                    </td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                        </tbody>                    
+                                                    </table>
+                                                </div> 
+                                            </div> 
+                                        </div> 
+                                    </div> 
+                                </div> 
+                                <div class="row row-sm">
+                                    <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                                        <div class="card box-shadow-0">                        
+                                            <div class="card-body">
+                                                <h4 class="card-title">Historial Solicitud de Mantenimiento</h4>
+                                                <table id="datatable-allusers2" class="display nowrap" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>Estado Solicitud</th>
+                                                            <th>Empresa de Mantenimiento</th>
+                                                            <th>Fecha</th>
+                                                            <th>Solicitante</th>                          
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for historial in historiales %}                            
+                                                            <tr>
+                                                                <td class="dtr-control"></td>
+                                                                <td>
+                                                                    {% for opcion in choicesprogreso %}
+                                                                        {% if historial.progreso == opcion.0 %} 
+                                                                            {{ opcion.1 }}
+                                                                        {% endif %}
+                                                                    {% endfor%}
+                                                                </td>
+                                                                <td>{% if historial.empresaMantenimiento %}{{ historial.empresaMantenimiento }}{% endif %}</td>
+                                                                <td>{{ historial.fechacreacion|date:"d-m-Y H:i" }}</td>
+                                                                <td>{{ historial.solicitante.first_name }} {{ solicitud.solicitante.last_name }}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>                    
+                                                </table>
+                                            </div> 
+                                        </div> 
+                                    </div> 
+                                </div>
+                            </div> 
+                        </div> 
+                    </div> 
+                </div> 
+            </div> 
+        </div>
+    </div>
+</div>
+</form>
+{% endblock content %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script type="application/javascript">
+    new DataTable('#datatable-allusers', {
+        columnDefs: [
+            {
+                className: 'dtr-control',
+                orderable: false,
+                targets: 2
+            }
+        ],
+        language: {
+            url: '{% static 'json/es-CL.json' %}',        
+        },
+        columnDefs: [    
+            { searchable: false, targets: [0] },
+            { orderable: false, targets: [0]}  
+        ],
+        /*order: [1, 'asc'],*/
+        responsive: {
+            details: {
+                type: 'column'
+            }
+        }
+    });
+    new DataTable('#datatable-allusers2', {
+        columnDefs: [
+            {
+                className: 'dtr-control',
+                orderable: false,
+                targets: 2
+            }
+        ],
+        language: {
+            url: '{% static 'json/es-CL.json' %}',        
+        },
+        columnDefs: [    
+            { searchable: false, targets: [0,3] },
+            { orderable: false, targets: [0,1,3]}  
+        ],
+        /*order: [1, 'asc'],*/
+        responsive: {
+            details: {
+                type: 'column'
+            }
+        }
+    });
+</script>
+<script>
+    new MultiSelectTag('id_problemas')
+</script>
+<script src="{% static 'js/custommaintenancerequest.js' %}"></script>
+<script src="{% static 'js/uploadimagemaintenance.js' %}"></script>
+<script src="{% static 'js/formatmoney.js' %}"></script>
+<script type="text/javascript"> 
+    const form = document.querySelector('#form');
+    form.addEventListener('submit', (event) => {
+    event.preventDefault();        
+    const formData = new FormData(form);
+    $.LoadingOverlay("show");
+    $.ajax({
+        url: '{% url 'save_edit_maintenance_request' %}',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            $.LoadingOverlay("hide");
+            Swal.fire({
+                icon: 'success',
+                title: 'Solicitud Actualizada con éxito!',
+                confirmButtonColor: '#ff00d9',
+            }).then(() => {
+                window.location.href = '{% url 'manage_maintenance_request' %}';
+            });
+        },
+        error: function(error) {
+            $.LoadingOverlay("hide");
+            Swal.fire({
+                icon: 'error',        
+                titleText: 'Solicitud no Procesada',
+                text: 'Vuelva a intentarlo!',  
+                confirmButtonColor: '#ff00d9',
+            })
+        }
+        });
+    });
+</script>
+{% endblock javascript %}
+
+{% block messages %}
+{% endblock messages%}

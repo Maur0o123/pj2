@@ -1,0 +1,858 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Editar Vigilancia Médica{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+<style>
+    .vigencia-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        height: 38px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+    }
+
+    .upload-preview-carousel {
+        margin-bottom: 0.5rem;
+    }
+
+    .js-evidence-link {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.35rem;
+        min-width: 0;
+        width: 100%;
+        padding: 0.45rem 3.2rem 0.45rem 3.2rem;
+        text-align: center !important;
+    }
+
+    .js-evidence-link i {
+        display: inline-block;
+        flex: 0 0 auto;
+        margin: 0 !important;
+        vertical-align: bottom;
+    }
+
+    .file-link-label {
+        display: inline-block !important;
+        min-width: 0;
+        max-width: calc(100% - 6.4rem);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: bottom;
+        text-align: center !important;
+    }
+
+    .upload-preview-carousel .carousel-control-prev,
+    .upload-preview-carousel .carousel-control-next,
+    .vigilancia-evidence-panel .carousel-control-prev,
+    .vigilancia-evidence-panel .carousel-control-next {
+        width: 2.2rem;
+        opacity: 1;
+    }
+
+    .upload-preview-carousel .carousel-control-prev-icon,
+    .upload-preview-carousel .carousel-control-next-icon,
+    .vigilancia-evidence-panel .carousel-control-prev-icon,
+    .vigilancia-evidence-panel .carousel-control-next-icon {
+        filter: none;
+        background-size: 1rem 1rem;
+    }
+
+    .vigilancia-evidence-panel {
+        width: 100%;
+    }
+
+    .vigilancia-evidence-row {
+        display: flex;
+        align-items: stretch;
+        gap: 0.5rem;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    .vigilancia-evidence-carousel {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .vigilancia-evidence-row .carousel {
+        margin-bottom: 0 !important;
+    }
+
+    .vigilancia-evidence-action {
+        width: 38px;
+        min-width: 38px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .locked-success-field[readonly] {
+        background-color: #8fbe54 !important;
+        border-color: #8fbe54 !important;
+        color: #ffffff !important;
+        font-weight: 600;
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+
+    .locked-success-field[readonly]::placeholder {
+        color: rgba(255, 255, 255, 0.85);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<button id="saveButton" type="button" class="btn btn-primary save-float">Guardar</button>
+<a href="{{ back_url|default:'#' }}" class="btn btn-secondary back-float">Regresar</a>
+
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+            
+            <div class="page-header">
+                <h1 class="page-title">Editar Ficha #{{ vigilancia.id }}</h1>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data" id="formVigilancia">
+                {% csrf_token %}
+                
+                <div class="card">
+                    <div class="panel panel-primary">
+                        <div class="tab-menu-heading border-bottom-0">
+                            <div class="tabs-menu4 border-bottomo-sm">
+                                <nav class="nav d-sm-flex d-block">
+                                    <a class="nav-link border border-bottom-0 br-sm-5 me-2 active" data-bs-toggle="tab" href="#personal">
+                                        <i class="fe fe-user me-2"></i>Datos Personales
+                                    </a>
+                                    <a class="nav-link border border-bottom-0 br-sm-5 me-2" data-bs-toggle="tab" href="#agentes1">
+                                        <i class="fe fe-activity me-2"></i>Sílice y Ruido
+                                    </a>
+                                    <a class="nav-link border border-bottom-0 br-sm-5 me-2" data-bs-toggle="tab" href="#agentes2">
+                                        <i class="fe fe-alert-triangle me-2"></i>Otros Agentes
+                                    </a>
+                                </nav>
+                            </div>
+                        </div>
+                        
+                        <div class="panel-body tabs-menu-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="personal">
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3"><label class="form-label required">RUT</label><input type="text" class="form-control" name="rut" value="{{ vigilancia.rut_trabajador }}" readonly></div>
+                                        <div class="col-md-8 mb-3"><label class="form-label required">Nombre Completo</label><input type="text" class="form-control locked-success-field" name="nombre_completo" value="{{ vigilancia.nombre_completo }}" readonly spellcheck="false"></div>
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label required">Género</label>
+                                            <select class="form-control" name="genero" required>
+                                                <option value="">Seleccione...</option>
+                                                {% for g in generos %}
+                                                    <option value="{{ g.id }}" {% if genero_seleccionado_id|stringformat:'s' == g.id|stringformat:'s' %}selected{% endif %}>{{ g.genero }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 mb-3"><label class="form-label">Fecha Nacimiento</label><input type="date" class="form-control" name="fecha_nacimiento" id="fecha_nacimiento" value="{{ fecha_nacimiento_mostrada|date:'Y-m-d' }}" onchange="calcularEdad()"></div>
+                                        <div class="col-md-2 mb-3"><label class="form-label">Edad</label><input type="number" class="form-control bg-light" name="edad" id="edad_input" value="{{ vigilancia.edad }}" readonly></div>
+                                        <div class="col-md-3 mb-3"><label class="form-label">Area</label><select class="form-control" name="area" id="area_select"><option value="">Seleccione...</option>{% for opcion in opciones_area %}<option value="{{ opcion.valor }}" {% if vigilancia.area == opcion.valor %}selected{% endif %}>{{ opcion.valor }}</option>{% endfor %}</select></div>
+                                        <div class="col-md-3 mb-3"><label class="form-label">GES</label><select class="form-control" name="ges" id="ges_select"><option value="">Seleccione...</option>{% for opcion in opciones_ges %}<option value="{{ opcion.valor }}" {% if vigilancia.ges == opcion.valor %}selected{% endif %}>{{ opcion.valor }}</option>{% endfor %}</select></div>
+                                        <div class="col-12"><hr></div>
+                                        <div class="col-md-4 mb-3"><label class="form-label">Cargo</label><select class="form-control" name="cargo" id="cargo_select"><option value="">Seleccione...</option>{% for opcion in opciones_cargo %}<option value="{{ opcion.valor }}" {% if vigilancia.cargo == opcion.valor %}selected{% endif %}>{{ opcion.valor }}</option>{% endfor %}</select></div>
+                                        <div class="col-md-4 mb-3"><label class="form-label">Tipo de Contrato</label><select class="form-control" name="tipo_contrato" id="tipo_contrato_select"><option value="">Seleccione...</option>{% for opcion in opciones_tipo_contrato %}<option value="{{ opcion.valor }}" {% if vigilancia.tipo_contrato == opcion.valor %}selected{% endif %}>{{ opcion.valor }}</option>{% endfor %}</select></div>
+                                        <div class="col-md-4 mb-3"><label class="form-label required">Faena</label><select class="form-control" name="faena" required><option value="" {% if not vigilancia.faena_id or vigilancia.faena.faena == 'SIN ASIGNAR' %}selected{% endif %}>Seleccione...</option>{% for f in faenas %}<option value="{{ f.id }}" {% if vigilancia.faena_id == f.id %}selected{% endif %}>{{ f.faena }}</option>{% endfor %}</select></div>
+                                        <div class="col-md-3 mb-3"><label class="form-label">Fecha Ingreso</label><input type="date" class="form-control" name="fecha_ingreso" id="fecha_ingreso" value="{{ vigilancia.fecha_ingreso|date:'Y-m-d' }}" onchange="calcularAntiguedad()"></div>
+                                        <div class="col-md-3 mb-3"><label class="form-label">Años</label><input type="text" class="form-control bg-light" name="antiguedad_anos" id="ant_anos" value="{{ vigilancia.antiguedad_anos }}" readonly></div>
+                                        <div class="col-md-3 mb-3"><label class="form-label">Meses</label><input type="text" class="form-control bg-light" name="antiguedad_meses" id="ant_meses" value="{{ vigilancia.antiguedad_meses }}" readonly></div>
+                                        <div class="col-md-3 mb-3"><label class="form-label">Días</label><input type="text" class="form-control bg-light" name="antiguedad_dias" id="ant_dias" value="{{ vigilancia.antiguedad_dias }}" readonly></div>
+                                        <!-- Ajuste visual: misma grilla/tamaño que Fecha Ingreso y etiqueta completa. -->
+                                        <div class="col-md-3 mb-3"><label class="form-label text-danger">Fecha Retiro / Desvinculación</label><input type="date" class="form-control" name="fecha_retiro" value="{{ vigilancia.fecha_retiro|date:'Y-m-d' }}"></div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane" id="agentes1">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <div class="card border-primary shadow-none h-100">
+                                                <div class="card-header bg-primary-transparent"><h4 class="card-title text-primary"><i class="fe fe-wind me-2"></i>Sílice Respirable</h4></div>
+                                                <div class="card-body">
+                                                    <div class="mb-3"><label class="form-label">Evaluación de Riesgo</label><select class="form-control" name="silice_eval_riesgo"><option value="">Seleccione...</option>{% for opcion in opciones_eval_riesgo %}<option value="{{ opcion.valor }}" {% if vigilancia.silice_eval_riesgo == opcion.valor %}selected{% endif %}>{{ opcion.valor }}</option>{% endfor %}</select></div>
+                                                    <div class="row"><div class="col-6 mb-3"><label class="form-label">Nivel de Riesgo</label><select class="form-control" name="silice_nivel_riesgo"><option value="">Seleccione...</option>{% for opcion in opciones_nivel_riesgo %}<option value="{{ opcion.valor }}" {% if vigilancia.silice_nivel_riesgo == opcion.valor %}selected{% endif %}>{{ opcion.valor }}</option>{% endfor %}</select></div><div class="col-6 mb-3"><label class="form-label">Grado Exposición</label><select class="form-control" name="silice_grado_expo"><option value="">Seleccione...</option>{% for opcion in opciones_grado_exposicion %}<option value="{{ opcion.valor }}" {% if vigilancia.silice_grado_expo == opcion.valor %}selected{% endif %}>{{ opcion.valor }}</option>{% endfor %}</select></div></div>
+                                                    <div class="row"><div class="col-6 mb-3"><label class="form-label">Fecha Radiografía</label><input type="date" class="form-control" name="silice_fecha_radio" value="{{ vigilancia.silice_fecha_radio|date:'Y-m-d' }}"></div><div class="col-6 mb-3"><label class="form-label">Fecha Vencimiento</label><input type="date" class="form-control" name="silice_fecha_vence" id="silice_vence" value="{{ vigilancia.silice_fecha_vence|date:'Y-m-d' }}" onchange="checkVigencia('silice_vence', 'silice_vigencia')"></div></div>
+                                                    <div class="mb-3"><label class="form-label">Vigencia</label>{% if vigilancia.silice_vigencia == 'VIGENTE' %}<div id="silice_vigencia_badge" class="vigencia-badge bg-success-transparent text-success border border-success">VIGENTE</div>{% elif vigilancia.silice_vigencia == 'VENCIDO' %}<div id="silice_vigencia_badge" class="vigencia-badge bg-danger-transparent text-danger border border-danger">VENCIDO</div>{% else %}<div id="silice_vigencia_badge" class="vigencia-badge bg-light text-muted border">PENDIENTE</div>{% endif %}<input type="hidden" name="silice_vigencia" id="silice_vigencia" value="{{ vigilancia.silice_vigencia|default:'' }}"></div>
+                                                    <div class="mb-0"><label class="form-label">Observaciones</label><textarea class="form-control" name="silice_obs" rows="2">{{ vigilancia.silice_obs|default:'' }}</textarea></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="card border-warning shadow-none h-100">
+                                                <div class="card-header bg-warning-transparent"><h4 class="card-title text-warning"><i class="fe fe-volume-2 me-2"></i>Ruido Ocupacional</h4></div>
+                                                <div class="card-body">
+                                                    <div class="mb-3"><label class="form-label">Evaluación de Riesgo</label><select class="form-control" name="ruido_eval_riesgo"><option value="">Seleccione...</option>{% for opcion in opciones_eval_riesgo %}<option value="{{ opcion.valor }}" {% if vigilancia.ruido_eval_riesgo == opcion.valor %}selected{% endif %}>{{ opcion.valor }}</option>{% endfor %}</select></div>
+                                                    <div class="row"><div class="col-6 mb-3"><label class="form-label">Nivel Seguimiento</label><select class="form-control" name="ruido_nivel_seguimiento"><option value="">Seleccione...</option>{% for opcion in opciones_nivel_seguimiento %}<option value="{{ opcion.valor }}" {% if vigilancia.ruido_nivel_seguimiento == opcion.valor %}selected{% endif %}>{{ opcion.valor }}</option>{% endfor %}</select></div><div class="col-6 mb-3"><label class="form-label">Grado Exposición</label><select class="form-control" name="ruido_grado_expo"><option value="">Seleccione...</option>{% for opcion in opciones_grado_exposicion %}<option value="{{ opcion.valor }}" {% if vigilancia.ruido_grado_expo == opcion.valor %}selected{% endif %}>{{ opcion.valor }}</option>{% endfor %}</select></div></div>
+                                                    <div class="row"><div class="col-6 mb-3"><label class="form-label">Fecha Audiometría</label><input type="date" class="form-control" name="ruido_fecha_audio" value="{{ vigilancia.ruido_fecha_audio|date:'Y-m-d' }}"></div><div class="col-6 mb-3"><label class="form-label">Fecha Vencimiento</label><input type="date" class="form-control" name="ruido_fecha_vence" id="ruido_vence" value="{{ vigilancia.ruido_fecha_vence|date:'Y-m-d' }}" onchange="checkVigencia('ruido_vence', 'ruido_vigencia')"></div></div>
+                                                    <div class="mb-3"><label class="form-label">Vigencia</label>{% if vigilancia.ruido_vigencia == 'VIGENTE' %}<div id="ruido_vigencia_badge" class="vigencia-badge bg-success-transparent text-success border border-success">VIGENTE</div>{% elif vigilancia.ruido_vigencia == 'VENCIDO' %}<div id="ruido_vigencia_badge" class="vigencia-badge bg-danger-transparent text-danger border border-danger">VENCIDO</div>{% else %}<div id="ruido_vigencia_badge" class="vigencia-badge bg-light text-muted border">PENDIENTE</div>{% endif %}<input type="hidden" name="ruido_vigencia" id="ruido_vigencia" value="{{ vigilancia.ruido_vigencia|default:'' }}"></div>
+                                                    <div class="mb-0"><label class="form-label">Observaciones</label><textarea class="form-control" name="ruido_obs" rows="2">{{ vigilancia.ruido_obs|default:'' }}</textarea></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane" id="agentes2">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3"><div class="card border-info shadow-none h-100"><div class="card-header bg-info-transparent"><h4 class="card-title text-info"><i class="fe fe-cloud me-2"></i>Hipobaria</h4></div><div class="card-body"><div class="mb-3"><label class="form-label">Exposición</label><select class="form-control" name="hipo_exposicion"><option value="">Seleccione...</option>{% for opcion in opciones_exposicion %}<option value="{{ opcion.valor }}" {% if vigilancia.hipo_exposicion == opcion.valor %}selected{% endif %}>{{ opcion.valor }}</option>{% endfor %}</select></div><div class="row"><div class="col-6 mb-3"><label class="form-label">F. Hemoglobina</label><input type="date" class="form-control" name="hipo_fecha_hemo" value="{{ vigilancia.hipo_fecha_hemo|date:'Y-m-d' }}"></div><div class="col-6 mb-3"><label class="form-label">F. Vencimiento</label><input type="date" class="form-control" name="hipo_fecha_vence" id="hipo_vence" value="{{ vigilancia.hipo_fecha_vence|date:'Y-m-d' }}" onchange="checkVigencia('hipo_vence', 'hipo_vigencia')"></div></div><div class="mb-3"><label class="form-label">Vigencia</label>{% if vigilancia.hipo_vigencia == 'VIGENTE' %}<div id="hipo_vigencia_badge" class="vigencia-badge bg-success-transparent text-success border border-success">VIGENTE</div>{% elif vigilancia.hipo_vigencia == 'VENCIDO' %}<div id="hipo_vigencia_badge" class="vigencia-badge bg-danger-transparent text-danger border border-danger">VENCIDO</div>{% else %}<div id="hipo_vigencia_badge" class="vigencia-badge bg-light text-muted border">PENDIENTE</div>{% endif %}<input type="hidden" name="hipo_vigencia" id="hipo_vigencia" value="{{ vigilancia.hipo_vigencia|default:'' }}"></div><div class="mb-0"><label class="form-label">Observaciones</label><textarea class="form-control" name="hipo_obs" rows="2">{{ vigilancia.hipo_obs|default:'' }}</textarea></div></div></div></div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="card border-success shadow-none h-100">
+                                                <div class="card-header bg-success-transparent"><h4 class="card-title text-success"><i class="fe fe-activity me-2"></i>Vibraciones</h4></div>
+                                                <div class="card-body">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Evaluación del Riesgo</label>
+                                                        <select class="form-control" name="vibra_eval_riesgo">
+                                                            <option value="">Seleccione...</option>
+                                                            {% for opcion in opciones_eval_riesgo %}
+                                                                <option value="{{ opcion.valor }}" {% if vigilancia.vibra_eval_riesgo == opcion.valor %}selected{% endif %}>{{ opcion.valor }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Exposición</label>
+                                                        <select class="form-control" name="vibra_exposicion">
+                                                            <option value="">Seleccione...</option>
+                                                            {% for opcion in opciones_exposicion %}
+                                                                <option value="{{ opcion.valor }}" {% if vigilancia.vibra_exposicion == opcion.valor %}selected{% endif %}>{{ opcion.valor }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Fecha Vencimiento</label>
+                                                        <input type="date" class="form-control" name="vibra_fecha_vence" id="vibra_vence" value="{{ vigilancia.vibra_fecha_vence|date:'Y-m-d' }}" onchange="checkVigencia('vibra_vence', 'vibra_vigencia')">
+                                                    </div>
+                                                    <div class="mb-0">
+                                                        <label class="form-label">Vigencia</label>
+                                                        {% if vigilancia.vibra_vigencia == 'VIGENTE' %}
+                                                            <div id="vibra_vigencia_badge" class="vigencia-badge bg-success-transparent text-success border border-success">VIGENTE</div>
+                                                        {% elif vigilancia.vibra_vigencia == 'VENCIDO' %}
+                                                            <div id="vibra_vigencia_badge" class="vigencia-badge bg-danger-transparent text-danger border border-danger">VENCIDO</div>
+                                                        {% else %}
+                                                            <div id="vibra_vigencia_badge" class="vigencia-badge bg-light text-muted border">PENDIENTE</div>
+                                                        {% endif %}
+                                                        <input type="hidden" name="vibra_vigencia" id="vibra_vigencia" value="{{ vigilancia.vibra_vigencia|default:'' }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="card border-danger shadow-none h-100">
+                                                <div class="card-header bg-danger-transparent"><h4 class="card-title text-danger"><i class="fe fe-sun me-2"></i>Radiaciones Ionizantes</h4></div>
+                                                <div class="card-body">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Exposición</label>
+                                                        <select class="form-control" name="rad_exposicion">
+                                                            <option value="">Seleccione...</option>
+                                                            {% for opcion in opciones_exposicion %}
+                                                                <option value="{{ opcion.valor }}" {% if vigilancia.rad_exposicion == opcion.valor %}selected{% endif %}>{{ opcion.valor }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Fecha Vencimiento</label>
+                                                        <input type="date" class="form-control" name="rad_fecha_vence" id="rad_vence" value="{{ vigilancia.rad_fecha_vence|date:'Y-m-d' }}" onchange="checkVigencia('rad_vence', 'rad_vigencia')">
+                                                    </div>
+                                                    <div class="mb-0">
+                                                        <label class="form-label">Vigencia</label>
+                                                        {% if vigilancia.rad_vigencia == 'VIGENTE' %}
+                                                            <div id="rad_vigencia_badge" class="vigencia-badge bg-success-transparent text-success border border-success">VIGENTE</div>
+                                                        {% elif vigilancia.rad_vigencia == 'VENCIDO' %}
+                                                            <div id="rad_vigencia_badge" class="vigencia-badge bg-danger-transparent text-danger border border-danger">VENCIDO</div>
+                                                        {% else %}
+                                                            <div id="rad_vigencia_badge" class="vigencia-badge bg-light text-muted border">PENDIENTE</div>
+                                                        {% endif %}
+                                                        <input type="hidden" name="rad_vigencia" id="rad_vigencia" value="{{ vigilancia.rad_vigencia|default:'' }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="card border-secondary shadow-none h-100">
+                                                <div class="card-header bg-secondary-transparent"><h4 class="card-title text-dark"><i class="fe fe-aperture me-2"></i>Humos Metálicos</h4></div>
+                                                <div class="card-body">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Evaluación del Riesgo</label>
+                                                        <select class="form-control" name="humos_eval_riesgo">
+                                                            <option value="">Seleccione...</option>
+                                                            {% for opcion in opciones_eval_riesgo %}
+                                                                <option value="{{ opcion.valor }}" {% if vigilancia.humos_eval_riesgo == opcion.valor %}selected{% endif %}>{{ opcion.valor }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Exposición</label>
+                                                        <select class="form-control" name="humos_exposicion">
+                                                            <option value="">Seleccione...</option>
+                                                            {% for opcion in opciones_exposicion %}
+                                                                <option value="{{ opcion.valor }}" {% if vigilancia.humos_exposicion == opcion.valor %}selected{% endif %}>{{ opcion.valor }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Fecha Vencimiento</label>
+                                                        <input type="date" class="form-control" name="humos_fecha_vence" id="humos_vence" value="{{ vigilancia.humos_fecha_vence|date:'Y-m-d' }}" onchange="checkVigencia('humos_vence', 'humos_vigencia')">
+                                                    </div>
+                                                    <div class="mb-0">
+                                                        <label class="form-label">Vigencia</label>
+                                                        {% if vigilancia.humos_vigencia == 'VIGENTE' %}
+                                                            <div id="humos_vigencia_badge" class="vigencia-badge bg-success-transparent text-success border border-success">VIGENTE</div>
+                                                        {% elif vigilancia.humos_vigencia == 'VENCIDO' %}
+                                                            <div id="humos_vigencia_badge" class="vigencia-badge bg-danger-transparent text-danger border border-danger">VENCIDO</div>
+                                                        {% else %}
+                                                            <div id="humos_vigencia_badge" class="vigencia-badge bg-light text-muted border">PENDIENTE</div>
+                                                        {% endif %}
+                                                        <input type="hidden" name="humos_vigencia" id="humos_vigencia" value="{{ vigilancia.humos_vigencia|default:'' }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 mt-3">
+                                            <div class="card bg-light border-0">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label class="form-label required">Fecha Realizacion</label>
+                                                            <input type="date" class="form-control" name="fecha_incidente" value="{{ vigilancia.fecha_incidente|date:'Y-m-d' }}" required>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label fw-bold"><i class="fe fe-paperclip me-2"></i>Archivos Adjuntos</label>
+                                                            {% if archivos_adjuntos %}
+                                                                <div id="current-document-preview" class="vigilancia-evidence-panel mb-2">
+                                                                    <div class="vigilancia-evidence-row">
+                                                                        <div class="vigilancia-evidence-carousel">
+                                                                            <div id="current-doc-carousel-{{ vigilancia.id }}" class="carousel slide mb-2 js-no-autoplay-carousel" data-bs-ride="false" data-bs-interval="false" data-bs-touch="false">
+                                                                                <div class="carousel-inner">
+                                                                                    {% for archivo in archivos_adjuntos %}
+                                                                                        <div class="carousel-item {% if forloop.first %}active{% endif %}" data-delete-url="{{ archivo.delete_url }}">
+                                                                                            <a href="{{ archivo.url }}" target="_blank" class="btn btn-sm btn-primary text-white w-100 js-evidence-link" data-file-name="{{ archivo.name }}" title="{{ archivo.name }}">
+                                                                                                <i class="fe fe-eye"></i><span class="file-link-label">{{ archivo.name }}</span>
+                                                                                            </a>
+                                                                                        </div>
+                                                                                    {% endfor %}
+                                                                                </div>
+                                                                                {% if archivos_adjuntos|length > 1 %}
+                                                                                    <button class="carousel-control-prev" type="button" data-bs-target="#current-doc-carousel-{{ vigilancia.id }}" data-bs-slide="prev">
+                                                                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                                                        <span class="visually-hidden">Anterior</span>
+                                                                                    </button>
+                                                                                    <button class="carousel-control-next" type="button" data-bs-target="#current-doc-carousel-{{ vigilancia.id }}" data-bs-slide="next">
+                                                                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                                                        <span class="visually-hidden">Siguiente</span>
+                                                                                    </button>
+                                                                                {% endif %}
+                                                                            </div>
+                                                                        </div>
+                                                                        <button type="button" class="btn btn-danger btn-sm btn-delete-db-doc vigilancia-evidence-action" title="Eliminar permanentemente este archivo">
+                                                                            <i class="fe fe-trash"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <label class="small text-muted d-block mb-1">Subir nuevos archivos:</label>
+                                                            {% endif %}
+                                                            <div class="small text-muted mb-1">Solo 1 archivo. Maximo 100 MB.</div>
+                                                            <div class="input-group">
+                                                                <input type="file" class="form-control" name="documento" id="input_documento" data-existing-count="{{ archivos_adjuntos|length }}">
+                                                                <button class="btn btn-danger" type="button" id="btn_limpiar_doc" title="Quitar archivos seleccionados"><i class="fe fe-x"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function calcularEdad() {
+        let fecha = document.getElementById('fecha_nacimiento').value;
+        if(fecha) {
+            let hoy = new Date();
+            let nacimiento = new Date(fecha);
+            let edad = hoy.getFullYear() - nacimiento.getFullYear();
+            let m = hoy.getMonth() - nacimiento.getMonth();
+            if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) edad--;
+            document.getElementById('edad_input').value = edad;
+        }
+    }
+
+    function calcularAntiguedad() {
+        let fecha = document.getElementById('fecha_ingreso').value;
+        if(!fecha) return;
+        let start = new Date(fecha);
+        let end = new Date();
+        let years = end.getFullYear() - start.getFullYear();
+        let m = end.getMonth() - start.getMonth();
+        if (m < 0 || (m === 0 && end.getDate() < start.getDate())) years--;
+        let tempDate = new Date(start);
+        tempDate.setFullYear(tempDate.getFullYear() + years);
+        let months = 0;
+        while(tempDate < end) { tempDate.setMonth(tempDate.getMonth() + 1); if(tempDate <= end) months++; }
+        tempDate.setMonth(tempDate.getMonth() - 1);
+        let days = Math.round(Math.abs((end - tempDate) / (24 * 60 * 60 * 1000)));
+        document.getElementById('ant_anos').value = Math.max(0, years);
+        document.getElementById('ant_meses').value = Math.max(0, months);
+        document.getElementById('ant_dias').value = isNaN(days) ? 0 : Math.max(0, days);
+    }
+
+    function checkVigencia(inputId, hiddenId) {
+        let fechaStr = document.getElementById(inputId).value;
+        let hiddenInput = document.getElementById(hiddenId);
+        let badge = document.getElementById(hiddenId + '_badge');
+        if(!fechaStr) {
+            hiddenInput.value = "";
+            badge.textContent = "PENDIENTE";
+            badge.className = "vigencia-badge bg-light text-muted border";
+            return;
+        }
+        let fechaVence = new Date(fechaStr + 'T00:00:00');
+        let hoy = new Date();
+        hoy.setHours(0,0,0,0);
+        if (fechaVence >= hoy) {
+            hiddenInput.value = "VIGENTE";
+            badge.textContent = "VIGENTE";
+            badge.className = "vigencia-badge bg-success-transparent text-success border border-success";
+        } else {
+            hiddenInput.value = "VENCIDO";
+            badge.textContent = "VENCIDO";
+            badge.className = "vigencia-badge bg-danger-transparent text-danger border border-danger";
+        }
+    }
+
+    const MAX_FILES_PER_INPUT = 5;
+    const MAX_FILE_SIZE_BYTES = 100 * 1024 * 1024; // 100 MB
+    const MAX_FILENAME_CHARS = 30;
+    const FILE_SIZE_ERROR_MSG = 'No puede excederse de los 100 MB por archivo.';
+    const localPreviewState = new Map();
+    let localPreviewCounter = 0;
+
+    function showUploadError(message) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Limite de archivos',
+            text: message,
+            confirmButtonText: 'Entendido',
+            confirmButtonColor: '#3085d6'
+        });
+    }
+
+    function getExistingFilesCountForInput($input) {
+        const raw = parseInt($input.attr('data-existing-count') || '0', 10);
+        if (!Number.isFinite(raw) || raw < 0) {
+            return 0;
+        }
+        return raw;
+    }
+
+    function getTotalFilesLimitMessage(existingCount) {
+        const remaining = Math.max(0, MAX_FILES_PER_INPUT - existingCount);
+        if (remaining === 0) {
+            return `Esta ficha ya tiene ${MAX_FILES_PER_INPUT} archivos. Primero elimina uno para subir otro.`;
+        }
+        return `Esta ficha ya tiene ${existingCount} archivo(s). Solo puedes subir ${remaining} archivo(s) mas.`;
+    }
+
+    function validateChangedFileInput($input) {
+        const input = $input.get(0);
+        if (!input || !input.files || !input.files.length) {
+            return true;
+        }
+
+        const selectedCount = input.files.length;
+        const existingCount = getExistingFilesCountForInput($input);
+
+        if (selectedCount > MAX_FILES_PER_INPUT) {
+            showUploadError(`No puedes subir mas de ${MAX_FILES_PER_INPUT} archivos por ficha.`);
+            $input.val('');
+            return false;
+        }
+
+        if (selectedCount + existingCount > MAX_FILES_PER_INPUT) {
+            showUploadError(getTotalFilesLimitMessage(existingCount));
+            $input.val('');
+            return false;
+        }
+
+        for (const file of input.files) {
+            if (file.size > MAX_FILE_SIZE_BYTES) {
+                showUploadError(FILE_SIZE_ERROR_MSG);
+                $input.val('');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function validateAllFilesBeforeSubmit() {
+        let hasError = false;
+
+        $('#formVigilancia input[type="file"]').each(function () {
+            if (!this.files || !this.files.length) {
+                return;
+            }
+
+            const selectedCount = this.files.length;
+            const existingCount = getExistingFilesCountForInput($(this));
+
+            if (selectedCount > MAX_FILES_PER_INPUT) {
+                showUploadError(`No puedes subir mas de ${MAX_FILES_PER_INPUT} archivos por ficha.`);
+                hasError = true;
+                return false;
+            }
+
+            if (selectedCount + existingCount > MAX_FILES_PER_INPUT) {
+                showUploadError(getTotalFilesLimitMessage(existingCount));
+                hasError = true;
+                return false;
+            }
+
+            for (const file of this.files) {
+                if (file.size > MAX_FILE_SIZE_BYTES) {
+                    showUploadError(FILE_SIZE_ERROR_MSG);
+                    hasError = true;
+                    return false;
+                }
+            }
+        });
+
+        return !hasError;
+    }
+
+    function initManualCarousels(scope) {
+        if (!window.bootstrap || !bootstrap.Carousel) {
+            return;
+        }
+
+        const root = scope && scope.querySelectorAll ? scope : document;
+        const carousels = root.querySelectorAll('.carousel');
+
+        carousels.forEach((carouselEl) => {
+            const instance = bootstrap.Carousel.getOrCreateInstance(carouselEl, {
+                interval: false,
+                ride: false,
+                touch: false,
+                pause: true,
+                wrap: true
+            });
+            instance.pause();
+        });
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function revokeObjectUrls(urls) {
+        if (!Array.isArray(urls)) {
+            return;
+        }
+        urls.forEach((url) => {
+            try {
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                // noop
+            }
+        });
+    }
+
+    function cleanupSelectedFilesPreview($input) {
+        const inputEl = $input && $input.length ? $input.get(0) : null;
+        if (!inputEl) {
+            return;
+        }
+
+        const state = localPreviewState.get(inputEl);
+        if (state && Array.isArray(state.objectUrls)) {
+            revokeObjectUrls(state.objectUrls);
+        }
+        localPreviewState.delete(inputEl);
+
+        const previewTarget = $input.attr('data-preview-target');
+        if (previewTarget) {
+            $(previewTarget).remove();
+            $input.removeAttr('data-preview-target');
+        }
+    }
+
+    function ensureSelectedFilesPreviewContainer($input) {
+        const existingTarget = $input.attr('data-preview-target');
+        if (existingTarget) {
+            const $existing = $(existingTarget);
+            if ($existing.length) {
+                return $existing;
+            }
+        }
+
+        localPreviewCounter += 1;
+        const previewId = `upload-preview-${localPreviewCounter}`;
+        const $preview = $(`<div id="${previewId}" class="upload-preview-carousel"></div>`);
+        const $group = $input.closest('.input-group');
+
+        if ($group.length) {
+            $group.before($preview);
+        } else {
+            $input.before($preview);
+        }
+
+        $input.attr('data-preview-target', `#${previewId}`);
+        return $preview;
+    }
+
+    function extractFileNameFromUrl(url) {
+        if (!url) {
+            return 'este archivo';
+        }
+        try {
+            const cleanUrl = String(url).split('?')[0].split('#')[0];
+            const segments = cleanUrl.split('/');
+            const rawName = segments[segments.length - 1] || '';
+            const decodedName = decodeURIComponent(rawName);
+            return decodedName || 'este archivo';
+        } catch (error) {
+            return 'este archivo';
+        }
+    }
+
+    function truncateWithEllipsis(value, maxChars = MAX_FILENAME_CHARS) {
+        const text = String(value ?? '').trim();
+        if (!text) {
+            return '';
+        }
+        if (text.length <= maxChars) {
+            return text;
+        }
+        return `${text.slice(0, Math.max(1, maxChars - 3))}...`;
+    }
+
+    function hydrateEvidenceLinkNames($scope) {
+        const $root = $scope || $(document);
+        $root.find('.js-evidence-link').each(function () {
+            const explicitName = String($(this).attr('data-file-name') || '').trim();
+            const href = $(this).attr('href') || '';
+            const fileName = explicitName || extractFileNameFromUrl(href);
+            const shortName = truncateWithEllipsis(fileName);
+            const $label = $(this).find('.file-link-label');
+            if ($label.length) {
+                $label.text(shortName || fileName);
+                $label.attr('title', fileName);
+            }
+        });
+    }
+
+    function normalizeFileList(value) {
+        if (Array.isArray(value)) {
+            return value
+                .map((entry) => {
+                    if (!entry) return null;
+                    if (typeof entry === 'string') {
+                        const url = entry.trim();
+                        return url ? { id: null, url, name: '' } : null;
+                    }
+                    if (typeof entry === 'object') {
+                        const url = String(entry.url || '').trim();
+                        if (!url) return null;
+                        return {
+                            id: entry.id ?? null,
+                            url,
+                            name: String(entry.name || '').trim()
+                        };
+                    }
+                    return null;
+                })
+                .filter(Boolean);
+        }
+        if (typeof value === 'string' && value.trim()) {
+            return [{ id: null, url: value.trim(), name: '' }];
+        }
+        return [];
+    }
+
+    function renderEvidenceCarousel(urls, carouselId, buttonClass = 'btn btn-sm btn-primary text-white w-100') {
+        const files = normalizeFileList(urls);
+        if (!files.length) {
+            return '';
+        }
+
+        const itemsHtml = files.map((file, idx) => `
+            <div class="carousel-item ${idx === 0 ? 'active' : ''}" data-evidence-id="${file.id ?? ''}">
+                <a href="${escapeHtml(file.url)}" target="_blank" class="${buttonClass} js-evidence-link" data-file-name="${escapeHtml(file.name || '')}">
+                    <i class="fe fe-eye"></i><span class="file-link-label">Archivo</span>
+                </a>
+            </div>
+        `).join('');
+
+        const controlsHtml = files.length > 1 ? `
+            <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        ` : '';
+
+        return `
+            <div id="${carouselId}" class="carousel slide mb-2 js-no-autoplay-carousel" data-bs-ride="false" data-bs-interval="false" data-bs-touch="false">
+                <div class="carousel-inner">${itemsHtml}</div>
+                ${controlsHtml}
+            </div>
+        `;
+    }
+
+    function renderSelectedFilesPreview($input) {
+        cleanupSelectedFilesPreview($input);
+
+        const inputEl = $input && $input.length ? $input.get(0) : null;
+        if (!inputEl || !inputEl.files || !inputEl.files.length) {
+            return;
+        }
+
+        const files = Array.from(inputEl.files).map((file) => ({
+            id: null,
+            url: URL.createObjectURL(file),
+            name: file.name || 'Archivo'
+        }));
+
+        localPreviewState.set(inputEl, {
+            objectUrls: files.map((file) => file.url)
+        });
+
+        const carouselId = `selected-files-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+        const selectedLabel = files.length === 1
+            ? 'nuevo archivo adjunto'
+            : 'nuevos archivos adjuntos';
+        const $preview = ensureSelectedFilesPreviewContainer($input);
+
+        $preview.html(`
+            <div class="text-white fw-semibold small mb-1">${selectedLabel}</div>
+            ${renderEvidenceCarousel(files, carouselId, 'btn btn-sm btn-primary text-white w-100')}
+        `);
+
+        hydrateEvidenceLinkNames($preview);
+        initManualCarousels($preview.get(0));
+    }
+
+    function syncCurrentDocumentDeleteButton() {
+        const $panel = $('#current-document-preview');
+        if (!$panel.length) {
+            return;
+        }
+
+        const $button = $panel.find('.btn-delete-db-doc');
+        if (!$button.length) {
+            return;
+        }
+
+        const deleteUrl = String(
+            $panel.find('.carousel-item.active').attr('data-delete-url')
+            || $panel.find('.carousel-item').first().attr('data-delete-url')
+            || ''
+        ).trim();
+
+        $button.data('url', deleteUrl);
+        $button.prop('disabled', !deleteUrl);
+    }
+    
+    $(document).ready(function() {
+        // Validación y envío seguro
+        $('#saveButton').click(function(e) {
+            e.preventDefault();
+            var form = document.getElementById('formVigilancia');
+            if (!validateAllFilesBeforeSubmit()) {
+                return;
+            }
+            if (form.checkValidity()) {
+                form.submit();
+            } else {
+                form.reportValidity();
+            }
+        });
+
+        if($('#silice_vence').val()) checkVigencia('silice_vence', 'silice_vigencia');
+        if($('#ruido_vence').val()) checkVigencia('ruido_vence', 'ruido_vigencia');
+        if($('#hipo_vence').val()) checkVigencia('hipo_vence', 'hipo_vigencia');
+        if($('#vibra_vence').val()) checkVigencia('vibra_vence', 'vibra_vigencia');
+        if($('#rad_vence').val()) checkVigencia('rad_vence', 'rad_vigencia');
+        if($('#humos_vence').val()) checkVigencia('humos_vence', 'humos_vigencia');
+        hydrateEvidenceLinkNames($('#current-document-preview'));
+        initManualCarousels(document.getElementById('current-document-preview'));
+        syncCurrentDocumentDeleteButton();
+        $('#current-document-preview .carousel').on('slid.bs.carousel', function () {
+            syncCurrentDocumentDeleteButton();
+        });
+
+        const $documentInput = $('#input_documento');
+        $documentInput.on('change', function () {
+            const $input = $(this);
+            const isValid = validateChangedFileInput($input);
+            if (!isValid) {
+                cleanupSelectedFilesPreview($input);
+                return;
+            }
+            renderSelectedFilesPreview($input);
+        });
+        $('#btn_limpiar_doc').click(function(){
+            cleanupSelectedFilesPreview($documentInput);
+            $documentInput.val('');
+        });
+
+        $(document).on('click', '.btn-delete-db-doc', function(e) {
+            e.preventDefault();
+            var deleteUrl = $(this).data('url');
+            if (!deleteUrl) {
+                return;
+            }
+            Swal.fire({
+                title: 'Eliminar archivo adjunto?',
+                text: "Se borrara el archivo actual de la base de datos.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, borrar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = deleteUrl;
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

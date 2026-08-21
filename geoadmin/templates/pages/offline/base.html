@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es" dir="ltr" style="
+        --primary01: rgba(143, 189, 86, 0.1);
+        --primary02: rgba(143, 189, 86, 0.2);
+        --primary03: rgba(143, 189, 86, 0.3);
+        --primary06: rgba(143, 189, 86, 0.6);
+        --primary09: rgba(143, 189, 86, 0.9);
+    ">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!-- META DATA -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="Geoadmin &amp; Portal Dashboard" />
+    <meta name="author" content="www.isamax.cl" />
+    <meta name="keywords" content="" />
+    <!-- FAVICON -->   
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/logo/Logo GeoAdmin.png' %}?v=1.1"/> 
+    <!-- TITLE -->
+    <title>Geoadmin</title>
+    <!-- BOOTSTRAP CSS -->
+    {% block css %}
+    {% endblock css %}
+    <link id="style" href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+    <!-- STYLE CSS -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/skin-modes.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/sweetalert2.min.css' %}" rel="stylesheet"/>
+    <!--- FONT-ICONS CSS -->
+    <link href="{% static 'css/icons.css' %}" rel="stylesheet" />
+    <link href="{% static 'iconfonts/materialdesignicons/materialdesignicons.css' %}" rel="stylesheet" />
+    <!-- INTERNAL Switcher css -->
+    <link href="{% static 'css/switcher.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/demo.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/simple-line-icons.css' %}" rel="stylesheet" />    
+
+    <meta http-equiv="imagetoolbar" content="no" />
+    <style type="text/css">
+        <!-- input,textarea{-webkit-touch-callout:default;-webkit-user-select:auto;-khtml-user-select:auto;-moz-user-select:text;-ms-user-select:text;user-select:text} *{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:-moz-none;-ms-user-select:none;user-select:none} 
+        -->
+    </style>
+    <style type="text/css" media="print">
+        <!-- body{display:none} 
+        -->
+    </style>
+    {% block select2 %}
+    {% endblock select2 %}
+</head>
+<body class="ltr app sidebar-mini light-mode sidebar-gone">
+    <div class="horizontalMenucontainer open">
+        <!-- GLOBAL-LOADER -->
+        <div id="global-loader" style="display: none">
+            <img src="{% static 'images/loader.svg' %}" class="loader-img" alt="Loader" />
+        </div>
+        <!-- /GLOBAL-LOADER -->
+        <!-- PAGE -->
+        <div class="page">
+            <div class="page-main">
+                <!-- APP HEADER START -->
+                {% include 'main/navbar.html' %}
+                <!-- APP HEADER END -->
+                <!-- APP-SIDEBAR START -->
+                {% include 'pages/offline/sidebarsondaje.html' %}
+                <!-- APP-SIDEBAR END -->
+                <!-- APP-CONTENT START -->
+                {% block content %}
+                {% endblock content %}
+                <!-- APP CONTENT END -->
+            </div> 
+            {% include 'pages/offline/footer.html' %}
+        </div>
+        <!-- BACK-TO-TOP -->
+        <a href="#top" id="back-to-top"><i class="fa fa-long-arrow-up"></i></a>
+    </div>
+    {% block javascript %}
+    {% endblock javascript %}    
+    <!-- JQUERY JS -->
+    <script src="{% static 'js/jquery.min.js' %}"></script> 
+    <!-- BOOTSTRAP JS -->
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- SWEETALERT2 JS -->
+    <script src="{% static 'js/sweetalert2.all.min.js' %}"></script>
+    <!-- SIDE-MENU JS-->
+    <script src="{% static 'js/sidemenu.js' %}"></script>
+    <!-- APEXCHART JS -->
+    <script src="{% static 'js/apexcharts.js' %}"></script>
+    <!-- INTERNAL SELECT2 JS -->
+    <script src="{% static 'js/select2.full.min.js' %}"></script>
+    <!-- CHART-CIRCLE JS--> 
+    <script src="{% static 'js/circle-progress.min.js' %}"></script>
+    <!-- INTERNAL DATA-TABLES JS -->
+    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'js/dataTables.bootstrap5.js' %}"></script>
+    <script src="{% static 'js/dataTables.responsive.min.js' %}"></script>
+    <!-- INDEX JS -->
+    <script src="{% static 'js/index1.js' %}"></script>
+    <script src="{% static 'js/reply.js' %}"></script>
+    <!-- PERFECT SCROLLBAR JS-->
+    <script src="{% static 'js/perfect-scrollbar.js' %}"></script>
+    <script src="{% static 'js/pscroll.js' %}"></script>
+    <!-- STICKY JS -->
+    <script src="{% static 'js/sticky.js' %}"></script>
+    <!-- COLOR THEME JS -->
+    <script src="{% static 'js/themeColors.js' %}"></script>
+    <!-- CUSTOM JS -->
+    <script src="{% static 'js/custom.js' %}"></script>
+    <!-- SWITCHER JS -->
+    <script src="{% static 'js/switcher.js' %}"></script> 
+    <!-- LOADING OVERLAY JS -->
+    <script src="{% static 'js/loadingoverlay.min.js' %}"></script> 
+    {% block messages %}
+    {% endblock messages%}    
+    {% if messages %}    
+        {% for message in messages %}            
+            {% if 'success' in message.tags %}
+                <script>
+                Swal.fire({
+                    "titleText": "{{ message }}",
+                    "text": "{{ message.extra_tags }}", 
+                    "icon": "success",
+                    "confirmButtonColor": "#ff00d9",
+                })
+                </script>   
+            {% endif %} 
+            {% if 'error' in message.tags %}
+                <script>
+                Swal.fire({
+                    "titleText": "{{ message }}",
+                    "text": "{{ message.extra_tags }}",  
+                    "icon": "error",
+                    "confirmButtonColor": "#ff00d9"
+                })    
+                </script>   
+            {% endif %}  
+        {% endfor %}  
+    {% endif %} 
+    {% if form.errors %}
+        {% for message in field.errors %}
+            <script>
+            Swal.fire({
+                "titleText": "Usuario/Password Incorrectos",
+                "text": "{{message|escape}}",  
+                "icon": "success",
+                "confirmButtonColor": "#ff00d9"
+            })          
+            </script> 
+        {% endfor%} 
+        {% for message in form.non_field_errors %}
+            <script>
+            Swal.fire({
+                "titleText": "Usuario/Password Incorrectos",
+                "text": "{{message|escape}}",  
+                "icon": "error",
+                "confirmButtonColor": "#ff00d9"
+            })          
+            </script>        
+        {% endfor %}
+    {% endif%}
+</body>
+</html>

@@ -1,0 +1,967 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Mining &#8212; documentación de Geoadmin - Versión Web</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=ea490ea2"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../_static/translations.js?v=f85f4cfb"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'modulos/mining';</script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="Offline" href="offline.html" />
+    <link rel="prev" title="Messenger" href="messenger.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logobg.png" class="logo__image only-light" alt="documentación de Geoadmin - Versión Web - Home"/>
+    <script>document.write(`<img src="../_static/logobg.png" class="logo__image only-dark" alt="documentación de Geoadmin - Versión Web - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Búsqueda</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../antesDeComenzar.html">Antes de Comenzar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../arquitectura.html">Arquitectura del Sistema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../databases.html">Database</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../secciones.html">Secciones</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="core.html">Core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checklist.html">Checklist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="drilling.html">Drilling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="equipment.html">Equipment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geoadmin.html">Geoadmin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inventory.html">Inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="machine.html">Machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html">Maintenance</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="messenger.html">Messenger</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Mining</a></li>
+<li class="toctree-l2"><a class="reference internal" href="offline.html">Offline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="planning.html">Planning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prevencion.html">Prevencion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user.html">User</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vehicle.html">Vehicle</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Api</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/Cconelli/Geoadmin" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Repositorio de origen"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/modulos/mining.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="claro/oscuro" aria-label="claro/oscuro" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Mining</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#descripcion-general">Descripción General</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-de-datos-models-py">Modelos de Datos (models.py)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vehiculoasignado">VehiculoAsignado</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentoporfaena">DocumentoPorFaena</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#formularios-forms-py">Formularios (forms.py)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formvehiculoasignacion">FormVehiculoAsignacion</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#campos-del-formulario">Campos del Formulario</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#consideraciones-adicionales">Consideraciones Adicionales</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vistas-views-py">Vistas (views.py)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manage-vehicles-mining">manage_vehicles_mining</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#parametros">Parámetros</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#funcionamiento">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#retorno">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#edit-vehicle-mining">edit_vehicle_mining</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Parámetros</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#save-edit-vehicle-mining">save_edit_vehicle_mining</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Parámetros</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#select-documents-mining">select_documents_mining</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Parámetros</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">Retorno</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rutas-urls-py">Rutas (urls.py)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">manage_vehicles_mining</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#url">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#vista-asociada">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">edit_vehicle_mining</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">save_edit_vehicle_mining</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">select_documents_mining</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">Vista asociada</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="mining">
+<h1>Mining<a class="headerlink" href="#mining" title="Link to this heading">#</a></h1>
+<section id="descripcion-general">
+<h2>Descripción General<a class="headerlink" href="#descripcion-general" title="Link to this heading">#</a></h2>
+<p>Este módulo gestiona la asignación de vehículos a faenas, incluyendo la administración de documentos asociados a cada faena. Contiene los archivos necesarios para la interacción con la base de datos, la interfaz de administración y la lógica de vistas.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mining/
+│──<span class="w"> </span>admin.py<span class="w">       </span><span class="c1"># Configuración para la interfaz de administración de Django</span>
+│──<span class="w"> </span>apps.py<span class="w">        </span><span class="c1"># Configuración de la aplicación dentro del proyecto Django</span>
+│──<span class="w"> </span>forms.py<span class="w">       </span><span class="c1"># Definición de formularios para la creación y edición de datos</span>
+│──<span class="w"> </span>migrations/<span class="w">    </span><span class="c1"># Archivos de migración para la base de datos</span>
+│──<span class="w"> </span>models.py<span class="w">      </span><span class="c1"># Definición de modelos de datos</span>
+│──<span class="w"> </span>urls.py<span class="w">        </span><span class="c1"># Configuración de rutas del módulo</span>
+│──<span class="w"> </span>views.py<span class="w">       </span><span class="c1"># Lógica para las vistas</span>
+</pre></div>
+</div>
+</section>
+<section id="modelos-de-datos-models-py">
+<h2>Modelos de Datos (models.py)<a class="headerlink" href="#modelos-de-datos-models-py" title="Link to this heading">#</a></h2>
+<p>Define las entidades utilizadas en el sistema, es decir, las estructuras que interactúan con la base de datos.</p>
+<section id="vehiculoasignado">
+<h3>VehiculoAsignado<a class="headerlink" href="#vehiculoasignado" title="Link to this heading">#</a></h3>
+<p>Este modelo gestiona la asignación de vehículos a faenas específicas, registrando tanto la faena actual como la anterior, junto con las fechas de traspaso de un vehículo entre faenas.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Campos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">vehiculo</span></code>: (ForeignKey) Relacionado con el modelo Vehiculo, almacena el vehículo asignado a la faena. Puede ser nulo o en blanco.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">faena</span></code>: (ForeignKey) Relacionado con el modelo Faena, representa la faena actual en la que está asignado el vehículo.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">faenaAnterior</span></code>: (CharField) Guarda el nombre de la faena anterior en la que estuvo asignado el vehículo.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fechaInicial</span></code>: (DateTimeField) Fecha de inicio del traspaso del vehículo a la nueva faena. Puede ser nula o en blanco.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fechaFinal</span></code>: (DateTimeField) Fecha final del traspaso, es decir, el momento en el que el vehículo dejó de estar asignado a la faena anterior. Puede ser nula o en blanco.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">creador</span></code>: (CharField) Nombre del creador o responsable de la asignación del vehículo.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status</span></code>: (BooleanField) Estado del vehículo asignado (activo o inactivo).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fechacreacion</span></code>: (DateTimeField) Fecha y hora en la que se creó el registro de asignación.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Método:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">__str__(self)</span></code>: Devuelve una representación del objeto, mostrando el nombre del vehículo asignado.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Metadatos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose_name</span></code>: «Vehículo en Faena».</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose_name_plural</span></code>: «Vehículos en Faena».</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">db_table</span></code>: mining_vehicles.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="documentoporfaena">
+<h3>DocumentoPorFaena<a class="headerlink" href="#documentoporfaena" title="Link to this heading">#</a></h3>
+<p>Este modelo se utiliza para gestionar los documentos asociados a una faena y sus respectivos vehículos, almacenando la información relevante sobre la faena, patente y los documentos asociados.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Campos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">faena</span></code>: (CharField) El nombre de la faena. Puede ser nulo.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">patente</span></code>: (CharField) La patente del vehículo asociado a la faena. Puede ser nulo.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tipoDocumento</span></code>: (CharField) Tipo de documento que se está registrando (por ejemplo, licencia, certificado, etc.). Puede ser nulo.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fechaVencimiento</span></code>: (DateTimeField) La fecha de vencimiento del documento. Puede ser nulo o en blanco.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">creador</span></code>: (CharField) El nombre del creador o responsable de la carga del documento. Puede ser nulo.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status</span></code>: (BooleanField) El estado del documento (activo/inactivo).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fechacreacion</span></code>: (DateTimeField) Fecha de creación del registro de documento, con valor por defecto la fecha actual.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Método:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">generaNombre(instance,</span> <span class="pre">filename)</span></code>: Genera un nombre de archivo único para los documentos subidos, basándose en la patente del vehículo, la faena y la fecha/hora de carga. El archivo se guarda en una ruta que incluye estos datos, organizando los documentos por faena y vehículo.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">__str__(self)</span></code>: Devuelve una representación del objeto, mostrando el nombre de la faena junto con el nombre del archivo del documento.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Metadatos:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose_name</span></code>: «Documento por Faena».</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose_name_plural</span></code>: «Documentos por Faena».</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">db_table</span></code>: mining_documents.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+<section id="formularios-forms-py">
+<h2>Formularios (forms.py)<a class="headerlink" href="#formularios-forms-py" title="Link to this heading">#</a></h2>
+<p>Contiene los formularios utilizados en las vistas.</p>
+<section id="formvehiculoasignacion">
+<h3>FormVehiculoAsignacion<a class="headerlink" href="#formvehiculoasignacion" title="Link to this heading">#</a></h3>
+<p>Este formulario permite asignar un vehículo a una faena específica, registrando información clave sobre la asignación.</p>
+<section id="campos-del-formulario">
+<h4>Campos del Formulario<a class="headerlink" href="#campos-del-formulario" title="Link to this heading">#</a></h4>
+<ol class="arabic simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">vehiculo</span></code></dt><dd><ul class="simple">
+<li><p>Etiqueta: Vehículo</p></li>
+<li><p>Descripción: Vehículo asignado.</p></li>
+<li><p>Deshabilitado: Sí</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">faenaAnterior</span></code></dt><dd><ul class="simple">
+<li><p>Etiqueta: Faena Actual</p></li>
+<li><p>Descripción: Última faena en la que estuvo asignado el vehículo.</p></li>
+<li><p>Deshabilitado: Sí</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">creador</span></code></dt><dd><ul class="simple">
+<li><p>Etiqueta: Asignado Por</p></li>
+<li><p>Descripción: Persona responsable de la asignación.</p></li>
+<li><p>Deshabilitado: Sí</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">faena</span></code></dt><dd><ul class="simple">
+<li><p>Etiqueta: Faena Siguiente</p></li>
+<li><p>Descripción: Nueva faena a la que será asignado el vehículo.</p></li>
+<li><p>Requerido: Sí</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">fechaInicial</span></code></dt><dd><ul class="simple">
+<li><p>Etiqueta: Fecha de Inicio</p></li>
+<li><p>Descripción: Fecha en la que se efectúa la asignación.</p></li>
+<li><p>Requerido: Sí</p></li>
+<li><p>Deshabilitado: Sí</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</section>
+<section id="consideraciones-adicionales">
+<h4>Consideraciones Adicionales<a class="headerlink" href="#consideraciones-adicionales" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">faenaAnterior</span></code> y <code class="docutils literal notranslate"><span class="pre">creador</span></code> están deshabilitados para evitar modificaciones manuales.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vehiculo</span></code> no se puede editar, asegurando que la asignación sea coherente.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fechaInicial</span></code> se establece automáticamente para evitar inconsistencias en la asignación.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="vistas-views-py">
+<h2>Vistas (views.py)<a class="headerlink" href="#vistas-views-py" title="Link to this heading">#</a></h2>
+<p>Contiene la lógica para procesar las solicitudes y devolver respuestas.</p>
+<section id="manage-vehicles-mining">
+<h3>manage_vehicles_mining<a class="headerlink" href="#manage-vehicles-mining" title="Link to this heading">#</a></h3>
+<p>Esta función maneja la visualización de vehículos y sus asignaciones a faenas.</p>
+<section id="parametros">
+<h4>Parámetros<a class="headerlink" href="#parametros" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">request</span></code>:
+El objeto de solicitud HTTP (<code class="docutils literal notranslate"><span class="pre">HttpRequest</span></code>). Se utiliza para obtener la información relacionada con el usuario autenticado y las sesiones.</p></li>
+</ul>
+</section>
+<section id="funcionamiento">
+<h4>Funcionamiento<a class="headerlink" href="#funcionamiento" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Recupera la lista de vehículos activos y los vehículos asignados a faenas.</p></li>
+<li><p>Asocia a cada vehículo la faena asignada correspondiente o muestra «SIN ASIGNAR» si no está asignado.</p></li>
+<li><p>Renderiza la página <code class="docutils literal notranslate"><span class="pre">manage_vehicles_mining.html</span></code> con la lista de vehículos y las asignaciones de faenas.</p></li>
+</ul>
+</section>
+<section id="retorno">
+<h4>Retorno<a class="headerlink" href="#retorno" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Renderiza la plantilla <code class="docutils literal notranslate"><span class="pre">manage_vehicles_mining.html</span></code> con el contexto de los vehículos y asignaciones.</p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="edit-vehicle-mining">
+<h3>edit_vehicle_mining<a class="headerlink" href="#edit-vehicle-mining" title="Link to this heading">#</a></h3>
+<p>Esta función permite editar la información de un vehículo asignado a una faena.</p>
+<section id="id1">
+<h4>Parámetros<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">request</span></code>:
+El objeto de solicitud HTTP (<code class="docutils literal notranslate"><span class="pre">HttpRequest</span></code>). Se utiliza para gestionar la sesión y los datos enviados por el usuario.</p></li>
+</ul>
+</section>
+<section id="id2">
+<h4>Funcionamiento<a class="headerlink" href="#id2" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Recupera los datos del vehículo y su historial de asignaciones.</p></li>
+<li><p>Obtiene los tipos de documentos de faena disponibles para la asignación.</p></li>
+<li><p>Renderiza la plantilla <code class="docutils literal notranslate"><span class="pre">edit_vehicle_mining.html</span></code> con los datos del vehículo y las asignaciones de faena.</p></li>
+</ul>
+</section>
+<section id="id3">
+<h4>Retorno<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Renderiza la plantilla <code class="docutils literal notranslate"><span class="pre">edit_vehicle_mining.html</span></code> con el contexto del vehículo y sus asignaciones.</p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="save-edit-vehicle-mining">
+<h3>save_edit_vehicle_mining<a class="headerlink" href="#save-edit-vehicle-mining" title="Link to this heading">#</a></h3>
+<p>Esta función guarda los cambios realizados en la asignación de un vehículo a una faena y los documentos asociados.</p>
+<section id="id4">
+<h4>Parámetros<a class="headerlink" href="#id4" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">request</span></code>:
+El objeto de solicitud HTTP (<code class="docutils literal notranslate"><span class="pre">HttpRequest</span></code>). Se utiliza para recuperar los datos enviados por el formulario.</p></li>
+</ul>
+</section>
+<section id="id5">
+<h4>Funcionamiento<a class="headerlink" href="#id5" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Actualiza los documentos de faena asociados al vehículo, ya sea cambiando los documentos existentes o agregando nuevos.</p></li>
+<li><p>Actualiza la fecha de vencimiento de los documentos si es necesario.</p></li>
+<li><p>Si se ha cambiado la faena asignada, actualiza la asignación y crea un nuevo registro de asignación.</p></li>
+<li><p>Envía una notificación por correo sobre el cambio de faena.</p></li>
+<li><p>Redirige al usuario a la página de administración de vehículos después de guardar los cambios.</p></li>
+</ul>
+</section>
+<section id="id6">
+<h4>Retorno<a class="headerlink" href="#id6" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Redirige a la página <code class="docutils literal notranslate"><span class="pre">manage_vehicles_mining</span></code> después de guardar los cambios.</p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="select-documents-mining">
+<h3>select_documents_mining<a class="headerlink" href="#select-documents-mining" title="Link to this heading">#</a></h3>
+<p>Esta función maneja la selección de documentos asociados a una faena y vehículo específicos a través de una solicitud AJAX.</p>
+<section id="id7">
+<h4>Parámetros<a class="headerlink" href="#id7" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">request</span></code>:
+El objeto de solicitud HTTP (<code class="docutils literal notranslate"><span class="pre">HttpRequest</span></code>). Se utiliza para obtener los datos enviados por el formulario mediante AJAX.</p></li>
+</ul>
+</section>
+<section id="id8">
+<h4>Funcionamiento<a class="headerlink" href="#id8" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Recupera la lista de documentos asociados a la faena seleccionada.</p></li>
+<li><p>Verifica si existen documentos previamente cargados para el vehículo y faena seleccionados.</p></li>
+<li><p>Devuelve una respuesta JSON con los documentos y sus detalles, incluyendo el tipo de documento, la URL del archivo, y la fecha de vencimiento.</p></li>
+</ul>
+</section>
+<section id="id9">
+<h4>Retorno<a class="headerlink" href="#id9" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Retorna una respuesta JSON con la lista de documentos asociados a la faena y vehículo, o un error si la solicitud no es válida.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="rutas-urls-py">
+<h2>Rutas (urls.py)<a class="headerlink" href="#rutas-urls-py" title="Link to this heading">#</a></h2>
+<p>Define las rutas de acceso a las vistas del módulo.</p>
+<section id="id10">
+<h3>manage_vehicles_mining<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<p>Ruta para gestionar los vehículos de minería.</p>
+<section id="url">
+<h4>URL<a class="headerlink" href="#url" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/manage_vehicles_mining</span></code></p></li>
+</ul>
+</section>
+<section id="vista-asociada">
+<h4>Vista asociada<a class="headerlink" href="#vista-asociada" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">manage_vehicles_mining</span></code></p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="id11">
+<h3>edit_vehicle_mining<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
+<p>Ruta para editar un vehículo de minería.</p>
+<section id="id12">
+<h4>URL<a class="headerlink" href="#id12" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/edit_vehicle_mining</span></code></p></li>
+</ul>
+</section>
+<section id="id13">
+<h4>Vista asociada<a class="headerlink" href="#id13" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">edit_vehicle_mining</span></code></p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="id14">
+<h3>save_edit_vehicle_mining<a class="headerlink" href="#id14" title="Link to this heading">#</a></h3>
+<p>Ruta para guardar los cambios en el vehículo de minería.</p>
+<section id="id15">
+<h4>URL<a class="headerlink" href="#id15" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/save_edit_vehicle_mining</span></code></p></li>
+</ul>
+</section>
+<section id="id16">
+<h4>Vista asociada<a class="headerlink" href="#id16" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">save_edit_vehicle_mining</span></code></p></li>
+</ul>
+<p>—</p>
+</section>
+</section>
+<section id="id17">
+<h3>select_documents_mining<a class="headerlink" href="#id17" title="Link to this heading">#</a></h3>
+<p>Ruta para seleccionar los documentos de minería asociados al vehículo.</p>
+<section id="id18">
+<h4>URL<a class="headerlink" href="#id18" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/select_documents_mining</span></code></p></li>
+</ul>
+</section>
+<section id="id19">
+<h4>Vista asociada<a class="headerlink" href="#id19" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">select_documents_mining</span></code></p></li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="messenger.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">Messenger</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="offline.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">Offline</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#descripcion-general">Descripción General</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-de-datos-models-py">Modelos de Datos (models.py)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vehiculoasignado">VehiculoAsignado</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentoporfaena">DocumentoPorFaena</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#formularios-forms-py">Formularios (forms.py)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formvehiculoasignacion">FormVehiculoAsignacion</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#campos-del-formulario">Campos del Formulario</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#consideraciones-adicionales">Consideraciones Adicionales</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vistas-views-py">Vistas (views.py)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manage-vehicles-mining">manage_vehicles_mining</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#parametros">Parámetros</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#funcionamiento">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#retorno">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#edit-vehicle-mining">edit_vehicle_mining</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Parámetros</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#save-edit-vehicle-mining">save_edit_vehicle_mining</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Parámetros</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Retorno</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#select-documents-mining">select_documents_mining</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Parámetros</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Funcionamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">Retorno</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rutas-urls-py">Rutas (urls.py)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">manage_vehicles_mining</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#url">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#vista-asociada">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">edit_vehicle_mining</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">save_edit_vehicle_mining</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">Vista asociada</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">select_documents_mining</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">URL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">Vista asociada</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por Isamax
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Isamax.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

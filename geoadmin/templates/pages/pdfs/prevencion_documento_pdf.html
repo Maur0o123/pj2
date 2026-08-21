@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ titulo_detalle_documento }}</title>
+    <style>
+        @page {
+            size: letter portrait;
+            margin: 24pt;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10pt;
+            color: #1f2430;
+        }
+
+        h1, h2, h3 {
+            margin: 0 0 8pt 0;
+        }
+
+        .meta {
+            text-align: right;
+            font-size: 9pt;
+            color: #555;
+            margin-bottom: 12pt;
+        }
+
+        .card {
+            border: 1px solid #cfd4dd;
+            margin-bottom: 14pt;
+        }
+
+        .card:last-child {
+            margin-bottom: 0;
+        }
+
+        .card-header {
+            background: #d7eb8f;
+            padding: 8pt 10pt;
+            font-weight: bold;
+        }
+
+        .card-body {
+            padding: 10pt;
+        }
+
+        .info-table,
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .info-table td,
+        .detail-table th,
+        .detail-table td {
+            border: 1px solid #cfd4dd;
+            padding: 5pt;
+            vertical-align: top;
+        }
+
+        .detail-table {
+            font-size: 9pt;
+        }
+
+        .detail-table th {
+            background: #2c3146;
+            color: #fff;
+            text-align: left;
+        }
+
+        .detail-table .sin-borde-derecho {
+            border-right: 0;
+        }
+
+        .seccion-titulo {
+            font-size: 12pt;
+            font-weight: bold;
+            margin-bottom: 8pt;
+        }
+
+        .muted {
+            color: #666;
+        }
+
+        .break-word {
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-all;
+            line-height: 1.35;
+        }
+
+        .col-numero,
+        .col-cumple {
+            text-align: center;
+            padding-left: 2pt !important;
+            padding-right: 2pt !important;
+        }
+
+        .evidencia-bloque-titulo {
+            display: block;
+            margin-bottom: 6pt;
+        }
+
+        .observacion-general-texto {
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-all;
+            line-height: 1.35;
+        }
+
+        .resumen-evidencias {
+            margin-top: 10pt;
+            font-size: 9pt;
+            color: #555;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        .anexo-portada {
+            page-break-before: always;
+        }
+
+        .anexo-titulo {
+            font-size: 14pt;
+            font-weight: bold;
+            margin-bottom: 10pt;
+        }
+
+        .anexo-subtitulo {
+            margin-bottom: 14pt;
+            color: #555;
+        }
+
+        .evidencia-ficha {
+            page-break-before: always;
+        }
+
+        .evidencia-meta {
+            margin-bottom: 12pt;
+        }
+
+        .evidencia-meta p {
+            margin: 0 0 6pt 0;
+        }
+
+        .evidencia-preview-wrap {
+            border: 1px solid #cfd4dd;
+            padding: 10pt;
+            text-align: center;
+        }
+
+        .evidencia-preview {
+            width: 100%;
+            max-height: 640pt;
+            object-fit: contain;
+        }
+
+        .evidencia-no-preview {
+            border: 1px solid #cfd4dd;
+            background: #f7f8fb;
+            padding: 16pt;
+        }
+
+        .evidencia-no-preview p {
+            margin: 0 0 8pt 0;
+        }
+
+        .download-link {
+            color: #111111;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        .archivo-evidencia {
+            margin-top: 16pt;
+            padding-top: 12pt;
+            border-top: 1px solid #d7dce5;
+        }
+
+        .archivo-evidencia:first-child {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="meta">
+        Descargado: {{ fecha_descarga|date:"d/m/Y H:i" }}
+    </div>
+
+    <h1>{{ titulo_detalle_documento }}</h1>
+
+    <div class="card">
+        <div class="card-header">Datos del Reporte</div>
+        <div class="card-body">
+            <table class="info-table">
+                <tbody>
+                    <tr>
+                        <td><strong>Faena</strong></td>
+                        <td>{{ documento.faena.faena|default:"-" }}</td>
+                        <td><strong>Plantilla Base</strong></td>
+                        <td>{% if documento.plantilla_base %}{{ documento.plantilla_base.nombre }}{% else %}Eliminada{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tipo</strong></td>
+                        <td>{% if documento.plantilla_base %}{{ documento.plantilla_base.get_tipo_display }}{% else %}-{% endif %}</td>
+                        <td><strong>Realizado Por</strong></td>
+                        <td>{{ documento.creador|default:"-" }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fecha Creación</strong></td>
+                        <td>{{ documento.fecha_creacion|date:"d/m/Y H:i" }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% for seccion in contenido_documento %}
+        <div class="card">
+            <div class="card-header">Sección {{ forloop.counter }}. {{ seccion.seccion }}</div>
+            <div class="card-body">
+                <table class="detail-table">
+                    <colgroup>
+                        {% if not seccion.columnas_extras %}
+                            <col style="width: 6%;">
+                            <col style="width: 82%;">
+                            <col style="width: 12%;">
+                        {% else %}
+                            <col style="width: 4%;">
+                            <col style="width: 87%;">
+                            <col style="width: 9%;">
+                        {% endif %}
+                        {% if seccion.columnas_extras %}
+                            {% if seccion.columnas_extras|length == 1 %}
+                                <col style="width: 24%;">
+                            {% elif seccion.columnas_extras|length == 2 %}
+                                <col style="width: 12%;">
+                                <col style="width: 12%;">
+                            {% elif seccion.columnas_extras|length == 3 %}
+                                <col style="width: 8%;">
+                                <col style="width: 8%;">
+                                <col style="width: 8%;">
+                            {% else %}
+                                {% for col_nombre in seccion.columnas_extras %}
+                                    <col style="width: 6%;">
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Item</th>
+                            <th>Cumple %</th>
+                            {% if seccion.columnas_extras %}
+                                {% for col_nombre in seccion.columnas_extras %}
+                                    <th>{{ col_nombre }}</th>
+                                {% endfor %}
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fila in seccion.respuestas %}
+                            <tr>
+                                <td class="break-word col-numero">{{ forloop.parentloop.counter }}.{{ forloop.counter }}</td>
+                                <td class="break-word">{{ fila.pregunta|default:"-" }}</td>
+                                <td class="break-word col-cumple">{{ fila.cumple|default:"-" }}{% if fila.cumple %}%{% endif %}</td>
+                                {% for extra in fila.respuestas_extras %}
+                                    <td class="break-word">{{ extra|default:"-" }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="resumen-evidencias">
+                    Las evidencias de items, secciones y cierre fueron movidas al anexo final.
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <div class="card">
+        <div class="card-header">Cierre del Reporte</div>
+        <div class="card-body">
+            <p>
+                <strong class="evidencia-bloque-titulo">Evidencia General:</strong>
+                {% if anexo_evidencias %}
+                    <span class="muted">Disponible en el anexo final de evidencias.</span>
+                {% else %}
+                    <span class="muted">Sin evidencia</span>
+                {% endif %}
+            </p>
+            <p><strong>Observaciones Generales:</strong></p>
+            <div class="observacion-general-texto">{{ observacion_general_pdf|safe }}</div>
+        </div>
+    </div>
+
+    {% if anexo_evidencias %}
+        <div class="anexo-portada">
+            <div class="anexo-titulo">Anexo de Evidencias</div>
+            <div class="anexo-subtitulo">
+                Cada evidencia se presenta al final del documento con su título, origen y método de acceso.
+                Las imágenes se muestran en vista previa. Los demás archivos se incluyen como referencia para descarga.
+            </div>
+        </div>
+
+        {% for evidencia in anexo_evidencias %}
+            <div class="evidencia-ficha">
+                <h2>{{ evidencia.indice }}. {{ evidencia.titulo }}</h2>
+                <div class="evidencia-meta">
+                    <p><strong>Origen:</strong> {{ evidencia.origen }}</p>
+                    <p><strong>Archivos adjuntos:</strong> {{ evidencia.archivos|length }}</p>
+                </div>
+
+                {% for archivo in evidencia.archivos %}
+                    <div class="archivo-evidencia">
+                        <div class="evidencia-meta">
+                            <p><strong>Archivo {{ forloop.counter }}:</strong> {{ archivo.nombre_archivo_html|safe }}</p>
+                            <p><strong>Tipo:</strong> {{ archivo.extension }}</p>
+                        </div>
+
+                        {% if archivo.tipo_visualizacion == 'imagen' %}
+                            <div class="evidencia-preview-wrap">
+                                <img src="{{ archivo.archivo_src }}" alt="{{ archivo.nombre_archivo }}" class="evidencia-preview">
+                            </div>
+                        {% elif archivo.tipo_visualizacion == 'pdf_multiple' %}
+                            {% for src in archivo.archivo_src_multiple %}
+                                <div class="evidencia-preview-wrap" style="margin-bottom: 20px;">
+                                    <img src="{{ src }}" alt="Página de {{ archivo.nombre_archivo }}" class="evidencia-preview">
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="evidencia-no-preview" style="text-align: center; border-radius: 8px;">
+                                <p style="font-size: 11pt; color: #333;"><strong>Archivo Adjunto</strong></p>
+                                <p style="color: #666;">Este archivo no tiene vista previa disponible.</p>
+                                <a href="{{ archivo.url_descarga }}" class="download-link" style="color: #111111; text-decoration: underline; font-weight: bold;">
+                                    Descargar {{ archivo.nombre_archivo_html|safe }}
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>

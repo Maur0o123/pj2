@@ -1,0 +1,492 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Editar Sonda{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <style>
+        .titulo-uso-sonda {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            line-height: 1.55;
+        }
+
+        .titulo-uso-sonda-seccion {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 4.5rem !important;
+            padding-top: 3rem !important;
+            margin-bottom: 1.25rem;
+            line-height: 1.55;
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Editar Sonda</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Mantenedor Sistema</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Editar Sonda</li>
+                    </ol>
+                </div>
+            </div> <!-- PAGE-HEADER END --> <!-- row -->
+            <div class="row row-sm">
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">                        
+                        <div class="card-body">
+                            <h4 class="card-title">Datos Principales</h4>
+                            <p class="card-title">Atención: no se puede eliminar este registro</p>
+                            <form class="form-horizontal" id="form" action="#" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{ documento_id }}">                           
+                                <div class="row row-sm">
+                                    {{ formeditar|crispy }}
+                                </div>
+                                <div class="form-group mt-3">
+                                    <div> 
+                                        <a class="btn btn-secondary" href="{% url 'manage_probe' %}">Regresar</a> 
+                                        <button type="submit" class="btn btn-primary">Guardar</button>                                         
+                                    </div>
+                                </div>
+                            </form>
+                        </div>  
+                    </div>
+                </div>                
+            </div> 
+            <div class="row row-sm">
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">
+                        <div class="card-body">
+                            <form id="filtros-uso-sonda-form" method="get" class="mb-4">
+                                <div class="row row-sm">
+                                    <div class="col-md-3">
+                                        <label class="form-label">Año</label>
+                                        <select name="anio" class="form-control">
+                                            <option value="">Todos</option>
+                                            {% for anio in opciones_filtros_uso_sonda.anios %}
+                                                <option value="{{ anio }}" {% if filtros_uso_sonda.anio == anio %}selected{% endif %}>{{ anio }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Mes</label>
+                                        <select name="mes" class="form-control">
+                                            <option value="">Todos</option>
+                                            {% for mes in opciones_filtros_uso_sonda.meses %}
+                                                <option value="{{ mes.value }}" {% if filtros_uso_sonda.mes == mes.value %}selected{% endif %}>{{ mes.label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Sondaje</label>
+                                        <select name="sondaje" class="form-control">
+                                            <option value="">Todos</option>
+                                            {% for sondaje in opciones_filtros_uso_sonda.sondajes %}
+                                                <option value="{{ sondaje.value }}" {% if filtros_uso_sonda.sondaje == sondaje.value %}selected{% endif %}>{{ sondaje.label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Turno</label>
+                                        <select name="turno" class="form-control">
+                                            <option value="">Todos</option>
+                                            {% for turno in opciones_filtros_uso_sonda.turnos %}
+                                                <option value="{{ turno.value }}" {% if filtros_uso_sonda.turno == turno.value %}selected{% endif %}>{{ turno.label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                            <h4 class="card-title titulo-uso-sonda">Datos generales de la sonda</h4>
+                            {% if estadisticas_uso_sonda.total_reportes > 0 %}
+                                <div class="row row-sm">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Horas en Perforación</label>
+                                        <input id="uso-sonda-horas-perforacion" type="text" class="form-control" value="{{ estadisticas_uso_sonda.horas_perforacion }}" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Total Metros Perforados</label>
+                                        <input id="uso-sonda-total-metros-perforados" type="text" class="form-control" value="{{ estadisticas_uso_sonda.total_metros_perforados }}" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Promedio Metros/Día</label>
+                                        <input id="uso-sonda-promedio-metros-dia" type="text" class="form-control" value="{{ estadisticas_uso_sonda.promedio_metros_dia }}" readonly>
+                                    </div>
+                                </div>
+
+                                {% if estadisticas_uso_sonda.ultimo_uso %}
+                                    <h4 class="card-title mt-4 pt-3 border-top titulo-uso-sonda-seccion">Última ubicación</h4>
+                                    <div class="row row-sm">
+                                        <div class="col-md-3">
+                                            <label class="form-label">Fecha</label>
+                                            <input id="uso-sonda-ultimo-fecha" type="text" class="form-control" value="{{ estadisticas_uso_sonda.ultimo_uso.fecha|date:'d/m/Y H:i' }}" readonly>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Faena</label>
+                                            <input id="uso-sonda-ultimo-faena" type="text" class="form-control" value="{{ estadisticas_uso_sonda.ultimo_uso.faena }}" readonly>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">Turno</label>
+                                            <input id="uso-sonda-ultimo-turno" type="text" class="form-control" value="{{ estadisticas_uso_sonda.ultimo_uso.turno }}" readonly>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">Sondaje</label>
+                                            <input id="uso-sonda-ultimo-sondaje" type="text" class="form-control" value="{{ estadisticas_uso_sonda.ultimo_uso.sondaje }}" readonly>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">Metros del día</label>
+                                            <input id="uso-sonda-ultimo-metros" type="text" class="form-control" value="{{ estadisticas_uso_sonda.ultimo_uso.metros }}" readonly>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                <h4 class="card-title mt-4 pt-3 border-top titulo-uso-sonda-seccion">Últimos Reportes</h4>
+                                <div class="table-responsive">
+                                    <table id="datatable-ultimos-reportes" class="display nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Fecha</th>
+                                                <th>Lugar</th>
+                                                <th>Sondaje</th>
+                                                <th>Turno</th>
+                                                <th>Metros</th>
+                                                <th>Horas de Perforación</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="uso-sonda-reportes-tbody">
+                                            {% for reporte in estadisticas_uso_sonda.reportes_recientes %}
+                                            <tr>
+                                                <td>{{ reporte.fecha|date:'d/m/Y H:i' }}</td>
+                                                <td>{{ reporte.faena }}</td>
+                                                <td>{{ reporte.sondaje }}</td>
+                                                <td>{{ reporte.turno }}</td>
+                                                <td>{{ reporte.metros }}</td>
+                                                <td>{{ reporte.horas_perforacion }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <p id="uso-sonda-sin-registros" class="card-title mt-3 mb-0" style="display: none;">No hay reportes para los filtros seleccionados.</p>
+                            {% else %}
+                                <p class="card-title mb-0">Esta sonda aún no tiene reportes aprobados.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script type="text/javascript">        
+    document.getElementById('div_id_sonda').classList.add('col-md-4');
+</script>
+<script src="{% static 'js/uploadimage.js' %}"></script>
+<script type="application/javascript">
+    const idiomaDatatableUrl = '{% static 'json/es-CL.json' %}';
+    const selectorTablaUltimosReportes = '#datatable-ultimos-reportes';
+    let tablaUltimosReportes = null;
+    let filtrosRequestSerial = 0;
+    let filtrosAbortController = null;
+    let actualizandoOpcionesFiltros = false;
+
+    function inicializarDataTableUltimosReportes() {
+        const tabla = document.getElementById('datatable-ultimos-reportes');
+        if (!tabla) {
+            return null;
+        }
+
+        if (tablaUltimosReportes) {
+            return tablaUltimosReportes;
+        }
+
+        if ($.fn.DataTable && $.fn.DataTable.isDataTable(selectorTablaUltimosReportes)) {
+            tablaUltimosReportes = $(selectorTablaUltimosReportes).DataTable();
+            return tablaUltimosReportes;
+        }
+
+        tablaUltimosReportes = $(selectorTablaUltimosReportes).DataTable({
+            language: {
+                url: idiomaDatatableUrl,
+            },
+            responsive: true,
+            lengthChange: true,
+            pageLength: 10,
+            lengthMenu: [10, 25, 50],
+            order: [[0, 'desc']]
+        });
+        return tablaUltimosReportes;
+    }
+
+    function escaparHtml(valor) {
+        return String(valor ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function construirQueryDesdeFiltros(filtros) {
+        const params = new URLSearchParams();
+        ['anio', 'mes', 'sondaje', 'turno'].forEach((campo) => {
+            const valor = (filtros && filtros[campo]) ? String(filtros[campo]).trim() : '';
+            if (valor) {
+                params.set(campo, valor);
+            }
+        });
+        return params.toString();
+    }
+
+    function renderOpcionesSelect(selectElement, opciones, valorSeleccionado) {
+        if (!selectElement) {
+            return;
+        }
+
+        const fragment = document.createDocumentFragment();
+        const opcionTodos = document.createElement('option');
+        opcionTodos.value = '';
+        opcionTodos.textContent = 'Todos';
+        fragment.appendChild(opcionTodos);
+
+        (opciones || []).forEach((opcion) => {
+            const optionElement = document.createElement('option');
+            optionElement.value = String(opcion.value ?? '');
+            optionElement.textContent = String(opcion.label ?? '');
+            fragment.appendChild(optionElement);
+        });
+
+        selectElement.innerHTML = '';
+        selectElement.appendChild(fragment);
+        selectElement.value = valorSeleccionado || '';
+        if (selectElement.value !== (valorSeleccionado || '')) {
+            selectElement.value = '';
+        }
+    }
+
+    function actualizarOpcionesFiltros(data) {
+        if (!filtrosUsoSondaForm) {
+            return;
+        }
+
+        const filtros = data.filtros_uso_sonda || {};
+        const opciones = data.opciones_filtros_uso_sonda || {};
+
+        const opcionesAnios = (opciones.anios || []).map((anio) => ({
+            value: String(anio),
+            label: String(anio),
+        }));
+
+        actualizandoOpcionesFiltros = true;
+        try {
+            renderOpcionesSelect(
+                filtrosUsoSondaForm.querySelector('select[name="anio"]'),
+                opcionesAnios,
+                filtros.anio || ''
+            );
+            renderOpcionesSelect(
+                filtrosUsoSondaForm.querySelector('select[name="mes"]'),
+                opciones.meses || [],
+                filtros.mes || ''
+            );
+            renderOpcionesSelect(
+                filtrosUsoSondaForm.querySelector('select[name="sondaje"]'),
+                opciones.sondajes || [],
+                filtros.sondaje || ''
+            );
+            renderOpcionesSelect(
+                filtrosUsoSondaForm.querySelector('select[name="turno"]'),
+                opciones.turnos || [],
+                filtros.turno || ''
+            );
+        } finally {
+            actualizandoOpcionesFiltros = false;
+        }
+    }
+
+    function actualizarCamposUsoSonda(data) {
+        const horasPerforacion = document.getElementById('uso-sonda-horas-perforacion');
+        const totalMetrosPerforados = document.getElementById('uso-sonda-total-metros-perforados');
+        const promedioMetrosDia = document.getElementById('uso-sonda-promedio-metros-dia');
+
+        if (horasPerforacion) {
+            horasPerforacion.value = data.horas_perforacion || '-';
+        }
+        if (totalMetrosPerforados) {
+            totalMetrosPerforados.value = data.total_metros_perforados || '0.00';
+        }
+        if (promedioMetrosDia) {
+            promedioMetrosDia.value = data.promedio_metros_dia || '0.00';
+        }
+
+        const ultimoUso = data.ultimo_uso || {};
+        const ultimoFecha = document.getElementById('uso-sonda-ultimo-fecha');
+        const ultimoFaena = document.getElementById('uso-sonda-ultimo-faena');
+        const ultimoTurno = document.getElementById('uso-sonda-ultimo-turno');
+        const ultimoSondaje = document.getElementById('uso-sonda-ultimo-sondaje');
+        const ultimoMetros = document.getElementById('uso-sonda-ultimo-metros');
+
+        if (ultimoFecha) ultimoFecha.value = ultimoUso.fecha || '-';
+        if (ultimoFaena) ultimoFaena.value = ultimoUso.faena || '-';
+        if (ultimoTurno) ultimoTurno.value = ultimoUso.turno || '-';
+        if (ultimoSondaje) ultimoSondaje.value = ultimoUso.sondaje || '-';
+        if (ultimoMetros) ultimoMetros.value = ultimoUso.metros || '-';
+    }
+
+    function actualizarTablaUltimosReportes(reportes) {
+        const tabla = inicializarDataTableUltimosReportes();
+        if (!tabla) {
+            return;
+        }
+        tabla.clear();
+        reportes.forEach((reporte) => {
+            tabla.row.add([
+                escaparHtml(reporte.fecha),
+                escaparHtml(reporte.faena),
+                escaparHtml(reporte.sondaje),
+                escaparHtml(reporte.turno),
+                escaparHtml(reporte.metros),
+                escaparHtml(reporte.horas_perforacion),
+            ]);
+        });
+        tabla.draw();
+    }
+
+    async function actualizarUsoSondaSinRecargar() {
+        if (!filtrosUsoSondaForm) {
+            return;
+        }
+        const requestSerial = ++filtrosRequestSerial;
+
+        if (filtrosAbortController) {
+            filtrosAbortController.abort();
+        }
+        filtrosAbortController = new AbortController();
+
+        const filtrosSolicitados = {
+            anio: filtrosUsoSondaForm.querySelector('select[name="anio"]')?.value || '',
+            mes: filtrosUsoSondaForm.querySelector('select[name="mes"]')?.value || '',
+            sondaje: filtrosUsoSondaForm.querySelector('select[name="sondaje"]')?.value || '',
+            turno: filtrosUsoSondaForm.querySelector('select[name="turno"]')?.value || '',
+        };
+        const queryString = construirQueryDesdeFiltros(filtrosSolicitados);
+        const requestUrl = `${window.location.pathname}${queryString ? `?${queryString}` : ''}`;
+
+        try {
+            if (window.$ && $.LoadingOverlay) {
+                $.LoadingOverlay("show");
+            }
+
+            const response = await fetch(requestUrl, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                signal: filtrosAbortController.signal,
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al obtener datos filtrados.');
+            }
+
+            const data = await response.json();
+            if (requestSerial !== filtrosRequestSerial) {
+                return;
+            }
+
+            actualizarOpcionesFiltros(data);
+            actualizarCamposUsoSonda(data);
+            actualizarTablaUltimosReportes(data.reportes_recientes || []);
+
+            const queryNormalizado = construirQueryDesdeFiltros(data.filtros_uso_sonda || {});
+            const urlNormalizada = `${window.location.pathname}${queryNormalizado ? `?${queryNormalizado}` : ''}`;
+            if (window.history && window.history.replaceState) {
+                window.history.replaceState({}, '', urlNormalizada);
+            }
+
+            const sinRegistros = document.getElementById('uso-sonda-sin-registros');
+            if (sinRegistros) {
+                sinRegistros.style.display = (data.total_reportes || 0) > 0 ? 'none' : 'block';
+            }
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                return;
+            }
+            console.error(error);
+        } finally {
+            if (window.$ && $.LoadingOverlay && requestSerial === filtrosRequestSerial) {
+                $.LoadingOverlay("hide");
+            }
+        }
+    }
+
+    const filtrosUsoSondaForm = document.getElementById('filtros-uso-sonda-form');
+    inicializarDataTableUltimosReportes();
+
+    if (filtrosUsoSondaForm) {
+        const filtrosSelect = filtrosUsoSondaForm.querySelectorAll('select');
+        filtrosSelect.forEach((filtroSelect) => {
+            filtroSelect.addEventListener('change', () => {
+                if (actualizandoOpcionesFiltros) {
+                    return;
+                }
+                actualizarUsoSondaSinRecargar();
+            });
+        });
+    }
+</script>
+<script type="text/javascript"> 
+    const form = document.querySelector('#form');
+    form.addEventListener('submit', (event) => {
+    event.preventDefault();        
+    const formData = new FormData(form);
+    $.LoadingOverlay("show");
+    $.ajax({
+        url: '{% url 'save_edit_probe' %}',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            $.LoadingOverlay("hide");
+            Swal.fire({
+                icon: 'success',
+                title: 'Sonda Actualizada con éxito!',
+                confirmButtonColor: '#ff00d9',
+            }).then(() => {
+                window.location.href = '{% url 'manage_probe' %}';
+            });
+        },
+        error: function(error) {
+            $.LoadingOverlay("hide");
+            Swal.fire({
+                icon: 'error',        
+                titleText: 'Sonda no se Actualizó',
+                text: 'Vuelva a intentarlo!',  
+                confirmButtonColor: '#ff00d9',
+            })
+        }
+        });
+    });
+</script>
+{% endblock javascript %}
+
+{% block messages %}
+{% endblock messages%}

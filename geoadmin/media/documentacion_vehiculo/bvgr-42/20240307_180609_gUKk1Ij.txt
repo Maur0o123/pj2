@@ -1,0 +1,55 @@
+
+LISTO - agregar mantenedor de sistema, para marcas, modelos, años etc...
+LISTO - aregar boton flotante para guardar cuando el formulario sea muy extenso, para todos?
+LISTO - login y registro
+LISTO - habilitar funcional editar usuario en perfil navbar
+LSITO - modificar cantidad de fotografias en vehiculos solo front
+LISTO - habilitar funcional crear y editar vehiculo 
+LISTO - alerta de guardado, cuando se quiera salir de un formulario sin guardar (confirmacion sweetaler2)
+- agregar seccion tecnica a la seccion de los vehiculos, para incoorporar el tipo de neumatico, aceite, filtro, etc
+- Registro vehicular ->	adm-vehiculos -> new-vehiculo -> agregar-documentacion factura(solo adm)
+- Registro vehicular -> adm-vehiculos -> mover vehiculo entre faenas
+
+
+PENDIENTES
+- descargar toda la documentacion al mismo tiempo
+- Mantenciones -> registrar mantenimiento ->patente/proveedor/kilometraje/faena/fecha/valor/documento factura/mantenimiento preventivo o mayor o reparacion
+- Mantenciones -> conductor/supervisor crea -> supervisor gestiona (codigo qr)
+- Mantenciones -> proveedores de servicios
+- crear un historial de control de cambios(auditoria)
+LISTO - habilitar en editar usuarios la opciones de administrar usuaraios solo (administrador)
+LISTO - agregar licencia interna minera imagen
+LISTO - agregar fecha de vencimiento a la licencia interna 
+LISTO - opcion poder volver a la imagen base usuario
+- opcion poder volver a la imagen base vehiculo
+- agregar certificado lamina, barra antovuelco, integracion multiplataforma(solo pelambre), certificado inspeccion visual
+- agregar vencimiento lamina (no obligatorio),  integracion multiplataforma, inspeccion visual
+- agregar factura de compra (no obligatorio)
+- cambiar secciones crear tipo, marca, modelo y hacerlas en una sola seccion
+- seccion tecnica, editar vehiculo cantidad de puertas, traccion 4x4, 4x2, peso bruto y carga, tipo de neumatico, aceite, filtro
+- seguro particular fecha y documentacion
+
+ERRORES
+LISTO - al guaardar un nuevo genero y luego entro a otro enlace, y presionar volver aparece el mensaje de creado correctamente nuevamente
+LISTO - en mantenedor de sistema Genero, marca, año etc.... deben ser unico
+LISTO - en administrar usuarios, cuando actualizo un formulario no se recarga con los datos
+LISTO - agregar espacio al final del sidebar
+- fecha de nacimiento no puede ser mayor que la de vencimiento de la cedula y no puede ser mayor que la fecha actual
+- select2 para marca y modelos
+- error al subir y mostrar las nuevas fotografias en vehiculos
+LISTO - error al subir y mostrar las nuevas fotografias en usuarios
+LISTO - abrir imagenes y archivos en una nueva ventana
+LISTO - error al cambiar la imagen preliminar de licencia de conducir 
+LISTO - la patente debe ser siempre en mayuscula
+LISTO - la fecha de adquisicion en vehiculos no obligatoria
+LISTO - domicilio en vehiculos solo tiene 15 caracteres
+LISTO - error tipo grafico en crear tipo de vehiculo
+LISTO - cambiar fecha gps a no obligatorio
+LISTO - habilitar para editar nombre y apellidos en editar usuario (solo administrador)
+
+
+
+
+pedro.cornejo@geoadmin.cl
+Geoadmin5720$
+geoadmin5720

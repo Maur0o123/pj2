@@ -1,0 +1,275 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Planificación Sondaje{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <meta name="csrf-token" content="{{ csrf_token }}">
+{% endblock css %}
+
+{% block content %}
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <!-- CONTAINER -->
+        <div class="main-container container-fluid"> <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Avance Programa</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Planificación Sondaje</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Editar Avance Programa</li>
+                    </ol>
+                </div>
+            </div> <!-- PAGE-HEADER END --> <!-- row -->
+            <div class="row row-sm">
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">                        
+                        <div class="card-body">
+                            <h4 class="card-title">Datos Principales</h4>
+                            <form class="form-horizontal" id="form" action="#" method="POST">
+                                {% csrf_token %}                                
+                                <div class="row row-sm" style="display: flex; flex-wrap: nowrap; align-items: center;">
+                                    {{ formselectCampana|crispy }}
+                                    <div style="margin-top: 12px;">
+                                        <button type="submit" class=" col-md-4 btn btn-primary">Consultar</button> 
+                                    </div>
+                                </div>
+                            </form>
+                        </div>  
+                    </div>
+                </div>                
+            </div>
+            <div class="row row-sm">
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">                        
+                        <div class="card-body">
+                            <h4 class="card-title">Planificación Anual</h4>
+                            <div class="row row-sm">
+                                <div class="table-responsive">
+                                    <table id="datatable-allinfo" class="display nowrap" style="width:100%">
+                                        <thead>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>                    
+                                    </table>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                </div>                
+            </div> 
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script type="text/javascript">        
+    document.getElementById('div_id_campana').classList.add('col-md-4');
+</script>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script type="application/javascript">
+    new DataTable('#datatable-allinfo', {
+        columnDefs: [
+            {
+                className: 'dtr-control',
+                orderable: false,
+                targets: 2
+            }
+        ],
+        language: {
+            url: '{% static 'json/es-CL.json' %}',        
+        },
+        columnDefs: [    
+            { searchable: false, targets: [0,1,4,5] },
+            { orderable: false, targets: [0,1,5]}  
+        ],
+        paging: false,
+        info: false, 
+        lengthChange: false,
+        searching: false,    
+        ordering: false,
+        lengthMenu: [[15, 30], [15, 30]],
+        /*order: [1, 'desc'],*/
+        responsive: {
+            details: {
+                type: 'column'
+            }
+        }
+    });
+</script>
+<script type="text/javascript">
+    const form = document.querySelector('#form');
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();        
+        const formData = new FormData(form);
+        $.LoadingOverlay("show");
+        $.ajax({
+            url: '{% url 'edit_drilling_program' %}',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                $.LoadingOverlay("hide");
+                updateTable(response);
+            },
+            error: function(error) {
+                $.LoadingOverlay("hide");
+                const backendMessage = error?.responseJSON?.error;
+                Swal.fire({
+                    icon: 'error',
+                    titleText: 'Error al solicitar Información',
+                    text: backendMessage || 'Vuelva a intentarlo!',
+                    confirmButtonColor: '#ff00d9',
+                })
+            }
+        });
+    });
+
+    function createTableHeader(programas) {
+        const thead = document.querySelector('#datatable-allinfo thead');
+        thead.innerHTML = ''; // Limpiar
+    
+        const headerRow1 = document.createElement('tr');
+        const headerRow2 = document.createElement('tr');
+    
+        // Primera columna: Mes (ocupa 2 filas)
+        const thMes = document.createElement('th');
+        thMes.textContent = 'Mes';
+        thMes.rowSpan = 2;
+        thMes.classList.add('table-th-narrow-gpt');
+        headerRow1.appendChild(thMes);
+    
+        // Por cada programa, columna con subcolumnas
+        programas.forEach(programa => {
+            const thPrograma = document.createElement('th');
+            thPrograma.textContent = programa.programa;
+            thPrograma.colSpan = 4;
+            thPrograma.classList.add('text-center');
+            headerRow1.appendChild(thPrograma);
+    
+            // Subcolumnas
+            ['Plan', 'Real', 'Acum. Plan', 'Acum. Real'].forEach(sub => {
+                const thSub = document.createElement('th');
+                thSub.textContent = sub;
+                //thSub.colSpan = 1;
+                thSub.classList.add('text-center', 'table-th-narrow-gpt');
+
+                headerRow2.appendChild(thSub);
+            });
+        });
+    
+        thead.appendChild(headerRow1);
+        thead.appendChild(headerRow2);
+    }
+    
+    function updateTable(data) {
+        const tableBody = document.querySelector('#datatable-allinfo tbody');
+        tableBody.innerHTML = '';
+    
+        const programas = data.programas;
+        const planificacion = data.planificacion;
+        const meses = data.meses;
+        const anoInicial = data.anoInicial;
+        const anoFinal = data.anoFinal;
+        createTableHeader(programas);
+        for (let year = anoInicial; year <= anoFinal; year++) {
+            meses.forEach(mes => {
+                const tr = document.createElement('tr');
+                
+                // Columna de mes
+                const mesTd = document.createElement('td');
+                //mesTd.textContent = mes[1]; // nombre del mes
+                mesTd.textContent = year + ' - ' + mes[1];
+                
+                tr.appendChild(mesTd);
+        
+                programas.forEach(programa => {
+                    //const item = planificacion.find(p => p.mes === mes[0] && p.programa === programa.id);
+                    const item = planificacion.find(p => p.mes === mes[0] && p.programa === programa.id && p.ano === year);
+
+                    
+                    const fields = [
+                        { key: 'plan', placeholder: "" },
+                        { key: 'realMensual', placeholder: "" },
+                        { key: 'acumuladoPlan', placeholder: "" },
+                        { key: 'acumuladoReal', placeholder: "" }
+                    ];
+        
+                    fields.forEach(field => {
+                        const td = document.createElement('td');
+                        td.classList.add('table-th-narrow-gpt');
+                        
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        
+                        input.className = 'textinput form-control';
+                        input.value = item && item[field.key] !== undefined ? item[field.key] : field.placeholder;
+                        input.dataset.mes = mes[0];
+                        input.dataset.programa = programa.id;
+                        input.dataset.tipo = field.key;
+
+                        input.addEventListener('change', function() {
+                            const newValue = input.value;
+                            $.LoadingOverlay("show");
+                            $.ajax({
+                                url: '{% url 'update_drilling_program' %}',
+                                type: 'POST',
+                                data: {
+                                    'mes': input.dataset.mes,
+                                    'programa': input.dataset.programa,
+                                    'tipo': input.dataset.tipo,
+                                    'ano': year,
+                                    'cantidad': newValue,
+                                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                                },
+                                success: function(response) {
+                                    $.LoadingOverlay("hide");
+                                    Swal.fire({
+                                        icon: 'success',
+                                        titleText: 'Actualizado',
+                                        text: 'La cantidad ha sido actualizada!',
+                                        confirmButtonColor: '#ff00d9',
+                                    });
+                                },
+                                error: function(error) {
+                                    $.LoadingOverlay("hide");
+                                    Swal.fire({
+                                        icon: 'error',
+                                        titleText: 'Error al actualizar',
+                                        text: 'Vuelva a intentarlo!',
+                                        confirmButtonColor: '#ff00d9',
+                                    });
+                                }
+                            });
+                        });
+
+
+                        td.appendChild(input);
+                        tr.appendChild(td);
+                    });
+                });
+        
+                tableBody.appendChild(tr);
+            });
+        }
+    }
+
+    
+
+    
+    
+</script>
+
+{% endblock javascript %}
+
+{% block messages %}
+{% endblock messages%}

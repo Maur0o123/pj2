@@ -1,0 +1,166 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Evaluacion Cuantitativa{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <style>
+        .filter-wrapper {
+            max-width: 300px;
+        }
+        .form-inline-btn {
+            flex-wrap: nowrap !important;
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+            <div class="page-header">
+                <h1 class="page-title">Evaluacion Cuantitativa</h1>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Prevencion</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Higiene Ocupacional</a></li>
+                        <li class="breadcrumb-item active">Evaluacion Cuantitativa</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-12 d-flex flex-column align-items-start gap-3">
+                    <a href="{% url 'new_higiene_cuantitativa' %}" class="btn btn-primary btn-size-new">
+                        <i class="fe fe-plus me-2"></i>Crear
+                    </a>
+                    {% if mostrar_filtro_faena %}
+                    <div class="filter-wrapper">
+                        <label class="form-label fw-bold">Filtrar por Faena:</label>
+                        <select id="faenaFilter" class="form-control">
+                            <option value="">Todas las Faenas</option>
+                        </select>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row row-sm">
+                <table id="datatable-cuantitativa" class="display nowrap table table-bordered text-nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Fecha</th>
+                            <th>Cualitativa</th>
+                            <th>Codigo Cuantitativa</th>
+                            <th>Nombre Cuantitativa</th>
+                            <th>Faena</th>
+                            <th>Area</th>
+                            <th>GES</th>
+                            <th>Agente</th>
+                            <th>Nivel de Riesgo</th>
+                            <th>Contrato (oculto)</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in registros %}
+                        <tr>
+                            <td class="dtr-control"></td>
+                            <td data-order="{{ r.fecha|date:'U' }}">{{ r.fecha|date:"Y-m-d" }}</td>
+                            <td>{{ r.cualitativa.codigo }} - {{ r.cualitativa.nombre }}</td>
+                            <td>{{ r.codigo }}</td>
+                            <td>{{ r.nombre }}</td>
+                            <td>{{ r.faena.faena }}</td>
+                            <td>{{ r.area }}</td>
+                            <td>{{ r.ges }}</td>
+                            <td>{{ r.agente_texto }}</td>
+                            <td>{{ r.nivel_riesgo_texto }}</td>
+                            <td>{{ r.contrato_filtro_texto|default:"-" }}</td>
+                            <td class="form-inline-btn">
+                                <a href="{% url 'view_higiene_cuantitativa' r.id %}" class="btn btn-warning btn-size-adm" title="Ver">Ver</a>
+                                <a href="{% url 'edit_higiene_cuantitativa' r.id %}" class="btn btn-info btn-size-adm" title="Editar">Editar</a>
+                                <form method="post" action="{% url 'disable_higiene_cuantitativa' r.id %}" class="d-inline-block">
+                                    {% csrf_token %}
+                                    {% if r.status %}
+                                        <button type="submit" class="btn btn-danger btn-size-adm" title="Deshabilitar">Deshabilitar</button>
+                                    {% else %}
+                                        <button type="submit" class="btn btn-primary btn-size-adm" title="Habilitar">Habilitar</button>
+                                    {% endif %}
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script>
+    function escapeRegex(string) {
+        return string ? string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : "";
+    }
+
+    function appendOptionIfMissing(select, value) {
+        if (!select || !value) return;
+        if (select.find('option[value="' + value + '"]').length === 0) {
+            select.append('<option value="' + value + '">' + value + '</option>');
+        }
+    }
+
+    $(document).ready(function() {
+        const table = new DataTable('#datatable-cuantitativa', {
+            language: { url: '{% static "json/es-CL.json" %}' },
+            columnDefs: [
+                { className: 'dtr-control', orderable: false, targets: 0, width: "5%", searchable: false },
+                { targets: 1, width: "8%", searchable: true },
+                { targets: 2, width: "10%", searchable: true },
+                { targets: 3, width: "8%", searchable: true },
+                { targets: 4, width: "12%", searchable: true },
+                { targets: 5, width: "8%", searchable: true },
+                { targets: 6, width: "8%", searchable: true },
+                { targets: 7, width: "8%", searchable: true },
+                { targets: 8, width: "8%", searchable: true },
+                { targets: 9, width: "8%", searchable: true },
+                { visible: false, searchable: true, targets: 10 },
+                { targets: 11, width: "15%", searchable: false, orderable: false, className: "text-center" }
+            ],
+            order: [[1, "desc"]],
+            responsive: { details: { type: 'column', target: 0 } },
+            autoWidth: false,
+            initComplete: function () {
+                const api = this.api();
+                const faenaSelect = $('#faenaFilter');
+
+                if (faenaSelect.length) {
+                    api.column(5).data().unique().sort().each(function (d) {
+                        if (!d) return;
+                        const text = $('<div>').html(d).text().trim();
+                        if (!text || text.toUpperCase() === 'SIN ASIGNAR') return;
+                        appendOptionIfMissing(faenaSelect, text);
+                    });
+                }
+            }
+        });
+
+        $('#faenaFilter').on('change', function () {
+            const val = escapeRegex($(this).val());
+            table.column(5).search(val ? '^' + val + '$' : '', true, false).draw();
+        });
+    });
+</script>
+{% endblock javascript %}

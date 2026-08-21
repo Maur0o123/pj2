@@ -1,0 +1,108 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Reportes Digitales Eliminados{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <style>
+        .form-inline-btn {
+            flex-wrap: nowrap !important;
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> 
+        <div class="main-container container-fluid"> 
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Reportes Digitales Eliminados</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Reportes Digitales</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Mis Reportes</li>
+                    </ol>
+                </div>
+            </div> 
+            
+            <h5 class="mb-5"></h5>
+            <div class="row row-sm"> 
+                <table id="datatable-allusers" class="display nowrap table table-bordered text-nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>#</th>
+                            <th>Fecha - Hora</th>
+                            <th>Sondaje-N°-Gemelo</th>
+                            <th>Sonda</th>
+                            <th>Controlador</th>
+                            <th>Turno</th>                            
+                            <th class="text-center">Acciones Reportes</th>  
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>                    
+                </table>
+            </div>            
+        </div>
+        <h5 class="mb-5"></h5> 
+        <div class="main-container container-fluid"> 
+            <a class="btn btn-secondary" href="{% url 'dashboardSondaje' %}">Regresar</a> 
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+<script src="{% static 'js/jquery-3.7.0.js'%}"></script>
+<script src="{% static 'js/jquery.dataTables.min1.13.7.js'%}"></script>
+<script src="{% static 'js/dataTables.responsive.min2.5.0.js'%}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const idDataTable = '#datatable-allusers';
+        const dataUrl = window.location.href;
+        const urlLenguage = '{% static "json/es-CL.json" %}';
+
+        const table = new DataTable(idDataTable, {
+            serverSide: true,
+            processing: true,
+            ajax: {
+                url: dataUrl, 
+                type: 'GET'
+            },
+            columns: [
+                { data: null, defaultContent: '', className: 'dtr-control', orderable: false }, // 0: Expander
+                { data: 'id_checklist', width: "5%" },
+                { data: 'fecha', width: "15%" },
+                { data: 'sondaje', width: "20%" },
+                { data: 'sonda', width: "15%" },
+                { data: 'creador', width: "15%" },
+                { data: 'turno', width: "15%" },
+                { data: 'acciones', orderable: false, width: "15%", className: "text-center" }
+            ],
+            columnDefs: [
+                { searchable: false, targets: [0, 7] },
+                { orderable: false, targets: [0, 7] }
+            ],
+            order: [[2, 'desc']],
+            language: { url: urlLenguage },
+            responsive: {
+                details: { type: 'column', target: 0 }
+            },
+            autoWidth: false
+        });
+    });
+</script>
+{% endblock javascript %}

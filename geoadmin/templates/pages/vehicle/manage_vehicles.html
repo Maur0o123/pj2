@@ -1,0 +1,414 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Administración de Vehículos{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
+<style>
+    div.swal2-container div.swal2-popup.swal-size-fix {
+        width: 512px !important;
+        min-height: 325px !important; 
+        padding: 20px !important; 
+        max-width: 100% !important; 
+        box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+    }
+
+    .swal-size-fix .swal2-title {
+        font-size: 22px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .swal-size-fix .swal2-html-container {
+        font-size: 15px !important;
+        margin-top: 5px !important;
+    }
+
+    .swal-size-fix .swal2-actions button {
+        font-size: 14px !important;
+        padding: 8px 20px !important;
+    }
+
+    div.swal2-container .swal2-select-custom {
+        font-size: 13px !important;
+        padding: 4px 10px !important;
+        width: 75% !important; 
+        max-width: 75% !important;
+        margin: 15px auto 20px auto !important; 
+        display: block !important;
+        height: 36px !important; 
+        border-radius: 4px !important;
+    }
+
+    div.swal2-container .swal2-select-custom option {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Forzar ancho de columna Acciones */
+    #datatable-allusers th:last-child,
+    #datatable-allusers td:last-child,
+    #datatable-allusers-des th:last-child,
+    #datatable-allusers-des td:last-child {
+        width: 210px !important;
+        min-width: 210px !important;
+        max-width: 210px !important;
+    }
+
+    .form-inline-btn {
+        flex-wrap: nowrap !important; /* Evitar que los botones se salten de línea */
+    }
+</style>
+{% endblock css %}
+
+{% block content %}
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> 
+        <div class="main-container container-fluid"> 
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Administrar Vehículos</h1>
+                </div>
+   
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Registro Vehicular</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Administrar Vehículos</li>
+                    </ol>
+                </div>
+            </div> 
+
+            {% if request.user.usuarioprofile.seccionVehicular == "ADMINISTRADOR" or request.user.is_superuser %} 
+            <a class="btn btn-primary btn-size-new" href="{% url 'new_vehicle' %}">Nuevo Vehículo</a>
+            {% endif %}
+        
+            <h5 class="mb-5"></h5>
+
+            <div class="card"> 
+                <div class="panel panel-primary">
+                    <div class="tab-menu-heading border-bottom-0"> 
+                        <div class="tabs-menu4 border-bottomo-sm"> 
+                            <nav class="nav d-sm-flex d-block"> 
+                                <a id="nav25" class="nav-link border border-bottom-0 br-sm-5 me-2 active" data-bs-toggle="tab" href="#tab25">Habilitados</a> 
+                                <a id="nav26" class="nav-link border border-bottom-0 br-sm-5 me-2" data-bs-toggle="tab" href="#tab26">Deshabilitados</a>
+                            </nav> 
+                        </div> 
+                    </div>
+                    <div class="panel-body tabs-menu-body"> 
+  
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab25">
+                                <div class="table-responsive"> 
+                                    <table id="datatable-allusers" class="table table-bordered text-nowrap key-buttons" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 30px;"></th>
+                                                <th>Patente</th>
+                                                <th>Tipo</th>
+                                                <th>Marca</th>
+                                                <th>Modelo</th>
+                                                <th>Faena</th>
+                                                <th>Porcentaje</th>
+                                                <th>Acciones</th>                            
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>                    
+                                    </table>
+                                </div>  
+                            </div>
+                            
+                            <div class="tab-pane" id="tab26"> 
+                                <div class="table-responsive"> 
+                                    <table id="datatable-allusers-des" class="table table-bordered text-nowrap key-buttons" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 30px;"></th>
+                                                <th>Patente</th>
+                                                <th>Tipo</th>
+                                                <th>Marca</th>
+                                                <th>Modelo</th>
+                                                <th>Porcentaje</th>
+                                                <th>Acciones</th>                            
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>                    
+                                    </table>
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h5 class="mb-5"></h5> 
+        {% if request.user.usuarioprofile.seccionVehicular == "ADMINISTRADOR" or request.user.is_superuser %} 
+        <div class="main-container container-fluid"> 
+            <a class="btn btn-secondary" href="{% url 'dashboard' %}">Regresar</a> 
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascript2 %}
+
+<script>
+    const pdfViewUrl = '{% url "vehicle_pdf_view" %}';
+    const classForm = '.vehicle-form';
+    const urlLenguage = '{% static "json/es-CL.json" %}';
+    const apiUrl = '{{ api_url|default:request.path }}';
+    const dashboardFilters = {
+        faena: '{{ filtro_faena|default:""|escapejs }}',
+        tipo: '{{ filtro_tipo|default:""|escapejs }}'
+    };
+    let tableHab;
+    let tableDes;
+
+    function getCsrfToken() {
+        return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    }
+
+    function handleFormSubmit(event) {
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+        if (typeof $.LoadingOverlay !== "undefined") $.LoadingOverlay("show");
+        $.ajax({
+            url: pdfViewUrl, 
+            method: 'POST', 
+            headers: { 'X-CSRFToken': getCsrfToken() },
+            data: formData, 
+            processData: false, 
+            contentType: false,
+            success: function(response) {
+                if (typeof $.LoadingOverlay !== "undefined") $.LoadingOverlay("hide");
+                if (response.pdf_url) {
+                    Swal.fire({
+                        icon: 'success', 
+                        title: 'Documento Creado!', 
+                        text: 'Descargando...', 
+                        confirmButtonColor: '#00b4db',
+                    }).then(() => {
+                        var link = document.createElement('a'); 
+                        link.href = response.pdf_url;
+                        link.download = response.pdf_url.split('/').pop(); 
+                        document.body.appendChild(link);
+                        link.click(); 
+                        document.body.removeChild(link);
+                    });
+                } else {
+                    Swal.fire({ 
+                        icon: 'error', 
+                        title: 'Error', 
+                        text: response.error || 'Intente nuevamente', 
+                        confirmButtonColor: '#dc3545' 
+                    });
+                }
+            },
+            error: function() {
+                if (typeof $.LoadingOverlay !== "undefined") $.LoadingOverlay("hide");
+                Swal.fire({ 
+                    icon: 'error', 
+                    title: 'Error', 
+                    text: 'Error de conexión', 
+                    confirmButtonColor: '#dc3545' 
+                });
+            }
+        });
+    }
+
+    function updateCsrfAndRegister(classForm) {
+        const csrfToken = getCsrfToken();
+        $(classForm).find('input[name="csrfmiddlewaretoken"]').val(csrfToken);
+    }
+
+    // --- INICIALIZACIÓN ---
+    $(document).ready(function() {
+        // Limitar número de botones de página en móviles
+        $.fn.dataTable.ext.pager.numbers_length = 5;
+        
+        // 1. Tabla Habilitados
+        tableHab = $('#datatable-allusers').DataTable({
+            serverSide: true,
+            processing: true,
+            scrollX: false, // Desactivamos scrollX para que funcione el responsive
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: 'tr'
+                }
+            },
+            ajax: {
+                url: apiUrl,
+                type: 'GET',
+                data: function (d) {
+                    d.estado = true;
+                    if (dashboardFilters.faena) d.faena = dashboardFilters.faena;
+                    if (dashboardFilters.tipo) d.tipo = dashboardFilters.tipo;
+                }
+            },
+            order: [[1, 'desc']],
+            columns: [
+                { data: null, defaultContent: '', orderable: false, className: 'dtr-control' },
+                { data: 'patente', responsivePriority: 1 }, 
+                { data: 'tipo', responsivePriority: 4 }, 
+                { data: 'marca', responsivePriority: 5 }, 
+                { data: 'modelo', responsivePriority: 6 }, 
+                { data: 'faena', responsivePriority: 7 }, 
+                { data: 'porcentaje', responsivePriority: 1 }, 
+                { data: 'acciones', orderable: false, responsivePriority: 3 }
+            ],
+            columnDefs: [ 
+                { width: "40px", targets: 0, orderable: false },
+                { width: "80px", targets: 1 },
+                { width: "80px", targets: 6 },
+                { width: "210px", targets: 7 }, /* Ancho fijo para Acciones */
+                { className: "text-center", targets: "_all" },
+                { searchable: false, targets: [0, 7] }, 
+                { orderable: false, targets: [0, 7] } 
+            ],
+            language: { url: urlLenguage }
+        });
+
+        // 2. Tabla Deshabilitados
+        tableDes = $('#datatable-allusers-des').DataTable({
+            serverSide: true,
+            processing: true,
+            scrollX: false,
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: 0
+                }
+            },
+            autoWidth: false,
+            ajax: {
+                url: apiUrl,
+                type: 'GET',
+                data: function (d) {
+                    d.estado = false;
+                    if (dashboardFilters.faena) d.faena = dashboardFilters.faena;
+                    if (dashboardFilters.tipo) d.tipo = dashboardFilters.tipo;
+                }
+            },
+            order: [[1, 'desc']],
+            columns: [
+                { data: null, defaultContent: '', orderable: false, className: 'dtr-control' },
+                { data: 'patente', name: 'patente', responsivePriority: 1 },
+                { data: 'tipo', name: 'tipo', responsivePriority: 4 },
+                { data: 'marca', name: 'marca', responsivePriority: 5 },
+                { data: 'modelo', name: 'modelo', responsivePriority: 6 },
+                { data: 'porcentaje', name: 'porcentaje', responsivePriority: 1 },
+                { data: 'acciones', name: 'acciones', orderable: false, responsivePriority: 3 }
+            ],
+            columnDefs: [ 
+                { width: "40px", targets: 0, orderable: false },
+                { width: "80px", targets: 1 },
+                { width: "80px", targets: 5 },
+                { width: "210px", targets: 6 }, /* Ancho fijo para Acciones en deshabilitados */
+                { className: "text-center", targets: "_all" },
+                { searchable: false, targets: [0, 6] }, 
+                { orderable: false, targets: [0, 6] }
+            ],
+            language: { url: urlLenguage }
+        });
+
+        // --- EVENTOS (Delegación JQuery) ---
+        
+        // PDF Form
+        $(document).on('submit', classForm, handleFormSubmit);
+
+        // Actualizar CSRF en draw
+        $('#datatable-allusers').on('draw.dt', () => updateCsrfAndRegister(classForm));
+        $('#datatable-allusers-des').on('draw.dt', () => updateCsrfAndRegister(classForm));
+
+        // --- SOLUCIÓN DEL ERROR AL ELIMINAR ---
+        // Usamos delegación al 'document' para atrapar los botones creados por DataTables
+        $(document).on('submit', '.status-form', function(e){
+            e.preventDefault();
+            
+            var form = this;
+            var formData = new FormData(form);
+         
+            var url = $(form).attr('action');
+            var btn = $(form).find('button[type="submit"]');
+
+            if (btn.hasClass('btn-danger')) {
+                Swal.fire({
+                    title: 'Deshabilitar Vehículo',
+                    text: 'Seleccione el motivo de desactivación:',
+                    input: 'select',
+                    customClass: {
+                        popup: 'swal-size-fix',
+                        input: 'swal2-select-custom'
+                    },
+                    inputOptions: {
+                        {% for problema in problemas %}
+                        '{{ problema.id }}': '{{ problema }}',
+                        {% endfor %}
+                    },
+                    inputPlaceholder: 'Seleccione un motivo...',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#00b4db',
+                    confirmButtonText: 'Deshabilitar',
+                    cancelButtonText: 'Cancelar',
+                    inputValidator: (value) => {
+                        return new Promise((resolve) => {
+                            if (value) { resolve(); }
+                            else { resolve('Debe seleccionar un motivo de desactivación'); }
+                        });
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        formData.append('problema_id', result.value);
+                        ejecutarAjaxStatus(url, formData);
+                    }
+                });
+            } else {
+                ejecutarAjaxStatus(url, formData);
+            }
+        });
+
+        function ejecutarAjaxStatus(url, formData) {
+            if (typeof $.LoadingOverlay !== "undefined") $.LoadingOverlay("show");
+            $.ajax({
+                url: url, type: 'POST', data: formData, processData: false, contentType: false,
+                success: function(response) {
+                    if (typeof $.LoadingOverlay !== "undefined") $.LoadingOverlay("hide");
+                    
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success', title: 'Éxito', text: response.message, confirmButtonColor: '#00b4db',
+                        }).then(() => {
+                            tableHab.ajax.reload(null, false);
+                            tableDes.ajax.reload(null, false);
+                        });
+                    } else {
+                        Swal.fire({ icon: 'warning', title: 'Acción Denegada', text: response.message, confirmButtonColor: '#00b4db' });
+                    }
+                },
+                error: function() {
+                    if (typeof $.LoadingOverlay !== "undefined") $.LoadingOverlay("hide");
+                    Swal.fire({ icon: 'error', title: 'Error', text: 'Error de servidor.', confirmButtonColor: '#dc3545' });
+                }
+            });
+        }
+
+        // --- CORRECCIÓN DE ALINEACIÓN AL CAMBIAR PESTAÑA ---
+        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+            $($.fn.dataTable.tables(true)).DataTable().columns.adjust().responsive.recalc();
+        });
+    });
+</script>
+{% endblock javascript2 %}

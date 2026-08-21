@@ -1,0 +1,707 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Lista de Trabajadores{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+<link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+<style>
+    :root {
+        --toolbar-control-width: 470px;
+        --toolbar-control-height: 36px;
+    }
+    .toolbar-trabajadores {
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-start !important;
+        gap: 12px;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    .toolbar-field {
+        width: min(100%, var(--toolbar-control-width));
+        max-width: 100%;
+    }
+    .toolbar-field .select2-container {
+        width: 100% !important;
+    }
+    .toolbar-field .select2-container .select2-selection--single {
+        height: var(--toolbar-control-height) !important;
+        display: flex;
+        align-items: center;
+        padding-right: 58px;
+        position: relative;
+    }
+    .toolbar-field .select2-container .select2-selection__rendered {
+        line-height: normal !important;
+        padding-left: 12px;
+        color: #333;
+    }
+    .toolbar-field .select2-container .select2-selection__clear {
+        display: none !important;
+    }
+    .toolbar-add-btn {
+        margin-top: 0;
+        width: auto;
+        min-width: 170px !important;
+        height: var(--toolbar-control-height);
+        margin-left: 0 !important;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 12px;
+    }
+    @media (max-width: 767.98px) {
+        :root {
+            --toolbar-control-width: 100%;
+        }
+    }
+
+    .btn-resultado-disabled {
+        background: rgba(74, 144, 226, 0.35) !important;
+        border-color: rgba(74, 144, 226, 0.45) !important;
+        color: rgba(230, 243, 255, 0.9) !important;
+        cursor: not-allowed;
+    }
+
+    .trabajadores-summary-general {
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.03);
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .trabajadores-summary-general-data {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .trabajadores-summary-card {
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.03);
+        height: 100%;
+        text-align: center;
+    }
+
+    .trabajadores-summary-label {
+        font-size: 0.88rem;
+        opacity: 0.8;
+        margin-bottom: 0.35rem;
+    }
+
+    .trabajadores-summary-value {
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.1;
+    }
+</style>
+{% endblock css %}
+
+{% block select2 %}
+<link href="{% static 'css/select2.min.css' %}" rel="stylesheet" />
+{% endblock select2 %}
+
+{% block content %}
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+
+            <div class="page-header">
+                <h1 class="page-title">Lista de Trabajadores</h1>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'history_prevencion' %}">Documentos</a></li>
+                        <li class="breadcrumb-item active">Trabajadores</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6 col-xl">
+                            <div class="trabajadores-summary-general">
+                                <div class="trabajadores-summary-general-data">
+                                    <div><strong>Documento:</strong> {{ resumen_trabajadores.nombre_documento|default:'-' }}</div>
+                                    <div><strong>Tipo:</strong> {{ resumen_trabajadores.tipo_documento|default:'-' }}</div>
+                                    <div><strong>Faena:</strong> {{ resumen_trabajadores.faena_nombre|default:'-' }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-xl">
+                            <div class="trabajadores-summary-card">
+                                <div class="trabajadores-summary-label">Entregados</div>
+                                <div class="trabajadores-summary-value text-info">{{ resumen_trabajadores.entregados|default:0 }}</div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-xl">
+                            <div class="trabajadores-summary-card">
+                                <div class="trabajadores-summary-label">
+                                    {% if es_documento_curso %}
+                                        Aprobados
+                                    {% else %}
+                                        Personas validadas
+                                    {% endif %}
+                                </div>
+                                <div class="trabajadores-summary-value text-success">{{ resumen_trabajadores.validados|default:0 }}</div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-xl">
+                            <div class="trabajadores-summary-card">
+                                <div class="trabajadores-summary-label">
+                                    {% if es_documento_curso %}
+                                        Porcentaje de aprobados
+                                    {% else %}
+                                        Porcentaje de validación
+                                    {% endif %}
+                                </div>
+                                <div class="trabajadores-summary-value text-warning">{{ resumen_trabajadores.porcentaje_validacion|default:0|floatformat:2 }}%</div>
+                            </div>
+                        </div>
+                        {% if es_documento_curso %}
+                        <div class="col-12 col-md-6 col-xl">
+                            <div class="trabajadores-summary-card">
+                                <div class="trabajadores-summary-label">Promedio % de aprobados</div>
+                                <div class="trabajadores-summary-value text-primary">{{ resumen_trabajadores.promedio_porcentaje_aprobacion|default:0|floatformat:2 }}%</div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <form id="formAgregarTrabajador" method="POST" action="{% url 'add_documento_difusion_trabajador' documento.id %}" class="toolbar-trabajadores">
+                        {% csrf_token %}
+                        <div class="toolbar-field">
+                            <label for="selectAgregarTrabajador" class="form-label mb-1">Agregar Trabajador:</label>
+                            <select
+                                id="selectAgregarTrabajador"
+                                class="form-control"
+                                name="user_id">
+                                <option value="" selected>Seleccione trabajador...</option>
+                                {% for fila in trabajadores_disponibles %}
+                                    <option value="{{ fila.user.id }}">{{ fila.username }} - {{ fila.nombre }}</option>
+                                {% empty %}
+                                    <option value="" disabled>Sin trabajadores disponibles</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button id="btnAgregarTrabajador" type="submit" class="btn btn-primary btn-size-adm toolbar-add-btn"{% if not trabajadores_disponibles %} disabled{% endif %}>Agregar a lista</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row row-sm">
+                <table id="datatable-difusion-trabajadores" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>RUT</th>
+                            <th>Nombre</th>
+                            <th>Cargo</th>
+                            <th>Faena</th>
+                            <th>Difundido por</th>
+                            <th>Estado</th>
+                            {% if es_documento_curso %}
+                            <th>% Resultado</th>
+                            {% endif %}
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fila in filas_trabajadores %}
+                        <tr>
+                            <td class="dtr-control"></td>
+                            <td>{{ fila.username }}</td>
+                            <td>{{ fila.nombre }}</td>
+                            <td>{{ fila.cargo|default:'-' }}</td>
+                            <td>{{ fila.faena_nombre|default:'-' }}</td>
+                            <td>{{ fila.difundido_por|default:'-' }}</td>
+                            
+                            <td data-order="{% if fila.motivo_rechazo or fila.estado_notificacion_key == 'rechazado' %}3{% elif fila.estado_notificacion_key == 'activo' %}1{% elif fila.estado_notificacion_key == 'entregado' %}2{% elif fila.estado_notificacion_key == 'leido' %}4{% elif fila.estado_notificacion_key == 'aprobado' %}5{% else %}9{% endif %}">
+                                {% if fila.motivo_rechazo or fila.estado_notificacion_key == 'rechazado' %}
+                                    <span class="badge bg-danger-transparent rounded-pill text-danger p-2">Rechazado</span>
+                                {% elif fila.estado_notificacion_key == 'activo' %}
+                                    <span class="badge bg-info-transparent rounded-pill text-info p-2">{{ fila.estado_notificacion|default:'Activo' }}</span>
+                                {% elif fila.estado_notificacion_key == 'aprobado' %}
+                                    <span class="badge bg-success-transparent rounded-pill text-success p-2">{{ fila.estado_notificacion|default:'Aprobado' }}</span>
+                                {% elif fila.estado_notificacion_key == 'leido' %}
+                                    <span class="badge bg-success-transparent rounded-pill text-success p-2">{{ fila.estado_notificacion|default:'Validado' }}</span>
+                                {% elif fila.estado_notificacion_key == 'entregado' %}
+                                    <span class="badge bg-warning-transparent rounded-pill text-warning p-2">{{ fila.estado_notificacion|default:'Entregado' }}</span>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            
+                            {% if es_documento_curso %}
+                            <td data-order="{% if fila.resultado_disponible %}{{ fila.resultado_porcentaje_aprobacion|default:0 }}{% else %}-1{% endif %}">
+                                {% if fila.resultado_disponible %}
+                                    <span class="badge bg-primary-transparent rounded-pill text-primary p-2">{{ fila.resultado_porcentaje_aprobacion|default:0|floatformat:2 }}%</span>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            {% endif %}
+                            
+                            <td>
+                                {% if es_documento_curso and fila.user %}
+                                    {% if fila.resultado_disponible %}
+                                        <a href="{{ fila.url_resultado_curso|default:'#' }}" class="btn btn-info btn-size-adm me-1" title="Ver Resultado">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V2z"/></svg>
+                                        </a>
+                                    {% else %}
+                                        <button type="button" class="btn btn-size-adm me-1 btn-resultado-disabled" disabled title="Resultado no disponible">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V2z"/></svg>
+                                        </button>
+                                    {% endif %}
+                                {% endif %}
+
+                                <form method="POST" action="{% url 'remove_documento_difusion_trabajador' documento.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    {% if fila.user %}
+                                        <input type="hidden" name="user_id" value="{{ fila.user.id }}">
+                                    {% endif %}
+                                    {% if fila.registro %}
+                                        <input type="hidden" name="registro_id" value="{{ fila.registro.id }}">
+                                    {% endif %}
+                                    <button type="submit" class="btn btn-danger btn-size-adm" title="Eliminar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/></svg>
+                                    </button>
+                                </form>
+                                
+                                {% if fila.info_boton_activo %}
+                                    <button
+                                        type="button"
+                                        class="btn btn-secondary btn-size-adm ms-1 js-btn-info-trabajador"
+                                        title="Información"
+                                        data-trabajador="{{ fila.nombre|default:'-'|escape }}"
+                                        data-rut="{{ fila.username|default:'-'|escape }}"
+                                        data-estado="{% if fila.motivo_rechazo %}Rechazado{% else %}{{ fila.estado_notificacion|default:'-'|escape }}{% endif %}"
+                                        data-es-curso="{{ fila.info_es_curso|yesno:'true,false' }}"
+                                        data-intentos-script-id="{{ fila.info_intentos_script_id|default:''|escape }}"
+                                        data-fecha-entregado="{{ fila.info_fecha_entregado|default:'-'|escape }}"
+                                        data-fecha-activo="{{ fila.info_fecha_activo|default:'-'|escape }}"
+                                        data-fecha-validado="{{ fila.info_fecha_validado|default:'-'|escape }}"
+                                        data-fecha-rechazo="{{ fila.info_fecha_rechazo|default:'-'|escape }}"
+                                        data-tiempo-lectura="{{ fila.info_tiempo_lectura|default:'-'|escape }}"
+                                        data-motivo="{{ fila.motivo_rechazo|default:''|escape }}"
+                                        data-doc-id="{{ documento.id }}"
+                                        data-user-id="{{ fila.user.id|default:'' }}"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
+                                    </button>
+                                    {{ fila.info_intentos|json_script:fila.info_intentos_script_id }}
+                                {% else %}
+                                    <button type="button" class="btn btn-secondary btn-size-adm ms-1" disabled title="Información no disponible">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
+                                    </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row row-sm mt-4">
+                <div class="col-12">
+                    <div class="card mb-0">
+                        <div class="card-body border-bottom">
+                            <h4 class="card-title mb-0">Historial de movimientos de trabajadores</h4>
+                        </div>
+                        <div class="card-body">
+                            <table id="datatable-difusion-historial-trabajadores" class="display nowrap" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Acción</th>
+                                        <th>Trabajador</th>
+                                        <th>RUT</th>
+                                        <th>Realizado por</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in historial_movimientos_trabajadores %}
+                                    <tr>
+                                        <td data-order="{{ item.fecha_order }}">{{ item.fecha }}</td>
+                                        <td data-order="{% if item.accion_key == 'agregado' %}1{% elif item.accion_key == 'quitado' %}2{% else %}9{% endif %}">
+                                            {% if item.accion_key == 'agregado' %}
+                                                <span class="badge bg-success-transparent rounded-pill text-success p-2">{{ item.accion_label }}</span>
+                                            {% elif item.accion_key == 'quitado' %}
+                                                <span class="badge bg-danger-transparent rounded-pill text-danger p-2">{{ item.accion_label }}</span>
+                                            {% else %}
+                                                <span class="badge bg-info-transparent rounded-pill text-info p-2">{{ item.accion_label }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ item.trabajador_nombre|default:'-' }}</td>
+                                        <td>{{ item.trabajador_rut|default:'-' }}</td>
+                                        <td>{{ item.actor_nombre|default:'-' }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end mt-3">
+                <a href="{% url 'history_prevencion' %}" class="btn btn-secondary">Regresar</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    const esDocumentoCurso = {{ es_documento_curso|yesno:"true,false" }};
+    const indiceColumnaAcciones = esDocumentoCurso ? 8 : 7;
+    const columnasPrioridadMedia = esDocumentoCurso ? [1, 2, 3, 5, 6, 7] : [1, 2, 3, 5, 6];
+    
+    new DataTable('#datatable-difusion-trabajadores', {
+        columnDefs: [
+            { className: 'dtr-control', orderable: false, targets: 0, responsivePriority: 1 },
+            { responsivePriority: 2, targets: columnasPrioridadMedia },
+            { orderable: false, targets: indiceColumnaAcciones, responsivePriority: 20000 }
+        ],
+        language: { url: '{% static "json/es-CL.json" %}' },
+        order: [[1, 'asc']],
+        responsive: { details: { type: 'column' } }
+    });
+    
+    new DataTable('#datatable-difusion-historial-trabajadores', {
+        language: { url: '{% static "json/es-CL.json" %}' },
+        order: [[0, 'desc']],
+        responsive: true
+    });
+    
+    document.addEventListener('click', function (event) {
+        const btnInfo = event.target.closest('.js-btn-info-trabajador');
+        if (!btnInfo) {
+            return;
+        }
+        event.preventDefault();
+
+        const escHtml = (value) => String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+
+        const leer = (attrName, fallback = '-') => {
+            const valor = String(btnInfo.getAttribute(attrName) || '').trim();
+            return valor || fallback;
+        };
+
+        const trabajador = leer('data-trabajador');
+        const rut = leer('data-rut');
+        const estado = leer('data-estado');
+        const motivoRechazo = leer('data-motivo', '');
+        
+        const esCurso = String(btnInfo.getAttribute('data-es-curso') || '').trim().toLowerCase() === 'true';
+        const intentosScriptId = leer('data-intentos-script-id', '');
+        const fechaEntregado = leer('data-fecha-entregado');
+        const fechaActivo = leer('data-fecha-activo');
+        const fechaValidado = leer('data-fecha-validado');
+        const fechaRechazo = leer('data-fecha-rechazo');
+        const tiempoLectura = leer('data-tiempo-lectura');
+        const docId = leer('data-doc-id');
+        const userId = leer('data-user-id');
+        let intentos = [];
+        
+        if (intentosScriptId) {
+            const intentosNode = document.getElementById(intentosScriptId);
+            if (intentosNode) {
+                try {
+                    const parsed = JSON.parse(intentosNode.textContent || '[]');
+                    if (Array.isArray(parsed)) {
+                        intentos = parsed;
+                    }
+                } catch (e) {
+                    intentos = [];
+                }
+            }
+        }
+
+        const safeRelativeUrl = (value) => {
+            const url = String(value || '').trim();
+            return /^\/[^\s]*$/.test(url) ? url : '#';
+        };
+
+        const tiemposSeparados = tiempoLectura !== '-' ? tiempoLectura.split(',').map(t => t.trim()) : [];
+
+        let intentosHtml = '';
+        if (esCurso) {
+            intentosHtml = '<hr style="opacity:.2;margin:.65rem 0;"><div><strong>Intentos registrados:</strong></div>';
+            if (intentos.length > 0) {
+                intentosHtml += '<div style="margin-top:.55rem;display:flex;flex-direction:column;gap:.45rem;">';
+                intentos.forEach((intento, index) => {
+                    const numero = escHtml(intento && intento.numero);
+                    const porcentaje = escHtml(intento && intento.porcentaje);
+                    const fecha = escHtml(intento && intento.fecha);
+                    const url = safeRelativeUrl(intento && intento.url);
+                    const tiempoIntento = escHtml(tiemposSeparados[index] || '-');
+                    
+                    const mostrarLinkDetalle = (url !== '#');
+                    intentosHtml += ''
+                        + '<div style="padding:.45rem .6rem;border:1px solid rgba(0,0,0,.12);border-radius:8px;">'
+                        + '<div><strong>Intento ' + numero + ':</strong> ' + porcentaje + '</div>'
+                        + '<div><strong>Fecha:</strong> ' + fecha + '</div>'
+                        + '<div><strong>Tiempo empleado:</strong> ' + tiempoIntento + '</div>'
+                        + (
+                            mostrarLinkDetalle
+                                ? ('<div style="margin-top:.35rem;">'
+                                    + '<a href="' + escHtml(url) + '" target="_blank" rel="noopener" class="btn btn-sm btn-info">Ver prueba</a>'
+                                    + '</div>')
+                                : '<div style="margin-top:.35rem;font-size:.85rem;opacity:.75;">Sin detalle guardado</div>'
+                        )
+                        + '</div>';
+                });
+                intentosHtml += '</div>';
+            } else {
+                intentosHtml += '<div style="margin-top:.45rem;">Sin intentos registrados.</div>';
+            }
+        }
+
+        let estadoLower = estado.toLowerCase();
+        let badgeClass = '';
+
+        if (estadoLower.includes('validado') || estadoLower.includes('aprobado')) {
+            badgeClass = 'badge bg-success-transparent rounded-pill text-success p-2';
+        } else if (estadoLower.includes('rechazado') || estadoLower.includes('reprobado')) {
+            badgeClass = 'badge bg-danger-transparent rounded-pill text-danger p-2';
+        } else if (estadoLower.includes('entregado')) {
+            badgeClass = 'badge bg-warning-transparent rounded-pill text-warning p-2';
+        } else if (estadoLower.includes('activo')) {
+            badgeClass = 'badge bg-info-transparent rounded-pill text-info p-2';
+        } else {
+            badgeClass = 'badge bg-secondary-transparent rounded-pill text-secondary p-2';
+        }
+
+        let estadoHtml = '<div style="margin-bottom: 8px;"><strong>Estado actual:</strong> <span class="' + badgeClass + '" style="font-size: 0.9em;">' + escHtml(estado) + '</span></div>';
+        
+        if (motivoRechazo && motivoRechazo !== '-' && motivoRechazo !== 'None') {
+            let textoMotivo = '';
+            const lowerMotivo = String(motivoRechazo).toLowerCase();
+            
+            if (lowerMotivo.includes('identidad') || lowerMotivo.includes('carnet') || lowerMotivo.includes('rut')) {
+                textoMotivo = 'La cédula no coincidía.';
+            } else if (lowerMotivo.includes('cancel')) {
+                textoMotivo = 'Le dio a cancelar (se restó 1 intento).';
+            } else {
+                textoMotivo = motivoRechazo; 
+            }
+            estadoHtml += '<div style="color: #dc3545; margin-top: 5px;"><strong>Motivo del rechazo:</strong> ' + escHtml(textoMotivo) + '</div>';
+            
+        } else if (estadoLower.includes('rechazado') || estadoLower.includes('reprobado')) {
+            estadoHtml += '<div style="color: #dc3545; margin-top: 5px;"><strong>Motivo del rechazo:</strong> Respondió malas las alternativas.</div>';
+        }
+
+        let validacionHtml = '';
+        
+        if (esCurso && (estadoLower.includes('rechazado') || estadoLower.includes('reprobado') || (motivoRechazo && motivoRechazo !== '-'))) {
+            
+            validacionHtml = '<div><strong>Fecha de rechazo:</strong> ' + escHtml(fechaRechazo) + '</div>';
+            
+            if (docId && userId) {
+                validacionHtml += '<div class="mt-3 text-center border-top pt-3" style="border-color: rgba(0,0,0,0.1)!important;"><button type="button" class="btn btn-warning w-100 fw-bold js-btn-reiniciar-curso" data-user-id="' + userId + '" data-doc-id="' + docId + '">Dar otra oportunidad</button></div>';
+            }
+        } 
+        else if (motivoRechazo && motivoRechazo !== '-') {
+            validacionHtml = '<div><strong>Fecha de rechazo:</strong> ' + escHtml(fechaRechazo) + '</div>';
+            if (docId && userId) {
+                validacionHtml += '<div class="mt-3 text-center border-top pt-3" style="border-color: rgba(0,0,0,0.1)!important;"><button type="button" class="btn btn-warning w-100 fw-bold js-btn-reiniciar-validacion" data-user-id="' + userId + '" data-doc-id="' + docId + '">Dar otra oportunidad</button></div>';
+            }
+        } 
+        else {
+            validacionHtml = '<div><strong>Fecha validado:</strong> ' + escHtml(fechaValidado) + '</div>';
+        }
+
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                titleText: 'Información del trabajador',
+                html:
+                    '<div style="text-align:left;line-height:1.55;">'
+                    + '<div><strong>Trabajador:</strong> ' + escHtml(trabajador) + '</div>'
+                    + '<div><strong>RUT:</strong> ' + escHtml(rut) + '</div>'
+                    + '<hr style="opacity:.2;margin:.65rem 0;">'
+                    + estadoHtml
+                    + '<div><strong>Fecha entregado:</strong> ' + escHtml(fechaEntregado) + '</div>'
+                    + '<div><strong>Fecha activo:</strong> ' + escHtml(fechaActivo) + '</div>'
+                    + validacionHtml
+                    + (esCurso ? '' : '<div><strong>Tiempo de lectura:</strong> ' + escHtml(tiempoLectura) + '</div>')
+                    + intentosHtml
+                    + '</div>',
+                icon: 'info',
+                confirmButtonColor: '#8FBD56',
+                confirmButtonText: 'Cerrar',
+            });
+            return;
+        }
+
+        alert(
+            'Trabajador: ' + trabajador + '\n'
+            + 'RUT: ' + rut + '\n'
+            + 'Estado actual: ' + estado + '\n'
+            + (motivoRechazo && motivoRechazo !== '-' ? 'Motivo del rechazo: ' + motivoRechazo + '\n' : '')
+            + 'Fecha entregado: ' + fechaEntregado + '\n'
+            + 'Fecha activo: ' + fechaActivo + '\n'
+            + (motivoRechazo && motivoRechazo !== '-' ? 'Fecha de rechazo: ' + fechaRechazo + '\n' : 'Fecha validado: ' + fechaValidado + '\n')
+            + 'Tiempo de lectura: ' + tiempoLectura
+            + (
+                esCurso && intentos.length > 0
+                    ? ('\n\nIntentos:\n' + intentos.map((intento) => {
+                        return (
+                            'Intento ' + String((intento && intento.numero) || '-') + ': '
+                            + String((intento && intento.porcentaje) || '-')
+                            + ' (' + String((intento && intento.fecha) || '-') + ')'
+                        );
+                    }).join('\n'))
+                    : ''
+            )
+        );
+    });
+
+    document.addEventListener('click', function(event) {
+    const btnReiniciar = event.target.closest('.js-btn-reiniciar-curso, .js-btn-reiniciar-validacion');
+    if (!btnReiniciar) return;
+    
+    const userId = btnReiniciar.getAttribute('data-user-id');
+    const docId = btnReiniciar.getAttribute('data-doc-id');
+    const esCurso = btnReiniciar.classList.contains('js-btn-reiniciar-curso');
+    
+    const tituloAlerta = esCurso 
+        ? '¿Reiniciar intentos del curso?' 
+        : '¿Dar otra oportunidad?';
+        
+    const textoAlerta = esCurso 
+        ? 'Esto eliminará los resultados anteriores y le dará al trabajador nuevas oportunidades para realizar el curso.' 
+        : 'Esto limpiará el rechazo por validación de identidad y le permitirá al trabajador escanear nuevamente.';
+        
+    const textoExito = esCurso 
+        ? 'Los intentos del curso han sido reiniciados.' 
+        : 'Se ha dado una nueva oportunidad al trabajador.';
+    
+    Swal.fire({
+        title: tituloAlerta,
+        text: textoAlerta,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#8FBD56',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, reiniciar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const csrfToken = getCookie('csrftoken');
+            
+            fetch('/prevencion/reiniciar-curso-intentos/' + docId + '/' + userId + '/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire('¡Reiniciado!', textoExito, 'success')
+                    .then(() => window.location.reload());
+                } else {
+                    Swal.fire('Error', data.message || 'No se pudo procesar la solicitud.', 'error');
+                }
+            })
+            .catch(err => Swal.fire('Error', 'Problema de conexión.', 'error'));
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% block javascript2 %}
+<script>
+    (function () {
+        function normalizarTextoBusqueda(valor) {
+            return String(valor || '')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[.\-\s]/g, '');
+        }
+
+        const $selectAgregar = $('#selectAgregarTrabajador');
+        const formAgregar = document.getElementById('formAgregarTrabajador');
+        const btnAgregar = document.getElementById('btnAgregarTrabajador');
+
+        function actualizarEstadoBotonAgregar() {
+            if (!btnAgregar) return;
+            const valor = ($selectAgregar.val() || '').toString().trim();
+            const sinOpciones = $selectAgregar.find('option[value!=""]').length === 0;
+            btnAgregar.disabled = sinOpciones || !valor;
+        }
+
+        $selectAgregar.select2({
+            width: '100%',
+            allowClear: false,
+            minimumResultsForSearch: 0,
+            matcher: function(params, data) {
+                if ($.trim(params.term) === '') {
+                    return data;
+                }
+                if (!data.text) {
+                    return null;
+                }
+
+                const term = normalizarTextoBusqueda(params.term);
+                const text = normalizarTextoBusqueda(data.text);
+                return text.includes(term) ? data : null;
+            }
+        });
+        $selectAgregar.on('change', actualizarEstadoBotonAgregar);
+        actualizarEstadoBotonAgregar();
+
+        if (formAgregar) {
+            formAgregar.addEventListener('submit', function (event) {
+                const valor = ($selectAgregar.val() || '').toString().trim();
+                if (!valor) {
+                    event.preventDefault();
+                }
+            });
+        }
+    })();
+</script>
+{% endblock javascript2 %}

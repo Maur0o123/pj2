@@ -1,0 +1,85 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Egreso{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+<link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+<link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+{% endblock css %}
+
+{% block content %}
+<a href="{% url 'egreso' %}" class="btn btn-secondary back-float back-float-solo">Regresar</a>
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+            <div class="page-header">
+                <h1 class="page-title">Egreso</h1>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Prevención</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'egreso' %}">Egreso</a></li>
+                        <li class="breadcrumb-item active">Ver</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="row row-sm">
+                <table id="datatable-egreso-detalle" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>RUT</th>
+                            <th>Nombre</th>
+                            <th>Cargo</th>
+                            <th>Faena</th>
+                            <th>Area</th>
+                            <th>GES</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for e in egresos %}
+                        <tr>
+                            <td class="dtr-control"></td>
+                            <td>{{ e.rut_trabajador|default:'-' }}</td>
+                            <td>{{ e.nombre_completo|default:'-' }}</td>
+                            <td>{{ e.cargo|default:'-' }}</td>
+                            <td>{{ e.faena.faena|default:'-' }}</td>
+                            <td>{{ e.area|default:'-' }}</td>
+                            <td>{{ e.ges|default:'-' }}</td>
+                            <td>
+                                <a href="{% url 'view_vigilancia_egreso' e.id %}" class="btn btn-warning btn-size-adm">Ver</a>
+                                <form method="POST" action="{% url 'reintegrar_vigilancia_trabajador' vigilancia.id e.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success btn-size-adm">A Vigilancia</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script>
+    new DataTable('#datatable-egreso-detalle', {
+        columnDefs: [
+            { className: 'dtr-control', orderable: false, targets: 0, responsivePriority: 1 },
+            { responsivePriority: 2, targets: [1, 2, 3] },
+            { orderable: false, targets: 7, responsivePriority: 20000 }
+        ],
+        language: { url: '{% static "json/es-CL.json" %}' },
+        order: [[1, 'asc']],
+        responsive: { details: { type: 'column' } }
+    });
+</script>
+{% endblock %}

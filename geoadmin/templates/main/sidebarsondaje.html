@@ -1,0 +1,239 @@
+{% load static %}
+<div class="sticky is-expanded" style="margin-bottom: -74px;">
+    <div class="app-sidebar__overlay active" data-bs-toggle="sidebar"></div>
+    <div class="app-sidebar ps">
+        <div class="side-header"> 
+            <a class="header-brand1" href="{% url 'logincustom' %}"> 
+<img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img desktop-logo" alt="logo" />
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img toggle-logo" alt="logo" />
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img light-logo" alt="logo" />
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img light-logo1" alt="logo" />
+                <h3>GeoAdmin</h3>
+            </a>   
+        </div>
+        <div class="main-sidemenu is-expanded">
+            <div class="slide-left disabled active d-none" id="slide-left">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
+                </svg> 
+            </div>
+            <ul class="side-menu open" style="margin-right: 0px; margin-left: 0px;">
+                <li>
+                    <h3>Menu Sondaje</h3>
+                </li>
+
+                {% if request.user.usuarioprofile.seccionSondaje in 'ADMINISTRADOR, BASE DATOS' %}
+                <li class="slide"> 
+                    <a class="side-menu__item has-link {% if sidebar == 'dashboardSondaje' %}active{% endif %}" data-bs-toggle="slide" href="{% url 'dashboardSondaje' %}"> 
+                        <i class="icon-home icons-size"></i>  
+                        <span class="side-menu__label">Dashboard</span> 
+                    </a> 
+                </li>
+                {% endif %}
+
+                {% if request.user.usuarioprofile.seccionSondaje != "SIN ASIGNAR" %}
+                <li class="slide {% if sidebarmain == 'capacitaciones' %}is-expanded{% endif %}">
+                    <a class="side-menu__item {% if sidebarmain == 'capacitaciones' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#">
+                        <i class="icon-note icons-size"></i>
+                        <span class="side-menu__label">Capacitaciones</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Capacitaciones</a></li>
+                        <li><a href="{% url 'manage_capacitaciones' 'charlas' %}" class="slide-item {% if sidebarmenu == 't-charlas' %}active{% endif %}">Charlas</a></li>
+                        <li><a href="{% url 'manage_capacitaciones' 'informativos' %}" class="slide-item {% if sidebarmenu == 't-informativos' %}active{% endif %}">Informativos</a></li>
+                        <li><a href="{% url 'manage_capacitaciones' 'difusiones' %}" class="slide-item {% if sidebarmenu == 't-difusiones' %}active{% endif %}">Difusiones</a></li>
+                        <li><a href="{% url 'manage_capacitaciones' 'cursos' %}" class="slide-item {% if sidebarmenu == 't-cursos' %}active{% endif %}">Cursos</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+          
+                <li>
+                    <h3>Secciones</h3>
+                </li>
+
+                {% if request.user.usuarioprofile.seccionSondaje in 'JEFE MANTENCION, CONTROLADOR, SUPERVISOR, BASE DATOS, ADMINISTRADOR' %}
+                <li class="slide {% if sidebarmain == 'system_drilling' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'system_drilling' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-notebook icons-size"></i>
+                        <span class="side-menu__label">Reportes Digitales</span>
+                        <i class="angle fa fa-angle-right"></i> 
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Reporte Digital</a></li>
+                        
+                        <li><a href="{% url 'new_reporte_digital' %}" class="slide-item {% if sidebar == 'manage_new_report' %}active{% endif %}">Nuevo Reporte</a></li>
+                        
+                        {% if request.user.usuarioprofile.seccionSondaje in 'JEFE MANTENCION, CONTROLADOR, SUPERVISOR, BASE DATOS, ADMINISTRADOR' %} 
+                        <li><a href="{% url 'manage_revisar_reportes_digitales' %}" class="slide-item {% if sidebar == 'manage_check_digital_reports' %}active{% endif %}">Revisar Reportes</a></li>
+                        <li><a href="{% url 'manage_mis_reportes_digitales' %}" class="slide-item {% if sidebar == 'manage_my_digital_reports' %}active{% endif %}">Reportes por Corregir</a></li>
+                        {% endif %}
+
+                        {% if request.user.usuarioprofile.seccionSondaje in 'JEFE MANTENCION, SUPERVISOR, BASE DATOS, ADMINISTRADOR' %} 
+                        <li><a href="{% url 'manage_mis_reportes_digitales_eliminados' %}" class="slide-item {% if sidebar == 'manage_my_digital_reports_deleted' %}active{% endif %}">Reportes Eliminados</a></li>
+                        <li><a href="{% url 'manage_todos_reportes_digitales' %}" class="slide-item {% if sidebar == 'manage_all_digital_reports' %}active{% endif %}">Reportes Aprobados</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if request.user.usuarioprofile.seccionSondaje in 'JEFE MANTENCION, SUPERVISOR, BASE DATOS, ADMINISTRADOR' %}
+                <li class="slide {% if sidebarmain == 'system_checklist' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'system_checklist' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-check icons-size"></i>
+                        <span class="side-menu__label">CheckList</span>
+                        <i class="angle fa fa-angle-right"></i> 
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">CheckList</a></li>
+                        <li><a href="{% url 'new_checklist_materiales_caseta' %}" class="slide-item {% if sidebar == 'new_checklist_materiales_caseta' %}active{% endif %}">Checklist Caseta</a></li>
+                        <li><a href="{% url 'manage_checklist_materiales_caseta' %}" class="slide-item {% if sidebar == 'manage_checklist_materiales_caseta' %}active{% endif %}">Administrar Checklist Caseta</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if request.user.usuarioprofile.seccionSondaje in 'SUPERVISOR, BASE DATOS, ADMINISTRADOR' %} 
+                <li class="slide {% if sidebarmain == 'system_report_drilling' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'system_report_drilling' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-chart icons-size"></i>
+                        <span class="side-menu__label">Informes y Estadisticas</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Estadisticas</a></li>
+                        <li><a href="{% url 'manage_report_drilling' %}" class="slide-item {% if sidebar == 'manage_report_drilling' %}active{% endif %}">Reporte General</a></li>
+                        <li><a href="{% url 'new_planning_drilling' %}" class="slide-item {% if sidebar == 'new_planning_drilling' %}active{% endif %}">Avance Programa</a></li>
+                        <li><a href="{% url 'export_data' %}" class="slide-item {% if sidebar == 'export_data' %}active{% endif %}">Obtener datos</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if request.user.usuarioprofile.seccionSondaje != "SIN ASIGNAR" %}
+                <li class="slide {% if sidebarmain == 'manage_documentation' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'manage_documentation' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-layers icons-size"></i>
+                        <span class="side-menu__label">Documentación</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Documentación</a></li>
+                        <li><a href="{% url 'view_general_mining_documents' %}" class="slide-item {% if sidebar == 'manage_viewdocuemntationmining' %}active{% endif %}">Para Faena</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if request.user.usuarioprofile.seccionSondaje in 'ADMINISTRADOR, BASE DATOS' %} 
+                <li class="slide {% if sidebarmain == 'system_users' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'system_users' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-people icons-size"></i>
+                        <span class="side-menu__label">Usuarios</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Usuarios</a></li>
+                        <li><a href="{% url 'manage_users' %}" class="slide-item {% if sidebar == 'manage_users' %}active{% endif %}">Administrar</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if request.user.usuarioprofile.seccionSondaje in 'ADMINISTRADOR, BASE DATOS' %}
+                <li class="slide {% if sidebarmain == 'manage_system' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'manage_system' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-organization icons-size"></i>
+                        <span class="side-menu__label">Mantenedor Sistema</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Mantenedor Sistema</a></li>
+                        <li class="sub-slide {% if sidebarmenu == 'manage_users' %}is-expanded active{% endif %}"> 
+                            <a class="sub-side-menu__item {% if sidebarmenu == 'manage_users' %}active{% endif %}" data-bs-toggle="sub-slide" href="#">
+                                <span class="sub-side-menu__label ">Opciones Usuarios</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a> 
+                            <ul class="sub-slide-menu {% if sidebarmenu == 'manage_users' %}open{% endif %}"> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_genders' %}active{% endif %}" href="{% url 'manage_genders' %}" >Géneros</a></li> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_cities' %}active{% endif %}" href="{% url 'manage_cities' %}">Ciudades</a></li> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_nationalities' %}active{% endif %}" href="{% url 'manage_nationalities' %}">Nacionalidades</a></li> 
+                            </ul> 
+                        </li>
+                        <li class="sub-slide {% if sidebarmenu == 'manage_mining' %}is-expanded active{% endif %}"> 
+                            <a class="sub-side-menu__item {% if sidebarmenu == 'manage_mining' %}active{% endif %}" data-bs-toggle="sub-slide" href="#">
+                                <span class="sub-side-menu__label ">Opciones Faenas Mineras</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a> 
+                            <ul class="sub-slide-menu {% if sidebarmenu == 'manage_mining' %}open{% endif %}"> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_managemining' %}active{% endif %}" href="{% url 'manage_mining' %}" >Administrar Faenas</a></li> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_documentsmining_general' %}active{% endif %}" href="{% url 'manage_mining_documents_general' %}">Documentación General</a></li>
+                            </ul> 
+                        </li>
+                        <li class="sub-slide {% if sidebarmenu == 'manage_drilling' %}is-expanded active{% endif %}"> 
+                            <a class="sub-side-menu__item {% if sidebarmenu == 'manage_drilling' %}active{% endif %}" data-bs-toggle="sub-slide" href="#">
+                                <span class="sub-side-menu__label ">Opciones Sondaje</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a> 
+                            <ul class="sub-slide-menu {% if sidebarmenu == 'manage_drilling' %}open{% endif %}">
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_sonda' %}active{% endif %}" href="{% url 'manage_probe' %}">Sondas</a></li>
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_sondaje' %}active{% endif %}" href="{% url 'manage_drilling' %}">Sondajes</a></li>
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_diametro' %}active{% endif %}" href="{% url 'manage_diameter' %}">Diámetro</a></li> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_tipoTerreno' %}active{% endif %}" href="{% url 'manage_tipoTerreno' %}">Tipo de Terreno</a></li> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_orientacion' %}active{% endif %}" href="{% url 'manage_orientation' %}">Orientación</a></li>
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_detalle' %}active{% endif %}" href="{% url 'manage_details' %}">Detalle Control Horario</a></li>
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_cantidadAgua' %}active{% endif %}" href="{% url 'manage_cantidadAgua' %}">Agua (Lts)</a></li>
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_aditivo' %}active{% endif %}" href="{% url 'manage_aditivos' %}">Aditivos</a></li>
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_largoBarra' %}active{% endif %}" href="{% url 'manage_largoBarra' %}">Largo de Barra</a></li>
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_campanas' %}active{% endif %}" href="{% url 'manage_campanas' %}">Campañas</a></li>
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_programas' %}active{% endif %}" href="{% url 'manage_programas' %}">Programas</a></li>
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_recomendacion' %}active{% endif %}" href="{% url 'manage_recomendacion' %}">Recomendaciones</a></li>
+                            </ul> 
+                        </li>
+                        <li class="sub-slide {% if sidebarmenu == 'manage_materiales' %}is-expanded active{% endif %}"> 
+                            <a class="sub-side-menu__item {% if sidebarmenu == 'manage_materiales' %}active{% endif %}" data-bs-toggle="sub-slide" href="#">
+                                <span class="sub-side-menu__label ">Opciones CheckList</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a> 
+                            <ul class="sub-slide-menu {% if sidebarmenu == 'manage_materiales_sonda' %}open{% endif %}"> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_materiales_caseta' %}active{% endif %}" href="{% url 'manage_materiales_caseta' %}">Materiales Caseta/sonda</a></li>
+                            </ul> 
+                        </li>
+                        <li class="sub-slide {% if sidebarmenu == 'manage_ayuda_manuales' %}is-expanded active{% endif %}"> 
+                            <a class="sub-side-menu__item {% if sidebarmenu == 'manage_ayuda_manuales' %}active{% endif %}" data-bs-toggle="sub-slide" href="{% url 'manage_help_manuals' %}">
+                                <span class="sub-side-menu__label ">Opciones Ayuda y Manuales</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li class="sub-slide {% if sidebar == 'manage_notifications' %}is-expanded active{% endif %}"> 
+                            <a class="sub-side-menu__item {% if sidebar == 'manage_notifications' %}active{% endif %}" data-bs-toggle="sub-slide" href="{% url 'manage_notifications' %}?area=SONDAJE">
+                                <span class="sub-side-menu__label ">Notificaciones</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if request.user.usuarioprofile.seccionSondaje in 'ADMINISTRADOR, BASE DATOS' %} 
+                <li class="slide {% if sidebarmain == 'system_report_error' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'system_report_error' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="{% url 'manage_report_error' %}"> 
+                        <i class="icon-people icons-size"></i>
+                        <span class="side-menu__label">Reporte de Errores</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                <div class="mt-5"></div>
+            </ul>
+            <div class="slide-right" id="slide-right">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24"
+                    height="24" viewBox="0 0 24 24">
+                    <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
+                </svg> 
+            </div>
+        </div>
+        <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+            <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+        </div>
+        <div class="ps__rail-y" style="top: 100px;">
+            <div class="ps__thumb-y" tabindex="0" ></div>
+        </div>
+    </div>
+</div>

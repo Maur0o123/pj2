@@ -1,0 +1,23 @@
+{% extends 'main/base_login.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="page">
+    <div>
+        <div class="container-login100">
+            <div class="wrap-login100 p-0">
+                <div class="card-body">
+                    <div class="col col-login mx-auto text-center">
+                        <a href="#" class="text-center"><img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img" alt=""/></a>
+                        <span href="#" class="login100-form-title"> La página que buscabas no existe (404)</span>
+                    </div>
+                    <div class="text-center pt-3">
+                        <a class="btn btn-secondary" href="{% url 'logincustom' %}">Regresar</a> 
+                    </div>
+                </dic>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

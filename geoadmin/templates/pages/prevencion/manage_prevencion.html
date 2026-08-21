@@ -1,0 +1,268 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Administración de {{ titulo_categoria }}{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+<link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+<style>
+    body.seccion-prevencion .swal2-popup .swal2-actions .swal2-confirm.swal-delete-confirm-btn,
+    body.seccion-sondaje .swal2-popup .swal2-actions .swal2-confirm.swal-delete-confirm-btn {
+        background-color: #e984b1 !important;
+        border-color: #e984b1 !important;
+        color: #fff !important;
+    }
+
+    body.seccion-prevencion .swal2-popup .swal2-actions .swal2-cancel.swal-delete-cancel-btn,
+    body.seccion-sondaje .swal2-popup .swal2-actions .swal2-cancel.swal-delete-cancel-btn {
+        background-color: #8fbd56 !important;
+        border-color: #8fbd56 !important;
+        color: #fff !important;
+    }
+
+    .btn-edit-prevencion-bloqueado {
+        opacity: 0.65;
+        cursor: not-allowed;
+    }
+</style>
+{% endblock css %}
+
+{% block content %}
+
+<div class="app-content main-content mt-0">
+    <div class="side-app"> <div class="main-container container-fluid"> <div class="page-header">
+                <div>
+                    <h1 class="page-title">Administrar {{ titulo_categoria }}</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Prevención</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Administrar {{ titulo_categoria }}</li>
+                    </ol>
+                </div>
+            </div>
+            {% if mostrar_boton_nuevo %}
+                <a class="btn btn-primary btn-size-new" href="{% url 'create_prevencion' slug_categoria %}">{{ boton_nuevo_texto }}</a>
+            {% endif %}
+            {% if not vista_capacitaciones_vacia|default:False %}
+                <h5 class="mb-5"></h5> 
+                
+                <div class="card">
+                    <div class="panel panel-primary">
+                        <div class="tab-menu-heading border-bottom-0">
+                            <div class="tabs-menu4 border-bottomo-sm">
+                                <nav class="nav d-sm-flex d-block">
+                                    <a class="nav-link border border-bottom-0 br-sm-5 me-2 {% if active_tab != 'eliminados' %}active{% endif %}" data-bs-toggle="tab" href="#tab-activos">Activos</a>
+                                    <a class="nav-link border border-bottom-0 br-sm-5 me-2 {% if active_tab == 'eliminados' %}active{% endif %}" data-bs-toggle="tab" href="#tab-eliminados">Eliminados</a>
+                                </nav>
+                            </div>
+                        </div>
+
+                        <div class="panel-body tabs-menu-body">
+                            <div class="tab-content">
+                                <!-- PESTAÑA: ACTIVOS -->
+                                <div class="tab-pane {% if active_tab != 'eliminados' %}active{% endif %}" id="tab-activos">
+                                    <div class="row row-sm"> 
+                                        <table id="datatable-prevencion" class="display nowrap" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th></th> 
+                                                    <th>Nombre Capacitación</th>
+                                                    <th>Faena</th>
+                                                    <th>Cargo</th>
+                                                    <th>Fecha Creación</th>
+                                                    <th>Secciones</th>
+                                                    <th>Acciones</th>                            
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for p in plantillas %}
+                                                    <tr>
+                                                        <td class="dtr-control"></td>
+                                                        <td>{{ p.nombre }}</td>
+                                                        <td>
+                                                            {% if p.faena %}
+                                                                {{ p.faena.faena }}
+                                                            {% else %}
+                                                                <span class="text-muted">Sin Faena</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{{ p.cargo_display }}</td>
+                                                        <td>{{ p.fechacreacion|date:"Y-m-d" }}</td>
+                                                        <td>{{ p.estructura|length }} Secciones</td>
+                                                        <td class="form-inline-btn"> 
+                                                            {% if p.edicion_bloqueada %}
+                                                                <button type="button" class="btn btn-info btn-size-adm btn-edit-prevencion-bloqueado" data-block-reason="No puedes editar esta plantilla porque ya está difundida." title="No puedes editar porque ya está difundida">Editar</button>
+                                                            {% else %}
+                                                                <a href="{% url 'edit_prevencion' slug_categoria p.id %}" class="btn btn-info btn-size-adm">Editar</a>
+                                                            {% endif %}
+                                                            
+                                                            {% if habilitar_duplicado_docs %}
+                                                                <a href="{% url 'create_prevencion' slug_categoria %}?duplicate_from={{ p.id }}" class="btn btn-warning btn-size-adm" title="Duplicar"><i class="fa fa-copy"></i></a>
+                                                            {% else %}
+                                                                <button type="button" class="btn btn-warning btn-size-adm" disabled title="Disponible solo en documentos"><i class="fa fa-copy"></i></button>
+                                                            {% endif %}
+                                                            
+                                                            <a href="javascript:void(0);" data-url="{% url 'delete_prevencion' p.id %}" class="btn btn-danger btn-size-adm btn-delete-prevencion">Eliminar</a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>                    
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane {% if active_tab == 'eliminados' %}active{% endif %}" id="tab-eliminados">
+                                    <div class="row row-sm">
+                                        <table id="datatable-prevencion-eliminados" class="display nowrap" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Nombre Capacitación</th>
+                                                    <th>Faena</th>
+                                                    <th>Cargo</th>
+                                                    <th>Fecha Creación</th>
+                                                    <th>Secciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for p in plantillas_eliminadas %}
+                                                    <tr>
+                                                        <td class="dtr-control"></td>
+                                                        <td>{{ p.nombre }}</td>
+                                                        <td>
+                                                            {% if p.faena %}
+                                                                {{ p.faena.faena }}
+                                                            {% else %}
+                                                                <span class="text-muted">Sin Faena</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{{ p.cargo_display }}</td>
+                                                        <td>{{ p.fechacreacion|date:"Y-m-d" }}</td>
+                                                        <td>{{ p.estructura|length }} Secciones</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>                    
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>            
+            {% endif %}
+        </div>
+        {% if not vista_capacitaciones_vacia|default:False %}
+            <h5 class="mb-5"></h5> 
+            <div class="main-container container-fluid"> 
+                <a class="btn btn-secondary" href="{% url 'dashboardPrevencion' %}">Regresar</a> 
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+    {% if not vista_capacitaciones_vacia|default:False %}
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    
+    <script type="application/javascript">
+        $(document).ready(function() {
+            var tableActivos = new DataTable('#datatable-prevencion', {
+                columnDefs: [
+                    { className: 'dtr-control', orderable: false, targets: 0 },
+                    { orderable: false, targets: [0, 5, 6] } 
+                ],
+                language: {
+                    url: '{% static "json/es-CL.json" %}',
+                },
+                responsive: {
+                    details: { type: 'column' }
+                }
+            });
+
+            var tableEliminados = new DataTable('#datatable-prevencion-eliminados', {
+                columnDefs: [
+                    { className: 'dtr-control', orderable: false, targets: 0 },
+                    { orderable: false, targets: [0, 5] } 
+                ],
+                language: {
+                    url: '{% static "json/es-CL.json" %}',
+                },
+                responsive: {
+                    details: { type: 'column' }
+                }
+            });
+
+            $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
+                if (tableActivos && typeof tableActivos.columns === 'function') {
+                    tableActivos.columns.adjust();
+                    if (tableActivos.responsive && typeof tableActivos.responsive.recalc === 'function') {
+                        tableActivos.responsive.recalc();
+                    }
+                }
+                if (tableEliminados && typeof tableEliminados.columns === 'function') {
+                    tableEliminados.columns.adjust();
+                    if (tableEliminados.responsive && typeof tableEliminados.responsive.recalc === 'function') {
+                        tableEliminados.responsive.recalc();
+                    }
+                }
+            });
+
+            $('body').on('click', '.btn-delete-prevencion', function (e) {
+                e.preventDefault();
+                const deleteUrl = $(this).data('url');
+                if (!deleteUrl) return;
+
+                if (typeof Swal === 'undefined') {
+                    const ok = window.confirm('¿Está seguro de eliminar esta plantilla?');
+                    if (ok) window.location.href = deleteUrl;
+                    return;
+                }
+
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: 'La plantilla se eliminará.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#e984b1',
+                    cancelButtonColor: '#8fbd56',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar',
+                    reverseButtons: true,
+                    customClass: {
+                        confirmButton: 'swal-delete-confirm-btn',
+                        cancelButton: 'swal-delete-cancel-btn'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = deleteUrl;
+                    }
+                });
+            });
+
+            $('body').on('click', '.btn-edit-prevencion-bloqueado', function (e) {
+                e.preventDefault();
+                const blockReason = $(this).data('block-reason') || 'No puedes editar esta plantilla porque ya está difundida.';
+
+                if (typeof Swal === 'undefined') {
+                    window.alert(blockReason);
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Edición bloqueada',
+                    text: blockReason,
+                    icon: 'info',
+                    confirmButtonText: 'Entendido',
+                    confirmButtonColor: '#8fbd56'
+                });
+            });
+        });
+    </script>
+    {% endif %}
+{% endblock javascript %}

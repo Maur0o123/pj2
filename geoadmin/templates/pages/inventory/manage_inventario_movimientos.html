@@ -1,0 +1,376 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Administrar Movimientos{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+<link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+{% endblock css %}
+
+{% block content %}
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Administrar Movimientos</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">Inventario</li>
+                        <li class="breadcrumb-item active">Movimientos</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <a class="btn btn-primary btn-size-new" href="{% url 'new_ingreso_cm' %}">
+                    Nuevo ingreso C.M
+                </a>
+
+                <a class="btn btn-info btn-size-new ms-2"
+                   href="{% url 'new_traspaso_bodega' %}">
+                    Traspaso a bodega
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="panel panel-primary">
+
+                    <div class="tab-menu-heading border-bottom-0">
+                        <div class="tabs-menu4 border-bottomo-sm">
+                            <nav class="nav d-sm-flex d-block">
+                                <a class="nav-link border border-bottom-0 br-sm-5 me-2 active"
+                                   data-bs-toggle="tab"
+                                   href="#tabMovimientos">
+                                    Movimientos
+                                </a>
+
+                                <a class="nav-link border border-bottom-0 br-sm-5 me-2"
+                                   data-bs-toggle="tab"
+                                   href="#tabStock">
+                                    Stock
+                                </a>
+                            </nav>
+                        </div>
+                    </div>
+
+                    <div class="panel-body tabs-menu-body">
+                        <div class="tab-content">
+
+                            <div class="tab-pane active" id="tabMovimientos">
+                                <div class="row row-sm">
+                                    <table id="datatable-allusers" class="display nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Fecha</th>
+                                                <th>Rut Proveedor / nombre</th>
+                                                <th>Valor Total Compra</th>
+                                                <th>Responsable</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            {% for movimiento in movimientos %}
+                                            <tr>
+                                                <td class="dtr-control"></td>
+                                                <td>{{ movimiento.fecha|date:"Y-m-d" }}</td>
+                                                <td>{{ movimiento.proveedor.rut }}/{{ movimiento.proveedor.nombre }}</td>
+                                                <td>${{ movimiento.valor_total_venta|floatformat:0 }}</td>
+                                                <td>{{ movimiento.creador }}</td>
+                                                <td>
+                                                    <button type="button"
+                                                            class="btn btn-warning btn-size-adm"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#modalItems{{ forloop.counter }}">
+                                                        <i class="fe fe-eye"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane" id="tabStock">
+                                <table id="datatable-stock-cm" class="display nowrap" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Item / Código</th>
+                                            <th>Stock Buenos</th>
+                                            <th>Stock Malos</th>
+                                            <th>Stock Total</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {% for stock in stocks_cm %}
+                                        <tr>
+                                            <td class="dtr-control"></td>
+                                            <td>
+                                                {{ stock.item.item }} /
+                                                {{ stock.item.codigo_item }}
+                                            </td>
+                                            <td>{{ stock.cantidad_buenos }}</td>
+                                            <td>{{ stock.cantidad_malos }}</td>
+                                            <td>
+                                                {{ stock.cantidad_buenos|add:stock.cantidad_malos }}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <h5 class="mb-5"></h5>
+
+            <a class="btn btn-secondary" href="{% url 'dashboardInventario' %}">
+                Regresar
+            </a>
+
+        </div>
+    </div>
+</div>
+
+{% for movimiento in movimientos %}
+<div class="modal fade" id="modalItems{{ forloop.counter }}" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Detalle del ingreso - {{ movimiento.proveedor.rut }} / {{ movimiento.proveedor.nombre }}
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <table class="table table-bordered table-dark">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Buenos</th>
+                            <th>Malos</th>
+                            <th>Valor Neto Total</th>
+                            <th>Fotografía</th>
+                            <th>Observación</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for ingreso in movimiento.items %}
+                        <tr>
+                            <td>
+                                {{ ingreso.item.codigo_item }} |
+                                {{ ingreso.item.item }}
+                            </td>
+
+                            <td>{{ ingreso.cantidad_buenos }}</td>
+                            <td>{{ ingreso.cantidad_malos }}</td>
+                            <td>${{ ingreso.valor_neto|floatformat:0 }}</td>
+
+                            <td>
+                                {% if ingreso.imagen %}
+                                    <button type="button"
+                                            class="btn btn-warning btn-sm btn-ver-imagen"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalImagen"
+                                            data-imagen="{{ ingreso.imagen.url }}">
+                                        <i class="fe fe-eye"></i>
+                                    </button>
+                                {% else %}
+                                    Sin imagen
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if ingreso.observacion %}
+                                    {{ ingreso.observacion }}
+                                {% else %}
+                                    Sin observación
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<div class="modal fade" id="modalImagen" tabindex="-1">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Fotografía del ingreso</h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body text-center">
+                <img id="imagenModal"
+                     src=""
+                     class="img-fluid"
+                     style="
+                        max-height:350px;
+                        max-width:100%;
+                        object-fit:contain;
+                        border-radius:0 !important;
+                     ">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'success' %}
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Ingreso guardado con éxito',
+                        confirmButtonColor: '#00cfe8'
+                    });
+                });
+            </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+{% endblock content %}
+
+{% block javascript %}
+<script src="{% static 'js/jquery-3.7.0.js' %}"></script>
+<script src="{% static 'js/jquery.dataTables.min1.13.7.js' %}"></script>
+<script src="{% static 'js/dataTables.responsive.min2.5.0.js' %}"></script>
+
+<script>
+new DataTable('#datatable-allusers', {
+    columnDefs: [
+        {
+            className: 'dtr-control',
+            orderable: false,
+            searchable: false,
+            targets: 0
+        },
+        {
+            orderable: false,
+            targets: [0, 5]
+        }
+    ],
+    language: {
+        url: '{% static "json/es-CL.json" %}',
+    },
+    responsive: {
+        details: {
+            type: 'column'
+        }
+    }
+});
+const tablaStockCm = new DataTable('#datatable-stock-cm', {
+    columnDefs: [
+        {
+            className: 'dtr-control',
+            orderable: false,
+            searchable: false,
+            targets: 0
+        },
+        {
+            orderable: false,
+            targets: [0]
+        }
+    ],
+    language: {
+        url: '{% static "json/es-CL.json" %}',
+    },
+    responsive: {
+        details: {
+            type: 'column'
+        }
+    }
+});
+$('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
+    tablaStockCm.columns.adjust().responsive.recalc();
+});
+</script>
+
+<script>
+
+document.addEventListener('click', function(e){
+
+    const boton = e.target.closest('.btn-ver-imagen');
+
+    if(!boton) return;
+
+    document.getElementById('imagenModal').src =
+        boton.dataset.imagen;
+
+});
+
+</script>
+
+<script>
+document.addEventListener('change', function(e) {
+
+    if (e.target.classList.contains('select-item-movimiento')) {
+
+        const select = e.target;
+        const option = select.options[select.selectedIndex];
+        const fila = select.closest('tr');
+
+        fila.querySelector('.td-buenos').textContent =
+            option.dataset.buenos || '0';
+
+        fila.querySelector('.td-malos').textContent =
+            option.dataset.malos || '0';
+
+        fila.querySelector('.td-observacion').textContent =
+            option.dataset.observacion || 'Sin observación';
+
+        const imagenTd = fila.querySelector('.td-imagen');
+
+        if (option.dataset.imagen) {
+            imagenTd.innerHTML = `
+                <button
+                    type="button"
+                    class="btn btn-warning btn-sm btn-ver-imagen"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalImagen"
+                    data-imagen="${option.dataset.imagen}">
+                    <i class="fe fe-eye"></i>
+                </button>
+            `;
+        } else {
+            imagenTd.textContent = 'Sin imagen';
+        }
+    }
+
+});
+</script>
+{% endblock javascript %}

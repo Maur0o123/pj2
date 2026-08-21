@@ -1,0 +1,752 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Antes de Comenzar &#8212; documentación de Geoadmin - Versión Web</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=ea490ea2"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="_static/translations.js?v=f85f4cfb"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'antesDeComenzar';</script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="Arquitectura del Sistema" href="arquitectura.html" />
+    <link rel="prev" title="Documentacion Geoadmin" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logobg.png" class="logo__image only-light" alt="documentación de Geoadmin - Versión Web - Home"/>
+    <script>document.write(`<img src="_static/logobg.png" class="logo__image only-dark" alt="documentación de Geoadmin - Versión Web - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Búsqueda</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Antes de Comenzar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="arquitectura.html">Arquitectura del Sistema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="databases.html">Database</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="secciones.html">Secciones</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="modulos/core.html">Core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/checklist.html">Checklist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/drilling.html">Drilling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/equipment.html">Equipment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/geoadmin.html">Geoadmin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/inventory.html">Inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/machine.html">Machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/maintenance.html">Maintenance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/messenger.html">Messenger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/mining.html">Mining</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/offline.html">Offline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/planning.html">Planning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/prevencion.html">Prevencion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/user.html">User</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulos/vehicle.html">Vehicle</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Api</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/Cconelli/Geoadmin" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Repositorio de origen"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/antesDeComenzar.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="claro/oscuro" aria-label="claro/oscuro" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Antes de Comenzar</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#servidor">Servidor</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#coneccion-al-servidor">Conección al Servidor</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#instalacion-del-repositorio">Instalación del Repositorio</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuracion-archivo-env">Configuración archivo <code class="docutils literal notranslate"><span class="pre">.env</span></code></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="antes-de-comenzar">
+<h1>Antes de Comenzar<a class="headerlink" href="#antes-de-comenzar" title="Link to this heading">#</a></h1>
+<p>Aquí encontraremos los principales consejos y requisitos necesarios para ejecutar todos los procesos sin problemas.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Siempre trabaja en un entorno virtual.</p></li>
+<li><p>Todas las variables de entorno deben estar correctamente configuradas en el archivo <code class="docutils literal notranslate"><span class="pre">.env</span></code>.</p></li>
+</ul>
+</div></blockquote>
+<div class="admonition important">
+<p class="admonition-title">Importante</p>
+<p>La configuración exacta puede variar entre ambientes. En el repositorio actual se validó un entorno local con <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.12</span></code> y <code class="docutils literal notranslate"><span class="pre">Django</span> <span class="pre">4.2.11</span></code>. Los datos de producción deben verificarse directamente en el servidor antes de desplegar.</p>
+</div>
+<section id="servidor">
+<h2>Servidor<a class="headerlink" href="#servidor" title="Link to this heading">#</a></h2>
+<p>Actualmente, contamos con un servidor disponible con las siguientes credenciales de acceso:</p>
+<div class="pst-scrollable-table-container"><table class="table" id="id1">
+<caption><span class="caption-text">Información del Servidor</span><a class="headerlink" href="#id1" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>IP</p></th>
+<th class="head"><p>Usuario</p></th>
+<th class="head"><p>Contraseña</p></th>
+<th class="head"><p>Ruta del Repositorio</p></th>
+<th class="head"><p>Usuario del Sistema</p></th>
+<th class="head"><p>Contraseña del Sistema</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">152.70.140.40</span></code></p></td>
+<td><p>XXXX</p></td>
+<td><p>XXXX</p></td>
+<td><p>/home/app</p></td>
+<td><p>ubuntu</p></td>
+<td><p>XXXX</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>El servidor y el entorno de ejecución deben revisar al menos los siguientes componentes:</p>
+<div class="pst-scrollable-table-container"><table class="table" id="id2">
+<caption><span class="caption-text">Tecnologías y Configuración del Servidor</span><a class="headerlink" href="#id2" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Tecnología</p></th>
+<th class="head"><p>Versión</p></th>
+<th class="head"><p>Usuario</p></th>
+<th class="head"><p>Contraseña</p></th>
+<th class="head"><p>Usuario BD</p></th>
+<th class="head"><p>Contraseña BD</p></th>
+<th class="head"><p>Base de Datos</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Python</p></td>
+<td><p>3.12.x</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Django</p></td>
+<td><p>4.2.11</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Mysql</p></td>
+<td><p>8.x</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>Definida en <code class="docutils literal notranslate"><span class="pre">SQL_NAME</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Importante</p>
+<p>Para tener acceso a las credenciales comuniquese con el departamento de Informatica.</p>
+</div>
+</section>
+<section id="coneccion-al-servidor">
+<h2>Conección al Servidor<a class="headerlink" href="#coneccion-al-servidor" title="Link to this heading">#</a></h2>
+<p>Antes de establecer la conexión con el servidor, es necesario solicitar al departamento de informática los siguientes elementos:</p>
+<ul class="simple">
+<li><p>Archivo de clave privada <code class="docutils literal notranslate"><span class="pre">.ppk</span></code>.</p></li>
+<li><dl class="simple">
+<dt>Credenciales de acceso al servidor:</dt><dd><ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">usuario</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">contraseña</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dirección</span> <span class="pre">IP</span></code></p></li>
+</ol>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Asegúrese de tener instalado <code class="docutils literal notranslate"><span class="pre">OpenSSH</span></code> en su equipo local antes de continuar.</p>
+</div>
+<ol class="arabic">
+<li><p>Instalación de herramientas necesarias.</p>
+<p>Abra una terminal y ejecute el siguiente comando para instalar <code class="docutils literal notranslate"><span class="pre">putty-tools</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>putty-tools<span class="w"> </span>-y
+</pre></div>
+</div>
+</li>
+<li><p>Conversión de clave privada <code class="docutils literal notranslate"><span class="pre">.ppk</span></code> → <code class="docutils literal notranslate"><span class="pre">.pem</span></code>.</p>
+<p>Si la clave proporcionada está en formato <code class="docutils literal notranslate"><span class="pre">.ppk</span></code>, conviértala a <code class="docutils literal notranslate"><span class="pre">.pem</span></code> con el siguiente comando:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>puttygen<span class="w"> </span>key.ppk<span class="w"> </span>-O<span class="w"> </span>private-openssh<span class="w"> </span>-o<span class="w"> </span>key.pem
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Reemplace <code class="docutils literal notranslate"><span class="pre">key.ppk</span></code> con el nombre exacto del archivo recibido.</p>
+</div>
+</li>
+<li><p>Configuración de Permisos del Archivo <code class="docutils literal notranslate"><span class="pre">.pem</span></code></p>
+<p>Para evitar problemas de seguridad, ajuste los permisos del archivo <code class="docutils literal notranslate"><span class="pre">.pem</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>key.pem
+</pre></div>
+</div>
+</li>
+<li><p>Establecer Conexión con el Servidor</p>
+<p>Ubíquese en el directorio donde se encuentra el archivo <code class="docutils literal notranslate"><span class="pre">.pem</span></code> y ejecute el siguiente comando:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh<span class="w"> </span>-i<span class="w"> </span>key.pem<span class="w"> </span>root@152.70.140.40
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<ul class="simple">
+<li><p>Reemplace key.pem con el nombre del archivo recibido.</p></li>
+<li><p>Asegúrese de que el nombre del archivo no contenga espacios.</p></li>
+<li><p>En caso de que el usuario no sea root, cámbielo por el usuario correspondiente (por ejemplo, ubuntu).</p></li>
+</ul>
+</div>
+</li>
+<li><p>Acceso al Directorio del Repositorio</p>
+<p>Una vez dentro del servidor, diríjase al directorio donde se alojará el repositorio:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/app
+</pre></div>
+</div>
+<p>Si el directorio no existe, créelo con los siguientes comandos:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>/home/app
+</pre></div>
+</div>
+<p>Para acceder al directorio:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/app
+</pre></div>
+</div>
+<p>Aquí es donde debe clonar o descargar el repositorio del proyecto.</p>
+</li>
+</ol>
+</section>
+<section id="instalacion-del-repositorio">
+<h2>Instalación del Repositorio<a class="headerlink" href="#instalacion-del-repositorio" title="Link to this heading">#</a></h2>
+<dl class="simple">
+<dt>Lo primero que debemos realizar es lo siguiente:</dt><dd><ul class="simple">
+<li><p>Debemos solicitar acceso al repositorio, que se encuentra en GitHub.</p></li>
+<li><p>Debemos clonar el repositorio en el servidor, en la ruta /home/app.</p></li>
+<li><p>Al ingresar al directorio, debemos inicializar el entorno virtual.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Asegurate de estar dentro del Servidor, en caso de no tener las credenciales de acceso solicitalos al departamento de informatica.</p>
+<ol class="arabic">
+<li><p>Ingresa al PATH del repositorio:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/app
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<ul class="simple">
+<li><p>En caso de no tener creado el entorno virtual, debes crearlo, de lo contrario omite este paso:</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+</pre></div>
+</div>
+</div>
+<ol class="arabic" start="2">
+<li><p>Activar entorno virtual:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+</pre></div>
+</div>
+</li>
+<li><p>Instalar dependecias desde el archivo <strong>requirements.txt</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+</li>
+<li><p>En caso de  actualizar dependencias o agregar una nueva, debe actualizar <strong>requirements.txt</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>freeze<span class="w"> </span>&gt;<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+</li>
+<li><p>Para salir del entorno virtual ejecuta:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>deactivate
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition important">
+<p class="admonition-title">Importante</p>
+<p>Es fundamental garantizar que se está trabajando con la versión más reciente del repositorio. Como parte de las buenas prácticas de desarrollo, se recomienda realizar las modificaciones en un entorno local en lugar de directamente en el servidor.
+A continuación, se detallan los parámetros necesarios para la correcta configuración del archivo <code class="docutils literal notranslate"><span class="pre">.env</span></code>.</p>
+</div>
+</section>
+<section id="configuracion-archivo-env">
+<h2>Configuración archivo <code class="docutils literal notranslate"><span class="pre">.env</span></code><a class="headerlink" href="#configuracion-archivo-env" title="Link to this heading">#</a></h2>
+<p>Antes de proceder, es imprescindible verificar la existencia del archivo <code class="docutils literal notranslate"><span class="pre">.env</span></code>, ya que, por razones de seguridad y buenas prácticas, este no se incluye en el repositorio de código.</p>
+<p>Si el archivo no está presente, deberá crearlo manualmente ejecutando el siguiente comando:</p>
+<ol class="arabic">
+<li><p>Asegurese de estar en el <code class="docutils literal notranslate"><span class="pre">PATH</span></code> correcto antes de continuar, ejecute:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/home/app
+</pre></div>
+</div>
+</li>
+<li><p>Cree el archivo he ingrese los valores de las variables, para esto ejecute:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vim<span class="w"> </span>.env
+</pre></div>
+</div>
+<div class="pst-scrollable-table-container"><table class="table" id="id3">
+<caption><span class="caption-text">Detalle archivo .env</span><a class="headerlink" href="#id3" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Descripción</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>TWILIO_ACCOUNT_SID</p></td>
+<td><p>ID de cuenta de Twilio, necesario para autenticarse.</p></td>
+</tr>
+<tr class="row-odd"><td><p>TWILIO_AUTH_TOKEN</p></td>
+<td><p>Token de autenticación de Twilio para realizar solicitudes.</p></td>
+</tr>
+<tr class="row-even"><td><p>TWILIO_WHATSAPP_NUMBER</p></td>
+<td><p>Número de WhatsApp proporcionado por Twilio.</p></td>
+</tr>
+<tr class="row-odd"><td><p>TWILIO_PHONE_NUMBER</p></td>
+<td><p>Número de teléfono de Twilio para enviar SMS y llamadas.</p></td>
+</tr>
+<tr class="row-even"><td><p>DEFAULT_FROM_EMAIL</p></td>
+<td><p>Correo electrónico predeterminado para el envío de emails.</p></td>
+</tr>
+<tr class="row-odd"><td><p>EMAIL_HOST_USER</p></td>
+<td><p>Usuario del servicio SMTP (correo saliente).</p></td>
+</tr>
+<tr class="row-even"><td><p>EMAIL_HOST_PASSWORD</p></td>
+<td><p>Contraseña o token para autenticarse en el servicio SMTP.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SQL_NAME</p></td>
+<td><p>Nombre de la base de datos del proyecto.</p></td>
+</tr>
+<tr class="row-even"><td><p>SQL_USER</p></td>
+<td><p>Usuario de la base de datos.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SQL_PASSWORD</p></td>
+<td><p>Contraseña del usuario de la base de datos.</p></td>
+</tr>
+<tr class="row-even"><td><p>SQL_PORT</p></td>
+<td><p>Puerto en el que corre la base de datos.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DB_OPTIONS_INIT_COMMAND</p></td>
+<td><p>Comando de inicialización para la base de datos, como el
+modo SQL (ejemplo: <cite>sql_mode=STRICT_TRANS_TABLES</cite>).</p></td>
+</tr>
+<tr class="row-even"><td><p>DB_OPTIONS_CHARSET</p></td>
+<td><p>Configuración de codificación de caracteres de la BD.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ol>
+<div class="admonition important">
+<p class="admonition-title">Importante</p>
+<p>Para tener acceso a estas variables de entono comuniquese con el departamento de Informatica.</p>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">Documentacion Geoadmin</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="arquitectura.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">Arquitectura del Sistema</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#servidor">Servidor</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#coneccion-al-servidor">Conección al Servidor</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#instalacion-del-repositorio">Instalación del Repositorio</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuracion-archivo-env">Configuración archivo <code class="docutils literal notranslate"><span class="pre">.env</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por Isamax
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Isamax.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

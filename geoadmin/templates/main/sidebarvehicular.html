@@ -1,0 +1,313 @@
+{% load static %}
+<div class="sticky is-expanded" style="margin-bottom: -74px;">
+    <div class="app-sidebar__overlay active" data-bs-toggle="sidebar"></div>
+    <div class="app-sidebar ps">
+        <div class="side-header"> 
+            <a class="header-brand1" href="{% url 'logincustom' %}"> 
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img desktop-logo" alt="logo" />
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img toggle-logo" alt="logo" />
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img light-logo"  alt="logo" />
+                <img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img light-logo1" alt="logo" /> 
+                <h3>GeoAdmin</h3>
+            </a>   
+        </div>
+        <div class="main-sidemenu is-expanded">
+            <div class="slide-left disabled active d-none" id="slide-left">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
+                </svg> 
+            </div>
+            <ul class="side-menu open" style="margin-right: 0px; margin-left: 0px;">
+                <li>
+                    <h3>Menu Vehicular</h3>
+                </li>
+
+                {% if request.user.usuarioprofile.seccionVehicular in 'ADMINISTRADOR, BASE DATOS' %}
+                <li class="slide"> 
+                    <a class="side-menu__item has-link {% if sidebar == 'dashboard' %}active{% endif %}" data-bs-toggle="slide" href="{% url 'dashboard' %}"> 
+                        <i class="icon-home icons-size"></i>  
+                        <span class="side-menu__label">Dashboard</span> 
+                    </a> 
+                </li>
+                {% endif %}
+
+                {% if request.user.usuarioprofile.seccionVehicular != "SIN ASIGNAR" %}
+                <li class="slide {% if sidebarmain == 'capacitaciones' %}is-expanded{% endif %}">
+                    <a class="side-menu__item {% if sidebarmain == 'capacitaciones' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#">
+                        <i class="icon-note icons-size"></i>
+                        <span class="side-menu__label">Capacitaciones</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Capacitaciones</a></li>
+                        <li><a href="{% url 'manage_capacitaciones' 'charlas' %}" class="slide-item {% if sidebarmenu == 't-charlas' %}active{% endif %}">Charlas</a></li>
+                        <li><a href="{% url 'manage_capacitaciones' 'informativos' %}" class="slide-item {% if sidebarmenu == 't-informativos' %}active{% endif %}">Informativos</a></li>
+                        <li><a href="{% url 'manage_capacitaciones' 'difusiones' %}" class="slide-item {% if sidebarmenu == 't-difusiones' %}active{% endif %}">Difusiones</a></li>
+                        <li><a href="{% url 'manage_capacitaciones' 'cursos' %}" class="slide-item {% if sidebarmenu == 't-cursos' %}active{% endif %}">Cursos</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                <li>
+                    <h3>Secciones</h3>
+                </li>
+
+                {% if request.user.usuarioprofile.seccionVehicular in 'CONDUCTOR, JEFE MANTENCION, SUPERVISOR, BASE DATOS, ADMINISTRADOR' %}
+                <li class="slide {% if sidebarmain == 'system_vehicles' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'system_vehicles' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-notebook icons-size"></i>
+                        <span class="side-menu__label">Registro Vehicular</span>
+                        <i class="angle fa fa-angle-right"></i> 
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Registro Vehicular</a></li>
+                        {% if request.user.usuarioprofile.seccionVehicular in 'ADMINISTRADOR, BASE DATOS, JEFE MANTENCION, SUPERVISOR' %} 
+                        <li><a href="{% url 'manage_vehicles' %}" class="slide-item {% if sidebar == 'manage_vehicles' %}active{% endif %}">Administrar Vehículos</a></li>
+                        {% endif %}
+                        
+                        <li><a href="{% url 'new_kilometraje_register' %}" class="slide-item {% if sidebar == 'new_kilometraje_register' %}active{% endif %}">Registrar Kilometraje</a></li>
+                        <li><a href="{% url 'new_maintenance_request' %}" class="slide-item {% if sidebar == 'new_maintenance_request' %}active{% endif %}">Solicitar Mantenimiento</a></li>
+                        
+                        {% if request.user.usuarioprofile.seccionVehicular in 'ADMINISTRADOR, BASE DATOS, JEFE MANTENCION, SUPERVISOR' %} 
+                        <li><a href="{% url 'manage_maintenance_request' %}" class="slide-item {% if sidebar == 'manage_maintenance_request' %}active{% endif %}">Administrar Mantenimientos</a></li>
+                        <li><a href="{% url 'manage_fuel_cards' %}" class="slide-item {% if sidebar == 'manage_fuel_cards' %}active{% endif %}">Tarjetas Combustible</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if request.user.usuarioprofile.seccionVehicular in 'JEFE MANTENCION, SUPERVISOR, BASE DATOS, ADMINISTRADOR' %}
+                <li class="slide {% if sidebarmain == 'system_machines' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'system_machines' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-wrench icons-size"></i>
+                        <span class="side-menu__label">Registro Maquinarias</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)"></a>Registro Maquinarias</li>
+                        <li><a href="{% url 'manage_machines' %}" class="slide-item {% if sidebar == 'manage_machines' %}active{% endif %}">Administrar Maquinarias</a></li>
+                        <li><a href="{% url 'new_horometro_register' %}" class="slide-item {% if sidebar == 'new_horometro_register' %}active{% endif %}">Registrar Horómetro</a></li>
+                        <li><a href="{% url 'new_maintenance_machine_request' %}" class="slide-item {% if sidebar == 'new_maintenance_machine_request' %}active{% endif %}">Solicitar Mantenimiento</a></li>
+                        <li><a href="{% url 'manage_maintenance_machine_request' %}" class="slide-item {% if sidebar == 'manage_maintenance_machine_request' %}active{% endif %}">Administrar Mantenimientos</a></li>
+                        <li><a href="{% url 'manage_machines_kits_repair' %}" class="slide-item {% if sidebar == 'manage_machines_kits_repair' %}active{% endif %}">Stock de Kits de Reparación</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if request.user.usuarioprofile.seccionVehicular in 'JEFE MANTENCION, SUPERVISOR, BASE DATOS, ADMINISTRADOR' %}
+                <li class="slide {% if sidebarmain == 'system_equipments' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'system_equipments' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-printer icons-size"></i>
+                        <span class="side-menu__label">Registro Equipos</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)"></a>Registro Equipos</li>
+                        <li><a href="{% url 'manage_equipments' %}" class="slide-item {% if sidebar == 'manage_equipments' %}active{% endif %}">Administrar Equipos</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if request.user.usuarioprofile.seccionVehicular in 'ADMINISTRADOR, BASE DATOS' %}
+                <li class="slide {% if sidebarmain == 'system_planning' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'system_planning' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-chart icons-size"></i>
+                        <span class="side-menu__label">Planificación</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Planificación</a></li>
+                        {% if request.user.usuarioprofile.seccionVehicular == "ADMINISTRADOR" %} 
+                        <li><a href="{% url 'new_planning_select_mining' %}" class="slide-item {% if sidebar == 'new_planning_mining' %}active{% endif %}">Ingreso</a></li>
+                        {% endif %}
+                        <li><a href="{% url 'view_planning_mining' %}" class="slide-item {% if sidebar == 'view_planning_mining' %}active{% endif %}">Visualizar por Faena</a></li>
+                        <li><a href="{% url 'view_planning_type' %}" class="slide-item {% if sidebar == 'view_planning_type' %}active{% endif %}">Visualizar por Tipo</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if request.user.usuarioprofile.seccionVehicular in 'ADMINISTRADOR, BASE DATOS' %}
+                <li class="slide {% if sidebarmain == 'system_report_vehicles' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'system_report_vehicles' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-chart icons-size"></i>
+                        <span class="side-menu__label">Informes y Estadisticas</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Estadisticas</a></li>
+                        <li><a href="{% url 'report_vehicles_general' %}" class="slide-item {% if sidebar == 'report_vehicles_general' %}active{% endif %}">Reporte General</a></li>
+                        <li><a href="{% url 'report_vehicles_faenas' %}" class="slide-item {% if sidebar == 'report_vehicles_faenas' %}active{% endif %}">Reporte Faena</a></li>
+                        <li><a href="{% url 'report_vehicles_kilometrajes' %}" class="slide-item {% if sidebar == 'report_vehicles_kilometrajes' %}active{% endif %}">Reporte kilometrajes</a></li>
+                        <li><a href="{% url 'report_vehicles_camionetas_faenas' %}" class="slide-item {% if sidebar == 'report_vehicles_camionetas_faenas' %}active{% endif %}">Reporte Vehículos</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+  
+                {% if request.user.usuarioprofile.seccionVehicular != "SIN ASIGNAR" %}
+                <li class="slide {% if sidebarmain == 'manage_documentation' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'manage_documentation' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-layers icons-size"></i>
+                        <span class="side-menu__label">Documentación</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Documentación</a></li>
+                        <li><a href="{% url 'view_general_mining_documents' %}"  class="slide-item {% if sidebar == 'manage_viewdocuemntationmining' %}active{% endif %}">Para Faena</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if request.user.usuarioprofile.seccionVehicular in 'ADMINISTRADOR, BASE DATOS' %}
+                <li class="slide {% if sidebarmain == 'system_users' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'system_users' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-people icons-size"></i>
+                        <span class="side-menu__label">Usuarios</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Usuarios</a></li>
+                        <li><a href="{% url 'manage_users' %}" class="slide-item {% if sidebar == 'manage_users' %}active{% endif %}">Administrar</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if request.user.usuarioprofile.seccionVehicular in 'ADMINISTRADOR, BASE DATOS' %}
+                <li class="slide {% if sidebarmain == 'manage_system' %}is-expanded{% endif %}">
+                    <a class="side-menu__item {% if sidebarmain == 'manage_system' %}is-expanded active{% endif %}" data-bs-toggle="slide" href="#"> 
+                        <i class="icon-organization icons-size"></i>
+                        <span class="side-menu__label">Mantenedor Sistema</span>
+                        <i class="angle fa fa-angle-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li class="side-menu-label1"><a href="javascript:void(0)">Mantenedor Sistema</a></li>
+                        {% if request.user.usuarioprofile.seccionVehicular in 'ADMINISTRADOR, BASE DATOS' %}
+                        <li class="sub-slide {% if sidebarmenu == 'manage_users' %}is-expanded active{% endif %}"> 
+                            <a class="sub-side-menu__item {% if sidebarmenu == 'manage_users' %}active{% endif %}" data-bs-toggle="sub-slide" href="#">
+                                <span class="sub-side-menu__label ">Opciones Usuarios</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a> 
+                            <ul class="sub-slide-menu {% if sidebarmenu == 'manage_users' %}open{% endif %}"> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_genders' %}active{% endif %}" href="{% url 'manage_genders' %}" >Géneros</a></li> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_cities' %}active{% endif %}" href="{% url 'manage_cities' %}">Ciudades</a></li> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_nationalities' %}active{% endif %}" href="{% url 'manage_nationalities' %}">Nacionalidades</a></li> 
+                            </ul> 
+                        </li>
+                        <li class="sub-slide {% if sidebarmenu == 'manage_vehicles' %}is-expanded active{% endif %}"> 
+                            <a class="sub-side-menu__item {% if sidebarmenu == 'manage_vehicles' %}active{% endif %}" data-bs-toggle="sub-slide" href="#">
+                                <span class="sub-side-menu__label ">Opciones Vehículos</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a> 
+                            <ul class="sub-slide-menu {% if sidebarmenu == 'manage_vehicles' %}open{% endif %}"> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_years' %}active{% endif %}" href="{% url 'manage_years' %}" >Administrar Años</a></li> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_brands' %}active{% endif %}" href="{% url 'manage_brands' %}">Administrar Marcas</a></li> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_models' %}active{% endif %}" href="{% url 'manage_models' %}">Administrar Modelos</a></li> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_colours' %}active{% endif %}" href="{% url 'manage_colours' %}" >Administrar Colores</a></li> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_types' %}active{% endif %}" href="{% url 'manage_types' %}">Administrar Tipos de Vehículos</a></li>
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_problems' %}active{% endif %}" href="{% url 'manage_problems' %}">Administrar Problemas</a></li>
+                                <li class="sub-slide2 {% if sidebarsubmenu == 'manage_failures' %}is-expanded active{% endif %}"> 
+                                    <a class="sub-side-menu__item2 {% if sidebarsubmenu == 'manage_failures' %}is-expanded active{% endif %}" data-bs-toggle="sub-slide2" href="#">
+                                        <span class="sub-side-menu__label2">Administrar Fallas</span>
+                                        <i class="sub-angle2 fa fa-angle-right"></i>
+                                    </a> 
+                                    <ul class="sub-slide-menu2 open"> 
+                                        <li><a href="{% url 'manage_categories_failures' %}" class="sub-slide-item2 {% if sidebarsubsubmenu == 'manage_categories_failures' %}active{% endif %}">Categorias</a></li> 
+                                        <li><a href="{% url 'manage_failures' %}" class="sub-slide-item2 {% if sidebarsubsubmenu == 'manage_failures' %}active{% endif %}">Fallas</a></li> 
+                                    </ul> 
+                                </li>
+                                <li class="sub-slide2 {% if sidebarsubmenu == 'manage_sleepiness' %}is-expanded active{% endif %}"> 
+                                    <a class="sub-side-menu__item2 {% if sidebarsubmenu == 'manage_sleepiness' %}is-expanded active{% endif %}" data-bs-toggle="sub-slide2" href="#">
+                                        <span class="sub-side-menu__label2">Administrar Equipos Somnolencia</span>
+                                        <i class="sub-angle2 fa fa-angle-right"></i>
+                                    </a> 
+                                    <ul class="sub-slide-menu2 open"> 
+                                        <li><a href="{% url 'manage_brand_sleepiness' %}" class="sub-slide-item2 {% if sidebarsubsubmenu == 'manage_brand_sleepiness' %}active{% endif %}">Proveedor</a></li> 
+                                    </ul> 
+                                </li>
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_important_dates' %}active{% endif %}" href="{% url 'manage_important_dates' %}">Administrar Fechas Importantes</a></li>
+                            </ul> 
+                        </li>
+                        <li class="sub-slide {% if sidebarmenu == 'manage_machine' %}is-expanded active{% endif %}"> 
+                            <a class="sub-side-menu__item {% if sidebarmenu == 'manage_machine' %}active{% endif %}" data-bs-toggle="sub-slide" href="#">
+                                <span class="sub-side-menu__label ">Opciones Maquinarias</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a> 
+                            <ul class="sub-slide-menu {% if sidebarmenu == 'manage_machine' %}open{% endif %}"> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_managetypemachine' %}active{% endif %}" href="{% url 'manage_types_machines' %}" >Tipo Maquinaria</a></li>
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_managebrandmachine' %}active{% endif %}" href="{% url 'manage_brands_machines' %}" >Marcas/Modelos</a></li>
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_managekitmachine' %}active{% endif %}" href="{% url 'manage_kits_repairs' %}">Kits de Reparación</a></li>
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_managefailuremachine' %}active{% endif %}" href="{% url 'manage_failures_machines' %}">Fallas Maquinarias</a></li>
+                            </ul> 
+                        </li>
+                        <li class="sub-slide {% if sidebarmenu == 'manage_equipment' %}is-expanded active{% endif %}"> 
+                            <a class="sub-side-menu__item {% if sidebarmenu == 'manage_equipment' %}active{% endif %}" data-bs-toggle="sub-slide" href="#">
+                                <span class="sub-side-menu__label ">Opciones Equipos</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a> 
+                            <ul class="sub-slide-menu {% if sidebarmenu == 'manage_machine' %}open{% endif %}"> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_typeequipment' %}active{% endif %}" href="{% url 'manage_types_equipment' %}" >Tipos</a></li>
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_brandequipment' %}active{% endif %}" href="{% url 'manage_brands_equipment' %}" >Marcas/Modelos</a></li>
+                            </ul> 
+                        </li>
+                        <li class="sub-slide {% if sidebarmenu == 'manage_mining' %}is-expanded active{% endif %}"> 
+                            <a class="sub-side-menu__item {% if sidebarmenu == 'manage_mining' %}active{% endif %}" data-bs-toggle="sub-slide" href="#">
+                                <span class="sub-side-menu__label ">Opciones Faenas Mineras</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a> 
+                            <ul class="sub-slide-menu {% if sidebarmenu == 'manage_mining' %}open{% endif %}"> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_managemining' %}active{% endif %}" href="{% url 'manage_mining' %}" >Administrar Faenas</a></li> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_documentsmining' %}active{% endif %}" href="{% url 'manage_mining_documents' %}">Documentación Vehicular</a></li>
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_documentsmining_general' %}active{% endif %}" href="{% url 'manage_mining_documents_general' %}">Documentación General</a></li>
+                            </ul> 
+                        </li>
+                        <li class="sub-slide {% if sidebarmenu == 'manage_maintenance' %}is-expanded active{% endif %}"> 
+                            <a class="sub-side-menu__item {% if sidebarmenu == 'manage_maintenance' %}active{% endif %}" data-bs-toggle="sub-slide" href="#">
+                                <span class="sub-side-menu__label ">Opciones Empresas Mantenimientos</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a> 
+                            <ul class="sub-slide-menu {% if sidebarmenu == 'manage_maintenance' %}open{% endif %}"> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_newcompanie' %}active{% endif %}" href="{% url 'manage_maintenance_companies' %}" >Administrar Empresas de Servicios</a></li> 
+                                <li><a class="sub-slide-item {% if sidebarsubmenu == 'manage_maintenanceservices' %}active{% endif %}" href="{% url 'manage_maintenance_services' %}">Administrar Servicios de Empresas</a></li> 
+                            </ul> 
+                        </li>
+                        <li class="sub-slide {% if sidebarmenu == 'manage_ayuda_manuales' %}is-expanded active{% endif %}"> 
+                            <a class="sub-side-menu__item {% if sidebarmenu == 'manage_ayuda_manuales' %}active{% endif %}" data-bs-toggle="sub-slide" href="{% url 'manage_help_manuals' %}">
+                                <span class="sub-side-menu__label ">Opciones Ayuda y Manuales</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li class="sub-slide {% if sidebar == 'manage_notifications' %}is-expanded active{% endif %}"> 
+                            <a class="sub-side-menu__item {% if sidebar == 'manage_notifications' %}active{% endif %}" data-bs-toggle="sub-slide" href="{% url 'manage_notifications' %}?area=VEHICULAR">
+                                <span class="sub-side-menu__label ">Notificaciones</span>
+                                <i class="sub-angle fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {% endif %}
+                {% endif %}
+
+                {% if request.user.usuarioprofile.seccionVehicular in 'ADMINISTRADOR, BASE DATOS' %}
+                <li class="slide {% if sidebarmain == 'system_report_error' %}is-expanded{% endif %}"> 
+                    <a class="side-menu__item {% if sidebarmain == 'system_report_error' %}active{% endif %}" href="{% url 'manage_report_error' %}"> 
+                        <i class="icon-people icons-size"></i>
+                        <span class="side-menu__label">Reporte de Errores</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                <div class="mt-5"></div>
+            </ul>
+            <div class="slide-right" id="slide-right">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
+                </svg> 
+            </div>
+        </div>
+        <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+            <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+        </div>
+        <div class="ps__rail-y" style="top: 100px;">
+            <div class="ps__thumb-y" tabindex="0" ></div>
+        </div>
+    </div>
+</div>

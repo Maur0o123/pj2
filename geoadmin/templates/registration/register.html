@@ -1,0 +1,109 @@
+{% extends 'main/base_login.html' %} 
+{% load static %} 
+{% load crispy_forms_tags %} 
+{% block title %}Registro de Usuario{% endblock %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+{% if user.is_authenticated %} 
+    <meta http-equiv="REFRESH" content="0;url={% url 'dashboard' %}">
+{% else %}
+<div class="page">
+    <div>
+    <!-- CONTAINER OPEN -->
+        <div class="container-login100">
+            <div class="wrap-login100 p-0" style="max-width: 1000px; width: 95%;">
+                <div class="card-body">
+                    <div class="col col-login mx-auto text-center">
+                        <a href="#" class="text-center"><img src="{% static 'images/logo/Logo GeoAdmin.png' %}" class="header-brand-img" alt=""/></a>
+                        <span href="#" class="login100-form-title"> Panel de Registro </span>
+                    </div> 
+                    <form class="login100-form validate-form w-100" id="form" action="{% url 'save_new_user' %}" method="POST">
+                        {% csrf_token %}                    
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                {{ formregistro.username|as_crispy_field }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ formregistro.first_name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ formregistro.last_name|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                {{ formregistro.password1|as_crispy_field }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ formregistro.password2|as_crispy_field }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ formregistro.phone|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-md-4 mb-3">
+                                {{ formregistro.email|as_crispy_field }}
+                            </div>
+                            <div class="col-md-4 mb-3 text-center">
+                                {% if recaptcha_site_key %}
+                                    <div class="g-recaptcha d-inline-block" data-sitekey="{{ recaptcha_site_key }}"></div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <button type="submit" class="login100-form-btn btn-geoadmin w-100 mt-2">Registrar</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Hidden field -->
+                        <div style="display: none;">
+                            {{ formregistro.role }}
+                        </div>
+
+                        <div class="text-center pt-3">
+                            <p class="text-dark mb-0">Ya tienes una cuenta?<a href="{% url 'logincustom' %}" class="text-primary ms-1">Ingresa Aquí</a></p>
+                        </div>
+                    </form>
+                </div>                
+            </div>
+        </div>
+    <!-- CONTAINER CLOSED -->
+    </div>
+    {% include 'main/footer-login.html' %}
+</div>
+{% endif %}
+
+{% endblock content %} 
+
+{% block javascript %} 
+<script type="text/javascript">        
+    function formatUsuario(id_username)
+    {id_username.value=id_username.value.replace(/[.-]/g, '')
+    .replace( /^(\d{1,2})(\d{3})(\d{3})(\w{1})$/, '$1.$2.$3-$4')}
+</script>
+<script type="text/javascript">
+    function formatTelefono(id_telefono)
+    {id_telefono.value=id_telefono.value.replace(/[-]/g, '')
+    .replace( /^(\d{1})(\d{4})(\d{4})$/, '$1$2$3')}
+</script>
+<script type="text/javascript">
+(function () {
+    const form = document.getElementById("form");
+    if (!form) return;
+
+    const button = form.querySelector("button[type='submit']");
+    form.addEventListener("submit", function (event) {
+        if (button) {
+            button.disabled = true;
+            button.innerText = "Enviando...";
+        }
+    });
+})();
+</script>
+{% if recaptcha_site_key %}
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endif %}
+{% endblock javascript %}

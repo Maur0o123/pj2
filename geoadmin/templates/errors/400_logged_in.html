@@ -1,0 +1,46 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">La página que buscabas no existe (400)</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="javascript:void(0);">Errores</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Error 400
+                        </li>
+                    </ol>
+                </div>
+                
+            </div>
+            <!-- PAGE-HEADER END -->
+        </div>
+        <div class="text-left pt-3">
+            <a  id="btn-regresar" class="btn btn-secondary" href="{% url 'select' %}">Regresar</a> 
+        </div>
+        <!-- CONTAINER END -->
+    </div>
+</div> 
+{% endblock content %}
+{% block javascript %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const btn = document.getElementById('btn-regresar');
+        const currentUrl = window.location.href;
+        if (!currentUrl.includes('https://geoadmin.cl/select')) {
+            btn.remove(); // Elimina el botón si NO contiene esa URL
+        }
+    });
+</script>
+{% endblock javascript %}

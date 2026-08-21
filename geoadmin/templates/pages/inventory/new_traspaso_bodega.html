@@ -1,0 +1,275 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Traspaso a Bodega{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+{% endblock css %}
+
+{% block content %}
+
+<button href="{% url 'manage_bodegas' %}" type="submit" form="form" class="btn btn-primary save-float">
+    Guardar
+</button>
+
+<a href="{% url 'manage_inventario_movimientos' %}" class="btn btn-secondary back-float">
+    Regresar
+</a>
+
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Traspaso a Bodega</h1>
+                </div>
+
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">Inventario</li>
+                        <li class="breadcrumb-item active">Traspaso a Bodega</li>
+                    </ol>
+                </div>
+            </div>
+
+            <form method="POST" id="form">
+                {% csrf_token %}
+
+                <div class="card">
+                    <div class="card-body">
+
+                        <h4 class="card-title mb-4">Datos del Traspaso</h4>
+
+                        <div class="row row-sm">
+
+                            <div class="col-md-6">
+                                <label>Bodega de origen</label>
+
+                                <select id="origen" class="form-control" disabled>
+                                    <option value="CASA_MATRIZ|" selected>Casa Matriz</option>
+                                </select>
+
+                                <input type="hidden" name="origen_tipo" id="origen_tipo" value="CASA_MATRIZ">
+                                <input type="hidden" name="origen_bodega" id="origen_bodega" value="">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label>Bodega de destino</label>
+
+                                <select id="destino" class="form-control" required>
+                                    <option value="">Seleccione bodega destino</option>
+
+                                    {% for bodega in bodegas %}
+                                        <option value="BODEGA|{{ bodega.id }}">
+                                            {{ bodega.nombre }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+
+                                <input type="hidden" name="destino_tipo" id="destino_tipo">
+                                <input type="hidden" name="destino_bodega" id="destino_bodega">
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <h4 class="card-title mb-3">Materiales disponibles</h4>
+
+                        <div id="contenedorStock">
+                            <div class="alert alert-info">
+                                Selecciona un origen para cargar los materiales disponibles.
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+<script>
+function separarUbicacion(valor) {
+    const partes = valor.split('|');
+
+    return {
+        tipo: partes[0] || '',
+        bodega: partes[1] || ''
+    };
+}
+
+function setHiddenUbicacion(selectId, tipoId, bodegaId) {
+    const select = document.getElementById(selectId);
+    const ubicacion = separarUbicacion(select.value);
+
+    document.getElementById(tipoId).value = ubicacion.tipo;
+    document.getElementById(bodegaId).value = ubicacion.bodega;
+
+    return ubicacion;
+}
+
+function cargarStockOrigen() {
+    console.log('Ejecutando cargarStockOrigen');
+
+    const origen = setHiddenUbicacion(
+        'origen',
+        'origen_tipo',
+        'origen_bodega'
+    );
+
+    console.log(origen);
+
+    const contenedor = document.getElementById('contenedorStock');
+
+    if (!origen.tipo) {
+        contenedor.innerHTML = `
+            <div class="alert alert-info">
+                Selecciona un origen para cargar los materiales disponibles.
+            </div>
+        `;
+        return;
+    }
+    console.log(
+        `{% url 'obtener_stock_ubicacion' %}?tipo=${origen.tipo}&bodega=${origen.bodega}`
+    );
+
+    fetch(
+        `{% url 'obtener_stock_ubicacion' %}?tipo=${origen.tipo}&bodega=${origen.bodega}`
+    )
+        .then(response => response.json())
+        .then(data => {
+
+            if (!data.success || data.stocks.length === 0) {
+                contenedor.innerHTML = `
+                    <div class="alert alert-warning">
+                        No hay materiales disponibles en esta ubicación.
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Stock Disponible</th>
+                                <th>Cantidad a Traspasar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            data.stocks.forEach(stock => {
+                html += `
+                    <tr>
+                        <td>
+                            ${stock.codigo_item || ''} | ${stock.item}
+                            <input type="hidden" name="items[]" value="${stock.item_id}">
+                        </td>
+
+                        <td>${stock.buenos}</td>
+                        
+
+                            <td>
+                                <input type="number"
+                                    name="cantidad_buenos[]"
+                                    class="form-control"
+                                    min="0"
+                                    max="${stock.buenos}"
+                                    value="0">
+                            </td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            contenedor.innerHTML = html;
+        });
+}
+
+document.getElementById('origen').addEventListener('change', function () {
+    cargarStockOrigen();
+});
+
+document.getElementById('destino').addEventListener('change', function () {
+    setHiddenUbicacion('destino', 'destino_tipo', 'destino_bodega');
+});
+
+document.getElementById('form').addEventListener('submit', function(e) {
+    const origen = setHiddenUbicacion('origen', 'origen_tipo', 'origen_bodega');
+    const destino = setHiddenUbicacion('destino', 'destino_tipo', 'destino_bodega');
+
+    if (!origen.tipo || !destino.tipo) {
+        e.preventDefault();
+
+        Swal.fire({
+            icon: 'warning',
+            title: 'Datos incompletos',
+            text: 'Debe seleccionar origen y destino.',
+            confirmButtonColor: '#00cfe8'
+        });
+
+        return;
+    }
+
+    if (origen.tipo === destino.tipo && origen.bodega === destino.bodega) {
+        e.preventDefault();
+
+        Swal.fire({
+            icon: 'warning',
+            title: 'Origen y destino iguales',
+            text: 'El origen y destino no pueden ser el mismo.',
+            confirmButtonColor: '#00cfe8'
+        });
+
+        return;
+    }
+
+let tieneCantidad = false;
+
+    document.querySelectorAll('input[name="cantidad_buenos[]"]').forEach(input => {
+        if (Number(input.value) > 0) {
+            tieneCantidad = true;
+        }
+    });
+
+if (!tieneCantidad) {
+    e.preventDefault();
+
+    Swal.fire({
+        icon: 'warning',
+        title: 'Sin cantidades',
+        text: 'Debe ingresar al menos una cantidad a traspasar.',
+        confirmButtonColor: '#00cfe8'
+    });
+
+    return;
+}
+
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    console.log('DOM cargado');
+
+    document.getElementById('origen_tipo').value = 'CASA_MATRIZ';
+    document.getElementById('origen_bodega').value = '';
+
+    cargarStockOrigen();
+});
+</script>
+{% endblock javascript %}

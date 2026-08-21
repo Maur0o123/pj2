@@ -1,0 +1,556 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}{% if solo_lectura %}Egreso{% else %}Vigilancia Médica{% endif %}{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+<link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" />
+<link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet" />
+<style>
+    .vigencia-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        height: 38px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+    }
+
+    .egreso-estado-badge {
+        display: inline-block;
+        min-width: 90px;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+    }
+
+    .egreso-estado-badge--actual {
+        background-color: #8cbf52;
+        color: #ffffff;
+    }
+
+    .egreso-estado-badge--historico {
+        background-color: #6c757d;
+        color: #ffffff;
+    }
+
+    .archivo-actual-box {
+        display: block;
+        width: 100%;
+        background-color: #8cbf52;
+        color: #ffffff;
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 10px 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .historial-archivo-cell {
+        display: inline-block;
+        max-width: 260px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+
+    .egreso-upload-link {
+        display: inline-block;
+        margin-top: 6px;
+    }
+
+    #datatable-egreso-archivos th:nth-child(2),
+    #datatable-egreso-archivos th:nth-child(3),
+    #datatable-egreso-archivos th:nth-child(5),
+    #datatable-egreso-archivos td:nth-child(2),
+    #datatable-egreso-archivos td:nth-child(3),
+    #datatable-egreso-archivos td:nth-child(5) {
+        white-space: nowrap;
+    }
+
+    #datatable-egreso-archivos td,
+    #datatable-egreso-archivos th {
+        vertical-align: middle;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% comment %}En modo normal permite actualizar seguimiento; en egreso permite actualizar fecha y archivo cuando el flag lo habilita.{% endcomment %}
+{% if not solo_lectura or permitir_subir_archivo_egreso %}
+<button type="submit" form="formViewVigilancia" class="btn btn-primary save-float">Guardar</button>
+{% endif %}
+<a href="{{ back_url|default:'#' }}" class="btn btn-secondary back-float{% if solo_lectura and not permitir_subir_archivo_egreso %} back-float-solo{% endif %}">Regresar</a>
+
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+            <div class="page-header">
+                <h1 class="page-title">{% if solo_lectura %}Egreso{% else %}Vigilancia Médica{% endif %}</h1>
+            </div>
+
+            <form id="formViewVigilancia" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card">
+                    <div class="panel panel-primary">
+                        <div class="tab-menu-heading border-bottom-0">
+                            <div class="tabs-menu4 border-bottomo-sm">
+                                <nav class="nav d-sm-flex d-block">
+                                    <a class="nav-link border border-bottom-0 br-sm-5 me-2 active" data-bs-toggle="tab" href="#personal">
+                                        <i class="fe fe-user me-2"></i>Datos Personales
+                                    </a>
+                                    <a class="nav-link border border-bottom-0 br-sm-5 me-2" data-bs-toggle="tab" href="#agente">
+                                        <i class="fe fe-activity me-2"></i>Agente
+                                    </a>
+                                    {% if solo_lectura %}
+                                    <a class="nav-link border border-bottom-0 br-sm-5 me-2" data-bs-toggle="tab" href="#egreso">
+                                        <i class="fe fe-log-out me-2"></i>Egreso
+                                    </a>
+                                    {% endif %}
+                                </nav>
+                            </div>
+                        </div>
+
+                        <div class="panel-body tabs-menu-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="personal">
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3"><label class="form-label">RUT</label><input type="text" class="form-control" value="{{ vigilancia.rut_trabajador|default:'' }}" disabled></div>
+                                        <div class="col-md-8 mb-3"><label class="form-label">Nombre Completo</label><input type="text" class="form-control" value="{{ vigilancia.nombre_completo|default:'' }}" disabled></div>
+                                        <div class="col-md-4 mb-3"><label class="form-label">Género</label><input type="text" class="form-control" value="{{ vigilancia.genero_texto|default:'-' }}" disabled></div>
+                                        <div class="col-md-4 mb-3"><label class="form-label">Fecha Nacimiento</label><input type="text" class="form-control" value="{{ vigilancia.fecha_nacimiento|date:'d/m/Y'|default:'-' }}" disabled></div>
+                                        <div class="col-md-2 mb-3"><label class="form-label">Edad</label><input type="text" class="form-control" value="{{ vigilancia.edad|default:'0' }}" disabled></div>
+                                        <div class="col-md-3 mb-3"><label class="form-label">Area</label><input type="text" class="form-control" value="{{ vigilancia.area|default:'-' }}" disabled></div>
+                                        <div class="col-md-3 mb-3"><label class="form-label">GES</label><input type="text" class="form-control" value="{{ vigilancia.ges|default:'-' }}" disabled></div>
+
+                                        <div class="col-12"><hr></div>
+
+                                        <div class="col-md-4 mb-3"><label class="form-label">Cargo</label><input type="text" class="form-control" value="{{ vigilancia.cargo|default:'-' }}" disabled></div>
+                                        <div class="col-md-4 mb-3"><label class="form-label">Tipo de Contrato</label><input type="text" class="form-control" value="{{ vigilancia.tipo_contrato|default:'-' }}" disabled></div>
+                                        <div class="col-md-4 mb-3"><label class="form-label">Faena</label><input type="text" class="form-control" value="{% if vigilancia.faena %}{{ vigilancia.faena.faena }}{% else %}-{% endif %}" disabled></div>
+                                        <div class="col-md-3 mb-3"><label class="form-label">Fecha Ingreso</label><input type="text" class="form-control" value="{{ vigilancia.fecha_ingreso|date:'d/m/Y'|default:'-' }}" disabled></div>
+                                        <div class="col-md-3 mb-3"><label class="form-label">Años</label><input type="text" class="form-control" value="{{ vigilancia.antiguedad_anos|default:'0' }}" disabled></div>
+                                        <div class="col-md-3 mb-3"><label class="form-label">Meses</label><input type="text" class="form-control" value="{{ vigilancia.antiguedad_meses|default:'0' }}" disabled></div>
+                                        <div class="col-md-3 mb-3"><label class="form-label">Días</label><input type="text" class="form-control" value="{{ vigilancia.antiguedad_dias|default:'0' }}" disabled></div>
+                                        <div class="col-md-3 mb-3"><label class="form-label text-danger">Fecha Retiro / Desvinculación</label><input type="text" class="form-control" value="{{ vigilancia.fecha_retiro|date:'d/m/Y'|default:'-' }}" disabled></div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane" id="agente">
+                                    <div class="row">
+                                        {% if agente_actual == 'silice' %}
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card border-primary shadow-none h-100">
+                                                    <div class="card-header bg-primary-transparent"><h4 class="card-title text-primary"><i class="fe fe-wind me-2"></i>Sílice Respirable</h4></div>
+                                                    <div class="card-body">
+                                                        <div class="mb-3"><label class="form-label">Evaluación de Riesgo</label><input type="text" class="form-control" value="{{ vigilancia.silice_eval_riesgo|default:'-' }}" disabled></div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 mb-3"><label class="form-label">Nivel de Riesgo</label><input type="text" class="form-control" value="{{ vigilancia.silice_nivel_riesgo|default:'-' }}" disabled></div>
+                                                            <div class="col-md-6 mb-3"><label class="form-label">Grado Exposición</label><input type="text" class="form-control" value="{{ vigilancia.silice_grado_expo|default:'-' }}" disabled></div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 mb-3"><label class="form-label">Fecha Radiografía</label><input type="date" class="form-control" name="silice_fecha_radio" value="{{ vigilancia.silice_fecha_radio|date:'Y-m-d' }}" {% if solo_lectura %}disabled{% endif %}></div>
+                                                            <div class="col-md-6 mb-3"><label class="form-label">Fecha Vencimiento</label><input type="date" class="form-control" name="silice_fecha_vence" id="silice_vence" value="{{ vigilancia.silice_fecha_vence|date:'Y-m-d' }}" onchange="checkVigencia('silice_vence', 'silice_vigencia_badge')" {% if solo_lectura %}disabled{% endif %}></div>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Vigencia</label>
+                                                            {% if vigilancia.silice_vigencia == 'VIGENTE' %}
+                                                                <div id="silice_vigencia_badge" class="vigencia-badge bg-success-transparent text-success border border-success">VIGENTE</div>
+                                                            {% elif vigilancia.silice_vigencia == 'VENCIDO' %}
+                                                                <div id="silice_vigencia_badge" class="vigencia-badge bg-danger-transparent text-danger border border-danger">VENCIDO</div>
+                                                            {% else %}
+                                                                <div id="silice_vigencia_badge" class="vigencia-badge bg-light text-muted border">PENDIENTE</div>
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="mb-0"><label class="form-label">Observaciones</label><textarea class="form-control" name="silice_obs" rows="2" {% if solo_lectura %}disabled{% endif %}>{{ vigilancia.silice_obs|default:'' }}</textarea></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% elif agente_actual == 'ruido' %}
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card border-warning shadow-none h-100">
+                                                    <div class="card-header bg-warning-transparent"><h4 class="card-title text-warning"><i class="fe fe-volume-2 me-2"></i>Ruido Ocupacional</h4></div>
+                                                    <div class="card-body">
+                                                        <div class="mb-3"><label class="form-label">Evaluación de Riesgo</label><input type="text" class="form-control" value="{{ vigilancia.ruido_eval_riesgo|default:'-' }}" disabled></div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 mb-3"><label class="form-label">Nivel Seguimiento</label><input type="text" class="form-control" value="{{ vigilancia.ruido_nivel_seguimiento|default:'-' }}" disabled></div>
+                                                            <div class="col-md-6 mb-3"><label class="form-label">Grado Exposición</label><input type="text" class="form-control" value="{{ vigilancia.ruido_grado_expo|default:'-' }}" disabled></div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 mb-3"><label class="form-label">Fecha Audiometría</label><input type="date" class="form-control" name="ruido_fecha_audio" value="{{ vigilancia.ruido_fecha_audio|date:'Y-m-d' }}" {% if solo_lectura %}disabled{% endif %}></div>
+                                                            <div class="col-md-6 mb-3"><label class="form-label">Fecha Vencimiento</label><input type="date" class="form-control" name="ruido_fecha_vence" id="ruido_vence" value="{{ vigilancia.ruido_fecha_vence|date:'Y-m-d' }}" onchange="checkVigencia('ruido_vence', 'ruido_vigencia_badge')" {% if solo_lectura %}disabled{% endif %}></div>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Vigencia</label>
+                                                            {% if vigilancia.ruido_vigencia == 'VIGENTE' %}
+                                                                <div id="ruido_vigencia_badge" class="vigencia-badge bg-success-transparent text-success border border-success">VIGENTE</div>
+                                                            {% elif vigilancia.ruido_vigencia == 'VENCIDO' %}
+                                                                <div id="ruido_vigencia_badge" class="vigencia-badge bg-danger-transparent text-danger border border-danger">VENCIDO</div>
+                                                            {% else %}
+                                                                <div id="ruido_vigencia_badge" class="vigencia-badge bg-light text-muted border">PENDIENTE</div>
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="mb-0"><label class="form-label">Observaciones</label><textarea class="form-control" name="ruido_obs" rows="2" {% if solo_lectura %}disabled{% endif %}>{{ vigilancia.ruido_obs|default:'' }}</textarea></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% elif agente_actual == 'hipobaria' %}
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card border-info shadow-none h-100">
+                                                    <div class="card-header bg-info-transparent"><h4 class="card-title text-info"><i class="fe fe-cloud me-2"></i>Hipobaria</h4></div>
+                                                    <div class="card-body">
+                                                        <div class="mb-3"><label class="form-label">Exposición</label><input type="text" class="form-control" value="{{ vigilancia.hipo_exposicion|default:'-' }}" disabled></div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 mb-3"><label class="form-label">F. Hemoglobina</label><input type="date" class="form-control" name="hipo_fecha_hemo" value="{{ vigilancia.hipo_fecha_hemo|date:'Y-m-d' }}" {% if solo_lectura %}disabled{% endif %}></div>
+                                                            <div class="col-md-6 mb-3"><label class="form-label">F. Vencimiento</label><input type="date" class="form-control" name="hipo_fecha_vence" id="hipo_vence" value="{{ vigilancia.hipo_fecha_vence|date:'Y-m-d' }}" onchange="checkVigencia('hipo_vence', 'hipo_vigencia_badge')" {% if solo_lectura %}disabled{% endif %}></div>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Vigencia</label>
+                                                            {% if vigilancia.hipo_vigencia == 'VIGENTE' %}
+                                                                <div id="hipo_vigencia_badge" class="vigencia-badge bg-success-transparent text-success border border-success">VIGENTE</div>
+                                                            {% elif vigilancia.hipo_vigencia == 'VENCIDO' %}
+                                                                <div id="hipo_vigencia_badge" class="vigencia-badge bg-danger-transparent text-danger border border-danger">VENCIDO</div>
+                                                            {% else %}
+                                                                <div id="hipo_vigencia_badge" class="vigencia-badge bg-light text-muted border">PENDIENTE</div>
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="mb-0"><label class="form-label">Observaciones</label><textarea class="form-control" name="hipo_obs" rows="2" {% if solo_lectura %}disabled{% endif %}>{{ vigilancia.hipo_obs|default:'' }}</textarea></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% elif agente_actual == 'vibraciones' %}
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card border-success shadow-none h-100">
+                                                    <div class="card-header bg-success-transparent"><h4 class="card-title text-success"><i class="fe fe-activity me-2"></i>Vibraciones</h4></div>
+                                                    <div class="card-body">
+                                                        <div class="mb-3"><label class="form-label">Evaluación del Riesgo</label><input type="text" class="form-control" value="{{ vigilancia.vibra_eval_riesgo|default:'-' }}" disabled></div>
+                                                        <div class="mb-3"><label class="form-label">Exposición</label><input type="text" class="form-control" value="{{ vigilancia.vibra_exposicion|default:'-' }}" disabled></div>
+                                                        <div class="mb-3"><label class="form-label">Fecha Vencimiento</label><input type="date" class="form-control" name="vibra_fecha_vence" id="vibra_vence" value="{{ vigilancia.vibra_fecha_vence|date:'Y-m-d' }}" onchange="checkVigencia('vibra_vence', 'vibra_vigencia_badge')" {% if solo_lectura %}disabled{% endif %}></div>
+                                                        <div class="mb-0">
+                                                            <label class="form-label">Vigencia</label>
+                                                            {% if vigilancia.vibra_vigencia == 'VIGENTE' %}
+                                                                <div id="vibra_vigencia_badge" class="vigencia-badge bg-success-transparent text-success border border-success">VIGENTE</div>
+                                                            {% elif vigilancia.vibra_vigencia == 'VENCIDO' %}
+                                                                <div id="vibra_vigencia_badge" class="vigencia-badge bg-danger-transparent text-danger border border-danger">VENCIDO</div>
+                                                            {% else %}
+                                                                <div id="vibra_vigencia_badge" class="vigencia-badge bg-light text-muted border">PENDIENTE</div>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% elif agente_actual == 'radiaciones' %}
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card border-danger shadow-none h-100">
+                                                    <div class="card-header bg-danger-transparent"><h4 class="card-title text-danger"><i class="fe fe-sun me-2"></i>Radiaciones Ionizantes</h4></div>
+                                                    <div class="card-body">
+                                                        <div class="mb-3"><label class="form-label">Exposición</label><input type="text" class="form-control" value="{{ vigilancia.rad_exposicion|default:'-' }}" disabled></div>
+                                                        <div class="mb-3"><label class="form-label">Fecha Vencimiento</label><input type="date" class="form-control" name="rad_fecha_vence" id="rad_vence" value="{{ vigilancia.rad_fecha_vence|date:'Y-m-d' }}" onchange="checkVigencia('rad_vence', 'rad_vigencia_badge')" {% if solo_lectura %}disabled{% endif %}></div>
+                                                        <div class="mb-0">
+                                                            <label class="form-label">Vigencia</label>
+                                                            {% if vigilancia.rad_vigencia == 'VIGENTE' %}
+                                                                <div id="rad_vigencia_badge" class="vigencia-badge bg-success-transparent text-success border border-success">VIGENTE</div>
+                                                            {% elif vigilancia.rad_vigencia == 'VENCIDO' %}
+                                                                <div id="rad_vigencia_badge" class="vigencia-badge bg-danger-transparent text-danger border border-danger">VENCIDO</div>
+                                                            {% else %}
+                                                                <div id="rad_vigencia_badge" class="vigencia-badge bg-light text-muted border">PENDIENTE</div>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% elif agente_actual == 'humos' %}
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card border-secondary shadow-none h-100">
+                                                    <div class="card-header bg-secondary-transparent"><h4 class="card-title text-dark"><i class="fe fe-aperture me-2"></i>Humos Metálicos</h4></div>
+                                                    <div class="card-body">
+                                                        <div class="mb-3"><label class="form-label">Evaluación del Riesgo</label><input type="text" class="form-control" value="{{ vigilancia.humos_eval_riesgo|default:'-' }}" disabled></div>
+                                                        <div class="mb-3"><label class="form-label">Exposición</label><input type="text" class="form-control" value="{{ vigilancia.humos_exposicion|default:'-' }}" disabled></div>
+                                                        <div class="mb-3"><label class="form-label">Fecha Vencimiento</label><input type="date" class="form-control" name="humos_fecha_vence" id="humos_vence" value="{{ vigilancia.humos_fecha_vence|date:'Y-m-d' }}" onchange="checkVigencia('humos_vence', 'humos_vigencia_badge')" {% if solo_lectura %}disabled{% endif %}></div>
+                                                        <div class="mb-0">
+                                                            <label class="form-label">Vigencia</label>
+                                                            {% if vigilancia.humos_vigencia == 'VIGENTE' %}
+                                                                <div id="humos_vigencia_badge" class="vigencia-badge bg-success-transparent text-success border border-success">VIGENTE</div>
+                                                            {% elif vigilancia.humos_vigencia == 'VENCIDO' %}
+                                                                <div id="humos_vigencia_badge" class="vigencia-badge bg-danger-transparent text-danger border border-danger">VENCIDO</div>
+                                                            {% else %}
+                                                                <div id="humos_vigencia_badge" class="vigencia-badge bg-light text-muted border">PENDIENTE</div>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="col-12">
+                                                <div class="alert alert-warning mb-0">Sin agente asociado a esta cuantitativa.</div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                {% if solo_lectura %}
+                                <div class="tab-pane" id="egreso">
+                                    <div class="row">
+                                        <div class="col-xl-6 mb-3">
+                                            <div class="card shadow-none h-100">
+                                                <div class="card-body">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Fecha</label>
+                                                        <input type="date" class="form-control" name="fecha_incidente" value="{{ vigilancia.fecha_incidente|date:'Y-m-d' }}" {% if solo_lectura and not permitir_subir_archivo_egreso %}disabled{% endif %}>
+                                                    </div>
+                                                    {% if not solo_lectura or permitir_subir_archivo_egreso %}
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Subir archivo</label>
+                                                        <div class="input-group">
+                                                            <input
+                                                                type="file"
+                                                                class="form-control"
+                                                                id="input_documento_egreso"
+                                                                name="documento"
+                                                                accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                                                {% if solo_lectura and not permitir_subir_archivo_egreso %}disabled{% endif %}
+                                                            >
+                                                            <button
+                                                                class="btn btn-danger d-none"
+                                                                type="button"
+                                                                id="btn_limpiar_documento_egreso"
+                                                                title="Limpiar archivo seleccionado"
+                                                                {% if solo_lectura and not permitir_subir_archivo_egreso %}disabled{% endif %}
+                                                            >
+                                                                <i class="fe fe-trash-2"></i>
+                                                            </button>
+                                                        </div>
+                                                        <small
+                                                            class="form-text egreso-upload-link"
+                                                            id="wrap_link_documento_egreso"
+                                                            style="display:none;"
+                                                        >
+                                                            <a href="#" id="link_documento_egreso" target="_blank" rel="noopener">Abrir adjunto</a>
+                                                        </small>
+                                                    </div>
+                                                    {% endif %}
+                                                    <div class="mb-0">
+                                                        <label class="form-label">Archivo actual</label>
+                                                        {% if archivo_actual %}
+                                                            <span class="archivo-actual-box" title="{{ archivo_actual.name }}">{{ archivo_actual.name }}</span>
+                                                            <small class="form-text">
+                                                                <a href="{{ archivo_actual.url }}" target="_blank" rel="noopener">Abrir adjunto</a>
+                                                            </small>
+                                                        {% else %}
+                                                            <input type="text" class="form-control" value="Sin archivo adjunto actual" disabled>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-6 mb-3">
+                                            <div class="card shadow-none h-100">
+                                                <div class="card-body">
+                                                    <h4 class="card-title mb-3">Historial histórico</h4>
+                                                    <table id="datatable-egreso-archivos" class="display nowrap" style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Orden</th>
+                                                                <th>Estado</th>
+                                                                <th>Fecha</th>
+                                                                <th>Archivo</th>
+                                                                <th>Acción</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for archivo in archivos_historial %}
+                                                            <tr>
+                                                                <td>{{ archivo.orden }}</td>
+                                                                <td>
+                                                                    <span class="egreso-estado-badge {% if archivo.es_actual %}egreso-estado-badge--actual{% else %}egreso-estado-badge--historico{% endif %}">
+                                                                        {% if archivo.es_actual %}ACTUAL{% else %}HISTÓRICO{% endif %}
+                                                                    </span>
+                                                                </td>
+                                                                <td data-order="{% if archivo.fecha_carga %}{{ archivo.fecha_carga|date:'U' }}{% else %}0{% endif %}">
+                                                                    {{ archivo.fecha_carga|date:'d/m/Y'|default:'-' }}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="historial-archivo-cell" title="{{ archivo.name }}">{{ archivo.name }}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <a href="{{ archivo.url }}" target="_blank" rel="noopener">Abrir adjunto</a>
+                                                                </td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script>
+    function checkVigencia(inputId, badgeId) {
+        const input = document.getElementById(inputId);
+        const badge = document.getElementById(badgeId);
+        if (!input || !badge) return;
+
+        const value = input.value;
+        if (!value) {
+            badge.textContent = 'PENDIENTE';
+            badge.className = 'vigencia-badge bg-light text-muted border';
+            return;
+        }
+
+        const parts = value.split('-');
+        if (parts.length !== 3) {
+            badge.textContent = 'PENDIENTE';
+            badge.className = 'vigencia-badge bg-light text-muted border';
+            return;
+        }
+
+        const selectedDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (selectedDate >= today) {
+            badge.textContent = 'VIGENTE';
+            badge.className = 'vigencia-badge bg-success-transparent text-success border border-success';
+        } else {
+            badge.textContent = 'VENCIDO';
+            badge.className = 'vigencia-badge bg-danger-transparent text-danger border border-danger';
+        }
+    }
+
+    $(document).ready(function () {
+        if ($('#silice_vence').length) checkVigencia('silice_vence', 'silice_vigencia_badge');
+        if ($('#ruido_vence').length) checkVigencia('ruido_vence', 'ruido_vigencia_badge');
+        if ($('#hipo_vence').length) checkVigencia('hipo_vence', 'hipo_vigencia_badge');
+        if ($('#vibra_vence').length) checkVigencia('vibra_vence', 'vibra_vigencia_badge');
+        if ($('#rad_vence').length) checkVigencia('rad_vence', 'rad_vigencia_badge');
+        if ($('#humos_vence').length) checkVigencia('humos_vence', 'humos_vigencia_badge');
+
+        let tablaEgresoArchivos = null;
+        const inicializarTablaEgresoArchivos = function () {
+            if (tablaEgresoArchivos || !$('#datatable-egreso-archivos').length) return;
+
+            const altoFila = 52;
+            const scrollY = `${(altoFila * 4) + 2}px`;
+            tablaEgresoArchivos = new DataTable('#datatable-egreso-archivos', {
+                paging: false,
+                info: false,
+                scrollY: scrollY,
+                scrollCollapse: true,
+                order: [[0, 'asc'], [2, 'desc']],
+                columnDefs: [
+                    { targets: 0, visible: false, searchable: false },
+                    { targets: [1, 4], orderable: false }
+                ],
+                language: {
+                    url: '{% static "json/es-CL.json" %}',
+                    emptyTable: 'No hay archivos de egreso cargados todavía.'
+                }
+            });
+        };
+
+        if ($('#egreso').hasClass('active')) {
+            inicializarTablaEgresoArchivos();
+        }
+
+        $('a[data-bs-toggle="tab"][href="#egreso"]').on('shown.bs.tab', function () {
+            inicializarTablaEgresoArchivos();
+            if (tablaEgresoArchivos) {
+                tablaEgresoArchivos.columns.adjust().draw(false);
+            }
+        });
+
+        if (window.location.hash === '#egreso') {
+            $('a[data-bs-toggle="tab"][href="#egreso"]').trigger('shown.bs.tab');
+        }
+
+        const $inputDocumentoEgreso = $('#input_documento_egreso');
+        const $btnLimpiarDocumentoEgreso = $('#btn_limpiar_documento_egreso');
+        const $wrapLinkDocumentoEgreso = $('#wrap_link_documento_egreso');
+        const $linkDocumentoEgreso = $('#link_documento_egreso');
+
+        let urlPrevisualizacionDocumento = null;
+        const puedePrevisualizarAdjunto = (
+            typeof window.URL !== 'undefined'
+            && typeof window.URL.createObjectURL === 'function'
+            && typeof window.URL.revokeObjectURL === 'function'
+        );
+
+        const liberarPrevisualizacionDocumento = function () {
+            if (puedePrevisualizarAdjunto && urlPrevisualizacionDocumento) {
+                URL.revokeObjectURL(urlPrevisualizacionDocumento);
+                urlPrevisualizacionDocumento = null;
+            }
+        };
+
+        const actualizarLinkAdjuntoEgreso = function () {
+            if (!$inputDocumentoEgreso.length || !$wrapLinkDocumentoEgreso.length || !$linkDocumentoEgreso.length) {
+                return;
+            }
+
+            const inputElement = $inputDocumentoEgreso.get(0);
+            const tieneArchivoSeleccionado = !!(inputElement && inputElement.files && inputElement.files.length);
+
+            if (tieneArchivoSeleccionado) {
+                $btnLimpiarDocumentoEgreso.removeClass('d-none');
+                liberarPrevisualizacionDocumento();
+                if (puedePrevisualizarAdjunto) {
+                    urlPrevisualizacionDocumento = URL.createObjectURL(inputElement.files[0]);
+                    $linkDocumentoEgreso.attr('href', urlPrevisualizacionDocumento);
+                    $wrapLinkDocumentoEgreso.show();
+                    return;
+                }
+                $linkDocumentoEgreso.attr('href', '#');
+                $wrapLinkDocumentoEgreso.hide();
+                return;
+            }
+
+            liberarPrevisualizacionDocumento();
+            $btnLimpiarDocumentoEgreso.addClass('d-none');
+            $linkDocumentoEgreso.attr('href', '#');
+            $wrapLinkDocumentoEgreso.hide();
+        };
+
+        if ($inputDocumentoEgreso.length) {
+            actualizarLinkAdjuntoEgreso();
+            $inputDocumentoEgreso.on('change', actualizarLinkAdjuntoEgreso);
+
+            $btnLimpiarDocumentoEgreso.on('click', function () {
+                if ($inputDocumentoEgreso.prop('disabled')) {
+                    return;
+                }
+                $inputDocumentoEgreso.val('');
+                actualizarLinkAdjuntoEgreso();
+            });
+
+            $(window).on('beforeunload', liberarPrevisualizacionDocumento);
+        }
+    });
+</script>
+{% endblock %}

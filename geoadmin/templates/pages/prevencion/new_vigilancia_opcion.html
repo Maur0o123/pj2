@@ -1,0 +1,110 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ titulo_nuevo }}{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/floating.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<button type="submit" form="formVigilanciaOpcion" class="btn btn-primary save-float">Guardar</button>
+<a class="btn btn-secondary back-float" href="{% url 'manage_vigilancia_option' tipo_slug %}">Regresar</a>
+
+<div class="app-content main-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">{{ titulo_nuevo }}</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Mantenedor Sistema</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Opciones Prevencion</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'manage_vigilancia_option' tipo_slug %}">{{ titulo_opcion }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ titulo_nuevo }}</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="row row-sm">
+                <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <div class="card box-shadow-0">
+                        <div class="card-body">
+                            <h4 class="card-title">Datos Principales</h4>
+                            <p class="card-title">Atencion: una vez creado no podras cambiar o eliminar este registro</p>
+                            <form class="form-horizontal" id="formVigilanciaOpcion" action="#" method="POST">
+                                {% csrf_token %}
+                                <div class="row row-sm">
+                                    {{ formopcion|crispy }}
+                                </div>
+                                {% if es_numerico %}
+                                <small class="text-muted d-block mb-3">Este tipo admite solo valores numericos.</small>
+                                {% endif %}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript">
+    const fieldWrap = document.getElementById('div_id_valor');
+    if (fieldWrap) {
+        fieldWrap.classList.add('col-md-4');
+    }
+
+    const valorInput = document.getElementById('id_valor');
+    if (valorInput && {{ es_numerico|yesno:"true,false" }}) {
+        valorInput.setAttribute('inputmode', 'decimal');
+        valorInput.setAttribute('placeholder', 'Ej: 10');
+    }
+
+    const form = document.querySelector('#formVigilanciaOpcion');
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+        $.LoadingOverlay("show");
+        $.ajax({
+            url: '{% url "save_new_vigilancia_option" tipo_slug %}',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function() {
+                $.LoadingOverlay("hide");
+                Swal.fire({
+                    icon: 'success',
+                    title: '{{ mensaje_exito }}',
+                    confirmButtonColor: '#3085d6',
+                }).then(() => {
+                    window.location.href = '{% url "manage_vigilancia_option" tipo_slug %}';
+                });
+            },
+            error: function(xhr) {
+                $.LoadingOverlay("hide");
+                const msg = xhr.responseJSON && xhr.responseJSON.error
+                    ? xhr.responseJSON.error
+                    : 'Vuelva a intentarlo.';
+                Swal.fire({
+                    icon: 'error',
+                    titleText: 'Error al crear registro',
+                    text: msg,
+                    confirmButtonColor: '#3085d6',
+                });
+            }
+        });
+    });
+</script>
+{% endblock javascript %}
+
+{% block messages %}
+{% endblock messages %}

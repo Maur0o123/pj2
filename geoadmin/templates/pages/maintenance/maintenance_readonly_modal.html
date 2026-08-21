@@ -1,0 +1,128 @@
+<div class="modal-minimal container-fluid px-0">
+    <div class="row gx-4">
+        <div class="col-md-6">
+            <div class="minimal-label">Vehículo</div>
+            <div class="minimal-value">{{ solicitud.vehiculo.placaPatente }}</div>
+
+            <div class="minimal-label">Solicitante</div>
+            <div class="minimal-value">{{ solicitud.solicitante.first_name }} {{ solicitud.solicitante.last_name }}</div>
+
+            <div class="minimal-label">Empresa de Mantenimiento</div>
+            <div class="minimal-value">{{ solicitud.empresaMantenimiento|default:"Sin asignar" }}</div>
+        </div>
+        <div class="col-md-6">
+            <div class="minimal-label">Fecha Solicitud</div>
+            <div class="minimal-value">{{ solicitud.fechacreacion|date:"d-m-Y H:i" }}</div>
+
+            <div class="minimal-label">Kilometraje</div>
+            <div class="minimal-value">{{ solicitud.kilometraje|default:"-" }} km</div>
+
+            <div class="minimal-label">Turno</div>
+            <div class="minimal-value">
+                {% if solicitud.turno == '1' %}Turno A
+                {% elif solicitud.turno == '2' %}Turno B
+                {% else %}No Aplica{% endif %}
+            </div>
+
+            <div class="minimal-label">Estado Actual</div>
+            <div class="minimal-value">
+                {% for opcion in choicesprogreso %}
+                    {% if solicitud.progreso|stringformat:"s" == opcion.0|stringformat:"s" %}
+                        <span class="minimal-badge">{{ opcion.1 }}</span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-12 mt-2">
+            <div class="minimal-label">Comentarios del Solicitante</div>
+            <div class="minimal-value" style="white-space: pre-line;">{{ solicitud.comentario|default:"Sin observaciones." }}</div>
+        </div>
+    </div>
+
+    <div class="minimal-title">Detalle de Problemas y Valores</div>
+    <div class="table-responsive">
+        <table class="minimal-table">
+            <thead>
+                <tr>
+                    <th>Problema / Falla</th>
+                    <th>Comentario Técnico</th>
+                    <th style="text-align: right;">Valor ($)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for problema in problemas %}
+                <tr>
+                    <td>{{ problema.fallaVehiculo.falla }}</td>
+                    <td style="opacity: 0.85;">{{ problema.descripcion|default:"-" }}</td>
+                    <td style="text-align: right; font-variant-numeric: tabular-nums;">$ {{ problema.valorServicio|default:"0" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" style="text-align: center; opacity: 0.5; padding: 1rem 0;">No hay problemas registrados</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="minimal-title">Historial de Cambios de Estado</div>
+    <div class="table-responsive">
+        <table class="minimal-table">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Empresa</th>
+                    <th>Responsable</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for historial in historiales %}
+                <tr>
+                    <td style="font-variant-numeric: tabular-nums;">{{ historial.fechacreacion|date:"d-m-Y H:i" }}</td>
+                    <td>
+                        {% for opcion in choicesprogreso %}
+                            {% if historial.progreso|stringformat:"s" == opcion.0|stringformat:"s" %}
+                                {{ opcion.1 }}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ historial.empresaMantenimiento|default:"N/A" }}</td>
+                    <td>{{ historial.solicitante.get_full_name }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align: center; opacity: 0.5; padding: 1rem 0;">No hay registros en el historial.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="minimal-title">Evidencia Fotográfica</div>
+    <div class="row gx-3 mt-2">
+        {% if solicitud.fotografiaUno and 'no-imagen' not in solicitud.fotografiaUno.url %}
+            <div class="col-6 mb-2">
+                <a href="{{ solicitud.fotografiaUno.url }}" target="_blank">
+                    <img src="{{ solicitud.fotografiaUno.url }}" class="minimal-img w-100">
+                </a>
+            </div>
+        {% endif %}
+        
+        {% if solicitud.fotografiaDos and 'no-imagen' not in solicitud.fotografiaDos.url %}
+            <div class="col-6 mb-2">
+                <a href="{{ solicitud.fotografiaDos.url }}" target="_blank">
+                    <img src="{{ solicitud.fotografiaDos.url }}" class="minimal-img w-100">
+                </a>
+            </div>
+        {% endif %}
+        
+        {% if not solicitud.fotografiaUno or 'no-imagen' in solicitud.fotografiaUno.url %}
+            {% if not solicitud.fotografiaDos or 'no-imagen' in solicitud.fotografiaDos.url %}
+                <div class="col-12 py-2 text-center" style="opacity: 0.5;">
+                    No se adjuntaron fotografías a esta solicitud.
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
